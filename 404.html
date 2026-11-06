@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>404 - Page Not Found | Decoderium Academy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <script>
+    (function () {
+      var here = location.pathname + location.search + location.hash;
+      var p = window.location.pathname;
+      var base = p.indexOf('/src/') !== -1 ? p.substring(0, p.indexOf('/src/')) : '';
+      location.replace(base + '/src/error/?code=404&from=' + encodeURIComponent(here));
+    })();
+  </script>
+  <meta http-equiv="refresh" content="0; url=./src/error/?code=404">
+</head>
+<body>
+  <p>Page not found. <a href="./src/login/">Go to sign in</a></p>
+</body>
+</html>

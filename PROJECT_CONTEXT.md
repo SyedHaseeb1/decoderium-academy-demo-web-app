@@ -1,17 +1,20 @@
-# STAND-HF Academy — Project Context & Architecture Reference
+# Decoderium Academy (STAND-HF) — Project Context & Architecture Reference
 
 > **Document Status**: Grounded Architecture Reference  
-> **Last Verified**: 2026-11-06  
-> **Scope**: Stand-HF Academy UI Prototype & Core Domain Rules
+> **Last Verified**: 2026-11-07  
+> **Scope**: Decoderium Academy UI Prototype & Core Domain Rules Engine
 
 ---
 
-## 1. Project Overview
+## 1. Project Overview & Clinical Domain
 
-- **Project Name**: Education & LMS Platform (Working Title / Name TBD — not yet finalized)
-- **Ecosystem**: Education and certification companion to **Standhf.pk** (the Heart Failure Clinical Registry initiative built by Abrar for Decoderium Technologies).
-- **Core Purpose**: An interactive online training and certification portal for medical doctors. The platform provides modular video curriculum, enforced completion gates (90% watch threshold), randomized timed module quizzes, deterministic certificate generation (PMDC verification), and administrative oversight.
-- **Project Role**: This repository hosts the approved UI prototype and domain rules engine. It acts as the interactive specification and behavioral contract that the production .NET 8 / Blazor WebAssembly application (`StandHF.Academy.*`) mirrors.
+- **Project Identity**: **Decoderium Academy & Observational Trial Platform** (Decoderium Technologies).
+- **Domain Specialization**: **Gastroenterology** (Distinct from StandHF.pk which represents the flagship cardiology clinical registry).
+- **Two Core Strategic Objectives**:
+  1. **Arm 1 (Educational Portal / LMS)**: Connect unreached and untapped clinicians and customers through a convenient, high-credibility web-based CME-accredited Certificate course.
+  2. **Arm 2 (Digital Observational Clinical Trial & Patient Data Collection)**: Conduct an observational clinical trial addressing the core bottleneck of physical paper data collection and missed follow-up visits. Arm 2 replaces paper case report forms with a digital pipeline that gathers clinical data digitally and establishes direct digital connectivity with patients to reliably secure longitudinal follow-up data.
+- **Extraction Parity**: Arm 2 shares similar architectural principles with the patient data extraction mechanics pioneered in the cardiology registry, tailored specifically for gastroenterology cohorts.
+- **Repository Scope**: This repository hosts the approved UI prototype and domain rules engine for Decoderium Academy (Arm 1) and its integration boundaries with Arm 2, serving as the live behavioral specification for the companion production .NET 8 / Blazor WASM applications (`StandHF.Academy.*`).
 
 ---
 
@@ -23,13 +26,13 @@
 - **Persistence & State**:
   - Session state: Browser `sessionStorage` (`academy_auth`, `academy_role`, `academy_doctor`, `academy_name`).
   - Persistent mock database: Browser `localStorage` (`academy_state_v1`).
-- **Static Asset Serving**: Standard HTTP servers (e.g. `python -m http.server 5200`, Nginx, GitHub Pages).
-- **Typography & Icons**: Self-hosted WOFF2 fonts (`Roboto`, `Material Symbols Rounded`) under `assets/fonts/`.
+- **Static Asset Serving**: Standard HTTP servers (e.g. `python3 -m http.server 5200`, Nginx, GitHub Pages).
+- **Typography & Icons**: Self-hosted WOFF2 fonts (`Roboto`, `Material Symbols Rounded`) under `src/assets/fonts/`.
 - **Validation & Tooling**: Node.js (`node -c`) for static JS syntax checks; Python 3 for JSON dataset validation.
 
 ### Companion / Target Production Stack (Documented in HANDOFF.md)
 - **Backend / Production Framework**: ASP.NET Core 8 Web API with Blazor WebAssembly (`StandHF.Academy.*`).
-- **Domain Sharing**: Shared C# rules (`StandHF.Academy.Shared/Rules/Rules.cs`) mirroring `assets/rules.js`.
+- **Domain Sharing**: Shared C# rules (`StandHF.Academy.Shared/Rules/Rules.cs`) mirroring `src/assets/rules.js`.
 
 ---
 
@@ -38,19 +41,26 @@
 ```
 Stand-HF/
 ├── AGENTS.md                          # Master Autonomous Engineering Instructions (SSOT)
-├── PROJECT_CONTEXT.md                 # This architecture & context reference
-├── standhf-academy-ui-prototype.zip   # Preserved distribution archive
-└── ui-prototype/                      # STAND-HF Academy UI Prototype Codebase
+├── CLAUDE.md, GEMINI.md, OPENCODE.md, .cursorrules -> symlinks to AGENTS.md
+├── PROJECT_CONTEXT.md                 # Grounded architecture & context reference (this file)
+├── PROGRESS.md                        # Master progress and resumption handover
+├── PROJECT_PROPOSAL.md                # Project proposal document
+├── PROJECT_UNDERSTANDING.md           # Business understanding and domain model
+├── index.html                         # Root redirect to src/login/ (GitHub Pages entry)
+├── 404.html                           # Root 404 error handler -> src/error/
+├── .nojekyll                          # Disables Jekyll processing on GitHub Pages
+├── Docs/                              # Project briefs and specification PDFs
+└── src/                               # Decoderium Academy Prototype Codebase
     ├── AGENTS.md                      # UI-specific rules & developer conventions
     ├── HANDOFF.md                     # API contract & Blazor migration specification
     ├── CHANGES.md                     # Client feedback & change tracker
     ├── README.md                      # Quick start & local execution guide
     ├── run.bat                        # Windows launcher script
-    ├── 404.html, index.html           # Entry redirection and fallback
+    ├── 404.html, index.html           # Subfolder fallback and redirect
     ├── login/                         # Sign-in portal (Doctor vs Admin demo logins)
-    ├── home/                          # Doctor dashboard (progress, next action)
+    ├── home/                          # Doctor dashboard (KPIs, course progress, mentors)
     ├── courses/                       # Course catalog and course detail (#c1)
-    ├── lecture/                       # Video lecture player (?id=...) with timer
+    ├── lecture/                       # Video lecture player (?id=...) with 90% watch gate
     ├── quiz/                          # Module timed quiz (?m=...) with timer & scoring
     ├── certificates/                  # Certificate gallery and single view (#c1)
     ├── verify/                        # Public certificate check portal (?cert=...)
@@ -60,13 +70,14 @@ Stand-HF/
     │   ├── boot.js                    # Async loader for data/*.json -> window.ACADEMY_DATA
     │   ├── rules.js                   # Canonical business logic engine (RULES object)
     │   ├── access.js                  # Data abstraction layer & localStorage mock DB
-    │   ├── ui.js                      # DOM utilities, formatters, toast notifications
+    │   ├── ui.js                      # DOM utilities, formatters, toast notifications, modals
     │   ├── views.js                   # Reusable HTML view renderers (cards, crumbs, nextStep)
     │   ├── header.js                  # Global responsive header & profile drawer
     │   ├── nav.js                     # Global responsive navigation menu
     │   ├── base.css                   # STAND-HF Registry design system styles
-    │   ├── academy.css                # Academy-specific layout & component styling
-    │   ├── STAND-HF-logo.svg          # Vector brand asset
+    │   ├── academy.css                # Decoderium Academy layout, theme & component styling
+    │   ├── decoderium-logo.svg        # Brand vector logo asset
+    │   ├── STAND-HF-logo.svg          # Companion registry brand asset
     │   └── fonts/                     # Self-hosted Roboto and Material Symbols fonts
     └── data/
         ├── README.md                  # Data schema documentation
@@ -80,23 +91,29 @@ Stand-HF/
 
 ## 4. Important Entry Points
 
-1. **`ui-prototype/index.html`**:
-   - Immediate redirect to `login/`.
-2. **`ui-prototype/login/index.html`**:
+1. **`index.html`**:
+   - Immediate redirect to `./src/login/` for GitHub Pages root visits.
+2. **`404.html`**:
+   - Captures unmapped paths and forwards to `src/error/?code=404`.
+3. **`src/login/index.html`**:
    - Dual-tab authentication interface (`doctor` vs `admin`).
    - Provides 1-click demo accounts (`ayesha.khan`, `bilal.ahmed`, `admin`).
-3. **`ui-prototype/home/index.html`**:
-   - Primary doctor landing view. Displays KPIs, resume button, and enrolled course cards.
-4. **`ui-prototype/courses/index.html`**:
+4. **`src/home/index.html`**:
+   - Primary doctor landing view. Displays KPIs, resume button, enrolled course cards, 7-day study graph, and faculty mentors.
+5. **`src/courses/index.html`**:
    - Course catalog at root; single course details and module status at `#<courseId>` (e.g. `#c1`).
-5. **`ui-prototype/lecture/index.html?id=<lectureId>`**:
-   - Video player simulation with 30x accelerated timer, scrubbing prevention past watched mark, and auto-completion.
-6. **`ui-prototype/quiz/index.html?m=<moduleId>`**:
+6. **`src/lecture/index.html?id=<lectureId>`**:
+   - Video player simulation with 30x accelerated timer, scrubbing prevention past watched mark, and auto-completion when 90% watched.
+7. **`src/quiz/index.html?m=<moduleId>`**:
    - Timed quiz interface with active clock preservation across page refreshes.
-7. **`ui-prototype/verify/index.html?cert=<codeOrHash>`**:
+8. **`src/certificates/index.html`**:
+   - Certificate gallery and print/view modal with deterministic FNV-1a hash verification code.
+9. **`src/verify/index.html?cert=<codeOrHash>`**:
    - Public unauthenticated portal to verify authenticity of doctor certificates.
-8. **`ui-prototype/admin/index.html#<section>`**:
-   - Administrative portal hash-routed between `#overview`, `#courses`, `#doctors`, `#reports`, and `#settings`.
+10. **`src/admin/index.html#<section>`**:
+    - Administrative portal hash-routed between `#overview`, `#courses`, `#doctors`, `#reports`, and `#settings`.
+11. **`src/error/index.html`**:
+    - Boot error and 404 display with helpful retry link.
 
 ---
 
@@ -111,13 +128,13 @@ Stand-HF/
                             │
                calls only   ▼
 ┌────────────────────────────────────────────────────────┐
-│                   assets/access.js                     │
+│                 src/assets/access.js                   │
 │  (Mock API Layer: courses(), progressOf(), submitQuiz) │
 └─────────────┬───────────────────────────┬──────────────┘
               │                           │
     enforces  ▼                 persists  ▼
 ┌───────────────────────────┐   ┌────────────────────────┐
-│     assets/rules.js       │   │  Storage Engine        │
+│    src/assets/rules.js    │   │  Storage Engine        │
 │ (Pure Business Rules):    │   │  - localStorage        │
 │ - lectureComplete (90%)   │   │    (academy_state_v1)  │
 │ - moduleState (unlocking) │   │  - sessionStorage      │
@@ -127,19 +144,19 @@ Stand-HF/
 ```
 
 ### Script Execution Sequence (Protected Pages)
-1. `boot.js`: Reads data files (`courses.json`, `questions.json`, `doctors.json`, `settings.json`) into `window.ACADEMY_DATA`.
+1. `src/assets/boot.js`: Reads data files (`courses.json`, `questions.json`, `doctors.json`, `settings.json`) into `window.ACADEMY_DATA`.
 2. Placeholder scripts executed in order:
-   - `assets/ui.js`: DOM helpers, string escaper, duration formatters.
-   - `assets/rules.js`: Evaluates domain logic.
-   - `assets/access.js`: Sets up state and mock persistence.
-   - `assets/views.js`: Shared component rendering functions.
+   - `src/assets/ui.js`: DOM helpers, string escaper, duration formatters, toast alerts (`sideAlert`), modals (`openDialog`).
+   - `src/assets/rules.js`: Evaluates domain logic.
+   - `src/assets/access.js`: Sets up state and mock persistence.
+   - `src/assets/views.js`: Shared component rendering functions.
    - Page Inline Script: Guarded by `if (!requireRole('doctor')) return;` (or `'admin'`).
-   - `assets/header.js`: Injects top bar and profile management.
-   - `assets/nav.js`: Injects navigation sidebar / mobile drawer.
+   - `src/assets/header.js`: Injects top bar and profile management.
+   - `src/assets/nav.js`: Injects navigation sidebar / mobile drawer / bottom bar.
 
 ---
 
-## 6. Business Logic Rules (`assets/rules.js`)
+## 6. Business Logic Rules (`src/assets/rules.js`)
 
 - **Lecture Completion**: Complete when watched seconds $\ge \lceil \text{duration} \times 0.90 \rceil$. Skipping forward past the furthest reached point is blocked; rewinding is permitted.
 - **Module Unlocking Sequence**:
@@ -164,23 +181,23 @@ Stand-HF/
 
 ### Run Local Development Server
 ```bash
-# In ui-prototype/
+# Serve repository root on port 5200
 python3 -m http.server 5200
-# Access via http://localhost:5200/
+# Access via http://localhost:5200/ (auto-redirects to ./src/login/)
 ```
 
 ### Static Syntax & Integrity Verification
 ```bash
-# Verify JavaScript syntax across all core modules
-node -c ui-prototype/assets/*.js
+# 1. Verify JavaScript syntax across all core modules
+node -c src/assets/*.js
 
-# Validate JSON dataset formatting
-python3 -c "import json, glob; [json.load(open(f)) for f in glob.glob('ui-prototype/data/*.json')]; print('JSON datasets valid.')"
+# 2. Validate JSON dataset formatting
+python3 -c "import json, glob; [json.load(open(f)) for f in glob.glob('src/data/*.json')]; print('JSON datasets valid.')"
 
-# Verify Business Rules Headlessly in Node.js
+# 3. Verify Business Rules Headlessly in Node.js
 node -e "
 const fs = require('fs');
-eval(fs.readFileSync('ui-prototype/assets/rules.js', 'utf8'));
+eval(fs.readFileSync('src/assets/rules.js', 'utf8'));
 console.log('RULES module valid. Sample cert:', RULES.certCode('d1', 'c1', '2026-11-06'));
 "
 ```
@@ -189,24 +206,24 @@ console.log('RULES module valid. Sample cert:', RULES.certCode('d1', 'c1', '2026
 
 ## 8. Coding & Design Conventions
 
-1. **STAND-HF Registry Design System**:
-   - Must use classes from `assets/base.css` (`.app`, `.side`, `.nav`, `.hello`, `.kpis`, `.card`, `.btn`, `.btn.primary`, `.tag`, `.snack`).
-   - Academy-specific additions go strictly into `assets/academy.css`.
-   - Brand tokens: Magenta accent (`#C90085`, `var(--primary)`), `var(--card)`, `var(--ink)`, `var(--line)`, `var(--success)`, `var(--error)`.
+1. **Decoderium Academy Design System**:
+   - Base tokens in `src/assets/base.css` (`.app`, `.side`, `.nav`, `.hello`, `.kpis`, `.card`, `.btn`, `.btn.primary`, `.tag`, `.snack`).
+   - Academy-specific additions go strictly into `src/assets/academy.css`.
+   - Brand tokens: Electric Violet (`#582be8` / `#7c3aed`), soft porcelain background (`#f8f9fd`), pure white elevated cards, coral/emerald status accents.
 2. **Touch Targets & Responsiveness**:
-   - Minimum interactive element size: $44 \times 44\,\text{px}$.
+   - Minimum interactive element size: $44 \times 44\,\text{px}$ (targets $\ge 48\,\text{px}$ on mobile).
    - Breakpoint checkpoints: $1024\,\text{px}$ (drawer switch), $768\,\text{px}$, and $<640\,\text{px}$ (mobile portrait).
 3. **Architecture Boundary Invariant**:
    - Pages must **never** access `localStorage` or `sessionStorage` directly. All state access must go through `access.js`.
-   - Business rules must **never** be hardcoded in HTML pages; they must reside in `assets/rules.js`.
-   - Changes to rules or requirements must be logged in `CHANGES.md`.
+   - Business rules must **never** be hardcoded in HTML pages; they must reside in `src/assets/rules.js`.
+   - Changes to rules or requirements must be logged in `src/CHANGES.md`.
 
 ---
 
 ## 9. Critical Implementation Constraints & Known Limitations
 
 ### Confirmed Constraints
-- **Zero Build Step**: Do not introduce npm, bundlers, Webpack, Vite, or external package managers to `ui-prototype/`.
+- **Zero Build Step**: Do not introduce npm, bundlers, Webpack, Vite, or external package managers to `src/`.
 - **Offline / Self-Contained**: All fonts, icons, and stylesheets are self-hosted. Do not rely on external CDNs.
 - **Preserve Client Experience**: Changes made here represent the client-facing prototype. High visual fidelity and immediate responsiveness are paramount.
 
@@ -222,8 +239,9 @@ console.log('RULES module valid. Sample cert:', RULES.certCode('d1', 'c1', '2026
 
 | Item | Status | Supporting Evidence |
 |---|---|---|
-| Prototype is vanilla HTML/CSS/JS without build step | **Confirmed Fact** | `ui-prototype/AGENTS.md`, inspected file structure |
-| Data resides in static JSON loaded via `boot.js` | **Confirmed Fact** | `ui-prototype/assets/boot.js`, `ui-prototype/data/*.json` |
-| Rules in `rules.js` match Blazor `Rules.cs` contract | **Confirmed Fact** | `ui-prototype/HANDOFF.md`, `ui-prototype/assets/rules.js` |
+| Prototype is vanilla HTML/CSS/JS without build step | **Confirmed Fact** | `src/AGENTS.md`, inspected file structure |
+| Codebase moved from `ui-prototype/` to `src/` | **Confirmed Fact** | Git commit `436fd27` and root `index.html` redirection |
+| Data resides in static JSON loaded via `boot.js` | **Confirmed Fact** | `src/assets/boot.js`, `src/data/*.json` |
+| Rules in `rules.js` match Blazor `Rules.cs` contract | **Confirmed Fact** | `src/HANDOFF.md`, `src/assets/rules.js` |
 | Blazor codebase (`StandHF.Academy.*`) exists in external repo | **Confirmed Fact** | Referenced in `CHANGES.md` and `HANDOFF.md`, not present in current workspace directory |
-| Root repository was uninitialized git workspace | **Confirmed Fact** | `git status` exited 128 |
+| Git repository initialized and tracking `origin/master` | **Confirmed Fact** | `git status` shows branch master up to date |

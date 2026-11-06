@@ -5,7 +5,7 @@
   <title>Decoderium Academy · Personal Learning Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#ff4760">
-  <link rel="icon" type="image/svg+xml" href="../assets/STAND-HF-logo.svg">
+  <link rel="icon" type="image/svg+xml" href="../assets/decoderium-mark.svg">
   <link rel="stylesheet" href="../assets/fonts/fonts.css">
   <link rel="stylesheet" href="../assets/base.css">
   <link rel="stylesheet" href="../assets/academy.css">
@@ -48,18 +48,7 @@
          CENTER COLUMN
          ========================================== */
       '<div class="lms-center-col">' +
-        /* 1. Search & Filter Row */
-        '<div class="lms-search-row">' +
-          '<div class="lms-search-input-wrap">' +
-            '<i class="ms">search</i>' +
-            '<input type="text" id="dashCourseSearch" placeholder="Search your course here...." aria-label="Search curriculum">' +
-          '</div>' +
-          '<button type="button" class="lms-filter-btn" title="Filter courses" onclick="location.href=\'../courses/\'" aria-label="Filter courses">' +
-            '<i class="ms">tune</i>' +
-          '</button>' +
-        '</div>' +
-
-        /* 2. Electric Violet Curved Hero Banner (.lms-hero-banner) */
+        /* 1. Electric Violet Curved Hero Banner (.lms-hero-banner) */
         '<div class="lms-hero-banner">' +
           '<svg class="lms-hero-sparkles" viewBox="0 0 220 170" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
             '<path d="M150 15 C150 50, 165 65, 200 65 C165 65, 150 80, 150 115 C150 80, 135 65, 100 65 C135 65, 150 50, 150 15 Z" fill="white" fill-opacity="0.22"/>' +
@@ -79,28 +68,28 @@
           '</div>' +
         '</div>' +
 
-        /* 3. Quick Progress Pill Cards Row */
+        /* 3. Quick Progress Pill Cards Row in Material Pastel Tonal Cards */
         '<div class="lms-progress-pills-grid">' +
-          '<a href="../courses/#c1" class="lms-progress-pill">' +
-            '<div class="lms-pill-icon-wrap"><i class="ms">notifications_none</i></div>' +
+          '<a href="../courses/#c1" class="lms-progress-pill tone-violet">' +
+            '<div class="lms-pill-icon-wrap"><i class="ms">cardiology</i></div>' +
             '<div class="lms-pill-text">' +
-              '<div class="lms-pill-meta">2/4 Watched</div>' +
+              '<div class="lms-pill-meta">2/4 Watched · 50%</div>' +
               '<div class="lms-pill-name">Module 1 · HFrEF Diagnosis</div>' +
             '</div>' +
             '<button type="button" class="lms-pill-more" aria-label="Module 1 options"><i class="ms">more_vert</i></button>' +
           '</a>' +
-          '<a href="../courses/#c1" class="lms-progress-pill">' +
-            '<div class="lms-pill-icon-wrap"><i class="ms">play_circle_outline</i></div>' +
+          '<a href="../courses/#c1" class="lms-progress-pill tone-rose">' +
+            '<div class="lms-pill-icon-wrap"><i class="ms">medication</i></div>' +
             '<div class="lms-pill-text">' +
-              '<div class="lms-pill-meta">1/3 Watched</div>' +
+              '<div class="lms-pill-meta">3/4 Watched · 75%</div>' +
               '<div class="lms-pill-name">Module 2 · GDMT Pillars</div>' +
             '</div>' +
             '<button type="button" class="lms-pill-more" aria-label="Module 2 options"><i class="ms">more_vert</i></button>' +
           '</a>' +
-          '<a href="../courses/#c1" class="lms-progress-pill">' +
-            '<div class="lms-pill-icon-wrap"><i class="ms">bookmark_border</i></div>' +
+          '<a href="../courses/#c1" class="lms-progress-pill tone-sky">' +
+            '<div class="lms-pill-icon-wrap"><i class="ms">speed</i></div>' +
             '<div class="lms-pill-text">' +
-              '<div class="lms-pill-meta">0/2 Watched</div>' +
+              '<div class="lms-pill-meta">1/2 Watched · 50%</div>' +
               '<div class="lms-pill-name">Module 3 · Titration & Safety</div>' +
             '</div>' +
             '<button type="button" class="lms-pill-more" aria-label="Module 3 options"><i class="ms">more_vert</i></button>' +
@@ -128,7 +117,7 @@
                 '<span class="lms-thumb-duration">9:00 min</span>' +
               '</div>' +
               '<div class="lms-card-content">' +
-                '<span class="lms-card-pill-tag">HFrEF DIAGNOSIS</span>' +
+                '<span class="lms-card-pill-tag tag-mint">HFrEF DIAGNOSIS</span>' +
                 '<h3 class="lms-card-title">What is HFrEF? Definitions and Clinical Burden</h3>' +
                 '<div class="lms-card-instructor-row">' +
                   '<div class="lms-instructor-avatar" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8);">SA</div>' +
@@ -151,7 +140,7 @@
                 '<span class="lms-thumb-duration">11:00 min</span>' +
               '</div>' +
               '<div class="lms-card-content">' +
-                '<span class="lms-card-pill-tag">GDMT PILLARS</span>' +
+                '<span class="lms-card-pill-tag tag-violet">GDMT PILLARS</span>' +
                 '<h3 class="lms-card-title">ARNI and the Move Beyond ACE-I and ARB</h3>' +
                 '<div class="lms-card-instructor-row">' +
                   '<div class="lms-instructor-avatar" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9);">TM</div>' +
@@ -174,7 +163,7 @@
                 '<span class="lms-thumb-duration">10:30 min</span>' +
               '</div>' +
               '<div class="lms-card-content">' +
-                '<span class="lms-card-pill-tag">PHARMACOTHERAPY</span>' +
+                '<span class="lms-card-pill-tag tag-rose">PHARMACOTHERAPY</span>' +
                 '<h3 class="lms-card-title">MRAs and SGLT2 Inhibitors: Clinical Rules</h3>' +
                 '<div class="lms-card-instructor-row">' +
                   '<div class="lms-instructor-avatar" style="background:linear-gradient(135deg,#ec4899,#be185d);">SA</div>' +
@@ -269,6 +258,7 @@
             '<div class="lms-profile-avatar-wrap">' +
               '<div class="lms-profile-ring"></div>' +
               '<div class="lms-profile-avatar">' + esc(docInitials) + '</div>' +
+              '<div class="lms-profile-pct-badge">' + (pc || 65) + '%</div>' +
             '</div>' +
             '<div class="lms-profile-name">' + greeting + ', ' + esc(doctorName.replace(/^Dr\.\s*/i, 'Dr. ')) + '</div>' +
             '<div class="lms-profile-pmdc">PMDC ID: ' + esc(pmdcId) + '</div>' +
@@ -457,15 +447,6 @@
         location.href = '../courses/';
       }
     };
-  }
-
-  var searchInput = document.getElementById('dashCourseSearch');
-  if (searchInput) {
-    searchInput.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') {
-        location.href = '../courses/#' + encodeURIComponent(this.value.trim());
-      }
-    });
   }
 
   /* Trigger physician welcome alert card */

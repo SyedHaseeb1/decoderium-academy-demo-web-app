@@ -1,0 +1,164 @@
+<svg width="1440" height="900" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .font { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1440" height="900" fill="#f8f9fd"/>
+
+  <!-- Left Sidebar (Matching) -->
+  <rect x="0" y="0" width="260" height="900" fill="#ffffff"/>
+  <line x1="260" y1="0" x2="260" y2="900" stroke="#e8ecf4" stroke-width="1"/>
+
+  <rect x="28" y="24" width="36" height="36" rx="10" fill="#582be8"/>
+  <path d="M38 42 L44 32 L48 44 L54 42" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="76" y="48" class="font" font-size="18" font-weight="700" fill="#0f172a">STAND-HF</text>
+
+  <rect x="16" y="96" width="228" height="44" rx="12" fill="transparent"/>
+  <text x="56" y="123" class="font" font-size="14" font-weight="600" fill="#64748b">Home Hub</text>
+
+  <rect x="16" y="148" width="228" height="44" rx="12" fill="transparent"/>
+  <text x="56" y="175" class="font" font-size="14" font-weight="600" fill="#64748b">Courses &amp; Protocols</text>
+
+  <!-- Active: Dashboard -->
+  <rect x="16" y="200" width="228" height="44" rx="12" fill="#f5f3ff"/>
+  <circle cx="38" cy="222" r="6" fill="#582be8"/>
+  <text x="56" y="227" class="font" font-size="14" font-weight="700" fill="#582be8">CME Dashboard</text>
+
+  <rect x="16" y="252" width="228" height="44" rx="12" fill="transparent"/>
+  <text x="56" y="279" class="font" font-size="14" font-weight="600" fill="#64748b">Certificates</text>
+
+  <rect x="16" y="304" width="228" height="44" rx="12" fill="transparent"/>
+  <text x="56" y="331" class="font" font-size="14" font-weight="600" fill="#64748b">Trial Guidelines</text>
+
+  <!-- Top App Header -->
+  <rect x="260" y="0" width="1180" height="72" fill="#ffffff"/>
+  <line x1="260" y1="72" x2="1440" y2="72" stroke="#e8ecf4" stroke-width="1"/>
+  <text x="292" y="43" class="font" font-size="20" font-weight="800" fill="#0f172a">Study Compliance &amp; CME Metrics</text>
+
+  <!-- Top 4 Metrics Summary Cards -->
+  <g transform="translate(292, 96)">
+    <!-- Metric 1 -->
+    <rect x="0" y="0" width="262" height="110" rx="16" fill="#ffffff" stroke="#e8ecf4" stroke-width="1.5"/>
+    <text x="20" y="32" class="font" font-size="12" font-weight="600" fill="#64748b">TOTAL TIME LOGGED</text>
+    <text x="20" y="68" class="font" font-size="28" font-weight="800" fill="#0f172a">14h 25m</text>
+    <text x="20" y="92" class="font" font-size="11" font-weight="600" fill="#10b981">▲ +2.4 hrs this week</text>
+
+    <!-- Metric 2 -->
+    <rect x="282" y="0" width="262" height="110" rx="16" fill="#ffffff" stroke="#e8ecf4" stroke-width="1.5"/>
+    <text x="302" y="32" class="font" font-size="12" font-weight="600" fill="#64748b">MANDATORY THRESHOLD</text>
+    <text x="302" y="68" class="font" font-size="28" font-weight="800" fill="#ff4760">90.0%</text>
+    <text x="302" y="92" class="font" font-size="11" font-weight="600" fill="#ff4760">Rule: rules.js Strict Threshold</text>
+
+    <!-- Metric 3 -->
+    <rect x="564" y="0" width="262" height="110" rx="16" fill="#ffffff" stroke="#e8ecf4" stroke-width="1.5"/>
+    <text x="584" y="32" class="font" font-size="12" font-weight="600" fill="#64748b">ACTUAL WATCH COMPLETION</text>
+    <text x="584" y="68" class="font" font-size="28" font-weight="800" fill="#10b981">92.4%</text>
+    <text x="584" y="92" class="font" font-size="11" font-weight="700" fill="#10b981">✓ COMPLIANT FOR CERTIFICATION</text>
+
+    <!-- Metric 4 -->
+    <rect x="846" y="0" width="262" height="110" rx="16" fill="#ffffff" stroke="#e8ecf4" stroke-width="1.5"/>
+    <text x="866" y="32" class="font" font-size="12" font-weight="600" fill="#64748b">QUIZ PASS STATUS</text>
+    <text x="866" y="68" class="font" font-size="28" font-weight="800" fill="#582be8">3 / 4</text>
+    <text x="866" y="92" class="font" font-size="11" font-weight="600" fill="#582be8">1 quiz ready to unlock</text>
+  </g>
+
+  <!-- Main Left Card: 90% Watch Threshold Tracker & Module Table -->
+  <rect x="292" y="230" width="760" height="630" rx="20" fill="#ffffff" stroke="#e8ecf4" stroke-width="1.5"/>
+  <text x="324" y="268" class="font" font-size="18" font-weight="800" fill="#0f172a">STAND-HF Protocol Watch Compliance Matrix</text>
+  <text x="324" y="292" class="font" font-size="13" font-weight="500" fill="#64748b">Every physician must watch $\ge$90% of each lecture video before quiz unlocking and CME certification.</text>
+
+  <!-- Table Header -->
+  <rect x="324" y="318" width="696" height="40" rx="8" fill="#f8f9fd"/>
+  <text x="340" y="342" class="font" font-size="11" font-weight="700" fill="#64748b">PROTOCOL / MODULE</text>
+  <text x="610" y="342" class="font" font-size="11" font-weight="700" fill="#64748b">WATCH %</text>
+  <text x="750" y="342" class="font" font-size="11" font-weight="700" fill="#64748b">THRESHOLD</text>
+  <text x="880" y="342" class="font" font-size="11" font-weight="700" fill="#64748b">QUIZ STATUS</text>
+
+  <!-- Row 1 -->
+  <line x1="324" y1="368" x2="1020" y2="368" stroke="#e8ecf4"/>
+  <text x="340" y="398" class="font" font-size="14" font-weight="700" fill="#0f172a">Module 01: Acute Heart Failure Biomarkers</text>
+  <text x="340" y="416" class="font" font-size="12" font-weight="500" fill="#64748b">NT-proBNP &amp; Troponin kinetics · 4 Lectures</text>
+  <rect x="610" y="392" width="100" height="8" rx="4" fill="#eef2f9"/>
+  <rect x="610" y="392" width="96" height="8" rx="4" fill="#10b981"/>
+  <text x="610" y="416" class="font" font-size="12" font-weight="700" fill="#10b981">96.0%</text>
+  <rect x="750" y="390" width="84" height="24" rx="6" fill="#ecfdf5"/>
+  <text x="758" y="406" class="font" font-size="11" font-weight="700" fill="#065f46">PASS (≥90%)</text>
+  <rect x="880" y="390" width="84" height="24" rx="6" fill="#f5f3ff"/>
+  <text x="892" y="406" class="font" font-size="11" font-weight="700" fill="#582be8">Passed (92%)</text>
+
+  <!-- Row 2 -->
+  <line x1="324" y1="436" x2="1020" y2="436" stroke="#e8ecf4"/>
+  <text x="340" y="466" class="font" font-size="14" font-weight="700" fill="#0f172a">Module 02: In-Hospital Worsening Protocol</text>
+  <text x="340" y="484" class="font" font-size="12" font-weight="500" fill="#64748b">STAND-HF IV Diuretic titration · 5 Lectures</text>
+  <rect x="610" y="460" width="100" height="8" rx="4" fill="#eef2f9"/>
+  <rect x="610" y="460" width="91" height="8" rx="4" fill="#10b981"/>
+  <text x="610" y="484" class="font" font-size="12" font-weight="700" fill="#10b981">91.5%</text>
+  <rect x="750" y="458" width="84" height="24" rx="6" fill="#ecfdf5"/>
+  <text x="758" y="474" class="font" font-size="11" font-weight="700" fill="#065f46">PASS (≥90%)</text>
+  <rect x="880" y="458" width="84" height="24" rx="6" fill="#f5f3ff"/>
+  <text x="892" y="474" class="font" font-size="11" font-weight="700" fill="#582be8">Passed (88%)</text>
+
+  <!-- Row 3 -->
+  <line x1="324" y1="504" x2="1020" y2="504" stroke="#e8ecf4"/>
+  <text x="340" y="534" class="font" font-size="14" font-weight="700" fill="#0f172a">Module 03: GDMT Initiation &amp; Co-Therapy</text>
+  <text x="340" y="552" class="font" font-size="12" font-weight="500" fill="#64748b">SGLT2i + ARNI Quadruple Therapy · 4 Lectures</text>
+  <rect x="610" y="528" width="100" height="8" rx="4" fill="#eef2f9"/>
+  <rect x="610" y="528" width="74" height="8" rx="4" fill="#582be8"/>
+  <text x="610" y="552" class="font" font-size="12" font-weight="700" fill="#582be8">74.0%</text>
+  <rect x="750" y="526" width="98" height="24" rx="6" fill="#fff1f3"/>
+  <text x="758" y="542" class="font" font-size="11" font-weight="700" fill="#ff4760">16% TO UNLOCK</text>
+  <rect x="880" y="526" width="84" height="24" rx="6" fill="#f8f9fd" stroke="#e8ecf4"/>
+  <text x="894" y="542" class="font" font-size="11" font-weight="700" fill="#64748b">Locked 🔒</text>
+
+  <!-- Row 4 -->
+  <line x1="324" y1="572" x2="1020" y2="572" stroke="#e8ecf4"/>
+  <text x="340" y="602" class="font" font-size="14" font-weight="700" fill="#0f172a">Module 04: Advanced Cardiorenal Hemodynamics</text>
+  <text x="340" y="620" class="font" font-size="12" font-weight="500" fill="#64748b">Venous congestion and nephron blockade · 3 Lectures</text>
+  <rect x="610" y="596" width="100" height="8" rx="4" fill="#eef2f9"/>
+  <rect x="610" y="596" width="94" height="8" rx="4" fill="#10b981"/>
+  <text x="610" y="620" class="font" font-size="12" font-weight="700" fill="#10b981">94.2%</text>
+  <rect x="750" y="594" width="84" height="24" rx="6" fill="#ecfdf5"/>
+  <text x="758" y="610" class="font" font-size="11" font-weight="700" fill="#065f46">PASS (≥90%)</text>
+  <rect x="880" y="594" width="84" height="24" rx="6" fill="#f5f3ff"/>
+  <text x="892" y="610" class="font" font-size="11" font-weight="700" fill="#582be8">Passed (95%)</text>
+
+  <!-- Rule Engine Footer Note -->
+  <rect x="324" y="670" width="696" height="50" rx="10" fill="#f5f3ff" stroke="#ddd6fe" stroke-width="1"/>
+  <text x="340" y="700" class="font" font-size="12" font-weight="600" fill="#582be8">⚖ STAND-HF Rule: RULES.isQuizUnlocked() requires watchPercent >= 90.0% for every enrolled lecture.</text>
+
+  <!-- Right Side: Circular Gauge & CME Certificate Status -->
+  <rect x="1076" y="230" width="324" height="630" rx="20" fill="#ffffff" stroke="#e8ecf4" stroke-width="1.5"/>
+  <text x="1104" y="268" class="font" font-size="18" font-weight="800" fill="#0f172a">Compliance Gauge</text>
+
+  <!-- Circular Ring Progress Chart -->
+  <g transform="translate(1238, 380)">
+    <!-- Background Circle -->
+    <circle cx="0" cy="0" r="80" stroke="#f1f3f9" stroke-width="16" fill="none"/>
+    <!-- Progress Circle (92.4%) -->
+    <circle cx="0" cy="0" r="80" stroke="#582be8" stroke-width="16" fill="none" stroke-dasharray="502" stroke-dashoffset="38" stroke-linecap="round"/>
+    <text x="0" y="8" class="font" font-size="32" font-weight="800" fill="#0f172a" text-anchor="middle">92.4%</text>
+    <text x="0" y="28" class="font" font-size="11" font-weight="700" fill="#10b981" text-anchor="middle">OVER THRESHOLD</text>
+  </g>
+
+  <!-- Breakdown List -->
+  <rect x="1104" y="500" width="268" height="60" rx="12" fill="#f8f9fd" stroke="#e8ecf4" stroke-width="1"/>
+  <circle cx="1124" cy="530" r="6" fill="#10b981"/>
+  <text x="1140" y="526" class="font" font-size="13" font-weight="700" fill="#0f172a">Completed Protocols</text>
+  <text x="1140" y="544" class="font" font-size="12" font-weight="500" fill="#64748b">3 Modules (12.0 CME)</text>
+
+  <rect x="1104" y="572" width="268" height="60" rx="12" fill="#f8f9fd" stroke="#e8ecf4" stroke-width="1"/>
+  <circle cx="1124" cy="602" r="6" fill="#582be8"/>
+  <text x="1140" y="598" class="font" font-size="13" font-weight="700" fill="#0f172a">In-Progress Protocol</text>
+  <text x="1140" y="616" class="font" font-size="12" font-weight="500" fill="#64748b">1 Module (74% Watched)</text>
+
+  <rect x="1104" y="644" width="268" height="60" rx="12" fill="#f8f9fd" stroke="#e8ecf4" stroke-width="1"/>
+  <circle cx="1124" cy="674" r="6" fill="#ff4760"/>
+  <text x="1140" y="670" class="font" font-size="13" font-weight="700" fill="#0f172a">Target Certificate</text>
+  <text x="1140" y="688" class="font" font-size="12" font-weight="500" fill="#64748b">STAND-HF Cert #SHF-8492</text>
+
+  <rect x="1104" y="730" width="268" height="48" rx="12" fill="#582be8"/>
+  <text x="1238" y="759" class="font" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">Generate CME Report ↓</text>
+</svg>

@@ -1,0 +1,90 @@
+<svg width="1440" height="900" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .font { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    </style>
+    <linearGradient id="bg-grad" x1="0" y1="0" x2="1440" y2="900" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#f8f9fd"/>
+      <stop offset="100%" stop-color="#eef2fb"/>
+    </linearGradient>
+    <linearGradient id="violet-glow" x1="0" y1="0" x2="600" y2="600" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#582be8" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#582be8" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="coral-glow" x1="1440" y1="900" x2="900" y2="500" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ff4760" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#ff4760" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="card-shadow" x="380" y="90" width="680" height="740" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="16" stdDeviation="24" flood-color="#0f172a" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1440" height="900" fill="url(#bg-grad)"/>
+  <circle cx="200" cy="150" r="400" fill="url(#violet-glow)"/>
+  <circle cx="1200" cy="750" r="450" fill="url(#coral-glow)"/>
+
+  <!-- Minimal Top Header -->
+  <rect x="0" y="0" width="1440" height="72" fill="#ffffff" fill-opacity="0.8"/>
+  <line x1="0" y1="72" x2="1440" y2="72" stroke="#e8ecf4" stroke-width="1"/>
+  
+  <!-- Logo -->
+  <rect x="64" y="18" width="36" height="36" rx="10" fill="#582be8"/>
+  <path d="M74 36 L80 26 L84 38 L90 36" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="112" y="42" class="font" font-size="19" font-weight="700" fill="#0f172a">STAND-HF <tspan fill="#582be8">Academy</tspan></text>
+  <rect x="290" y="24" width="138" height="24" rx="12" fill="#f5f3ff"/>
+  <text x="302" y="40" class="font" font-size="11" font-weight="600" fill="#582be8">CLINICAL STUDY PORTAL</text>
+
+  <text x="1260" y="42" class="font" font-size="13" font-weight="600" fill="#64748b">Support: +92 21 9920 1271</text>
+
+  <!-- Main Login Card Container -->
+  <g filter="url(#card-shadow)">
+    <rect x="420" y="110" width="600" height="690" rx="24" fill="#ffffff" stroke="#e8ecf4" stroke-width="1.5"/>
+  </g>
+
+  <!-- Card Top Badge & Header -->
+  <rect x="660" y="145" width="120" height="28" rx="14" fill="#ecfdf5" stroke="#a7f3d0" stroke-width="1"/>
+  <circle cx="674" cy="159" r="4" fill="#10b981"/>
+  <text x="686" y="163" class="font" font-size="12" font-weight="700" fill="#065f46">PMDC VERIFIED</text>
+
+  <text x="720" y="215" class="font" font-size="26" font-weight="800" fill="#0f172a" text-anchor="middle">Physician Sign In</text>
+  <text x="720" y="245" class="font" font-size="14" font-weight="500" fill="#64748b" text-anchor="middle">Access accredited Heart Failure CME protocols &amp; trial modules</text>
+
+  <!-- Quick Demo Profile Selector -->
+  <rect x="464" y="280" width="512" height="74" rx="14" fill="#f8f9fd" stroke="#e8ecf4" stroke-width="1"/>
+  <text x="484" y="306" class="font" font-size="12" font-weight="700" fill="#0f172a">ONE-CLICK INVESTIGATOR DEMO ACCESS</text>
+  <rect x="484" y="318" width="150" height="26" rx="6" fill="#582be8" fill-opacity="0.1"/>
+  <text x="496" y="335" class="font" font-size="11" font-weight="600" fill="#582be8">Dr. Sarah Khan (PI)</text>
+  <rect x="644" y="318" width="156" height="26" rx="6" fill="#ffffff" stroke="#e8ecf4"/>
+  <text x="654" y="335" class="font" font-size="11" font-weight="600" fill="#475569">Dr. A. Siddiqui (Co-PI)</text>
+  <rect x="810" y="318" width="150" height="26" rx="6" fill="#ffffff" stroke="#e8ecf4"/>
+  <text x="822" y="335" class="font" font-size="11" font-weight="600" fill="#475569">Prof. M. Hashim (Admin)</text>
+
+  <!-- Form Field 1: PMDC Number -->
+  <text x="464" y="388" class="font" font-size="13" font-weight="700" fill="#0f172a">PMDC / Medical License Number</text>
+  <rect x="464" y="400" width="512" height="48" rx="12" fill="#ffffff" stroke="#582be8" stroke-width="2"/>
+  <text x="484" y="430" class="font" font-size="15" font-weight="600" fill="#0f172a">PMDC-74920-P</text>
+  <rect x="910" y="412" width="54" height="24" rx="6" fill="#ecfdf5"/>
+  <text x="918" y="428" class="font" font-size="11" font-weight="700" fill="#10b981">VALID</text>
+
+  <!-- Form Field 2: Hospital Center -->
+  <text x="464" y="482" class="font" font-size="13" font-weight="700" fill="#0f172a">Study Center / Hospital Affiliation</text>
+  <rect x="464" y="494" width="512" height="48" rx="12" fill="#ffffff" stroke="#e8ecf4" stroke-width="1.5"/>
+  <text x="484" y="524" class="font" font-size="14" font-weight="500" fill="#0f172a">NICVD Karachi — Center #01 (STAND-HF Lead)</text>
+  <path d="M944 515 L952 525 L960 515" stroke="#64748b" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Form Field 3: Access PIN -->
+  <text x="464" y="576" class="font" font-size="13" font-weight="700" fill="#0f172a">Security Access PIN / OTP</text>
+  <rect x="464" y="588" width="512" height="48" rx="12" fill="#ffffff" stroke="#e8ecf4" stroke-width="1.5"/>
+  <text x="484" y="618" class="font" font-size="16" font-weight="600" fill="#64748b">••••••</text>
+  <text x="900" y="618" class="font" font-size="13" font-weight="600" fill="#582be8">Send OTP</text>
+
+  <!-- Submit Button -->
+  <rect x="464" y="660" width="512" height="52" rx="14" fill="#582be8"/>
+  <text x="720" y="692" class="font" font-size="16" font-weight="700" fill="#ffffff" text-anchor="middle">Enter Learning Portal →</text>
+
+  <!-- Security Footer -->
+  <text x="720" y="748" class="font" font-size="12" font-weight="500" fill="#64748b" text-anchor="middle">🔒 End-to-End Encrypted Session · STAND-HF Protocol Registry #NCT0529841</text>
+  <rect x="520" y="765" width="400" height="2" fill="#e8ecf4"/>
+</svg>

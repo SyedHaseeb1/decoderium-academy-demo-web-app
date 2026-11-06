@@ -1,7 +1,7 @@
 /* Session, roles and the demo "database" (localStorage). Loaded after boot.js, rules.js and ui.js.
    Everything here stands in for the API. The Blazor app replaces these functions with service calls.
    Storage keys: academy_* in sessionStorage (who is signed in), academy_state_v1 in localStorage (progress and edits). */
-var STATE_KEY = 'academy_state_v1';
+var STATE_KEY = 'academy_state_v2';
 var ST = null;       // saved state
 var COURSES = null;  // course tree with quiz pools built from the data files
 
@@ -61,11 +61,12 @@ function newState() {
   doctors.forEach(function (d) { progress[d.id] = { doctorId: d.id, lectures: {}, attempts: [], certs: [] }; });
   var c1 = COURSES[0], c2 = COURSES[1];
 
-  var a = progress.d01;                                  // Dr. Ayesha Khan: module 1 passed, module 2 half way
-  seedPass(a, c1, c1.modules[0], 90, 12, frac);
-  seedWatch(a, c1.modules[1].lectures[0], 1, frac);
-  seedWatch(a, c1.modules[1].lectures[1], 1, frac);
-  seedWatch(a, c1.modules[1].lectures[2], 0.4, frac);
+  var a = progress.d01;                                  // Dr. Ayesha Khan: completed course 1 with PMDC certificate
+  c1.modules.forEach(function (m) { seedPass(a, c1, m, 92, 14 - m.number * 3, frac); });
+  seedCert(a, c1, 4);
+  seedPass(a, c2, c2.modules[0], 88, 2, frac);
+  seedWatch(a, c2.modules[1].lectures[0], 1, frac);
+  seedWatch(a, c2.modules[1].lectures[1], 0.6, frac);
 
   var b = progress.d02;                                  // Dr. Bilal Ahmed: one quiz from a second certificate
   c1.modules.slice(0, 3).forEach(function (m) { seedPass(b, c1, m, 85, 30 - m.number * 5, frac); });
@@ -79,7 +80,7 @@ function newState() {
     if (between(r, 0, 3) > 0) seedCourse(progress[d.id], c2, between(r, 0, 4), r, frac);
   });
   var s = ACADEMY_DATA.settings;
-  return { v: 1, doctors: doctors, progress: progress, published: {}, settings: { quiz: JSON.parse(JSON.stringify(s.quiz)), certificate: JSON.parse(JSON.stringify(s.certificate)) }, activeQuiz: null };
+  return { v: 2, doctors: doctors, progress: progress, published: {}, settings: { quiz: JSON.parse(JSON.stringify(s.quiz)), certificate: JSON.parse(JSON.stringify(s.certificate)) }, activeQuiz: null };
 }
 
 function applyPublished() { COURSES.forEach(function (c) { if (ST.published.hasOwnProperty(c.id)) c.published = ST.published[c.id]; }); }
@@ -88,7 +89,7 @@ function loadState() {
   buildCourses();
   var saved = null;
   try { saved = JSON.parse(localStorage.getItem(STATE_KEY)); } catch (e) { }
-  ST = saved && saved.v === 1 && saved.doctors && saved.doctors.length ? saved : newState();
+  ST = saved && saved.v === 2 && saved.doctors && saved.doctors.length ? saved : newState();
   applyPublished();
 }
 function resetDemo() { try { localStorage.removeItem(STATE_KEY); } catch (e) { } loadState(); saveState(); }

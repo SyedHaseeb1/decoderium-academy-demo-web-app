@@ -1,0 +1,136 @@
+<svg width="1440" height="900" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .font { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1440" height="900" fill="#f8f9fd"/>
+
+  <!-- Left Sidebar (Unified Navigation) -->
+  <rect x="0" y="0" width="260" height="900" fill="#ffffff"/>
+  <line x1="260" y1="0" x2="260" y2="900" stroke="#e8ecf4" stroke-width="1"/>
+
+  <!-- Sidebar Brand -->
+  <rect x="28" y="24" width="36" height="36" rx="10" fill="#582be8"/>
+  <path d="M38 42 L44 32 L48 44 L54 42" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="76" y="48" class="font" font-size="18" font-weight="700" fill="#0f172a">STAND-HF</text>
+
+  <!-- Nav Items -->
+  <!-- Active: Home -->
+  <rect x="16" y="96" width="228" height="44" rx="12" fill="#f5f3ff"/>
+  <circle cx="38" cy="118" r="6" fill="#582be8"/>
+  <text x="56" y="123" class="font" font-size="14" font-weight="700" fill="#582be8">Home Hub</text>
+
+  <!-- Inactive: Courses -->
+  <rect x="16" y="148" width="228" height="44" rx="12" fill="transparent"/>
+  <text x="56" y="175" class="font" font-size="14" font-weight="600" fill="#64748b">Courses &amp; Protocols</text>
+
+  <!-- Inactive: Dashboard -->
+  <rect x="16" y="200" width="228" height="44" rx="12" fill="transparent"/>
+  <text x="56" y="227" class="font" font-size="14" font-weight="600" fill="#64748b">CME Dashboard</text>
+
+  <!-- Inactive: Certificates -->
+  <rect x="16" y="252" width="228" height="44" rx="12" fill="transparent"/>
+  <text x="56" y="279" class="font" font-size="14" font-weight="600" fill="#64748b">Certificates</text>
+
+  <!-- Inactive: Study Docs -->
+  <rect x="16" y="304" width="228" height="44" rx="12" fill="transparent"/>
+  <text x="56" y="331" class="font" font-size="14" font-weight="600" fill="#64748b">Trial Guidelines</text>
+
+  <!-- Sidebar Bottom Doctor Profile Card -->
+  <rect x="16" y="796" width="228" height="72" rx="14" fill="#f8f9fd" stroke="#e8ecf4" stroke-width="1"/>
+  <circle cx="48" cy="832" r="18" fill="#582be8"/>
+  <text x="48" y="837" class="font" font-size="13" font-weight="700" fill="#ffffff" text-anchor="middle">SK</text>
+  <text x="76" y="826" class="font" font-size="13" font-weight="700" fill="#0f172a">Dr. Sarah Khan</text>
+  <text x="76" y="844" class="font" font-size="11" font-weight="500" fill="#64748b">Principal Investigator</text>
+
+  <!-- Top App Header -->
+  <rect x="260" y="0" width="1180" height="72" fill="#ffffff"/>
+  <line x1="260" y1="72" x2="1440" y2="72" stroke="#e8ecf4" stroke-width="1"/>
+
+  <rect x="292" y="16" width="340" height="40" rx="10" fill="#f8f9fd" stroke="#e8ecf4" stroke-width="1"/>
+  <text x="316" y="41" class="font" font-size="13" font-weight="500" fill="#64748b">🔍  Search guidelines, lectures, faculty...</text>
+
+  <rect x="1230" y="18" width="168" height="36" rx="10" fill="#f5f3ff" stroke="#ddd6fe" stroke-width="1"/>
+  <text x="1246" y="41" class="font" font-size="12" font-weight="700" fill="#582be8">⚡ 90% Rule Enforced</text>
+
+  <!-- Main Content Area -->
+  <!-- Welcome Banner Card -->
+  <rect x="292" y="96" width="1108" height="150" rx="20" fill="#ffffff" stroke="#e8ecf4" stroke-width="1.5"/>
+  <rect x="292" y="96" width="1108" height="6" fill="#582be8" rx="3"/>
+  <text x="328" y="146" class="font" font-size="24" font-weight="800" fill="#0f172a">Welcome back, Dr. Sarah Khan 👋</text>
+  <text x="328" y="176" class="font" font-size="14" font-weight="500" fill="#64748b">You have completed 12.0 of 15.0 required CME units for the STAND-HF Acute Protocol Accreditation.</text>
+
+  <rect x="328" y="196" width="220" height="32" rx="8" fill="#ecfdf5"/>
+  <text x="342" y="217" class="font" font-size="12" font-weight="700" fill="#065f46">✓ PMDC Accreditation On-Track</text>
+
+  <!-- Quick Resume Big Spotlight Card -->
+  <rect x="292" y="266" width="720" height="260" rx="20" fill="#ffffff" stroke="#e8ecf4" stroke-width="1.5"/>
+  <text x="324" y="304" class="font" font-size="12" font-weight="700" fill="#ff4760">CURRENT ACTIVE MODULE · QUICK RESUME</text>
+  <text x="324" y="336" class="font" font-size="20" font-weight="800" fill="#0f172a">Module 03: GDMT Up-Titration in Worsening HF</text>
+  <text x="324" y="362" class="font" font-size="13" font-weight="500" fill="#64748b">Lecture 4: SGLT2i and ARNI Co-Administration Timelines (18 mins remaining)</text>
+
+  <!-- Progress Bar with 90% threshold line -->
+  <rect x="324" y="390" width="656" height="12" rx="6" fill="#eef2f9"/>
+  <rect x="324" y="390" width="485" height="12" rx="6" fill="#582be8"/>
+  <!-- 90% Marker -->
+  <line x1="914" y1="384" x2="914" y2="408" stroke="#ff4760" stroke-width="2.5" stroke-dasharray="2 2"/>
+  <text x="888" y="424" class="font" font-size="11" font-weight="700" fill="#ff4760">90% Target</text>
+  <text x="324" y="424" class="font" font-size="12" font-weight="600" fill="#0f172a">74% Watched (28m / 38m)</text>
+
+  <!-- Resume Button -->
+  <rect x="324" y="450" width="200" height="46" rx="12" fill="#582be8"/>
+  <text x="424" y="478" class="font" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">Resume Lecture 4 ▶</text>
+
+  <!-- Right Metrics Card -->
+  <rect x="1032" y="266" width="368" height="260" rx="20" fill="#ffffff" stroke="#e8ecf4" stroke-width="1.5"/>
+  <text x="1060" y="304" class="font" font-size="16" font-weight="800" fill="#0f172a">Accreditation Summary</text>
+  
+  <rect x="1060" y="328" width="312" height="54" rx="12" fill="#f8f9fd" stroke="#e8ecf4" stroke-width="1"/>
+  <text x="1076" y="352" class="font" font-size="12" font-weight="600" fill="#64748b">Total CME Credits</text>
+  <text x="1076" y="372" class="font" font-size="16" font-weight="800" fill="#582be8">12.0 / 15.0 hrs</text>
+
+  <rect x="1060" y="394" width="312" height="54" rx="12" fill="#f8f9fd" stroke="#e8ecf4" stroke-width="1"/>
+  <text x="1076" y="418" class="font" font-size="12" font-weight="600" fill="#64748b">Mandatory Watch Threshold</text>
+  <text x="1076" y="438" class="font" font-size="16" font-weight="800" fill="#10b981">92.4% Average</text>
+
+  <rect x="1060" y="460" width="312" height="46" rx="12" fill="#f5f3ff"/>
+  <text x="1076" y="488" class="font" font-size="13" font-weight="700" fill="#582be8">View Full CME Dashboard →</text>
+
+  <!-- Lower Section: Next Protocols Grid -->
+  <text x="292" y="562" class="font" font-size="18" font-weight="800" fill="#0f172a">Recommended Protocols &amp; Grand Rounds</text>
+
+  <!-- Protocol Card 1 -->
+  <rect x="292" y="582" width="354" height="270" rx="18" fill="#ffffff" stroke="#e8ecf4" stroke-width="1.5"/>
+  <rect x="312" y="602" width="80" height="24" rx="6" fill="#f5f3ff"/>
+  <text x="322" y="618" class="font" font-size="11" font-weight="700" fill="#582be8">CLINICAL</text>
+  <text x="312" y="652" class="font" font-size="16" font-weight="800" fill="#0f172a">Diuretic Resistance &amp; Biomarkers</text>
+  <text x="312" y="678" class="font" font-size="12" font-weight="500" fill="#64748b">Guidance on loop diuretics, thiazides, and urine sodium assessment.</text>
+  <text x="312" y="740" class="font" font-size="12" font-weight="600" fill="#0f172a">Credits: 3.5 CME · 4 Lectures</text>
+  <rect x="312" y="760" width="314" height="8" rx="4" fill="#eef2f9"/>
+  <rect x="312" y="760" width="314" height="8" rx="4" fill="#10b981"/>
+  <text x="312" y="790" class="font" font-size="12" font-weight="700" fill="#10b981">Completed &amp; Certified ✓</text>
+
+  <!-- Protocol Card 2 -->
+  <rect x="668" y="582" width="354" height="270" rx="18" fill="#ffffff" stroke="#e8ecf4" stroke-width="1.5"/>
+  <rect x="688" y="602" width="80" height="24" rx="6" fill="#fff1f3"/>
+  <text x="698" y="618" class="font" font-size="11" font-weight="700" fill="#ff4760">TRIALS</text>
+  <text x="688" y="652" class="font" font-size="16" font-weight="800" fill="#0f172a">In-Hospital Protocol Execution</text>
+  <text x="688" y="678" class="font" font-size="12" font-weight="500" fill="#64748b">STAND-HF randomisation, inclusion/exclusion, and safety reporting.</text>
+  <text x="688" y="740" class="font" font-size="12" font-weight="600" fill="#0f172a">Credits: 4.0 CME · 6 Lectures</text>
+  <rect x="688" y="760" width="314" height="8" rx="4" fill="#eef2f9"/>
+  <rect x="688" y="760" width="180" height="8" rx="4" fill="#582be8"/>
+  <text x="688" y="790" class="font" font-size="12" font-weight="700" fill="#582be8">In Progress (58%)</text>
+
+  <!-- Protocol Card 3 -->
+  <rect x="1046" y="582" width="354" height="270" rx="18" fill="#ffffff" stroke="#e8ecf4" stroke-width="1.5"/>
+  <rect x="1066" y="602" width="80" height="24" rx="6" fill="#f8f9fd" stroke="#e8ecf4"/>
+  <text x="1076" y="618" class="font" font-size="11" font-weight="700" fill="#64748b">ELECTIVE</text>
+  <text x="1066" y="652" class="font" font-size="16" font-weight="800" fill="#0f172a">Cardiorenal Syndrome Interventions</text>
+  <text x="1066" y="678" class="font" font-size="12" font-weight="500" fill="#64748b">Renal hemodynamics, ultrafiltration, and nephrology coordination.</text>
+  <text x="1066" y="740" class="font" font-size="12" font-weight="600" fill="#0f172a">Credits: 2.5 CME · 3 Lectures</text>
+  <rect x="1066" y="760" width="314" height="8" rx="4" fill="#eef2f9"/>
+  <text x="1066" y="790" class="font" font-size="12" font-weight="600" fill="#64748b">Not Started</text>
+</svg>

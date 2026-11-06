@@ -34,43 +34,51 @@
   /* 1. Render Left Sidebar Component */
   root.innerHTML =
     '<div>' +
-      '<div class="side-brand-wrap" style="margin-bottom:20px;">' +
-        '<div style="font-size:18px;font-weight:800;color:var(--navy);letter-spacing:-0.3px;">Decoderium</div>' +
-        '<div style="font-size:11px;color:var(--slate);font-weight:600;">Heart Failure Academy</div>' +
+      '<div class="side-brand-wrap">' +
+        '<div class="side-brand-title">' +
+          '<div class="side-brand-logo"><img src="../assets/decoderium-mark.svg" alt="Decoderium Mark"></div>' +
+          '<div class="side-brand-text">' +
+            '<div class="side-brand-name">Decoderium</div>' +
+            '<div class="side-brand-sub">Medical Academy</div>' +
+          '</div>' +
+        '</div>' +
+        '<button type="button" class="side-collapse-toggle" id="sideCollapseToggle" aria-label="Collapse sidebar" title="Collapse sidebar">' +
+          '<i class="ms" id="sideCollapseIcon">menu_open</i>' +
+        '</button>' +
       '</div>' +
 
-      '<div class="side-user-header" style="display:flex;align-items:center;gap:10px;margin-bottom:24px;">' +
-        '<div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#ff4760,#e60057);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;box-shadow:var(--shadow-sm);">' +
+      '<div class="side-user-header">' +
+        '<div class="side-user-avatar">' +
           esc(initials(name)) +
         '</div>' +
-        '<div>' +
+        '<div class="side-user-info">' +
           '<div style="font-size:14px;font-weight:800;color:var(--navy);">Hi ' + esc(firstName) + '</div>' +
           '<div style="font-size:11px;color:var(--slate);">' + (s.role === 'admin' ? 'Administrator' : 'Physician') + '</div>' +
         '</div>' +
       '</div>' +
 
-      '<div class="side-floating-nav" style="background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);padding:8px;box-shadow:var(--shadow-xs);display:flex;flex-direction:column;gap:4px;">' +
+      '<div class="side-floating-nav">' +
         navItems.map(function (item) {
           var on = item.key === cur;
-          return '<a class="nav' + (on ? ' active' : '') + '" href="' + item.href + '" data-key="' + item.key + '" style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:var(--radius-md);font-size:13px;font-weight:600;text-decoration:none;transition:all 0.2s ease;' + (on ? 'background:var(--navy);color:#fff;' : 'color:var(--slate);') + '">' +
-            '<i class="ms" style="font-size:20px;' + (on ? 'color:#fff;' : 'color:var(--slate);') + '">' + item.icon + '</i>' +
-            '<span>' + item.label + '</span>' +
+          return '<a class="nav' + (on ? ' active' : '') + '" href="' + item.href + '" data-key="' + item.key + '" title="' + esc(item.label) + '">' +
+            '<i class="ms">' + item.icon + '</i>' +
+            '<span class="nav-text">' + item.label + '</span>' +
           '</a>';
         }).join('') +
       '</div>' +
     '</div>' +
 
-    '<div style="display:flex;flex-direction:column;gap:10px;">' +
-      '<div style="background:#fff;border:1px solid var(--line);border-radius:var(--radius-md);padding:14px;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow-xs);">' +
-        '<div style="width:34px;height:34px;border-radius:50%;background:#ecfdf5;color:#059669;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;"><i class="ms">verified</i></div>' +
-        '<div style="min-width:0;flex:1;">' +
+    '<div class="side-bottom-wrap">' +
+      '<div class="side-pmdc-card" title="PMDC Verified: ' + (d ? esc(d.pmdcId) : 'Licensed Doctor') + '">' +
+        '<div class="side-pmdc-icon"><i class="ms">verified</i></div>' +
+        '<div class="side-pmdc-info" style="min-width:0;flex:1;">' +
           '<div style="font-size:12px;font-weight:800;color:var(--navy);">PMDC Verified</div>' +
           '<div style="font-size:10.5px;color:var(--slate);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + (d ? esc(d.pmdcId) : 'Licensed Doctor') + '</div>' +
         '</div>' +
       '</div>' +
 
-      '<button type="button" class="btn" id="navOut" style="width:100%;justify-content:center;background:#fff;border:1px solid var(--line);border-radius:var(--radius-pill);font-size:12px;padding:8px;font-weight:700;">' +
-        '<i class="ms" style="font-size:16px;">logout</i> Sign out' +
+      '<button type="button" class="btn side-logout-btn" id="navOut" title="Sign out">' +
+        '<i class="ms" style="font-size:18px;">logout</i> <span class="side-logout-text">Sign out</span>' +
       '</button>' +
     '</div>';
 
@@ -78,6 +86,46 @@
   if (btnOut) {
     btnOut.onclick = function () { signOut('../login/'); };
   }
+
+  /* 2. Setup Collapsible Sidebar Handler & Persistence */
+  var appEl = document.getElementById('app') || document.body;
+  var colBtn = document.getElementById('sideCollapseToggle');
+  var colIcon = document.getElementById('sideCollapseIcon');
+
+  function syncCollapseUI(isCol) {
+    if (colIcon) {
+      colIcon.textContent = isCol ? 'menu' : 'menu_open';
+    }
+    if (colBtn) {
+      colBtn.setAttribute('title', isCol ? 'Expand sidebar' : 'Collapse sidebar');
+      colBtn.setAttribute('aria-label', isCol ? 'Expand sidebar' : 'Collapse sidebar');
+    }
+  }
+
+  window.toggleAcademySidebar = function () {
+    var isCol = appEl.classList.toggle('collapsed');
+    root.classList.toggle('collapsed', isCol);
+    try {
+      localStorage.setItem('side_collapsed', isCol ? '1' : '0');
+    } catch (e) {}
+    syncCollapseUI(isCol);
+  };
+
+  if (colBtn) {
+    colBtn.onclick = function (e) {
+      e.preventDefault();
+      window.toggleAcademySidebar();
+    };
+  }
+
+  // Restore stored collapse preference on load
+  try {
+    if (localStorage.getItem('side_collapsed') === '1' && window.innerWidth > 1024) {
+      appEl.classList.add('collapsed');
+      root.classList.add('collapsed');
+      syncCollapseUI(true);
+    }
+  } catch (e) {}
 
   /* 2. Inject Mobile Drawer Scrim */
   var scrim = document.getElementById('drawerScrim');

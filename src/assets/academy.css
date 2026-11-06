@@ -5,13 +5,13 @@
    ========================================================================== */
 
 :root {
-  /* Modern Medical LMS Palette (Electric Violet / Indigo & Clean Porcelain) */
-  --bg: #f8f9fd;
+  /* Material Pastel Tonal Palette (From Reference Cards) */
+  --bg: #f4f7ff;
   --surface: #ffffff;
-  --surface-subtle: #f3f4fa;
-  --surface-hover: #eceef8;
-  --line: #e8ecf4;
-  --line-strong: #d5dcee;
+  --surface-subtle: #f8faff;
+  --surface-hover: #eef4ff;
+  --line: #e2e8f5;
+  --line-strong: #cbd5e5;
 
   --navy: #0f172a;
   --navy-light: #1e293b;
@@ -20,31 +20,38 @@
   --ink: #0f172a;
   --ink-muted: #64748b;
 
-  /* Primary Brand: Modern Electric Violet / Royal Indigo */
-  --primary: #582be8;
-  --primary-hover: #4a21d1;
-  --primary-glow: rgba(88, 43, 232, 0.25);
-  --primary-subtle: #f5f3ff;
-  --primary-border: #ddd6fe;
+  /* Card 1: Electric Azure Blue */
+  --primary: #0067ff;
+  --primary-hover: #0052cc;
+  --primary-glow: rgba(0, 103, 255, 0.25);
+  --primary-subtle: #eef5ff;
+  --primary-border: #bfdbfe;
   --on-primary: #ffffff;
 
-  /* Secondary Status Accents */
-  --coral: #ff4760;
-  --coral-subtle: #fff1f3;
+  /* Card 2: Soft Lilac / Orchid */
+  --purple: #cf78fc;
+  --purple-hover: #b85be6;
+  --purple-subtle: #faf0ff;
+  --purple-border: #f0abfc;
+
+  /* Card 3: Sunny Buttercup Amber */
+  --amber: #f9db38;
+  --amber-hover: #eab308;
+  --amber-subtle: #fefce8;
+  --amber-border: #fef08a;
+
+  /* Card 4: Coral / Watermelon Salmon */
+  --coral: #ed6f71;
+  --coral-hover: #e11d48;
+  --coral-subtle: #fff1f2;
   --coral-border: #fecdd3;
 
   --emerald: #10b981;
   --emerald-subtle: #ecfdf5;
   --emerald-border: #a7f3d0;
 
-  --amber: #f59e0b;
-  --amber-subtle: #fffbeb;
-  --amber-border: #fde68a;
-
   --teal: #0ea5e9;
   --teal-subtle: #f0f9ff;
-  --purple: #8b5cf6;
-  --purple-subtle: #f5f3ff;
 
   /* Geometry & Radii */
   --radius-xs: 6px;
@@ -90,7 +97,11 @@ body {
   padding: 0 !important;
   min-height: 100vh !important;
   background: var(--surface) !important;
-  transition: all 0.25s var(--ease);
+  transition: grid-template-columns 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.app.collapsed {
+  grid-template-columns: 80px minmax(0, 1fr) !important;
 }
 
 /* Left Sidebar Component Container */
@@ -100,7 +111,7 @@ body {
   max-width: 240px !important;
   background: #fbfcfe !important;
   border-right: 1px solid var(--line) !important;
-  padding: 28px 20px !important;
+  padding: 24px 18px !important;
   display: flex !important;
   flex-direction: column !important;
   justify-content: space-between !important;
@@ -109,7 +120,259 @@ body {
   height: 100vh !important;
   box-sizing: border-box !important;
   z-index: 100;
-  transition: transform 0.3s var(--ease);
+  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              min-width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              max-width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              padding 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.3s var(--ease);
+}
+
+.app.collapsed .side,
+.side.collapsed {
+  width: 80px !important;
+  min-width: 80px !important;
+  max-width: 80px !important;
+  padding: 24px 10px !important;
+}
+
+/* Brand area */
+.side-brand-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 22px;
+  min-height: 40px;
+}
+.side-brand-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.side-brand-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  flex-shrink: 0;
+  box-shadow: 0 3px 8px rgba(37, 34, 106, 0.08);
+  transition: all 0.2s ease;
+}
+.side-brand-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.side-brand-text {
+  transition: opacity 0.2s ease;
+}
+.side-brand-name {
+  font-size: 16.5px;
+  font-weight: 800;
+  color: var(--navy);
+  letter-spacing: -0.3px;
+  line-height: 1.15;
+}
+.side-brand-sub {
+  font-size: 10.5px;
+  color: var(--slate);
+  font-weight: 600;
+}
+
+.side-collapse-toggle {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--slate);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+.side-collapse-toggle:hover {
+  background: #f4f7ff;
+  color: var(--navy);
+  border-color: rgba(0, 103, 255, 0.3);
+}
+
+/* User Profile Header */
+.side-user-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+  transition: all 0.2s ease;
+}
+.side-user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0067ff, #cf78fc);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+}
+.side-user-info {
+  min-width: 0;
+  transition: opacity 0.2s ease;
+}
+
+/* Nav links */
+.side-floating-nav {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 8px;
+  box-shadow: var(--shadow-xs);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: padding 0.2s ease;
+}
+.side-floating-nav .nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  color: var(--slate);
+}
+.side-floating-nav .nav:hover {
+  background: #f4f7ff;
+  color: var(--navy);
+}
+.side-floating-nav .nav.active {
+  background: var(--navy) !important;
+  color: #fff !important;
+}
+.side-floating-nav .nav.active .ms {
+  color: #fff !important;
+}
+
+/* Bottom elements */
+.side-bottom-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.side-pmdc-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: var(--shadow-xs);
+  transition: all 0.2s ease;
+}
+.side-pmdc-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #ecfdf5;
+  color: #059669;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.side-logout-btn {
+  width: 100%;
+  justify-content: center;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  padding: 8px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--slate);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.side-logout-btn:hover {
+  background: #fff1f2;
+  color: #e11d48;
+  border-color: #fecdd3;
+}
+
+/* Collapsed Sidebar Rules */
+.app.collapsed .side-brand-wrap,
+.side.collapsed .side-brand-wrap {
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.app.collapsed .side-brand-text,
+.side.collapsed .side-brand-text {
+  display: none !important;
+}
+.app.collapsed .side-user-header,
+.side.collapsed .side-user-header {
+  justify-content: center;
+}
+.app.collapsed .side-user-info,
+.side.collapsed .side-user-info {
+  display: none !important;
+}
+.app.collapsed .side-floating-nav,
+.side.collapsed .side-floating-nav {
+  padding: 6px 4px;
+}
+.app.collapsed .side-floating-nav .nav,
+.side.collapsed .side-floating-nav .nav {
+  justify-content: center;
+  padding: 11px 0;
+  gap: 0;
+}
+.app.collapsed .side-floating-nav .nav .nav-text,
+.side.collapsed .side-floating-nav .nav .nav-text {
+  display: none !important;
+}
+.app.collapsed .side-pmdc-card,
+.side.collapsed .side-pmdc-card {
+  padding: 8px 4px;
+  justify-content: center;
+}
+.app.collapsed .side-pmdc-info,
+.side.collapsed .side-pmdc-info {
+  display: none !important;
+}
+.app.collapsed .side-logout-btn,
+.side.collapsed .side-logout-btn {
+  padding: 8px 0;
+  border-radius: var(--radius-md);
+  justify-content: center;
+}
+.app.collapsed .side-logout-text,
+.side.collapsed .side-logout-text {
+  display: none !important;
 }
 
 /* Main Workspace Component Container */
@@ -1723,22 +1986,73 @@ body {
 
 .lms-progress-pill {
   background: var(--surface);
-  border: 1px solid var(--line);
+  border: 1.5px solid var(--line);
   border-radius: var(--radius-lg);
   padding: 14px 16px;
   display: flex;
   align-items: center;
   gap: 12px;
-  box-shadow: var(--shadow-card);
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
   transition: all 0.2s ease;
   position: relative;
   text-decoration: none;
 }
 
 .lms-progress-pill:hover {
-  border-color: var(--primary-border);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 8px 24px rgba(88, 43, 232, 0.1);
+}
+
+/* Material Pastel Tonal Card Variants */
+.lms-progress-pill.tone-violet {
+  background: #f5f3ff;
+  border-color: #ddd6fe;
+}
+.lms-progress-pill.tone-violet .lms-pill-icon-wrap {
+  background: #ede9fe;
+  color: #582be8;
+}
+.lms-progress-pill.tone-violet .lms-pill-meta {
+  color: #582be8;
+  font-weight: 700;
+}
+.lms-progress-pill.tone-violet .lms-pill-name {
+  color: #1e1b4b;
+  font-weight: 800;
+}
+
+.lms-progress-pill.tone-rose {
+  background: #fff1f3;
+  border-color: #fecdd3;
+}
+.lms-progress-pill.tone-rose .lms-pill-icon-wrap {
+  background: #ffe4e6;
+  color: #e11d48;
+}
+.lms-progress-pill.tone-rose .lms-pill-meta {
+  color: #e11d48;
+  font-weight: 700;
+}
+.lms-progress-pill.tone-rose .lms-pill-name {
+  color: #881337;
+  font-weight: 800;
+}
+
+.lms-progress-pill.tone-sky {
+  background: #f0f9ff;
+  border-color: #bae6fd;
+}
+.lms-progress-pill.tone-sky .lms-pill-icon-wrap {
+  background: #e0f2fe;
+  color: #0284c7;
+}
+.lms-progress-pill.tone-sky .lms-pill-meta {
+  color: #0284c7;
+  font-weight: 700;
+}
+.lms-progress-pill.tone-sky .lms-pill-name {
+  color: #0c4a6e;
+  font-weight: 800;
 }
 
 .lms-pill-icon-wrap {
@@ -1940,12 +2254,37 @@ body {
   font-weight: 800;
   letter-spacing: 0.6px;
   text-transform: uppercase;
-  color: #6d28d9;
+  color: #582be8;
   background: #ede9fe;
   padding: 3px 10px;
   border-radius: var(--radius-pill);
   width: fit-content;
   margin-bottom: 8px;
+  border: 1px solid #ddd6fe;
+}
+
+.lms-card-pill-tag.tag-mint {
+  background: #dcfce7;
+  color: #15803d;
+  border-color: #bbf7d0;
+}
+
+.lms-card-pill-tag.tag-violet {
+  background: #ede9fe;
+  color: #582be8;
+  border-color: #ddd6fe;
+}
+
+.lms-card-pill-tag.tag-rose {
+  background: #ffe4e6;
+  color: #be123c;
+  border-color: #fecdd3;
+}
+
+.lms-card-pill-tag.tag-sky {
+  background: #e0f2fe;
+  color: #0369a1;
+  border-color: #bae6fd;
 }
 
 .lms-card-title {
@@ -2138,6 +2477,21 @@ body {
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   animation: lmsRingRotate 14s infinite linear;
+}
+
+.lms-profile-pct-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background: #582be8;
+  color: #ffffff;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2.5px 8px;
+  border: 2.5px solid #ffffff;
+  box-shadow: 0 2px 8px rgba(88, 43, 232, 0.35);
+  z-index: 5;
 }
 
 @keyframes lmsRingRotate {
@@ -2623,8 +2977,12 @@ body {
   .third-column-stack {
     grid-column: span 2;
   }
-  .app {
+  .app,
+  .app.collapsed {
     grid-template-columns: 1fr !important;
+  }
+  .side-collapse-toggle {
+    display: none !important;
   }
   .side {
     position: fixed !important;
@@ -2890,3 +3248,19 @@ body {
   .main { padding: 0 !important; }
   .cert-frame-modern { border: 4px double #141a29 !important; box-shadow: none !important; }
 }
+
+/* --------------------------------------------------------------------------
+   Defensive Button Protection: Prevent base.css button:hover bleeding
+   -------------------------------------------------------------------------- */
+.login-pill-submit:hover,
+button.login-pill-submit:hover {
+  background: linear-gradient(135deg, #481dd3 0%, #6d28d9 100%) !important;
+  color: #ffffff !important;
+}
+
+.eval-pill:hover,
+button.eval-pill:hover {
+  background: #ede9fe !important;
+  color: #582be8 !important;
+}
+

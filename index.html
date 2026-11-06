@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Decoderium Academy · Physician Portal</title>
+  <script>
+    (function () {
+      var p = window.location.pathname;
+      if (!p.endsWith('/') && !p.endsWith('.html')) {
+        p += '/';
+      }
+      if (p.endsWith('index.html')) {
+        p = p.replace(/index\.html$/, '');
+      }
+      window.location.replace(p + 'src/login/' + window.location.search + window.location.hash);
+    })();
+  </script>
+  <meta http-equiv="refresh" content="0; url=./src/login/">
+  <link rel="canonical" href="./src/login/">
+</head>
+<body>
+  <p>Redirecting to <a href="./src/login/">Decoderium Academy Physician Portal</a>…</p>
+</body>
+</html>
