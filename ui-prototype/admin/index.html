@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Decoderium Academy · Administration Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ff4760">
+  <link rel="icon" type="image/svg+xml" href="../assets/STAND-HF-logo.svg">
+  <link rel="stylesheet" href="../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../assets/base.css">
+  <link rel="stylesheet" href="../assets/academy.css">
+</head>
+<body data-page="admin">
+<div class="app" id="app">
+  <aside class="side" id="side" aria-label="Main navigation"></aside>
+  <div class="main">
+    <div id="app-header"></div>
+    <div id="view"></div>
+  </div>
+</div>
+<div class="snack" id="snack" role="status" aria-live="polite"></div>
+
+<script src="../assets/boot.js"></script>
+<script type="text/plain" data-src="ui.js"></script>
+<script type="text/plain" data-src="rules.js"></script>
+<script type="text/plain" data-src="access.js"></script>
+<script type="text/plain" data-src="views.js"></script>
+<script type="text/plain">
+(function () {
+  if (!requireRole('admin')) return;
+  var pubCourses = function () { return courses().filter(function (c) { return c.published; }); };
+  var docName = function (id) { var x = doctors().filter(function (d) { return d.id === id; })[0]; return x ? x.name : id; };
+  var allAttempts = function () {
+    var a = [];
+    Object.keys(ST.progress).forEach(function (k) {
+      ST.progress[k].attempts.forEach(function (x) {
+        var y = JSON.parse(JSON.stringify(x));
+        y.doctorId = k;
+        a.push(y);
+      });
+    });
+    return a;
+  };
+
+  function render() {
+    var h = location.hash.slice(1).split('/'), sec = h[0] || 'overview';
+    var map = {
+      overview: overview,
+      courses: function () { return h[1] ? courseView(h[1]) : courseList(); },
+      doctors: doctorList,
+      reports: reports,
+      settings: settingsView
+    };
+    (map[sec] || overview)();
+    if (window.academyUpdateNav) window.academyUpdateNav();
+    window.scrollTo(0, 0);
+  }
+
+  /* 1. Overview Telemetry */
+  function overview() {
+    var act = doctors().filter(function (d) { return d.active; }), att = allAttempts();
+    var certs = Object.keys(ST.progress).reduce(function (n, k) { return n + ST.progress[k].certs.length; }, 0);
+    var rate = att.length ? Math.round(att.filter(function (a) { return a.passed; }).length * 100 / att.length) : 0;
+    var prog = act.map(function (d) { return progressOf(d.id); });
+
+    var bars = pubCourses().map(function (c) {
+      var dn = prog.filter(function (p) { return RULES.courseComplete(c, p); }).length;
+      var st = prog.filter(function (p) { return RULES.courseStarted(c, p); }).length;
+      var avg = prog.length ? Math.round(prog.reduce(function (n, p) { return n + RULES.percent(c, p); }, 0) / prog.length) : 0;
+      return '<div style="background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow-card);margin-bottom:14px;">' +
+        '<div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:700;color:var(--navy);margin-bottom:6px;">' +
+          '<span>' + esc(c.title) + '</span><span>' + avg + '% Avg Completion</span>' +
+        '</div>' +
+        '<div style="height:8px;background:var(--surface-subtle);border-radius:var(--radius-pill);overflow:hidden;">' +
+          '<div style="height:100%;width:' + avg + '%;background:var(--primary);border-radius:var(--radius-pill);"></div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    $('#view').innerHTML =
+      '<div class="admin-hero-bar">' +
+        '<div><h1 style="font-size:26px;font-weight:800;color:var(--navy);margin:0 0 4px;">Executive Administration</h1><p style="font-size:13.5px;color:var(--slate);margin:0;">Platform governance, doctor licensing telemetry, and curriculum analytics.</p></div>' +
+        '<div style="display:flex;gap:10px;"><a class="btn-premium-pill" href="#doctors"><i class="ms">person_add</i> Enlist Doctor</a></div>' +
+      '</div>' +
+
+      '<div class="kpi-row-modern">' +
+        '<div class="kpi-card-modern"><span class="kpi-lbl">Active Physicians</span><span class="kpi-val">' + act.length + '</span></div>' +
+        '<div class="kpi-card-modern"><span class="kpi-lbl">Published Courses</span><span class="kpi-val">' + pubCourses().length + '</span></div>' +
+        '<div class="kpi-card-modern"><span class="kpi-lbl">Certificates Issued</span><span class="kpi-val">' + certs + '</span></div>' +
+        '<div class="kpi-card-modern"><span class="kpi-lbl">Quiz Pass Rate</span><span class="kpi-val">' + rate + '%</span></div>' +
+      '</div>' +
+
+      '<h3 style="font-size:17px;font-weight:800;color:var(--navy);margin:24px 0 12px;">Curriculum Progression</h3>' +
+      bars;
+  }
+
+  /* 2. Course Management */
+  function courseList() {
+    $('#view').innerHTML =
+      '<div class="admin-hero-bar">' +
+        '<div><h1 style="font-size:26px;font-weight:800;color:var(--navy);margin:0 0 4px;">Curriculum & Courses</h1><p style="font-size:13.5px;color:var(--slate);margin:0;">Manage course publishing, lecture video streams, and question banks.</p></div>' +
+      '</div>' +
+
+      '<div class="admin-table-card">' +
+        '<table class="admin-table">' +
+          '<thead><tr><th>Course Title</th><th>Modules</th><th>Lectures</th><th>Duration</th><th>Status</th><th>Actions</th></tr></thead>' +
+          '<tbody>' +
+            courses().map(function (c) {
+              return '<tr>' +
+                '<td><strong>' + esc(c.title) + '</strong><div style="font-size:12px;color:var(--slate);">' + esc(c.subtitle) + '</div></td>' +
+                '<td>' + c.modules.length + '</td>' +
+                '<td>' + RULES.lectureCount(c) + '</td>' +
+                '<td>' + fmtDur(RULES.totalSeconds(c)) + '</td>' +
+                '<td>' + (c.published ? '<span class="filter-chip-sm" style="color:#059669;font-weight:700;">Published</span>' : '<span class="filter-chip-sm" style="color:#f59e0b;font-weight:700;">Coming Soon</span>') + '</td>' +
+                '<td>' +
+                  '<div style="display:flex;gap:8px;">' +
+                    '<a href="#courses/' + c.id + '" class="btn" style="border-radius:var(--radius-pill);padding:6px 14px;border:1px solid var(--line);font-size:12px;font-weight:700;">Manage</a>' +
+                    '<button class="btn" data-pub="' + c.id + '" style="border-radius:var(--radius-pill);padding:6px 14px;border:1px solid var(--line);font-size:12px;font-weight:700;">' + (c.published ? 'Hide' : 'Publish') + '</button>' +
+                  '</div>' +
+                '</td>' +
+              '</tr>';
+            }).join('') +
+          '</tbody>' +
+        '</table>' +
+      '</div>';
+
+    $$('[data-pub]').forEach(function (b) {
+      b.onclick = function () {
+        var c = course(b.dataset.pub);
+        setPublished(c.id, !c.published);
+        snack(c.published ? 'Course published to doctors.' : 'Course unpublished.');
+        courseList();
+      };
+    });
+  }
+
+  function courseView(id) {
+    var c = course(id);
+    if (!c) { courseList(); return; }
+    $('#view').innerHTML =
+      crumbs([{ label: 'Courses', href: '#courses' }, { label: c.title }]) +
+      '<div class="admin-hero-bar">' +
+        '<div><h1 style="font-size:24px;font-weight:800;color:var(--navy);margin:0 0 4px;">' + esc(c.title) + '</h1><p style="font-size:13.5px;color:var(--slate);margin:0;">Course Modules & Question Bank Structure</p></div>' +
+      '</div>' +
+
+      '<div style="display:flex;flex-direction:column;gap:16px;">' +
+        c.modules.map(function (m) {
+          return '<div style="background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow-card);">' +
+            '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">' +
+              '<h3 style="font-size:16px;font-weight:800;color:var(--navy);margin:0;">Module ' + m.number + ': ' + esc(m.title) + '</h3>' +
+              '<span class="filter-chip-sm">' + m.lectures.length + ' Lectures</span>' +
+            '</div>' +
+            '<div style="font-size:13px;color:var(--slate-dark);">' + esc(m.summary) + '</div>' +
+            '<div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--line);display:flex;justify-content:space-between;font-size:12px;color:var(--slate);">' +
+              '<span>Question Bank: <strong>' + m.pool.length + ' Questions</strong></span>' +
+              '<span style="color:#059669;font-weight:700;">10 Questions / Attempt (70% Pass)</span>' +
+            '</div>' +
+          '</div>';
+        }).join('') +
+      '</div>';
+  }
+
+  /* 3. Doctor Directory & PMDC Management */
+  function doctorList() {
+    $('#view').innerHTML =
+      '<div class="admin-hero-bar">' +
+        '<div><h1 style="font-size:26px;font-weight:800;color:var(--navy);margin:0 0 4px;">Doctor Management</h1><p style="font-size:13.5px;color:var(--slate);margin:0;">Enlisted physicians, PMDC license credentials, and activation state.</p></div>' +
+      '</div>' +
+
+      '<div class="admin-table-card">' +
+        '<table class="admin-table">' +
+          '<thead><tr><th>Physician Name</th><th>PMDC ID</th><th>Speciality</th><th>Hospital</th><th>Status</th><th>Toggle</th></tr></thead>' +
+          '<tbody>' +
+            doctors().map(function (doc) {
+              return '<tr>' +
+                '<td><strong>' + esc(doc.name) + '</strong><div style="font-size:11.5px;color:var(--slate);">' + esc(doc.email) + '</div></td>' +
+                '<td><span style="font-family:monospace;font-weight:700;">' + esc(doc.pmdcId) + '</span></td>' +
+                '<td>' + esc(doc.speciality) + '</td>' +
+                '<td>' + esc(doc.hospital + ', ' + doc.city) + '</td>' +
+                '<td>' + (doc.active ? '<span class="filter-chip-sm" style="color:#059669;font-weight:700;">Active</span>' : '<span class="filter-chip-sm" style="color:#ef4444;font-weight:700;">Suspended</span>') + '</td>' +
+                '<td><button class="btn" data-doc="' + doc.id + '" style="border-radius:var(--radius-pill);padding:6px 14px;border:1px solid var(--line);font-size:12px;font-weight:700;">' + (doc.active ? 'Deactivate' : 'Activate') + '</button></td>' +
+              '</tr>';
+            }).join('') +
+          '</tbody>' +
+        '</table>' +
+      '</div>';
+
+    $$('[data-doc]').forEach(function (b) {
+      b.onclick = function () {
+        var id = b.dataset.doc;
+        var doc = doctors().filter(function (x) { return x.id === id; })[0];
+        if (doc) {
+          doc.active = !doc.active;
+          saveState();
+          snack('Doctor status updated.');
+          doctorList();
+        }
+      };
+    });
+  }
+
+  function reports() { overview(); }
+  function settingsView() {
+    var s = settings();
+    $('#view').innerHTML =
+      '<div class="admin-hero-bar">' +
+        '<div><h1 style="font-size:26px;font-weight:800;color:var(--navy);margin:0 0 4px;">System Rules & Settings</h1><p style="font-size:13.5px;color:var(--slate);margin:0;">Accreditation parameters, quiz limits, and watch thresholds.</p></div>' +
+      '</div>' +
+      '<div style="background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);padding:28px;box-shadow:var(--shadow-card);max-width:680px;">' +
+        '<div style="display:flex;flex-direction:column;gap:16px;font-size:14px;color:var(--navy);">' +
+          '<div><strong>Quiz Question Count:</strong> 10 MCQs</div>' +
+          '<div><strong>Countdown Timer:</strong> 10 Minutes</div>' +
+          '<div><strong>Passing Score:</strong> 70% (7/10 required)</div>' +
+          '<div><strong>Lecture Watch Gate:</strong> 90% Duration enforced</div>' +
+          '<div><strong>Certificate Hash Algorithm:</strong> 32-bit FNV-1a Cryptographic Hash</div>' +
+        '</div>' +
+      '</div>';
+  }
+
+  window.addEventListener('hashchange', render);
+  render();
+})();
+</script>
+<script type="text/plain" data-src="header.js"></script>
+<script type="text/plain" data-src="nav.js"></script>
+</body>
+</html>

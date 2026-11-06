@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>404 - Page Not Found | Decoderium Academy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <script>
+    /* GitHub Pages serves this file for any unknown address. Hand over to the error page. */
+    (function () {
+      var here = location.pathname + location.search + location.hash;
+      location.replace('./error/?code=404&from=' + encodeURIComponent(here));
+    })();
+  </script>
+  <meta http-equiv="refresh" content="0; url=./error/?code=404">
+</head>
+<body><p>Page not found. <a href="./login/">Go to sign in</a></p></body>
+</html>

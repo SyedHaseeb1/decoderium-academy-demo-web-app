@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Decoderium Academy · Official Certificates</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ff4760">
+  <link rel="icon" type="image/svg+xml" href="../assets/STAND-HF-logo.svg">
+  <link rel="stylesheet" href="../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../assets/base.css">
+  <link rel="stylesheet" href="../assets/academy.css">
+</head>
+<body data-page="certificates">
+<div class="app" id="app">
+  <aside class="side" id="side" aria-label="Main navigation"></aside>
+  <div class="main">
+    <div id="app-header"></div>
+    <div id="view"></div>
+  </div>
+</div>
+<div class="snack" id="snack" role="status" aria-live="polite"></div>
+
+<script src="../assets/boot.js"></script>
+<script type="text/plain" data-src="ui.js"></script>
+<script type="text/plain" data-src="rules.js"></script>
+<script type="text/plain" data-src="access.js"></script>
+<script type="text/plain" data-src="views.js"></script>
+<script type="text/plain">
+(function () {
+  if (!requireRole('doctor')) return;
+  var d = me();
+
+  function render() {
+    var id = location.hash.slice(1), c = id && course(id);
+    if (c) singleCert(c);
+    else galleryView();
+    window.scrollTo(0, 0);
+  }
+
+  /* Certificates Gallery List */
+  function galleryView() {
+    var certs = progressOf(d.id).certs.slice().sort(function (a, b) { return a.issuedOn < b.issuedOn ? 1 : -1; });
+
+    $('#view').innerHTML =
+      '<div style="margin-bottom:28px;">' +
+        '<h1 style="font-size:26px;font-weight:800;color:var(--navy);margin:0 0 6px;">Earned Certificates</h1>' +
+        '<p style="font-size:14px;color:var(--slate);margin:0;">Official continuing medical education credentials awarded with your PMDC license number.</p>' +
+      '</div>' +
+
+      (certs.length ?
+        '<div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));gap:20px;">' +
+          certs.map(function (x) {
+            var c = course(x.courseId);
+            return '<div style="background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-card);display:flex;flex-direction:column;gap:12px;">' +
+              '<div style="display:flex;align-items:center;gap:12px;">' +
+                '<div style="width:44px;height:44px;border-radius:12px;background:var(--primary-subtle);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:22px;">' +
+                  '<i class="ms">workspace_premium</i>' +
+                '</div>' +
+                '<div>' +
+                  '<div style="font-size:15px;font-weight:800;color:var(--navy);">' + esc(c.title) + '</div>' +
+                  '<div style="font-size:12px;color:var(--slate);">Issued ' + fmtDate(x.issuedOn) + '</div>' +
+                '</div>' +
+              '</div>' +
+              '<div style="font-family:monospace;font-size:12px;color:var(--slate);background:var(--surface-subtle);padding:6px 10px;border-radius:6px;">' +
+                'Code: ' + esc(x.code) +
+              '</div>' +
+              '<a href="#' + c.id + '" class="btn-premium-pill" style="justify-content:center;margin-top:auto;">' +
+                '<i class="ms">visibility</i> View Official Certificate' +
+              '</a>' +
+            '</div>';
+          }).join('') +
+        '</div>' :
+        '<div style="background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);padding:48px;text-align:center;">' +
+          '<i class="ms" style="font-size:48px;color:var(--slate);margin-bottom:12px;">workspace_premium</i>' +
+          '<h3 style="font-size:18px;font-weight:800;color:var(--navy);margin:0 0 6px;">No Certificates Earned Yet</h3>' +
+          '<p style="font-size:13.5px;color:var(--slate);margin-bottom:20px;">Complete all course modules and pass each timed quiz to earn your official certificate.</p>' +
+          '<a href="../courses/" class="btn-premium-pill"><i class="ms">school</i> Browse Active Curriculum</a>' +
+        '</div>');
+  }
+
+  /* Single Certificate View */
+  function singleCert(c) {
+    var cert = ensureCert(c.id);
+    if (!cert) {
+      $('#view').innerHTML = '<div style="background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);padding:40px;text-align:center;">' +
+        '<i class="ms" style="font-size:40px;color:var(--slate);margin-bottom:10px;">lock</i>' +
+        '<h3 style="font-size:18px;font-weight:800;color:var(--navy);">Certificate Locked</h3>' +
+        '<p style="font-size:13.5px;color:var(--slate);margin-bottom:18px;">Pass all module quizzes in this course to generate this certificate.</p>' +
+        '<a href="../courses/#' + c.id + '" class="btn-premium-pill">Return to Syllabus</a>' +
+      '</div>';
+      return;
+    }
+    var cs = settings().certificate;
+
+    $('#view').innerHTML =
+      crumbs([{ label: 'Certificates', href: './' }, { label: c.title }]) +
+      '<div class="no-print" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">' +
+        '<a href="./" style="font-size:13px;font-weight:700;color:var(--navy);text-decoration:none;"><i class="ms" style="vertical-align:-3px;">arrow_back</i> Back to Gallery</a>' +
+        '<div style="display:flex;gap:12px;">' +
+          '<button class="btn-premium-pill" id="btnPrint" type="button"><i class="ms">print</i> Print Certificate</button>' +
+          '<button class="btn" id="btnPdf" type="button" style="border-radius:var(--radius-pill);border:1px solid var(--line);font-size:13px;font-weight:700;"><i class="ms">download</i> Download PDF</button>' +
+        '</div>' +
+      '</div>' +
+
+      /* Modern A4 Landscape Certificate */
+      '<div class="cert-frame-modern">' +
+        '<div class="cert-org-title">' + esc(cs.issuingOrganisation) + '</div>' +
+        '<div class="cert-main-heading">Certificate of Clinical Competence</div>' +
+        '<p style="font-size:14px;color:var(--slate);margin:0;">This is to certify that</p>' +
+        '<div class="cert-doctor-name">' + esc(d.name) + '</div>' +
+        '<div style="font-size:14px;color:var(--navy);">PMDC Registration ID: <strong>' + esc(d.pmdcId) + '</strong></div>' +
+        '<p style="font-size:14px;color:var(--slate);margin:14px 0 6px;">has successfully completed all lectures, modules, and timed clinical assessments for</p>' +
+        '<h2 style="font-size:22px;font-weight:800;color:var(--primary);margin:0 0 16px;">' + esc(c.title) + '</h2>' +
+
+        '<div class="cert-meta-grid">' +
+          '<div>Issue Date<b>' + fmtDate(cert.issuedOn) + '</b></div>' +
+          '<div>Curriculum Modules<b>' + c.modules.length + ' Units</b></div>' +
+          '<div>Accreditation<b>12 CME Hours</b></div>' +
+        '</div>' +
+
+        '<div class="cert-sign-line">' +
+          esc(cs.signatoryName) + '<br>' +
+          '<span style="font-size:11.5px;color:var(--slate);font-weight:500;">' + esc(cs.signatoryTitle) + '</span>' +
+        '</div>' +
+
+        '<div class="cert-hash-pill">' +
+          '<i class="ms" style="color:var(--primary);font-size:16px;">verified</i>' +
+          '<span>Verification Hash: <strong>' + esc(cert.code) + '</strong></span>' +
+        '</div>' +
+      '</div>';
+
+    $('#btnPrint').onclick = $('#btnPdf').onclick = function () { window.print(); };
+  }
+
+  window.addEventListener('hashchange', render);
+  render();
+})();
+</script>
+<script type="text/plain" data-src="header.js"></script>
+<script type="text/plain" data-src="nav.js"></script>
+</body>
+</html>

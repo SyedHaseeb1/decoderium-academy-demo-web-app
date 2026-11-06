@@ -1,0 +1,61 @@
+{
+  "courses": [
+    {
+      "id": "c1", "title": "HFrEF Essentials", "subtitle": "From diagnosis to optimised therapy",
+      "description": "A practical course on recognising heart failure with reduced ejection fraction and starting, titrating and monitoring guideline-directed medical therapy.",
+      "category": "Heart failure", "level": "Foundation", "published": true,
+      "modules": [
+        { "id": "c1-m1", "number": 1, "title": "Understanding HFrEF", "summary": "Definitions, mechanisms and how the diagnosis is made.", "questionOffset": 0,
+          "lectures": [
+            { "id": "c1-m1-l1", "title": "What is HFrEF? Definitions and burden", "presenter": "Prof. Sara Anwar", "seconds": 540, "summary": "Classification by ejection fraction and why HFrEF carries the clearest treatment benefit." },
+            { "id": "c1-m1-l2", "title": "Pathophysiology in ten minutes", "presenter": "Prof. Sara Anwar", "seconds": 600, "summary": "Neurohormonal activation, remodelling and the targets of modern therapy." },
+            { "id": "c1-m1-l3", "title": "Diagnosis: ECG, echo and natriuretic peptides", "presenter": "Dr. Tahir Mahmood", "seconds": 480, "summary": "A simple work-up that works in an outpatient clinic." } ] },
+        { "id": "c1-m2", "number": 2, "title": "The four pillars of GDMT", "summary": "What each drug class does and the evidence behind it.", "questionOffset": 5,
+          "lectures": [
+            { "id": "c1-m2-l1", "title": "ARNI and the move beyond ACE-I and ARB", "presenter": "Dr. Tahir Mahmood", "seconds": 660, "summary": "Sacubitril/valsartan: when to start, how to switch, what to watch." },
+            { "id": "c1-m2-l2", "title": "Evidence-based beta-blockers", "presenter": "Dr. Tahir Mahmood", "seconds": 570, "summary": "Bisoprolol, carvedilol and metoprolol succinate: starting low and going slow." },
+            { "id": "c1-m2-l3", "title": "MRAs and SGLT2 inhibitors", "presenter": "Prof. Sara Anwar", "seconds": 630, "summary": "Two pillars that are often missed in everyday practice." } ] },
+        { "id": "c1-m3", "number": 3, "title": "Titration and monitoring", "summary": "Getting patients to target doses safely.", "questionOffset": 10,
+          "lectures": [
+            { "id": "c1-m3-l1", "title": "Starting and up-titrating safely", "presenter": "Dr. Nadia Rehman", "seconds": 600, "summary": "A practical schedule for follow-up visits and dose steps." },
+            { "id": "c1-m3-l2", "title": "Managing hypotension, hyperkalaemia and renal dysfunction", "presenter": "Dr. Nadia Rehman", "seconds": 690, "summary": "What to do before you stop a pillar, and which reasons are valid." } ] },
+        { "id": "c1-m4", "number": 4, "title": "Devices, follow-up and function", "summary": "Who needs a device, and how to track progress.", "questionOffset": 14,
+          "lectures": [
+            { "id": "c1-m4-l1", "title": "ICD and CRT: who qualifies?", "presenter": "Dr. Tahir Mahmood", "seconds": 510, "summary": "Selection criteria and referral pathways." },
+            { "id": "c1-m4-l2", "title": "Functional assessment: the 1-minute sit-to-stand test", "presenter": "Dr. Nadia Rehman", "seconds": 420, "summary": "A quick bedside measure of lower-limb function." },
+            { "id": "c1-m4-l3", "title": "Patient education and adherence", "presenter": "Prof. Sara Anwar", "seconds": 480, "summary": "Self-care, diet, medicines and when to call the clinic." } ] }
+      ]
+    },
+    {
+      "id": "c2", "title": "Heart Failure in Primary Care", "subtitle": "Recognise early, refer well, follow up closely",
+      "description": "For general practitioners and physicians who see heart failure patients every week and need clear rules for referral and follow-up.",
+      "category": "Primary care", "level": "Foundation", "published": true,
+      "modules": [
+        { "id": "c2-m1", "number": 1, "title": "Recognising heart failure", "summary": "Symptoms, signs and first tests.", "questionOffset": 3,
+          "lectures": [
+            { "id": "c2-m1-l1", "title": "Breathlessness: is it the heart?", "presenter": "Dr. Nadia Rehman", "seconds": 450, "summary": "Clinical clues and when to order an echo." },
+            { "id": "c2-m1-l2", "title": "Red flags and urgent referral", "presenter": "Dr. Nadia Rehman", "seconds": 390, "summary": "Who needs same-day assessment." } ] },
+        { "id": "c2-m2", "number": 2, "title": "Living with other conditions", "summary": "Diabetes, kidney disease and hypertension alongside HF.", "questionOffset": 8,
+          "lectures": [
+            { "id": "c2-m2-l1", "title": "Heart failure and diabetes", "presenter": "Prof. Sara Anwar", "seconds": 540, "summary": "Why SGLT2 inhibitors serve both conditions." },
+            { "id": "c2-m2-l2", "title": "Heart failure and kidney disease", "presenter": "Dr. Tahir Mahmood", "seconds": 570, "summary": "Safe prescribing when eGFR is reduced." },
+            { "id": "c2-m2-l3", "title": "Blood pressure and heart rate targets", "presenter": "Dr. Tahir Mahmood", "seconds": 420, "summary": "Practical numbers for titration visits." } ] },
+        { "id": "c2-m3", "number": 3, "title": "Community follow-up", "summary": "Keeping patients on treatment.", "questionOffset": 12,
+          "lectures": [
+            { "id": "c2-m3-l1", "title": "A follow-up visit checklist", "presenter": "Dr. Nadia Rehman", "seconds": 480, "summary": "What to record at every visit." },
+            { "id": "c2-m3-l2", "title": "Supporting adherence and self-care", "presenter": "Prof. Sara Anwar", "seconds": 450, "summary": "Affordability, family involvement and simple tools." } ] }
+      ]
+    },
+    {
+      "id": "c3", "title": "Advanced Heart Failure and Devices", "subtitle": "Coming soon",
+      "description": "Advanced therapies, device selection and palliative care. Content is being recorded.",
+      "category": "Heart failure", "level": "Advanced", "published": false,
+      "modules": [
+        { "id": "c3-m1", "number": 1, "title": "Advanced therapies", "summary": "Selection and referral.", "questionOffset": 2,
+          "lectures": [
+            { "id": "c3-m1-l1", "title": "Recognising advanced HF", "presenter": "Prof. Sara Anwar", "seconds": 500, "summary": "Triggers for referral to a specialist centre." },
+            { "id": "c3-m1-l2", "title": "Devices and mechanical support", "presenter": "Dr. Tahir Mahmood", "seconds": 560, "summary": "An overview for referring clinicians." } ] }
+      ]
+    }
+  ]
+}

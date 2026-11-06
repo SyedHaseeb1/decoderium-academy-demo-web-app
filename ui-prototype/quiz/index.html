@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Decoderium Academy · Timed Module Assessment</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ff4760">
+  <link rel="icon" type="image/svg+xml" href="../assets/STAND-HF-logo.svg">
+  <link rel="stylesheet" href="../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../assets/base.css">
+  <link rel="stylesheet" href="../assets/academy.css">
+</head>
+<body data-page="courses">
+<div class="app" id="app">
+  <aside class="side" id="side" aria-label="Main navigation"></aside>
+  <div class="main">
+    <div id="app-header"></div>
+    <div id="view"></div>
+  </div>
+</div>
+<div class="snack" id="snack" role="status" aria-live="polite"></div>
+
+<script src="../assets/boot.js"></script>
+<script type="text/plain" data-src="ui.js"></script>
+<script type="text/plain" data-src="rules.js"></script>
+<script type="text/plain" data-src="access.js"></script>
+<script type="text/plain" data-src="views.js"></script>
+<script type="text/plain">
+(function () {
+  if (!requireRole('doctor')) return;
+  var d = me(), p = progressOf(d.id), mid = new URLSearchParams(location.search).get('m'), f = findModule(mid);
+  if (!f) {
+    $('#view').innerHTML = '<div class="card empty"><i class="ms">search_off</i>Quiz not found. <a href="../courses/">Back to courses</a></div>';
+    return;
+  }
+  var c = f.course, m = f.module, q = settings().quiz;
+  var S = null, answers = [], idx = 0, confirmSubmit = false, stage = 'intro', attempt = null, timer = null, blocked = '';
+  var used = RULES.attemptsUsed(p, m.id), best = RULES.bestScore(p, m.id), passed = RULES.quizPassed(p, m.id);
+  var head = crumbs([{ label: 'Courses', href: '../courses/' }, { label: c.title, href: '../courses/#' + c.id }, { label: 'Module ' + m.number + ' quiz' }]);
+
+  if (activeQuiz() && activeQuiz().moduleId === m.id) {
+    S = activeQuiz();
+    answers = new Array(S.questions.length);
+    stage = 'run';
+  } else {
+    var st = RULES.moduleState(c, m, p);
+    if (st === 'locked') blocked = 'Pass the previous module’s quiz first.';
+    else if (st === 'progress') blocked = 'Watch every lecture in this module to 90% threshold to unlock quiz.';
+    else if (st === 'quiz' && used >= q.maxAttempts) blocked = 'No attempts left. Please contact the administrator.';
+  }
+
+  function view(html) {
+    $('#view').innerHTML = head + html;
+    window.scrollTo(0, 0);
+  }
+
+  /* Pre-flight Instruction Screen */
+  function intro() {
+    stage = 'intro';
+    view(
+      '<div class="quiz-container-card">' +
+        '<span class="filter-chip-sm" style="color:var(--primary);font-weight:700;margin-bottom:10px;display:inline-block;">Module Assessment</span>' +
+        '<h1 style="font-size:26px;font-weight:800;color:var(--navy);margin:0 0 10px;">Module ' + m.number + ' Timed Quiz: ' + esc(m.title) + '</h1>' +
+        (blocked ?
+          '<div style="background:#fffbeb;border:1px solid #fde68a;color:#b45309;padding:16px;border-radius:var(--radius-md);margin:16px 0;">' + blocked + '</div><div><a class="btn-premium-pill" href="../courses/#' + c.id + '">Back to Course</a></div>' :
+          passed ?
+          '<div style="background:#ecfdf5;border:1px solid #a7f3d0;color:#047857;padding:16px;border-radius:var(--radius-md);margin:16px 0;"><strong>✓ Module Quiz Passed:</strong> You completed this evaluation with <strong>' + best + '%</strong>. The next module is unlocked.</div><div><a class="btn-premium-pill" href="../courses/#' + c.id + '">Return to Course Syllabus</a></div>' :
+          '<div style="display:flex;flex-direction:column;gap:12px;margin:20px 0;font-size:14px;color:var(--slate-dark);line-height:1.6;">' +
+            '<div style="display:flex;align-items:center;gap:10px;"><i class="ms" style="color:var(--primary);">timer</i><span><strong>10:00 Minute Countdown:</strong> The examination runs on an unpausable timer. Unsubmitted responses auto-submit at zero.</span></div>' +
+            '<div style="display:flex;align-items:center;gap:10px;"><i class="ms" style="color:var(--teal);">quiz</i><span><strong>10 Clinical MCQs:</strong> Shuffled randomly from the module bank with 4 randomized distractor options.</span></div>' +
+            '<div style="display:flex;align-items:center;gap:10px;"><i class="ms" style="color:var(--emerald);">verified</i><span><strong>Pass Mark 70%:</strong> Requires answering at least 7 out of 10 questions correctly to unlock Module ' + (m.number + 1) + '.</span></div>' +
+          '</div>' +
+          '<div style="display:flex;align-items:center;gap:14px;margin-top:28px;">' +
+            '<button class="btn-premium-pill" id="go" type="button" style="font-size:14px;padding:12px 28px;"><i class="ms">play_arrow</i> Begin Timed Quiz</button>' +
+            '<a href="../courses/#' + c.id + '" style="font-size:13.5px;font-weight:700;color:var(--slate);text-decoration:none;">Cancel</a>' +
+          '</div>') +
+      '</div>'
+    );
+
+    var go = $('#go');
+    if (go) go.onclick = function () {
+      S = startQuiz(m.id);
+      if (!S) { snack('Quiz could not be started.'); return; }
+      answers = new Array(S.questions.length);
+      idx = 0;
+      confirmSubmit = false;
+      run();
+    };
+  }
+
+  /* Active Timed Quiz Runner */
+  function run() {
+    stage = 'run';
+    var qs = S.questions, cur = qs[idx], answered = answers.filter(function (a) { return a !== undefined; }).length;
+
+    view(
+      '<div class="quiz-container-card">' +
+        '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">' +
+          '<div>' +
+            '<span style="font-size:12px;font-weight:700;color:var(--slate);text-transform:uppercase;">Module ' + m.number + ' Clinical Assessment</span>' +
+            '<h2 style="font-size:20px;font-weight:800;color:var(--navy);margin:2px 0 0;">Question ' + (idx + 1) + ' of ' + qs.length + '</h2>' +
+          '</div>' +
+          '<div class="quiz-timer-pill" id="timer"><i class="ms">timer</i><span id="tleft">10:00</span></div>' +
+        '</div>' +
+
+        '<div style="height:6px;background:var(--surface-subtle);border-radius:var(--radius-pill);overflow:hidden;margin-bottom:24px;">' +
+          '<div style="height:100%;width:' + Math.round(answered * 100 / qs.length) + '%;background:var(--primary);border-radius:var(--radius-pill);"></div>' +
+        '</div>' +
+
+        '<p style="font-size:16.5px;font-weight:700;color:var(--navy);line-height:1.55;margin-bottom:22px;">' + esc(cur.text) + '</p>' +
+
+        '<div style="display:flex;flex-direction:column;gap:10px;margin-bottom:28px;">' +
+          cur.options.map(function (opt, i) {
+            var picked = answers[idx] === i;
+            return '<button type="button" class="opt-modern' + (picked ? ' picked' : '') + '" data-pick="' + i + '">' +
+              '<span class="opt-ltr">' + String.fromCharCode(65 + i) + '</span>' +
+              '<span style="font-size:14px;font-weight:600;">' + esc(opt) + '</span>' +
+            '</button>';
+          }).join('') +
+        '</div>' +
+
+        '<div style="display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding-top:20px;">' +
+          '<button class="btn" id="prev" type="button" style="border-radius:var(--radius-pill);padding:8px 18px;border:1px solid var(--line);"' + (idx === 0 ? ' disabled' : '') + '><i class="ms">chevron_left</i> Previous</button>' +
+          (idx < qs.length - 1 ?
+            '<button class="btn-premium-pill" id="next" type="button">Next Question <i class="ms">chevron_right</i></button>' :
+            '<button class="btn-premium-pill" id="fin" type="button" style="background:#059669!important;">Finish & Review</button>') +
+        '</div>' +
+      '</div>' +
+
+      /* Question Navigation Dot Matrix */
+      '<div class="quiz-container-card">' +
+        '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">' +
+          '<span style="font-size:13px;font-weight:800;color:var(--navy);">Question Matrix (' + answered + ' of ' + qs.length + ' answered)</span>' +
+          '<span style="font-size:12px;color:var(--slate);">Click any number to jump</span>' +
+        '</div>' +
+        '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">' +
+          qs.map(function (_, i) {
+            var isAns = answers[i] !== undefined, isCur = i === idx;
+            return '<button type="button" class="qdot-modern' + (isAns ? ' answered' : '') + (isCur ? ' current' : '') + '" data-go="' + i + '">' + (i + 1) + '</button>';
+          }).join('') +
+        '</div>' +
+
+        (confirmSubmit ?
+          '<div style="background:#fffbeb;border:1px solid #fde68a;border-radius:var(--radius-md);padding:16px;">' +
+            '<div style="font-size:13.5px;font-weight:700;color:#92400e;margin-bottom:10px;">' +
+              (answered === qs.length ? 'Ready to submit your examination?' : (qs.length - answered) + ' question(s) are unanswered and will be marked as incorrect. Submit anyway?') +
+            '</div>' +
+            '<div style="display:flex;gap:12px;">' +
+              '<button class="btn-premium-pill" id="sub" type="button" style="background:#059669!important;">Confirm Submit</button>' +
+              '<button class="btn" id="keep" type="button" style="border-radius:var(--radius-pill);border:1px solid var(--line);">Keep Working</button>' +
+            '</div>' +
+          '</div>' :
+          '<div><button class="btn" id="ask" type="button" style="border-radius:var(--radius-pill);border:1px solid var(--line);font-size:13px;font-weight:700;">Submit Quiz</button></div>') +
+      '</div>'
+    );
+
+    $$('[data-pick]').forEach(function (b) {
+      b.onclick = function () { answers[idx] = +b.dataset.pick; run(); };
+    });
+    $$('[data-go]').forEach(function (b) {
+      b.onclick = function () { idx = +b.dataset.go; run(); };
+    });
+
+    var on = function (id, fn) { var el = $(id); if (el) el.onclick = fn; };
+    on('#prev', function () { idx--; run(); });
+    on('#next', function () { idx++; run(); });
+    on('#fin', function () { confirmSubmit = true; run(); });
+    on('#ask', function () { confirmSubmit = true; run(); });
+    on('#keep', function () { confirmSubmit = false; run(); });
+    on('#sub', function () { submit(false); });
+
+    clock();
+  }
+
+  function clock() {
+    clearInterval(timer);
+    var paint = function () {
+      var left = Math.max(0, S.deadline - Date.now()), el = $('#tleft');
+      if (!el) return;
+      el.textContent = fmtClock(left / 1000);
+      $('#timer').classList.toggle('low', left <= 60000);
+      if (left <= 0) {
+        snack('Time limit reached. Submitting answers...');
+        submit(true);
+      }
+    };
+    paint();
+    timer = setInterval(paint, 1000);
+  }
+
+  function submit(timedOut) {
+    if (stage !== 'run') return;
+    stage = 'result';
+    clearInterval(timer);
+    attempt = submitQuiz(S, answers, timedOut);
+    resultView();
+  }
+
+  function resultView() {
+    var pass = attempt.passed;
+    view(
+      '<div class="quiz-container-card" style="text-align:center;padding:48px 36px;">' +
+        '<div style="width:72px;height:72px;border-radius:50%;margin:0 auto 18px;background:' + (pass ? '#ecfdf5' : '#fef2f2') + ';color:' + (pass ? '#059669' : '#dc2626') + ';display:flex;align-items:center;justify-content:center;font-size:36px;">' +
+          '<i class="ms">' + (pass ? 'check_circle' : 'cancel') + '</i>' +
+        '</div>' +
+        '<h1 style="font-size:28px;font-weight:800;color:var(--navy);margin:0 0 8px;">' + (pass ? 'Assessment Passed!' : 'Assessment Not Passed') + '</h1>' +
+        '<p style="font-size:14px;color:var(--slate);margin-bottom:24px;">' + (pass ? 'Congratulations! You met the required standard and unlocked the next sequential curriculum unit.' : 'You scored below the 70% threshold. Review the explanations below and try again.') + '</p>' +
+
+        '<div style="display:inline-flex;gap:32px;background:var(--surface-subtle);border:1px solid var(--line);border-radius:var(--radius-lg);padding:18px 36px;margin-bottom:28px;">' +
+          '<div><div style="font-size:28px;font-weight:800;color:var(--navy);">' + attempt.percent + '%</div><div style="font-size:12px;font-weight:700;color:var(--slate);">Final Score</div></div>' +
+          '<div><div style="font-size:28px;font-weight:800;color:var(--navy);">' + attempt.correct + ' / ' + attempt.total + '</div><div style="font-size:12px;font-weight:700;color:var(--slate);">Correct Answers</div></div>' +
+          '<div><div style="font-size:28px;font-weight:800;color:' + (pass ? '#059669' : '#dc2626') + ';">' + (pass ? 'PASSED' : 'RETRY') + '</div><div style="font-size:12px;font-weight:700;color:var(--slate);">Outcome</div></div>' +
+        '</div>' +
+
+        '<div style="display:flex;justify-content:center;gap:14px;">' +
+          '<a class="btn-premium-pill" href="../courses/#' + c.id + '" style="font-size:14px;padding:12px 28px;">' +
+            (pass ? 'Proceed to Next Module &rarr;' : 'Return to Course Syllabus') +
+          '</a>' +
+        '</div>' +
+      '</div>'
+    );
+  }
+
+  intro();
+})();
+</script>
+<script type="text/plain" data-src="header.js"></script>
+<script type="text/plain" data-src="nav.js"></script>
+</body>
+</html>

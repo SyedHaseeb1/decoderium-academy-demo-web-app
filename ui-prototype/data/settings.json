@@ -1,0 +1,6 @@
+{
+  "quiz": { "questionCount": 10, "timeLimitMinutes": 10, "passMark": 70, "maxAttempts": 3 },
+  "lectureCompleteFraction": 0.9,
+  "demoPlaybackSpeed": 30,
+  "certificate": { "issuingOrganisation": "Decoderium Academy", "signatoryName": "Principal Investigator", "signatoryTitle": "Decoderium Academy Programme" }
+}

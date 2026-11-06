@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Decoderium Academy · Something went wrong</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="../assets/decoderium-logo.svg">
+  <link rel="stylesheet" href="../assets/base.css">
+  <style>
+    body { min-height: 100vh; display: grid; place-items: center; padding: 20px; background: var(--bg); }
+    .box { max-width: 480px; text-align: center; display: flex; flex-direction: column; gap: 14px; align-items: center; }
+    .box img { height: 56px; }
+  </style>
+</head>
+<body>
+<div class="card box">
+  <img src="../assets/decoderium-logo.svg" alt="Decoderium Academy">
+  <h1 id="t" style="margin:0">We could not load the data</h1>
+  <p class="muted" id="m" style="margin:0">Check your connection and try again.</p>
+  <button class="btn primary" id="retry" type="button">Try again</button>
+</div>
+<script>
+  /* The error page does not load boot.js, so it can never redirect to itself. */
+  var q = new URLSearchParams(location.search), from = q.get('from') || '../login/', code = q.get('code');
+  if (code === 'file') {
+    document.getElementById('t').textContent = 'Open this prototype from a web server';
+    document.getElementById('m').textContent = 'Browsers block data files opened straight from a folder. Start a local server in the prototype folder (for example: python -m http.server 5200) and open http://localhost:5200/.';
+  } else if (code === '404') {
+    document.getElementById('t').textContent = 'Page not found';
+    document.getElementById('m').textContent = 'There is nothing at this address.';
+  } else if (q.get('msg')) {
+    document.getElementById('m').textContent = q.get('msg');
+  }
+  document.getElementById('retry').onclick = function () { location.href = from; };
+</script>
+</body>
+</html>

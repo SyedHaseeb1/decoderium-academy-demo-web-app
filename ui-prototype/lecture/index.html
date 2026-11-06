@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Decoderium Academy · Video Learning Player</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ff4760">
+  <link rel="icon" type="image/svg+xml" href="../assets/STAND-HF-logo.svg">
+  <link rel="stylesheet" href="../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../assets/base.css">
+  <link rel="stylesheet" href="../assets/academy.css">
+</head>
+<body data-page="courses">
+<div class="app" id="app">
+  <aside class="side" id="side" aria-label="Main navigation"></aside>
+  <div class="main">
+    <div id="app-header"></div>
+    <div id="view"></div>
+  </div>
+</div>
+<div class="snack" id="snack" role="status" aria-live="polite"></div>
+
+<script src="../assets/boot.js"></script>
+<script type="text/plain" data-src="ui.js"></script>
+<script type="text/plain" data-src="rules.js"></script>
+<script type="text/plain" data-src="access.js"></script>
+<script type="text/plain" data-src="views.js"></script>
+<script type="text/plain">
+(function () {
+  if (!requireRole('doctor')) return;
+  var d = me(), p = progressOf(d.id), f = findLecture(new URLSearchParams(location.search).get('id'));
+  if (!f) {
+    $('#view').innerHTML = '<div class="ui-card" style="text-align:center;padding:40px;"><i class="ms" style="font-size:40px;color:var(--slate);">search_off</i><h3>Lecture Not Found</h3><a href="../courses/" class="btn-pill-primary" style="margin-top:12px;">Back to Courses</a></div>';
+    return;
+  }
+  var c = f.course, m = f.module, l = f.lecture, frac = ACADEMY_DATA.settings.lectureCompleteFraction;
+  if (!c.published || RULES.moduleState(c, m, p) === 'locked') {
+    snack('Pass the previous module’s quiz to unlock this lecture.');
+    location.replace('../courses/#' + c.id);
+    return;
+  }
+
+  var dur = l.seconds, max = RULES.watched(p, l.id), pos = max >= dur ? 0 : max;
+  var speed = ACADEMY_DATA.settings.demoPlaybackSpeed, playing = false;
+  var done = RULES.lectureDone(p, l.id), lastSaved = max, timer = null;
+
+  $('#view').innerHTML =
+    '<div style="margin-bottom:20px;">' +
+      crumbs([{ label: 'Courses', href: '../courses/' }, { label: c.title, href: '../courses/#' + c.id }, { label: 'Module ' + m.number }]) +
+      '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:8px;">' +
+        '<div>' +
+          '<h1 style="font-size:24px;font-weight:800;color:var(--navy);margin:0 0 4px;letter-spacing:-0.4px;">' + esc(l.title) + '</h1>' +
+          '<div style="font-size:13.5px;color:var(--slate);display:flex;align-items:center;gap:8px;">' +
+            '<span><strong>' + esc(l.presenter) + '</strong> · Module ' + m.number + ': ' + esc(m.title) + '</span>' +
+            '<span class="ui-badge-pill primary" style="font-size:10.5px;padding:2px 8px;">Accredited</span>' +
+          '</div>' +
+        '</div>' +
+        '<div style="display:flex;gap:8px;">' +
+          '<a href="../courses/#' + c.id + '" class="btn-pill-outline" style="font-size:12px;"><i class="ms">menu_book</i> Syllabus</a>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+
+    /* Video Player Viewport (100% width, mobile & tablet touch optimized) */
+    '<div class="player-container" id="playerWrap">' +
+      '<div class="player-screen">' +
+        '<div style="position:absolute;top:14px;left:14px;background:rgba(17,24,39,0.75);backdrop-filter:blur(6px);color:#fff;padding:4px 12px;border-radius:var(--radius-pill);font-size:11.5px;font-weight:700;">' +
+          '<i class="ms" style="font-size:14px;vertical-align:-2px;">visibility</i> 842 Physicians Enrolled' +
+        '</div>' +
+        '<span id="chip" style="position:absolute;top:14px;right:14px;background:rgba(17,24,39,0.75);backdrop-filter:blur(6px);color:#fff;padding:4px 12px;border-radius:var(--radius-pill);font-size:11px;font-weight:700;border:1px solid rgba(255,255,255,0.15);"></span>' +
+        '<button class="player-big-btn" id="big" type="button" aria-label="Play lecture"><i class="ms">play_arrow</i></button>' +
+      '</div>' +
+
+      '<div class="player-controls-bar">' +
+        '<button class="player-ctl-btn" id="tog" type="button" aria-label="Play / Pause"><i class="ms">play_arrow</i></button>' +
+        '<button class="player-ctl-btn" id="rewind10" type="button" aria-label="Rewind 10 seconds" title="Rewind 10s"><i class="ms">replay_10</i></button>' +
+        '<button class="player-ctl-btn" id="forward10" type="button" aria-label="Forward 10 seconds" title="Forward 10s"><i class="ms">forward_10</i></button>' +
+        '<span class="player-timer-lbl" id="time">00:00 / 00:00</span>' +
+        '<input class="player-timeline-bar" id="seek" type="range" min="0" max="' + dur + '" value="0" aria-label="Seek">' +
+        '<button class="btn" id="spd" type="button" style="border-radius:var(--radius-pill);padding:4px 12px;background:rgba(255,255,255,0.12);color:#fff;border:none;cursor:pointer;font-size:11.5px;font-weight:700;" title="Toggle Playback Speed">Demo 30×</button>' +
+        '<button class="player-ctl-btn" id="fsBtn" type="button" aria-label="Fullscreen" title="Toggle Fullscreen"><i class="ms">fullscreen</i></button>' +
+      '</div>' +
+      '<div class="player-watch-meter" id="watchMeter">' +
+        '<span><i class="ms" style="font-size:16px;vertical-align:-2px;">verified</i> 90% Watch Threshold Required for PMDC Quiz</span>' +
+        '<strong id="watchMeterStatus">0%</strong>' +
+      '</div>' +
+    '</div>' +
+
+    /* Mobile / Tablet View Switcher Tabs */
+    '<div class="lecture-mobile-tabs">' +
+      '<button class="lecture-m-tab active" id="mTabAbout" type="button">About Lecture</button>' +
+      '<button class="lecture-m-tab" id="mTabContents" type="button">Module Contents (' + m.lectures.length + ')</button>' +
+      '<button class="lecture-m-tab" id="mTabQuiz" type="button">Module Quiz</button>' +
+    '</div>' +
+
+    /* 2-Column Responsive Workspace Grid */
+    '<div class="lecture-layout" style="display:grid;grid-template-columns:minmax(0,1.3fr) minmax(280px,0.85fr);gap:28px;align-items:start;margin-top:20px;">' +
+      /* Left Column: Lecture Summary, Guidelines & Watch Rule */
+      '<div class="lecture-m-pane active" id="paneAbout">' +
+        '<div class="ui-card" style="margin-bottom:18px;">' +
+          '<h3 style="font-size:16px;font-weight:800;color:var(--navy);margin:0 0 8px;">About This Clinical Lecture</h3>' +
+          '<p style="font-size:13.5px;color:var(--slate-dark);line-height:1.6;margin:0 0 16px;">' + esc(l.summary) + '</p>' +
+          '<div style="background:var(--surface-subtle);border:1px solid var(--line);border-radius:var(--radius-md);padding:14px 18px;display:flex;align-items:center;gap:12px;">' +
+            '<i class="ms" style="color:var(--primary);font-size:20px;">verified</i>' +
+            '<span style="font-size:12.5px;color:var(--navy);">Mandatory completion threshold: This lecture completes automatically once watched to <strong>' + Math.round(frac * 100) + '%</strong> duration. Forward scrubbing is guarded.</span>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="ui-card">' +
+          '<h4 style="font-size:14px;font-weight:800;color:var(--navy);margin:0 0 10px;">Clinical Key Takeaways</h4>' +
+          '<ul style="margin:0;padding-left:18px;font-size:13px;color:var(--slate-dark);display:flex;flex-direction:column;gap:8px;line-height:1.5;">' +
+            '<li>Stratify heart failure phenotype based on LVEF (HFrEF $\\le 40\\%$, HFmrEF $41-49\\%$, HFpEF $\\ge 50\\%$).</li>' +
+            '<li>Measure baseline NT-proBNP cutoffs and initiate quadruple guideline-directed medical therapy early.</li>' +
+            '<li>Titrate SGLT2 inhibitors and ARNI with close potassium and renal monitoring.</li>' +
+          '</ul>' +
+        '</div>' +
+      '</div>' +
+
+      /* Right Column: Module Contents List + Next Timed Quiz Card */
+      '<div class="lecture-m-pane active" id="paneContents" style="display:flex;flex-direction:column;gap:18px;">' +
+        '<div class="ui-card" style="padding:20px;">' +
+          '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">' +
+            '<h4 style="font-size:14px;font-weight:800;color:var(--navy);margin:0;">Module ' + m.number + ' Lectures</h4>' +
+            '<span class="ui-badge-pill neutral" style="font-size:11px;">' + m.lectures.length + ' Units</span>' +
+          '</div>' +
+
+          '<div style="display:flex;flex-direction:column;gap:8px;">' +
+            renderContents() +
+          '</div>' +
+        '</div>' +
+
+        /* Module Timed Quiz Callout Card */
+        '<div id="paneQuiz" style="background:linear-gradient(135deg,#ff4760,#e60057);border-radius:var(--radius-lg);padding:22px;color:#fff;box-shadow:var(--shadow-glow);">' +
+          '<h3 style="font-size:17px;font-weight:800;margin:0 0 6px;">Module ' + m.number + ' Timed Quiz</h3>' +
+          '<p style="font-size:12.5px;color:rgba(255,255,255,0.9);line-height:1.5;margin:0 0 16px;">10 clinical questions with a 10:00 minute countdown. Passing unlocks Module ' + (m.number + 1) + '.</p>' +
+          '<div id="quizActionWrap">' + renderQuizAction() + '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+
+  function renderContents() {
+    return m.lectures.map(function (lec) {
+      var isCur = lec.id === l.id;
+      var isDone = RULES.lectureDone(p, lec.id);
+      if (isCur) {
+        return '<div style="background:var(--primary);color:#fff;padding:12px 16px;border-radius:var(--radius-pill);display:flex;align-items:center;justify-content:space-between;box-shadow:0 4px 12px var(--primary-glow);">' +
+          '<div style="display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;"><i class="ms" style="font-size:18px;">play_circle</i><span>' + esc(lec.title) + '</span></div>' +
+          '<span style="font-size:11.5px;font-weight:600;opacity:0.9;">' + fmtDur(lec.seconds) + '</span>' +
+        '</div>';
+      }
+      return '<a href="?id=' + lec.id + '" style="display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-radius:var(--radius-pill);background:#fff;border:1px solid var(--line);text-decoration:none;color:var(--slate-dark);font-size:13px;font-weight:600;transition:all 0.15s ease;">' +
+        '<div style="display:flex;align-items:center;gap:10px;"><i class="ms" style="font-size:18px;color:' + (isDone ? 'var(--emerald)' : 'var(--slate)') + ';">' + (isDone ? 'check_circle' : 'lock') + '</i><span>' + esc(lec.title) + '</span></div>' +
+        '<span style="font-size:11.5px;color:var(--slate);">' + fmtDur(lec.seconds) + '</span>' +
+      '</a>';
+    }).join('');
+  }
+
+  function renderQuizAction() {
+    var allDone = m.lectures.every(function (x) { return RULES.lectureDone(p, x.id); });
+    if (RULES.quizPassed(p, m.id)) {
+      return '<span style="font-size:13px;font-weight:700;color:#fff;">✓ Module Quiz Passed (100%)</span>';
+    }
+    if (allDone) {
+      return '<a href="../quiz/?m=' + m.id + '" class="btn-pill-dark" style="background:#fff!important;color:var(--primary)!important;box-shadow:0 4px 12px rgba(0,0,0,0.15);"><i class="ms">timer</i> Start Timed Quiz</a>';
+    }
+    return '<span style="font-size:12px;opacity:0.9;">Complete all module lectures to unlock quiz.</span>';
+  }
+
+  function pct() { return Math.min(100, Math.round(max * 100 / dur)); }
+
+  function paint() {
+    $('#time').textContent = fmtClock(pos) + ' / ' + fmtClock(dur);
+    $('#seek').value = Math.floor(pos);
+    var chip = $('#chip');
+    chip.textContent = done ? '✓ 90% Watched' : pct() + '% watched';
+    $('#tog .ms').textContent = playing ? 'pause' : 'play_arrow';
+    $('#big').style.display = playing ? 'none' : 'grid';
+    $('#spd').textContent = speed > 1 ? 'Demo ×' + speed : '1× Speed';
+    $('#quizActionWrap').innerHTML = renderQuizAction();
+
+    var wm = $('#watchMeter'), wms = $('#watchMeterStatus');
+    if (wm && wms) {
+      if (done) {
+        wm.className = 'player-watch-meter unlocked';
+        wms.textContent = '✓ Threshold Reached (Quiz Unlocked)';
+      } else {
+        wm.className = 'player-watch-meter';
+        wms.textContent = pct() + '% / 90%';
+      }
+    }
+  }
+
+  function save() { lastSaved = max; recordWatch(l.id, max); }
+  function stop() { playing = false; clearInterval(timer); timer = null; }
+
+  function tick() {
+    pos = Math.min(dur, pos + 0.25 * speed);
+    max = Math.max(max, Math.floor(pos));
+    var just = !done && RULES.lectureComplete(max, dur, frac);
+    if (just || Math.floor(pos) - lastSaved >= 5 || pos >= dur) save();
+    if (just) {
+      done = true;
+      snack('Lecture complete (90% threshold reached).');
+      if (typeof sideAlert === 'function') {
+        sideAlert('Lecture Threshold Passed (90%)', 'Module lecture marked complete. The timed evaluation is now unlocked!', 'success');
+      }
+    }
+    if (pos >= dur) stop();
+    paint();
+  }
+
+  function toggle() {
+    if (playing) { stop(); save(); paint(); return; }
+    if (pos >= dur) pos = 0;
+    playing = true; timer = setInterval(tick, 250); paint();
+  }
+
+  $('#big').onclick = toggle;
+  $('#tog').onclick = toggle;
+
+  var r10 = $('#rewind10');
+  if (r10) r10.onclick = function () { pos = Math.max(0, pos - 10); paint(); };
+
+  var f10 = $('#forward10');
+  if (f10) f10.onclick = function () { pos = Math.min(max, pos + 10); paint(); };
+
+  var fs = $('#fsBtn'), pw = $('#playerWrap');
+  if (fs && pw) {
+    fs.onclick = function () {
+      if (!document.fullscreenElement) {
+        if (pw.requestFullscreen) pw.requestFullscreen();
+        else if (pw.webkitRequestFullscreen) pw.webkitRequestFullscreen();
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    };
+  }
+
+  $('#spd').onclick = function () { speed = speed > 1 ? 1 : ACADEMY_DATA.settings.demoPlaybackSpeed; paint(); };
+  $('#seek').oninput = function () { pos = Math.min(parseInt(this.value, 10) || 0, max); paint(); };
+  window.addEventListener('pagehide', function () { if (max > lastSaved) save(); });
+
+  /* Mobile/Tablet tab switcher */
+  var mAbout = $('#mTabAbout'), mContents = $('#mTabContents'), mQuiz = $('#mTabQuiz');
+  var pAbout = $('#paneAbout'), pContents = $('#paneContents'), pQuiz = $('#paneQuiz');
+  if (mAbout && mContents && mQuiz) {
+    var setMobilePane = function (target) {
+      mAbout.classList.toggle('active', target === 'about');
+      mContents.classList.toggle('active', target === 'contents');
+      mQuiz.classList.toggle('active', target === 'quiz');
+
+      if (window.innerWidth <= 1024) {
+        pAbout.classList.toggle('active', target === 'about');
+        pContents.classList.toggle('active', target === 'contents' || target === 'quiz');
+        if (target === 'quiz') pQuiz.scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+    mAbout.onclick = function () { setMobilePane('about'); };
+    mContents.onclick = function () { setMobilePane('contents'); };
+    mQuiz.onclick = function () { setMobilePane('quiz'); };
+  }
+
+  paint();
+})();
+</script>
+<script type="text/plain" data-src="header.js"></script>
+<script type="text/plain" data-src="nav.js"></script>
+</body>
+</html>

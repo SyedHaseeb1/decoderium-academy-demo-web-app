@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 120" width="540" height="120" fill="none">
+  <defs>
+    <linearGradient id="decGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#582be8" />
+      <stop offset="100%" stop-color="#7c3aed" />
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff4760" />
+      <stop offset="100%" stop-color="#e60057" />
+    </linearGradient>
+    <filter id="decShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#582be8" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Modern D Hex Badge -->
+  <g transform="translate(14, 14)">
+    <rect x="0" y="0" width="92" height="92" rx="26" fill="url(#decGrad)" filter="url(#decShadow)"/>
+    <!-- Stylized D Wave Cutout -->
+    <path d="M 30 24 H 48 C 62 24 72 34 72 46 C 72 58 62 68 48 68 H 30 Z" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Internal Cardiology Pulse Accent -->
+    <path d="M 38 46 L 44 46 L 48 38 L 53 54 L 57 43 L 60 46 L 64 46" fill="none" stroke="url(#accentGrad)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Glow dot -->
+    <circle cx="70" cy="24" r="4.5" fill="#38bdf8"/>
+  </g>
+
+  <!-- Brand Typography -->
+  <text x="126" y="58" font-family="Plus Jakarta Sans, Inter, -apple-system, sans-serif" font-size="34" font-weight="900" fill="#0b1727" letter-spacing="-0.8">DECODERIUM</text>
+  <text x="128" y="86" font-family="Plus Jakarta Sans, Inter, -apple-system, sans-serif" font-size="13" font-weight="700" fill="#64748b" letter-spacing="3.2">MEDICAL ACADEMY</text>
+</svg>

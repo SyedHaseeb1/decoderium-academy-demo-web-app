@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Decoderium Academy · Physician Portal Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ff4760">
+  <link rel="icon" type="image/svg+xml" href="../assets/STAND-HF-logo.svg">
+  <link rel="stylesheet" href="../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../assets/base.css">
+  <link rel="stylesheet" href="../assets/academy.css">
+  <style>
+    /* ==========================================================================
+       DECODERIUM.COM THEMED PHYSICIAN LOGIN CARD
+       Matches reference image: Floating rounded glassmorphism card, vertical bar,
+       premium medical dark-tech theme, ultra-easy for non-tech-savvy physicians.
+       ========================================================================== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body.decoderium-auth-body {
+      background: radial-gradient(circle at 50% 20%, #111a2e 0%, #080c14 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 20px;
+      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      position: relative;
+      overflow-x: hidden;
+      color: #ffffff;
+    }
+
+    /* Ambient Medical ECG & Frequency Wave Lines */
+    .decoderium-wave-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.55;
+    }
+
+    /* Floating Rounded Glass Card matching Reference Image */
+    .decoderium-glass-card {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 960px;
+      background: rgba(17, 24, 39, 0.72);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 32px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      display: grid;
+      grid-template-columns: 1fr 3px 1.15fr;
+      padding: 50px 46px;
+      gap: 40px;
+      align-items: center;
+    }
+
+    /* Left Side: Brand, Vision & Portal Info */
+    .brand-col {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      min-height: 380px;
+    }
+
+    .brand-logo-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #ff4760, #a855f7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 24px;
+      box-shadow: 0 4px 16px rgba(255, 71, 96, 0.35);
+    }
+
+    .brand-logo-title {
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      color: #ffffff;
+    }
+
+    .hero-title {
+      font-size: 34px;
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+      margin: 24px 0 14px;
+      color: #ffffff;
+    }
+
+    .hero-title span {
+      background: linear-gradient(90deg, #ff4760, #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-desc {
+      font-size: 13.5px;
+      color: #94a3b8;
+      line-height: 1.6;
+      margin-bottom: 24px;
+      max-width: 380px;
+    }
+
+    .perks-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .perk-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #cbd5e1;
+    }
+
+    .perk-item i {
+      color: #10b981;
+      font-size: 18px;
+    }
+
+    .brand-footer-link {
+      font-size: 12px;
+      color: #64748b;
+      letter-spacing: 0.5px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.15s ease;
+    }
+
+    .brand-footer-link:hover {
+      color: #cbd5e1;
+    }
+
+    /* Vertical Center Divider Bar */
+    .vertical-divider {
+      background: rgba(255, 255, 255, 0.35);
+      height: 80%;
+      border-radius: 9999px;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.15);
+    }
+
+    /* Right Side: Simple, Aesthetic Login Form */
+    .form-col {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .form-title {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      margin-bottom: 6px;
+      color: #ffffff;
+    }
+
+    .form-subtitle {
+      font-size: 13px;
+      color: #94a3b8;
+      margin-bottom: 22px;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .field-label {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #cbd5e1;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-left: 14px;
+    }
+
+    .pill-input {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1.5px solid rgba(255, 255, 255, 0.16);
+      border-radius: 9999px;
+      padding: 13px 22px;
+      font-size: 14px;
+      color: #ffffff;
+      outline: none;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      width: 100%;
+    }
+
+    .pill-input::placeholder {
+      color: #64748b;
+    }
+
+    .pill-input:focus {
+      background: rgba(255, 255, 255, 0.14);
+      border-color: #ff4760;
+      box-shadow: 0 0 0 3px rgba(255, 71, 96, 0.3);
+    }
+
+    .btn-login-submit {
+      width: 100%;
+      background: #ff4760;
+      color: #ffffff;
+      border: none;
+      padding: 13px;
+      border-radius: 9999px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+      box-shadow: 0 4px 16px rgba(255, 71, 96, 0.35);
+      transition: all 0.2s ease;
+    }
+
+    .btn-login-submit:hover {
+      background: #e63750;
+      box-shadow: 0 6px 20px rgba(255, 71, 96, 0.5);
+      transform: translateY(-1px);
+    }
+
+    /* Fast Demo Account Access for Physicians & Evaluators */
+    .demo-strip {
+      margin-top: 22px;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+    }
+
+    .demo-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .demo-buttons-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .demo-btn {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 9999px;
+      padding: 8px 12px;
+      color: #cbd5e1;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .demo-btn:hover {
+      background: rgba(255, 71, 96, 0.18);
+      border-color: #ff4760;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(255, 71, 96, 0.25);
+    }
+
+    .admin-note {
+      margin-top: 14px;
+      font-size: 11px;
+      color: #64748b;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 900px) {
+      .decoderium-glass-card {
+        grid-template-columns: 1fr;
+        padding: 34px 22px;
+        gap: 28px;
+        border-radius: 24px;
+      }
+      .vertical-divider {
+        display: none;
+      }
+      .brand-col {
+        min-height: auto;
+      }
+      .hero-title {
+        font-size: 28px;
+        margin: 16px 0 10px;
+      }
+      .hero-desc {
+        max-width: 100%;
+        margin-bottom: 16px;
+      }
+    }
+  </style>
+</head>
+<body class="decoderium-auth-body">
+
+<!-- Ambient Cardiology / Frequency Lines SVG -->
+<svg class="decoderium-wave-bg" viewBox="0 0 1440 900" fill="none" preserveAspectRatio="none">
+  <defs>
+    <linearGradient id="decGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.35"/>
+      <stop offset="50%" stop-color="#8b5cf6" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#ff4760" stop-opacity="0.55"/>
+    </linearGradient>
+  </defs>
+  <path d="M-100,520 C220,320 450,720 850,410 C1120,200 1320,620 1600,460" stroke="url(#decGrad1)" stroke-width="2.5" fill="none"/>
+  <path d="M-100,550 C220,350 450,750 850,440 C1120,230 1320,650 1600,490" stroke="url(#decGrad1)" stroke-width="1.5" fill="none"/>
+  <path d="M-100,580 C220,380 450,780 850,470 C1120,260 1320,680 1600,520" stroke="url(#decGrad1)" stroke-width="1" fill="none"/>
+  <path d="M-100,490 C220,290 450,690 850,380 C1120,170 1320,590 1600,430" stroke="url(#decGrad1)" stroke-width="1.8" fill="none"/>
+</svg>
+
+<!-- Main Floating Glassmorphic Login Card -->
+<div class="decoderium-glass-card animate-fade-in">
+  <!-- Left Side: Brand, Accreditation & Educational Pillars -->
+  <div class="brand-col">
+    <div>
+      <div class="brand-logo-row">
+        <div class="brand-logo-icon"><i class="ms">cardiology</i></div>
+        <div>
+          <div class="brand-logo-title">Decoderium</div>
+          <div style="font-size:11px;color:#94a3b8;font-weight:600;letter-spacing:0.5px;">HEART FAILURE ACADEMY</div>
+        </div>
+      </div>
+
+      <h1 class="hero-title">
+        Medical Education & <span>Certification</span>
+      </h1>
+
+      <p class="hero-desc">
+        Accredited continuing medical education platform for cardiologists and physicians in Pakistan. Complete guideline-directed modules, attempt timed evaluations, and receive verifiable PMDC certificates.
+      </p>
+
+      <div class="perks-list">
+        <div class="perk-item">
+          <i class="ms">verified</i>
+          <span>Official PMDC CPD & CME Accreditation</span>
+        </div>
+        <div class="perk-item">
+          <i class="ms">verified</i>
+          <span>90% Lecture Watch Integrity Gate</span>
+        </div>
+        <div class="perk-item">
+          <i class="ms">verified</i>
+          <span>Verifiable Cryptographic Certificate Hash</span>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <a href="https://standhf.pk" target="_blank" rel="noopener" class="brand-footer-link">
+        <i class="ms" style="font-size:15px;">launch</i>
+        <span>www.decoderium.com · STAND-HF Registry Companion</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Center Solid Divider Bar -->
+  <div class="vertical-divider"></div>
+
+  <!-- Right Side: Streamlined Physician Login -->
+  <div class="form-col">
+    <h2 class="form-title">Login</h2>
+    <p class="form-subtitle">Enter your official credentials or select a demo profile below.</p>
+
+    <!-- Error notice pill -->
+    <div id="errNotice" style="display:none;background:rgba(239,68,68,0.22);border:1px solid #ef4444;color:#fca5a5;padding:9px 16px;border-radius:9999px;font-size:12.5px;font-weight:600;margin-bottom:16px;text-align:center;"></div>
+
+    <!-- Login Form -->
+    <form id="formSignIn" onsubmit="return false;">
+      <div class="field-group">
+        <label class="field-label" for="loginUser">Username or PMDC Email</label>
+        <input type="text" id="loginUser" class="pill-input" placeholder="e.g. ayesha.khan" value="ayesha.khan" required>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="loginPass">Password</label>
+        <input type="password" id="loginPass" class="pill-input" placeholder="••••••••" value="demo" required>
+      </div>
+
+      <button type="submit" class="btn-login-submit" id="btnSubmitLogin">
+        <i class="ms" style="font-size:18px;">login</i> Sign In to Portal
+      </button>
+    </form>
+
+    <!-- 1-Click Physician Demo Accounts (Ultra easy for doctors) -->
+    <div class="demo-strip">
+      <div class="demo-label">One-Click Physician Demo Sign-In</div>
+      <div class="demo-buttons-grid">
+        <button type="button" class="demo-btn" id="chipAyesha" title="Sign in as Dr. Ayesha (Mid-Course Progress)">
+          <span style="width:8px;height:8px;border-radius:50%;background:#10b981;flex-shrink:0;"></span>
+          <span>Dr. Ayesha (In Progress)</span>
+        </button>
+        <button type="button" class="demo-btn" id="chipBilal" title="Sign in as Dr. Bilal (Certificate Ready)">
+          <span style="width:8px;height:8px;border-radius:50%;background:#38bdf8;flex-shrink:0;"></span>
+          <span>Dr. Bilal (Cert Ready)</span>
+        </button>
+        <button type="button" class="demo-btn" id="chipAdmin" style="grid-column:span 2;justify-content:center;" title="Sign in to Super Admin Portal">
+          <span style="width:8px;height:8px;border-radius:50%;background:#c084fc;flex-shrink:0;"></span>
+          <span>Super Administrator (Doctor Registry & Curriculum)</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="admin-note">
+      Physician registry & onboarding is managed by Hospital & PMDC Super Administrators.
+    </div>
+  </div>
+</div>
+
+<div class="snack" id="snack" role="status" aria-live="polite"></div>
+
+<script src="../assets/boot.js"></script>
+<script type="text/plain" data-src="ui.js"></script>
+<script type="text/plain" data-src="rules.js"></script>
+<script type="text/plain" data-src="access.js"></script>
+<script type="text/plain">
+(function () {
+  /* Already signed in check */
+  var s = session();
+  if (s.auth && s.role) {
+    location.replace(s.role === 'admin' ? '../admin/' : '../home/');
+    return;
+  }
+
+  function submitLogin(targetUser, targetRole) {
+    var user = (targetUser || $('#loginUser').value).trim();
+    if (!user) {
+      showError('Please enter your username or PMDC email address.');
+      return;
+    }
+
+    var role = targetRole || (user.toLowerCase() === 'admin' ? 'admin' : 'doctor');
+    var ok = signIn(user, role);
+    if (ok) {
+      location.replace(role === 'admin' ? '../admin/' : '../home/');
+    } else {
+      showError('Account not recognized. Try one of the demo buttons below.');
+    }
+  }
+
+  function showError(msg) {
+    var el = $('#errNotice');
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+
+  /* Form submission */
+  $('#formSignIn').onsubmit = function () {
+    submitLogin();
+  };
+
+  /* Quick Demo Buttons for non-tech-savvy physicians */
+  $('#chipAyesha').onclick = function () {
+    $('#loginUser').value = 'ayesha.khan';
+    $('#loginPass').value = 'demo';
+    submitLogin('ayesha.khan', 'doctor');
+  };
+
+  $('#chipBilal').onclick = function () {
+    $('#loginUser').value = 'bilal.ahmed@example.com';
+    $('#loginPass').value = 'demo';
+    submitLogin('bilal.ahmed@example.com', 'doctor');
+  };
+
+  $('#chipAdmin').onclick = function () {
+    $('#loginUser').value = 'admin';
+    $('#loginPass').value = 'demo';
+    submitLogin('admin', 'admin');
+  };
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Decoderium Academy · Course Catalog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ff4760">
+  <link rel="icon" type="image/svg+xml" href="../assets/STAND-HF-logo.svg">
+  <link rel="stylesheet" href="../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../assets/base.css">
+  <link rel="stylesheet" href="../assets/academy.css">
+</head>
+<body data-page="courses">
+<div class="app" id="app">
+  <aside class="side" id="side" aria-label="Main navigation"></aside>
+  <div class="main">
+    <div id="app-header"></div>
+    <div id="view"></div>
+  </div>
+</div>
+<div class="snack" id="snack" role="status" aria-live="polite"></div>
+
+<script src="../assets/boot.js"></script>
+<script type="text/plain" data-src="ui.js"></script>
+<script type="text/plain" data-src="rules.js"></script>
+<script type="text/plain" data-src="access.js"></script>
+<script type="text/plain" data-src="views.js"></script>
+<script type="text/plain">
+/* Course Catalog matching Reference Image 0 (Educef style 4-column grid & filter pills) */
+(function () {
+  if (!requireRole('doctor')) return;
+  var d = me(), p = progressOf(d.id), activeTab = 'All', activeCategory = 'All';
+
+  function render() {
+    var id = location.hash.slice(1), c = id && course(id);
+    if (c && c.published) detail(c); else list();
+    window.scrollTo(0, 0);
+  }
+
+  function list() {
+    var allCourses = courses().filter(function (c) { return c.published; });
+    var shown = allCourses.filter(function (c) {
+      if (activeTab === 'In progress') return RULES.courseStarted(c, p) && !RULES.courseComplete(c, p);
+      if (activeTab === 'Completed') return RULES.courseComplete(c, p);
+      if (activeTab === 'Not started') return !RULES.courseStarted(c, p);
+      return true;
+    });
+
+    $('#view').innerHTML =
+      '<div class="edu-catalog-header">' +
+        /* Active Filters Bar (Image 0) */
+        '<div class="edu-active-filters-bar">' +
+          '<div class="edu-pill-list">' +
+            '<span style="font-size:12px;font-weight:700;color:var(--slate);margin-right:6px;">ACTIVE FILTERS:</span>' +
+            '<span class="edu-filter-pill"><i class="ms">check</i> Heart Failure Guidelines</span>' +
+            '<span class="edu-filter-pill"><i class="ms">check</i> GDMT Protocols</span>' +
+            '<span class="edu-filter-pill"><i class="ms">check</i> Biomarkers</span>' +
+            '<span class="edu-filter-pill"><i class="ms">check</i> PMDC Accredited</span>' +
+          '</div>' +
+          '<span class="edu-results-count">Result: ' + shown.length + ' accredited curriculum courses</span>' +
+        '</div>' +
+
+        /* Secondary Segment Tabs Bar (Image 0) */
+        '<div class="edu-segment-bar">' +
+          '<div class="edu-tabs">' +
+            ['All', 'In progress', 'Completed', 'Not started'].map(function (tab) {
+              return '<span class="edu-tab' + (tab === activeTab ? ' active' : '') + '" data-tab="' + tab + '">' + tab + '</span>';
+            }).join('') +
+          '</div>' +
+
+          '<div style="display:flex;align-items:center;gap:12px;font-size:12.5px;color:var(--slate);">' +
+            '<span>Sort by: <strong>Accredited CME ▾</strong></span>' +
+            '<div style="display:flex;gap:4px;">' +
+              '<button class="icon-action-btn" style="width:30px;height:30px;"><i class="ms" style="font-size:18px;">grid_view</i></button>' +
+              '<button class="icon-action-btn" style="width:30px;height:30px;"><i class="ms" style="font-size:18px;">view_list</i></button>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+
+      /* 4-Column Course Grid (Image 0) */
+      (shown.length ?
+        '<div class="edu-course-grid">' +
+          shown.map(function (c, idx) {
+            var cDone = RULES.courseComplete(c, p);
+            var thumbGradients = [
+              'linear-gradient(135deg, #1d4ed8, #3b82f6)',
+              'linear-gradient(135deg, #059669, #10b981)',
+              'linear-gradient(135deg, #7c3aed, #8b5cf6)',
+              'linear-gradient(135deg, #ea580c, #f97316)'
+            ];
+            var grad = thumbGradients[idx % thumbGradients.length];
+
+            return '<a href="#' + c.id + '" class="edu-card">' +
+              '<div class="edu-card-thumb" style="background:' + grad + ';">' +
+                '<span class="edu-card-badge">' + (cDone ? 'COMPLETED' : 'CORE TRACK') + '</span>' +
+                '<i class="ms" style="font-size:48px;color:#fff;opacity:0.9;">cardiology</i>' +
+              '</div>' +
+              '<div class="edu-card-body">' +
+                '<div class="edu-card-category">' + esc(c.category) + '</div>' +
+                '<div class="edu-card-title">' + esc(c.title) + '</div>' +
+                '<div class="edu-card-instructor">' +
+                  '<div class="edu-card-instructor-avatar"></div>' +
+                  '<span>Prof. Dr. Ayesha Khan</span>' +
+                '</div>' +
+                '<div class="edu-card-footer">' +
+                  '<span><i class="ms" style="font-size:14px;vertical-align:-2px;">visibility</i> 842</span>' +
+                  '<span class="edu-card-price">12 CME Hours</span>' +
+                '</div>' +
+              '</div>' +
+            '</a>';
+          }).join('') +
+        '</div>' :
+        '<div class="card empty" style="border-radius:var(--radius-lg);padding:40px;text-align:center;"><i class="ms">school</i>No courses match this filter.</div>');
+
+    $$('[data-tab]').forEach(function (t) {
+      t.onclick = function () { activeTab = t.dataset.tab; list(); };
+    });
+  }
+
+  /* Single Course Syllabus Detail View */
+  function detail(c) {
+    var pc = RULES.percent(c, p), done = RULES.courseComplete(c, p), st = RULES.courseStarted(c, p), q = settings().quiz;
+    var step = nextStep(c, p);
+    var action = done ?
+      '<a class="btn-premium-pill" href="../certificates/#' + c.id + '"><i class="ms">workspace_premium</i> View Certificate</a>' :
+      step ?
+      '<a class="btn-premium-pill" href="' + step.href + '"><i class="ms">' + step.icon + '</i> ' + (step.icon === 'quiz' ? 'Start Module ' + RULES.pendingQuiz(c, p).number + ' Quiz' : st ? 'Resume Lecture' : 'Start Course') + '</a>' : '';
+
+    var mods = c.modules.map(function (m) {
+      var s = RULES.moduleState(c, m, p), locked = s === 'locked', used = RULES.attemptsUsed(p, m.id), left = q.maxAttempts - used;
+      var chip = {
+        locked: '<span class="filter-chip-sm"><i class="ms" style="font-size:14px;vertical-align:-2px;">lock</i> Locked</span>',
+        progress: '<span class="filter-chip-sm" style="color:var(--primary);font-weight:700;">In Progress</span>',
+        quiz: '<span class="filter-chip-sm" style="color:#d97706;font-weight:700;">Quiz Ready</span>',
+        passed: '<span class="filter-chip-sm" style="color:#059669;font-weight:700;">Passed · ' + RULES.bestScore(p, m.id) + '%</span>'
+      }[s];
+
+      var lecs = m.lectures.map(function (l) {
+        var dn = RULES.lectureDone(p, l.id);
+        if (locked) {
+          return '<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--line);color:var(--slate);">' +
+            '<div style="display:flex;align-items:center;gap:10px;"><i class="ms">lock</i><span>' + esc(l.title) + '</span></div>' +
+            '<span style="font-size:12px;">' + fmtDur(l.seconds) + '</span>' +
+          '</div>';
+        }
+        return '<a href="../lecture/?id=' + l.id + '" style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--line);text-decoration:none;color:var(--navy);transition:background 0.2s ease;">' +
+          '<div style="display:flex;align-items:center;gap:10px;"><i class="ms" style="color:' + (dn ? 'var(--emerald)' : 'var(--primary)') + ';">' + (dn ? 'check_circle' : 'play_circle') + '</i><span>' + esc(l.title) + '</span></div>' +
+          '<span style="font-size:12px;color:var(--slate);">' + fmtDur(l.seconds) + '</span>' +
+        '</a>';
+      }).join('');
+
+      var quizBtn = s === 'quiz' && left > 0 ?
+        '<a href="../quiz/?m=' + m.id + '" class="btn-premium-pill" style="font-size:12px;padding:6px 16px;">Start Timed Quiz</a>' :
+        s === 'passed' ?
+        '<span style="color:#059669;font-size:12.5px;font-weight:700;">✓ Module Quiz Passed</span>' :
+        '<span style="color:var(--slate);font-size:12px;">Complete all lectures to unlock</span>';
+
+      var isDefaultOpen = s === 'progress' || s === 'quiz';
+      return '<div class="accordion-item' + (isDefaultOpen ? '' : ' collapsed') + '" id="mod-' + m.id + '">' +
+        '<div class="accordion-header" onclick="document.getElementById(\'mod-' + m.id + '\').classList.toggle(\'collapsed\');">' +
+          '<div style="display:flex;align-items:center;gap:12px;">' +
+            '<div style="width:36px;height:36px;border-radius:50%;background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--navy);">' + m.number + '</div>' +
+            '<div><h3 style="font-size:15px;font-weight:800;color:var(--navy);margin:0;">' + esc(m.title) + '</h3><span style="font-size:12px;color:var(--slate);">' + esc(m.summary) + ' (' + m.lectures.length + ' lectures)</span></div>' +
+          '</div>' +
+          '<div style="display:flex;align-items:center;gap:12px;">' +
+            chip +
+            '<i class="ms accordion-chevron">expand_more</i>' +
+          '</div>' +
+        '</div>' +
+        '<div class="accordion-body">' +
+          lecs +
+          '<div style="padding:14px 20px;background:#fff;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">' +
+            '<div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--navy);"><i class="ms" style="color:var(--primary);">timer</i> Module ' + m.number + ' Assessment (10 Questions • 10:00 Timer)</div>' +
+            quizBtn +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    $('#view').innerHTML =
+      crumbs([{ label: 'Courses', href: './' }, { label: c.title }]) +
+      '<div style="background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);padding:32px;box-shadow:var(--shadow-card);margin-bottom:28px;">' +
+        '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:16px;">' +
+          '<div>' +
+            '<span class="filter-chip-sm" style="color:var(--primary);font-weight:700;margin-bottom:8px;display:inline-block;">' + esc(c.category) + '</span>' +
+            '<h1 style="font-size:26px;font-weight:800;color:var(--navy);margin:0 0 6px 0;">' + esc(c.title) + '</h1>' +
+            '<p style="font-size:14px;color:var(--slate);margin:0;">' + esc(c.subtitle) + '</p>' +
+          '</div>' +
+          action +
+        '</div>' +
+        '<p style="font-size:13.5px;color:var(--slate-dark);line-height:1.6;margin-bottom:20px;">' + esc(c.description) + '</p>' +
+        '<div>' +
+          '<div style="display:flex;justify-content:space-between;font-size:12.5px;font-weight:700;color:var(--navy);margin-bottom:6px;"><span>Course Progress</span><span>' + pc + '%</span></div>' +
+          '<div style="height:8px;background:var(--surface-subtle);border-radius:var(--radius-pill);overflow:hidden;"><div style="height:100%;width:' + pc + '%;background:' + (done ? 'var(--emerald)' : 'var(--primary)') + ';border-radius:var(--radius-pill);"></div></div>' +
+        '</div>' +
+      '</div>' +
+      mods;
+  }
+
+  window.addEventListener('hashchange', render);
+  render();
+})();
+</script>
+<script type="text/plain" data-src="header.js"></script>
+<script type="text/plain" data-src="nav.js"></script>
+</body>
+</html>
