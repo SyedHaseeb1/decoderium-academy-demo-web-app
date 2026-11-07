@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Decoderium Academy · Executive Administration</title>
+  <title>GILEAP · Executive Administration</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#582be8">
   <link rel="icon" type="image/svg+xml" href="../assets/decoderium-mark.svg">
@@ -35,7 +35,7 @@
           <img src="../assets/decoderium-mark.svg" alt="Decoderium Mark">
         </div>
         <div class="adm-brand-meta">
-          <span class="adm-brand-title">Decoderium</span>
+          <span class="adm-brand-title">GILEAP</span>
           <span class="adm-brand-badge"><i class="ms" style="font-size:12px;">admin_panel_settings</i> Executive Admin</span>
         </div>
       </div>
@@ -112,7 +112,7 @@
             <i class="ms">school</i> LMS Academy
           </button>
           <button type="button" class="adm-mode-btn clinical" id="btnModeClinical" role="tab" aria-selected="false">
-            <i class="ms">monitor_heart</i> Clinical Trial Radar
+            <i class="ms">biotech</i> Clinical Trial Radar
           </button>
         </div>
       </div>
@@ -131,11 +131,61 @@
           <kbd class="adm-kbd-shortcut">Ctrl+K</kbd>
         </div>
 
-        <!-- Notification Bell with Telemetry Alert -->
-        <button type="button" class="adm-icon-btn" id="admAlertBell" title="Live Telemetry Event Notifications" aria-label="Notifications">
-          <i class="ms" style="font-size:20px;">notifications_none</i>
-          <span class="badge-dot"></span>
-        </button>
+        <!-- Notification Bell with Interactive Telemetry Tray -->
+        <div style="position:relative;">
+          <button type="button" class="adm-icon-btn" id="admAlertBell" title="Live Telemetry Event Notifications" aria-label="Notifications">
+            <i class="ms" style="font-size:20px;">notifications_none</i>
+            <span class="badge-dot" id="admAlertDot"></span>
+          </button>
+
+          <div class="adm-notification-tray" id="admNotificationTray" role="region" aria-label="Live System Alerts">
+            <div class="adm-notif-header">
+              <div class="adm-notif-title">
+                <i class="ms" style="font-size:16px;color:var(--adm-primary);">notifications_active</i>
+                <span>Telemetry Alerts</span>
+                <span class="adm-notif-badge" id="admNotifBadge">4 New</span>
+              </div>
+              <button type="button" class="adm-notif-clear" id="btnDismissNotifs">Clear</button>
+            </div>
+            <div class="adm-notif-list" id="admNotifList">
+              <div class="adm-notif-item unread" onclick="location.hash='#clinical';">
+                <div class="adm-notif-icon-wrap" style="background:#fff1f2;color:#e11d48;"><i class="ms" style="font-size:18px;">warning</i></div>
+                <div class="adm-notif-item-body">
+                  <div class="adm-notif-item-title">Day-3 Triage Required</div>
+                  <div class="adm-notif-item-desc">3 enrolled GERD patients in Lahore hub pending follow-up.</div>
+                  <div class="adm-notif-item-time">2m ago · Clinical Trial</div>
+                </div>
+              </div>
+              <div class="adm-notif-item unread" onclick="location.hash='#doctors';">
+                <div class="adm-notif-icon-wrap" style="background:#ecfdf5;color:#059669;"><i class="ms" style="font-size:18px;">verified</i></div>
+                <div class="adm-notif-item-body">
+                  <div class="adm-notif-item-title">CME Certificate Verified</div>
+                  <div class="adm-notif-item-desc">Dr. Ayesha Khan (PMC-99214-A) achieved 100% completion.</div>
+                  <div class="adm-notif-item-time">14m ago · LMS Academy</div>
+                </div>
+              </div>
+              <div class="adm-notif-item" onclick="location.hash='#clinical';">
+                <div class="adm-notif-icon-wrap" style="background:#eff6ff;color:#2563eb;"><i class="ms" style="font-size:18px;">install_mobile</i></div>
+                <div class="adm-notif-item-body">
+                  <div class="adm-notif-item-title">PWA Install Milestone</div>
+                  <div class="adm-notif-item-desc">96% of active trial cohort installed the offline diary PWA.</div>
+                  <div class="adm-notif-item-time">1h ago · Patient App</div>
+                </div>
+              </div>
+              <div class="adm-notif-item" onclick="location.hash='#regions';">
+                <div class="adm-notif-icon-wrap" style="background:#f5f3ff;color:#7c3aed;"><i class="ms" style="font-size:18px;">hub</i></div>
+                <div class="adm-notif-item-body">
+                  <div class="adm-notif-item-title">New Trial Center Enlisted</div>
+                  <div class="adm-notif-item-desc">National Hospital Karachi joined multicenter registry.</div>
+                  <div class="adm-notif-item-time">3h ago · Multi-Center</div>
+                </div>
+              </div>
+            </div>
+            <div class="adm-notif-footer">
+              <a href="#clinical" id="btnNotifViewLogs">View All Live Activity Logs &rarr;</a>
+            </div>
+          </div>
+        </div>
 
         <!-- Admin Profile Pill -->
         <div class="adm-profile-pill" id="admProfilePill" role="button" aria-haspopup="true" aria-expanded="false" title="Administrator Profile">
@@ -203,14 +253,20 @@
     var gradId = 'thumbGrad_' + id.replace(/[^a-zA-Z0-9]/g, '_') + (isMini ? '_m' : '');
 
     var art = '';
-    if (id === 'c1' || /hfref|heart|cardio/i.test(c.title)) {
-      art = '<path d="M 0 82 Q 40 82, 80 82 L 105 82 L 115 50 L 130 115 L 145 60 L 155 95 L 165 82 Q 240 82, 340 82" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="' + (isMini ? '2.5' : '3.5') + '" stroke-linecap="round"/>' +
-            '<circle cx="' + (isMini ? '28' : '130') + '" cy="' + (isMini ? '20' : '115') + '" r="' + (isMini ? '3' : '5') + '" fill="#ff4760"/>' +
-            (!isMini ? '<path d="M 280 40 C 270 20, 240 25, 240 45 C 240 65, 280 95, 280 95 C 280 95, 320 65, 320 45 C 320 25, 290 20, 280 40 Z" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>' : '');
-    } else if (id === 'c2' || /primary|clinic|referral/i.test(c.title)) {
+    var thumbStyle = c.thumbStyle || '';
+    if (thumbStyle === 'endoscopy' || /endoscopy|mucosa|scope/i.test(c.title)) {
+      art = '<path d="M ' + (isMini ? '14' : '70') + ' ' + (isMini ? '26' : '110') + ' C ' + (isMini ? '24' : '140') + ' ' + (isMini ? '10' : '40') + ', ' + (isMini ? '34' : '200') + ' ' + (isMini ? '30' : '120') + ', ' + (isMini ? '46' : '270') + ' ' + (isMini ? '14' : '60') + '" fill="none" stroke="#38bdf8" stroke-width="' + (isMini ? '2.5' : '4') + '" stroke-linecap="round"/>' +
+            '<circle cx="' + (isMini ? '46' : '270') + '" cy="' + (isMini ? '14' : '60') + '" r="' + (isMini ? '3.5' : '9') + '" fill="#0284c7" stroke="#ffffff" stroke-width="1.5"/>' +
+            '<circle cx="' + (isMini ? '46' : '270') + '" cy="' + (isMini ? '14' : '60') + '" r="' + (isMini ? '1.5' : '3.5') + '" fill="#ffffff"/>';
+    } else if (thumbStyle === 'pcab' || id === 'c1' || /gerd|p-cab|apd|acid|gastro/i.test(c.title)) {
+      art = '<rect x="' + (isMini ? '16' : '90') + '" y="' + (isMini ? '14' : '60') + '" width="' + (isMini ? '26' : '160') + '" height="' + (isMini ? '12' : '45') + '" rx="' + (isMini ? '6' : '22') + '" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="' + (isMini ? '2' : '3') + '"/>' +
+            '<line x1="' + (isMini ? '29' : '170') + '" y1="' + (isMini ? '14' : '60') + '" x2="' + (isMini ? '29' : '170') + '" y2="' + (isMini ? '26' : '105') + '" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>' +
+            '<circle cx="' + (isMini ? '23' : '130') + '" cy="' + (isMini ? '20' : '82') + '" r="' + (isMini ? '2.5' : '5') + '" fill="#a78bfa"/>' +
+            (!isMini ? '<path d="M 270 45 Q 290 82, 320 85" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="2" stroke-dasharray="4 4"/>' : '');
+    } else if (thumbStyle === 'clinic' || id === 'c2' || /primary|clinic|referral/i.test(c.title)) {
       art = '<circle cx="' + (isMini ? '29' : '170') + '" cy="' + (isMini ? '20' : '82') + '" r="' + (isMini ? '12' : '44') + '" fill="rgba(255,255,255,0.1)"/>' +
             '<path d="M ' + (isMini ? '29' : '170') + ' ' + (isMini ? '13' : '56') + ' L ' + (isMini ? '29' : '170') + ' ' + (isMini ? '27' : '108') + ' M ' + (isMini ? '22' : '144') + ' ' + (isMini ? '20' : '82') + ' L ' + (isMini ? '36' : '196') + ' ' + (isMini ? '20' : '82') + '" stroke="#ffffff" stroke-width="' + (isMini ? '2.5' : '4') + '" stroke-linecap="round"/>';
-    } else if (id === 'c3' || /device|advanced|icd/i.test(c.title)) {
+    } else if (thumbStyle === 'device' || id === 'c3' || /device|advanced|icd/i.test(c.title)) {
       art = '<circle cx="' + (isMini ? '29' : '170') + '" cy="' + (isMini ? '20' : '82') + '" r="' + (isMini ? '8' : '26') + '" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>' +
             '<circle cx="' + (isMini ? '29' : '170') + '" cy="' + (isMini ? '20' : '82') + '" r="' + (isMini ? '15' : '52') + '" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" stroke-dasharray="4 4"/>' +
             '<circle cx="' + (isMini ? '29' : '170') + '" cy="' + (isMini ? '20' : '82') + '" r="' + (isMini ? '3' : '6') + '" fill="#ffffff"/>';
@@ -275,7 +331,7 @@
     if (!side) return;
     side.classList.toggle('collapsed', isCollapsed);
     if (sideIcon) {
-      sideIcon.textContent = isCollapsed ? 'chevron_right' : 'chevron_left';
+      sideIcon.textContent = 'chevron_left';
     }
     if (sideToggle) {
       sideToggle.setAttribute('title', isCollapsed ? 'Expand sidebar' : 'Collapse sidebar');
@@ -309,21 +365,26 @@
     if (!navPill) return;
     var activeItem = $('.adm-nav-item.active');
     if (activeItem) {
-      if (immediate) {
-        navPill.style.transition = 'none';
-      }
       var topPos = activeItem.offsetTop;
       var h = activeItem.offsetHeight;
       navPill.style.transform = 'translateY(' + topPos + 'px)';
       navPill.style.height = h + 'px';
-      navPill.style.opacity = '1';
       if (immediate) {
-        navPill.offsetHeight; // force reflow
-        setTimeout(function () {
-          navPill.style.transition = '';
-        }, 50);
+        navPill.classList.remove('ready');
+        navPill.style.transition = 'none';
+        navPill.style.opacity = '1';
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            navPill.style.transition = '';
+            navPill.classList.add('ready');
+          });
+        });
+      } else {
+        navPill.style.opacity = '1';
+        navPill.classList.add('ready');
       }
     } else {
+      navPill.classList.remove('ready');
       navPill.style.opacity = '0';
     }
   }
@@ -364,10 +425,30 @@
   }
 
   var alertBell = $('#admAlertBell');
-  if (alertBell) {
-    alertBell.onclick = function () {
-      sideAlert('Clinical Telemetry Pulse', '12 regional physician nodes synced. Day-3 follow-up triage radar active with pending actions.', 'cme');
+  var notifTray = $('#admNotificationTray');
+  if (alertBell && notifTray) {
+    alertBell.onclick = function (e) {
+      e.stopPropagation();
+      notifTray.classList.toggle('open');
     };
+
+    var btnDismiss = $('#btnDismissNotifs');
+    if (btnDismiss) {
+      btnDismiss.onclick = function (e) {
+        e.stopPropagation();
+        $$('.adm-notif-item').forEach(function (el) { el.classList.remove('unread'); });
+        var badge = $('#admNotifBadge');
+        if (badge) badge.textContent = '0 New';
+        var dot = $('#admAlertDot');
+        if (dot) dot.style.display = 'none';
+      };
+    }
+
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('#admNotificationTray') && !e.target.closest('#admAlertBell')) {
+        notifTray.classList.remove('open');
+      }
+    });
   }
 
   var omniSearch = $('#admOmniSearch');
@@ -448,20 +529,58 @@
         e.preventDefault();
         e.stopPropagation();
         var isOpen = menu.classList.contains('open');
+
+        // Close all other open dropdowns & reset their stacking contexts
         document.querySelectorAll('.adm-search-dropdown-menu.open').forEach(function (m) {
           if (m !== menu) {
             m.classList.remove('open');
+            m.classList.remove('open-upwards');
             var pBtn = m.parentElement.querySelector('.adm-search-dropdown-btn');
             if (pBtn) pBtn.classList.remove('is-open');
+            if (m.parentElement) {
+              m.parentElement.classList.remove('is-open');
+              m.parentElement.style.zIndex = '';
+              var pG = m.parentElement.closest('.adm-form-group');
+              if (pG) pG.style.zIndex = '';
+              var pR = m.parentElement.closest('[style*="grid"]');
+              if (pR) pR.style.zIndex = '';
+            }
           }
         });
 
-        menu.classList.toggle('open', !isOpen);
-        btn.classList.toggle('is-open', !isOpen);
-        if (!isOpen && searchInput) {
-          searchInput.value = '';
-          items.forEach(function (it) { it.style.display = 'flex'; });
-          setTimeout(function () { searchInput.focus(); }, 40);
+        var nextState = !isOpen;
+        menu.classList.toggle('open', nextState);
+        btn.classList.toggle('is-open', nextState);
+        dd.classList.toggle('is-open', nextState);
+
+        if (nextState) {
+          dd.style.zIndex = '3000';
+          var pGrp = dd.closest('.adm-form-group');
+          if (pGrp) pGrp.style.zIndex = '3000';
+          var pRow = dd.closest('[style*="grid"]');
+          if (pRow) pRow.style.zIndex = '3000';
+
+          // Smart auto-flip if near bottom of screen
+          var rect = btn.getBoundingClientRect();
+          var spaceBelow = window.innerHeight - rect.bottom;
+          if (spaceBelow < 250 && rect.top > 250) {
+            menu.classList.add('open-upwards');
+          } else {
+            menu.classList.remove('open-upwards');
+          }
+
+          if (searchInput) {
+            searchInput.value = '';
+            items.forEach(function (it) { it.style.display = 'flex'; });
+            setTimeout(function () { searchInput.focus(); }, 40);
+          }
+        } else {
+          menu.classList.remove('open-upwards');
+          dd.style.zIndex = '';
+          var pGrp = dd.closest('.adm-form-group');
+          if (pGrp) pGrp.style.zIndex = '';
+          var pRow = dd.closest('[style*="grid"]');
+          if (pRow) pRow.style.zIndex = '';
         }
       };
 
@@ -504,7 +623,14 @@
           it.classList.add('is-selected');
 
           menu.classList.remove('open');
+          menu.classList.remove('open-upwards');
           btn.classList.remove('is-open');
+          dd.classList.remove('is-open');
+          dd.style.zIndex = '';
+          var pGrp = dd.closest('.adm-form-group');
+          if (pGrp) pGrp.style.zIndex = '';
+          var pRow = dd.closest('[style*="grid"]');
+          if (pRow) pRow.style.zIndex = '';
 
           var evt = new Event('change', { bubbles: true });
           hiddenInput.dispatchEvent(evt);
@@ -517,8 +643,17 @@
     if (!e.target.closest('.adm-search-dropdown')) {
       document.querySelectorAll('.adm-search-dropdown-menu.open').forEach(function (m) {
         m.classList.remove('open');
+        m.classList.remove('open-upwards');
         var pBtn = m.parentElement.querySelector('.adm-search-dropdown-btn');
         if (pBtn) pBtn.classList.remove('is-open');
+        if (m.parentElement) {
+          m.parentElement.classList.remove('is-open');
+          m.parentElement.style.zIndex = '';
+          var pG = m.parentElement.closest('.adm-form-group');
+          if (pG) pG.style.zIndex = '';
+          var pR = m.parentElement.closest('[style*="grid"]');
+          if (pR) pR.style.zIndex = '';
+        }
       });
     }
   });
@@ -536,8 +671,26 @@
      6. SPA Router: Swaps Center Container (#view) Without Reloading
      -------------------------------------------------------------------------- */
   var isInitialRender = true;
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
 
   function render() {
+    if (typeof closeDialog === 'function') closeDialog();
+    var d = $('#admDocDrawer'), s = $('#admDocDrawerScrim');
+    if (d) d.classList.remove('open');
+    if (s) s.classList.remove('open');
+    var tray = $('#admNotificationTray');
+    if (tray) tray.classList.remove('open');
+
+    // Reset scroll positions before route processing
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    var vInit = $('#view');
+    if (vInit) vInit.scrollTop = 0;
+
     var raw = location.hash.slice(1).trim();
     if (!raw || raw === 'overview') raw = 'lms';
     var parts = raw.split('/');
@@ -565,7 +718,7 @@
       lms: 'LMS Academy Intelligence',
       clinical: 'Clinical Trial Radar',
       doctors: 'Physician Directory & Licensing',
-      courses: 'Curriculum & Courses',
+      courses: parts[1] === 'new' ? 'Course Onboarding Studio' : (parts[1] ? 'Course Curriculum Studio' : 'Curriculum & Courses'),
       regions: 'Regional Performance Matrix',
       settings: 'Accreditation & System Rules'
     };
@@ -580,7 +733,10 @@
     var routeMap = {
       lms: viewLmsDashboard,
       clinical: viewClinicalDashboard,
-      courses: function () { return parts[1] ? viewCourseDetail(parts[1]) : viewCourseList(); },
+      courses: function () {
+        if (parts[1] === 'new') return viewCourseOnboarding();
+        return parts[1] ? viewCourseDetail(parts[1]) : viewCourseList();
+      },
       doctors: viewDoctorList,
       regions: viewRegionalMatrix,
       settings: viewSettings
@@ -588,7 +744,10 @@
 
     (routeMap[sec] || viewLmsDashboard)();
     initSearchableDropdowns(viewEl);
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    if (viewEl) viewEl.scrollTop = 0;
   }
 
   /* --------------------------------------------------------------------------
@@ -612,73 +771,73 @@
     var avgC1 = progList.length && c1 ? Math.round(progList.reduce(function (n, p) { return n + RULES.percent(c1, p); }, 0) / progList.length) : 68;
 
     var facultyMentors = [
-      { name: 'Prof. Sara Anwar', role: 'Professor of Cardiology', hospital: 'Punjab Institute of Cardiology', spec: 'HFrEF & GDMT Fellow', initial: 'SA' },
-      { name: 'Dr. Tahir Mahmood', role: 'Consultant Physician', hospital: 'Federal General Hospital, Islamabad', spec: 'Clinical Pharmacology', initial: 'TM' },
-      { name: 'Dr. Nadia Rehman', role: 'Clinical Electrophysiologist', hospital: 'Aga Khan University Hospital', spec: 'Device Selection & CRT', initial: 'NR' }
+      { name: 'Prof. Sara Anwar', role: 'Professor of Gastroenterology', hospital: 'Services Institute of Medical Sciences (SIMS), Lahore', spec: 'Acid Peptic Disease & Endoscopy', initial: 'SA' },
+      { name: 'Dr. Tahir Mahmood', role: 'Consultant Gastroenterologist', hospital: 'Pakistan Institute of Medical Sciences (PIMS), Islamabad', spec: 'P-CAB & H. pylori Protocols', initial: 'TM' },
+      { name: 'Dr. Nadia Rehman', role: 'Consultant Gastroenterologist & Hepatologist', hospital: 'Aga Khan University Hospital, Karachi', spec: 'Therapeutic GI Endoscopy & Motility', initial: 'NR' }
     ];
 
     var html =
       '<!-- 1. Electric Violet Curved Hero Banner (COURSUE Online Coursing Aesthetic) -->' +
       '<div class="lms-hero-banner">' +
-        '<svg class="lms-hero-sparkles" viewBox="0 0 220 170" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
-          '<path d="M150 15 C150 50, 165 65, 200 65 C165 65, 150 80, 150 115 C150 80, 135 65, 100 65 C135 65, 150 50, 150 15 Z" fill="white" fill-opacity="0.22"/>' +
-          '<path d="M60 75 C60 100, 70 110, 95 110 C70 110, 60 120, 60 145 C60 120, 50 110, 25 110 C50 110, 60 100, 60 75 Z" fill="white" fill-opacity="0.16"/>' +
-          '<circle cx="170" cy="130" r="4" fill="white" fill-opacity="0.3"/>' +
-          '<circle cx="95" cy="35" r="3" fill="white" fill-opacity="0.25"/>' +
-        '</svg>' +
-        '<div>' +
-          '<span class="lms-hero-badge"><i class="ms" style="font-size:13px;">school</i> ACCREDITED ONLINE CME SUITE</span>' +
-          '<h1 class="lms-hero-title">Sharpen Clinical Precision with Guideline-Directed Heart Failure & Gastroenterology Masterclasses</h1>' +
-          '<p style="font-size:13.5px;color:rgba(255,255,255,0.9);max-width:560px;margin:0 0 24px;line-height:1.5;">' +
-            'Empowering 12 regional hospital hubs across Pakistan with structured CME video curriculum, 90% watch-time anti-skipping telemetry, and verified PMDC credentials.' +
-          '</p>' +
-        '</div>' +
-        '<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">' +
-          '<a href="#courses" class="lms-hero-btn">' +
-            '<span>Explore Course Catalog</span>' +
-            '<span class="lms-hero-btn-icon"><i class="ms">play_arrow</i></span>' +
-          '</a>' +
-          '<button type="button" class="adm-btn-hero-outline" id="btnHeroEnlistDoc">' +
-            '<i class="ms">person_add</i> Enlist Physician' +
-          '</button>' +
-        '</div>' +
+      '<svg class="lms-hero-sparkles" viewBox="0 0 220 170" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+      '<path d="M150 15 C150 50, 165 65, 200 65 C165 65, 150 80, 150 115 C150 80, 135 65, 100 65 C135 65, 150 50, 150 15 Z" fill="white" fill-opacity="0.22"/>' +
+      '<path d="M60 75 C60 100, 70 110, 95 110 C70 110, 60 120, 60 145 C60 120, 50 110, 25 110 C50 110, 60 100, 60 75 Z" fill="white" fill-opacity="0.16"/>' +
+      '<circle cx="170" cy="130" r="4" fill="white" fill-opacity="0.3"/>' +
+      '<circle cx="95" cy="35" r="3" fill="white" fill-opacity="0.25"/>' +
+      '</svg>' +
+      '<div>' +
+      '<span class="lms-hero-badge"><i class="ms" style="font-size:13px;">school</i> ACCREDITED GASTROENTEROLOGY CME ACADEMY</span>' +
+      '<h1 class="lms-hero-title">Sharpen Clinical Precision with Accredited Gastroenterology Masterclasses</h1>' +
+      '<p style="font-size:13.5px;color:rgba(255,255,255,0.9);max-width:560px;margin:0 0 24px;line-height:1.5;">' +
+      'Empowering 12 regional hospital hubs across Pakistan with structured CME video curriculum, 90% watch-time anti-skipping telemetry, and verified PMDC credentials.' +
+      '</p>' +
+      '</div>' +
+      '<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">' +
+      '<a href="#courses" class="lms-hero-btn">' +
+      '<span>Explore Course Catalog</span>' +
+      '<span class="lms-hero-btn-icon"><i class="ms">play_arrow</i></span>' +
+      '</a>' +
+      '<button type="button" class="adm-btn-hero-outline" id="btnHeroEnlistDoc">' +
+      '<i class="ms">person_add</i> Enlist Physician' +
+      '</button>' +
+      '</div>' +
       '</div>' +
 
       '<!-- Section 1: Quick Progress Learning Modules (COURSUE Style) -->' +
       '<div class="adm-section adm-section-tinted">' +
-        '<div class="adm-section-head">' +
-          '<div>' +
-            '<span class="adm-section-num">01</span>' +
-            '<h3 class="adm-section-title" style="display:inline;">Active CME Learning Modules & Velocity</h3>' +
-            '<p class="adm-section-desc">Key accredited curriculum modules with real-time video watch velocity.</p>' +
-          '</div>' +
-        '</div>' +
-        '<div class="lms-progress-pills-grid">' +
-          '<a href="#courses/c1" class="lms-progress-pill tone-violet" title="Inspect Module 1">' +
-            '<div class="lms-pill-icon-wrap"><i class="ms">cardiology</i></div>' +
-            '<div class="lms-pill-text">' +
-              '<div class="lms-pill-meta">2/3 Watched · 67% Avg Velocity</div>' +
-              '<div class="lms-pill-name">Module 1 · HFrEF Diagnosis & Phenotypes</div>' +
-            '</div>' +
-            '<span class="adm-chip adm-chip-violet" style="font-size:10px;padding:2px 8px;">Active</span>' +
-          '</a>' +
-          '<a href="#courses/c1" class="lms-progress-pill tone-rose" title="Inspect Module 2">' +
-            '<div class="lms-pill-icon-wrap"><i class="ms">medication</i></div>' +
-            '<div class="lms-pill-text">' +
-              '<div class="lms-pill-meta">3/3 Complete · 88% Quiz Pass</div>' +
-              '<div class="lms-pill-name">Module 2 · The 4 Pillars of GDMT</div>' +
-            '</div>' +
-            '<span class="adm-chip adm-chip-danger" style="font-size:10px;padding:2px 8px;">Key Pillar</span>' +
-          '</a>' +
-          '<a href="#courses/c1" class="lms-progress-pill tone-sky" title="Inspect Module 3">' +
-            '<div class="lms-pill-icon-wrap"><i class="ms">speed</i></div>' +
-            '<div class="lms-pill-text">' +
-              '<div class="lms-pill-meta">1/2 Watched · 50% Avg Completion</div>' +
-              '<div class="lms-pill-name">Module 3 · Drug Titration & Safety Gates</div>' +
-            '</div>' +
-            '<span class="adm-chip adm-chip-active" style="font-size:10px;padding:2px 8px;">In Progress</span>' +
-          '</a>' +
-        '</div>' +
+      '<div class="adm-section-head">' +
+      '<div>' +
+      '<span class="adm-section-num">01</span>' +
+      '<h3 class="adm-section-title" style="display:inline;">Active CME Learning Modules & Velocity</h3>' +
+      '<p class="adm-section-desc">Key accredited curriculum modules with real-time video watch velocity.</p>' +
+      '</div>' +
+      '</div>' +
+      '<div class="lms-progress-pills-grid">' +
+      '<a href="#courses/c1" class="lms-progress-pill tone-violet" title="Inspect Module 1">' +
+      '<div class="lms-pill-icon-wrap"><i class="ms">healing</i></div>' +
+      '<div class="lms-pill-text">' +
+      '<div class="lms-pill-meta">2/3 Watched · 67% Avg Velocity</div>' +
+      '<div class="lms-pill-name">Module 1 · Acid Peptic Disease & LA Classification</div>' +
+      '</div>' +
+      '<span class="adm-chip adm-chip-violet" style="font-size:10px;padding:2px 8px;">Active</span>' +
+      '</a>' +
+      '<a href="#courses/c1" class="lms-progress-pill tone-rose" title="Inspect Module 2">' +
+      '<div class="lms-pill-icon-wrap"><i class="ms">medication</i></div>' +
+      '<div class="lms-pill-text">' +
+      '<div class="lms-pill-meta">3/3 Complete · 88% Quiz Pass</div>' +
+      '<div class="lms-pill-name">Module 2 · P-CAB vs PPI Pharmacotherapy</div>' +
+      '</div>' +
+      '<span class="adm-chip adm-chip-danger" style="font-size:10px;padding:2px 8px;">Key Pillar</span>' +
+      '</a>' +
+      '<a href="#courses/c1" class="lms-progress-pill tone-sky" title="Inspect Module 3">' +
+      '<div class="lms-pill-icon-wrap"><i class="ms">science</i></div>' +
+      '<div class="lms-pill-text">' +
+      '<div class="lms-pill-meta">1/2 Watched · 50% Avg Completion</div>' +
+      '<div class="lms-pill-name">Module 3 · H. pylori Quadruple Eradication</div>' +
+      '</div>' +
+      '<span class="adm-chip adm-chip-active" style="font-size:10px;padding:2px 8px;">In Progress</span>' +
+      '</a>' +
+      '</div>' + +
 
         '<!-- Animated Live Telemetry KPI Cards -->' +
         '<div class="adm-kpi-grid">' +
@@ -883,7 +1042,7 @@
               '<div style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:800;color:#ff4760;text-transform:uppercase;margin-bottom:4px;">' +
                 '<i class="ms" style="font-size:15px;">broadcast_on_home</i> Upcoming Grand Rounds' +
               '</div>' +
-              '<strong style="font-size:13.5px;color:var(--adm-ink);display:block;margin-bottom:4px;">Refractory Heart Failure & Comorbid GI Distress Panel</strong>' +
+              '<strong style="font-size:13.5px;color:var(--adm-ink);display:block;margin-bottom:4px;">Refractory APD & Comorbid Upper GI Bleeding Masterclass</strong>' +
               '<div style="font-size:11.5px;color:var(--adm-slate);margin-bottom:10px;">Broadcast date: <strong>Thursday, Nov 12 · 08:00 PM PKT</strong> (1.5 CME Credits)</div>' +
               '<button type="button" class="adm-btn-action" id="btnJoinGrandRounds" style="background:#ffffff;color:#ff4760;border-color:rgba(255,71,96,0.3);font-size:11px;font-weight:800;">View Webinar Schedule &rarr;</button>' +
             '</div>' +
@@ -1286,9 +1445,16 @@
             '<h3 class="adm-section-title" style="display:inline;">Active Trial Patient Cohort (Arm 2 Electronic CRF)</h3>' +
             '<p class="adm-section-desc">Showing ' + filteredPatients.length + ' of ' + pts.length + ' longitudinal patients enrolled across Pakistan study centers.</p>' +
           '</div>' +
-          '<div style="display:flex;gap:10px;align-items:center;">' +
+          '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">' +
+            '<div class="adm-list-header-search">' +
+              '<i class="ms">search</i>' +
+              '<input type="text" id="inpPatientSearchQueryHeader" placeholder="Search patients, doctors, hospitals..." value="' + esc(patientFilters.q) + '">' +
+            '</div>' +
             '<button type="button" class="adm-btn-outline" id="btnTogglePatientSearch">' +
               '<i class="ms">tune</i> Filter Cohort <i class="ms" style="font-size:16px;">expand_more</i>' +
+            '</button>' +
+            '<button type="button" class="adm-btn-primary" id="btnRegisterPatient">' +
+              '<i class="ms">person_add</i> Enroll Patient' +
             '</button>' +
           '</div>' +
         '</div>' +
@@ -1296,9 +1462,6 @@
         '<!-- Collapsible Search Header -->' +
         '<div class="adm-collapsible-search-wrap' + (patientFilters.isOpen ? ' is-open' : '') + '" id="patientSearchPanel">' +
           '<div class="adm-collapsible-search-grid">' +
-            '<div>' +
-              '<input type="text" class="adm-search-input" id="inpPatientSearchQuery" placeholder="Search by code, doctor, hospital, or city..." value="' + esc(patientFilters.q) + '">' +
-            '</div>' +
             '<div>' +
               renderSearchableDropdown({
                 id: 'inpPatientIndFilter',
@@ -1331,6 +1494,7 @@
                   '<th>Demographics & Indication</th>' +
                   '<th>Attending Clinician</th>' +
                   '<th>Baseline / Day-3</th>' +
+                  '<th>Day-7 GERD-Q</th>' +
                   '<th>PWA Mobile App</th>' +
                   '<th>Push Alerts</th>' +
                   '<th>Study Status</th>' +
@@ -1348,6 +1512,13 @@
                     '</td>' +
                     '<td><strong>' + esc(p.doctorName) + '</strong><div style="font-size:11px;color:var(--adm-slate);">' + esc(p.hospital + ', ' + p.city) + '</div></td>' +
                     '<td><span style="color:#ef4444;font-weight:700;">' + p.baselineScore + '</span> / ' + (p.day3Score !== null ? '<strong style="color:var(--adm-emerald);">' + p.day3Score + '</strong>' : '<span style="color:var(--adm-slate);">--</span>') + '</td>' +
+                    '<td>' +
+                      (p.gerdqScore !== undefined ?
+                        '<span class="adm-pwa-badge ' + (p.gerdqScore >= 8 ? 'status-pending' : 'status-delivered') + '" title="Day-7 GERD-Q: ' + p.gerdqScore + '/18 (' + (p.gerdqCategory || '') + ')">' +
+                          '<i class="ms" style="font-size:12px;">fact_check</i> ' + p.gerdqScore + '/18 ' + (p.gerdqScore >= 8 ? '⚠️' : '✓') +
+                        '</span>' :
+                        '<span style="font-size:11px;color:var(--adm-slate);">Pending D-7</span>') +
+                    '</td>' +
                     '<td>' +
                       '<span class="adm-pwa-badge ' + (p.pwaInstalled ? 'status-installed' : 'status-pending') + '">' +
                         '<i class="ms" style="font-size:12px;">' + (p.pwaInstalled ? 'smartphone' : 'hourglass_empty') + '</i> ' + (p.pwaInstalled ? 'Installed' : 'Pending') +
@@ -1398,11 +1569,17 @@
       };
     }
 
-    var inpQuery = $('#inpPatientSearchQuery');
-    if (inpQuery) {
-      inpQuery.oninput = function () {
-        patientFilters.q = inpQuery.value.trim();
+    var inpPatHeader = $('#inpPatientSearchQueryHeader');
+    if (inpPatHeader) {
+      inpPatHeader.oninput = function () {
+        patientFilters.q = inpPatHeader.value.trim();
         viewClinicalDashboard();
+        var re = $('#inpPatientSearchQueryHeader');
+        if (re) {
+          re.focus();
+          var len = re.value.length;
+          re.setSelectionRange(len, len);
+        }
       };
     }
 
@@ -1490,10 +1667,10 @@
       '<div class="adm-qr-leaflet-box">' +
         '<div style="display:flex;justify-content:space-between;align-items:center;width:100%;border-bottom:1.5px solid var(--adm-line-light);padding-bottom:10px;">' +
           '<div style="text-align:left;">' +
-            '<div style="font-size:14px;font-weight:800;color:var(--adm-ink);">Decoderium Digital Health · Arm 2 E-CRF</div>' +
+            '<div style="font-size:14px;font-weight:800;color:var(--adm-ink);">GILEAP Digital Health · Arm 2 E-CRF</div>' +
             '<div style="font-size:11px;color:var(--adm-slate);">Gastroenterology Observational Study Patient Leaflet</div>' +
           '</div>' +
-          '<span class="adm-chip adm-chip-emerald">PKR 0 Push Telemetry</span>' +
+          '<span class="adm-chip adm-chip-active">Verified PWA Leaflet</span>' +
         '</div>' +
         '<div style="display:grid;grid-template-columns:160px 1fr;gap:18px;align-items:center;text-align:left;margin-top:6px;">' +
           '<div style="background:#fff;padding:8px;border:1.5px solid var(--adm-line);border-radius:12px;text-align:center;">' +
@@ -1673,10 +1850,10 @@
     var specOptions = [
       { value: 'all', label: 'All Specialties' },
       { value: 'Consultant Gastroenterologist', label: 'Consultant Gastroenterologist' },
-      { value: 'Consultant Cardiologist', label: 'Consultant Cardiologist' },
-      { value: 'General Physician / Interventionalist', label: 'General Physician' },
-      { value: 'Electrophysiologist & Pacing Specialist', label: 'Electrophysiologist' },
-      { value: 'Clinical Pharmacologist', label: 'Clinical Pharmacologist' }
+      { value: 'Hepatologist & Liver Specialist', label: 'Hepatologist & Liver Specialist' },
+      { value: 'GI Endoscopist & Interventionalist', label: 'GI Endoscopist' },
+      { value: 'Consultant Physician / APD Specialist', label: 'Consultant Physician' },
+      { value: 'Clinical Nutritionist & Pharmacologist', label: 'Clinical Pharmacologist' }
     ];
 
     var statusOptions = [
@@ -1684,6 +1861,14 @@
       { value: 'active', label: 'Active & Verified' },
       { value: 'suspended', label: 'Suspended' }
     ];
+
+    var actDocsCount = docs.filter(function (d) { return d.active; }).length;
+    var uniqueCities = [];
+    docs.forEach(function (d) { if (d.city && uniqueCities.indexOf(d.city) === -1) uniqueCities.push(d.city); });
+    var verifiedPmdcCount = docs.filter(function (d) { return d.pmdcId && d.pmdcId.indexOf('PENDING') === -1; }).length;
+    var certCount = Object.keys(ST.progress || {}).reduce(function (n, k) {
+      return n + ((ST.progress[k] && ST.progress[k].certs) ? ST.progress[k].certs.length : 0);
+    }, 0);
 
     var html =
       '<div class="adm-hero">' +
@@ -1696,6 +1881,49 @@
         '</div>' +
       '</div>' +
 
+      '<!-- Strategic Clinician Telemetry KPI Shelf -->' +
+      '<div class="adm-kpi-grid" style="margin-bottom:24px;">' +
+        '<div class="adm-kpi-card adm-kpi-violet">' +
+          '<div class="adm-kpi-top">' +
+            '<div class="adm-kpi-icon"><i class="ms">groups</i></div>' +
+            '<span class="adm-kpi-badge"><i class="ms" style="font-size:13px;">check_circle</i> Enlisted</span>' +
+          '</div>' +
+          '<div class="adm-kpi-label">Registered Clinicians</div>' +
+          '<div class="adm-kpi-val">' + docs.length + '</div>' +
+          '<div class="adm-kpi-sub"><i class="ms" style="font-size:15px;color:var(--adm-emerald);">verified</i> ' + actDocsCount + ' Active accounts</div>' +
+        '</div>' +
+
+        '<div class="adm-kpi-card adm-kpi-cyan">' +
+          '<div class="adm-kpi-top">' +
+            '<div class="adm-kpi-icon"><i class="ms">location_city</i></div>' +
+            '<span class="adm-kpi-badge"><i class="ms" style="font-size:13px;">hub</i> Regional Hubs</span>' +
+          '</div>' +
+          '<div class="adm-kpi-label">Geographic Spread</div>' +
+          '<div class="adm-kpi-val">' + uniqueCities.length + '</div>' +
+          '<div class="adm-kpi-sub"><i class="ms" style="font-size:15px;color:var(--adm-cyan);">public</i> Key major clinical centers</div>' +
+        '</div>' +
+
+        '<div class="adm-kpi-card adm-kpi-emerald">' +
+          '<div class="adm-kpi-top">' +
+            '<div class="adm-kpi-icon"><i class="ms">badge</i></div>' +
+            '<span class="adm-kpi-badge"><i class="ms" style="font-size:13px;">verified_user</i> License Check</span>' +
+          '</div>' +
+          '<div class="adm-kpi-label">PMDC Verified Roster</div>' +
+          '<div class="adm-kpi-val">' + verifiedPmdcCount + '</div>' +
+          '<div class="adm-kpi-sub"><i class="ms" style="font-size:15px;color:var(--adm-emerald);">security</i> Official council licensure</div>' +
+        '</div>' +
+
+        '<div class="adm-kpi-card adm-kpi-rose">' +
+          '<div class="adm-kpi-top">' +
+            '<div class="adm-kpi-icon"><i class="ms">workspace_premium</i></div>' +
+            '<span class="adm-kpi-badge"><i class="ms" style="font-size:13px;">qr_code_2</i> CME Credential</span>' +
+          '</div>' +
+          '<div class="adm-kpi-label">Certificates Conferred</div>' +
+          '<div class="adm-kpi-val">' + certCount + '</div>' +
+          '<div class="adm-kpi-sub"><i class="ms" style="font-size:15px;color:#ff4760;">school</i> FNV-1a cryptographically verified</div>' +
+        '</div>' +
+      '</div>' +
+
       '<div class="adm-section">' +
         '<div class="adm-section-head">' +
           '<div>' +
@@ -1703,9 +1931,13 @@
             '<h3 class="adm-section-title" style="display:inline;">Enlisted Clinician Cohort</h3>' +
             '<p class="adm-section-desc">Showing <strong>' + filtered.length + '</strong> of ' + docs.length + ' registered healthcare providers across Pakistan hubs.</p>' +
           '</div>' +
-          '<div style="display:flex;align-items:center;gap:10px;">' +
+          '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">' +
+            '<div class="adm-list-header-search">' +
+              '<i class="ms">search</i>' +
+              '<input type="text" id="inpDocSearchQueryHeader" placeholder="Search clinicians by name, PMDC, city..." value="' + esc(docFilterState.q) + '">' +
+            '</div>' +
             '<button type="button" class="adm-btn-outline" id="btnToggleDocFilter">' +
-              '<i class="ms">tune</i> Search & Filter <i class="ms" style="font-size:16px;">expand_more</i>' +
+              '<i class="ms">tune</i> Filters <i class="ms" style="font-size:16px;">expand_more</i>' +
             '</button>' +
           '</div>' +
         '</div>' +
@@ -1713,9 +1945,6 @@
         '<!-- Collapsible Search & Filter Bar -->' +
         '<div class="adm-collapsible-search-wrap' + (docFilterState.isOpen ? ' is-open' : '') + '" id="docFilterPanel">' +
           '<div class="adm-collapsible-search-grid">' +
-            '<div>' +
-              '<input type="text" class="adm-search-input" id="inpDocSearchQuery" placeholder="Filter by name, PMDC, hospital, city..." value="' + esc(docFilterState.q) + '">' +
-            '</div>' +
             '<div>' +
               renderSearchableDropdown({
                 id: 'inpDocCityFilter',
@@ -1808,11 +2037,17 @@
       };
     }
 
-    var inpQ = $('#inpDocSearchQuery');
-    if (inpQ) {
-      inpQ.oninput = function () {
-        docFilterState.q = inpQ.value.trim();
+    var inpDocHeader = $('#inpDocSearchQueryHeader');
+    if (inpDocHeader) {
+      inpDocHeader.oninput = function () {
+        docFilterState.q = inpDocHeader.value.trim();
         viewDoctorList();
+        var re = $('#inpDocSearchQueryHeader');
+        if (re) {
+          re.focus();
+          var len = re.value.length;
+          re.setSelectionRange(len, len);
+        }
       };
     }
 
@@ -1904,10 +2139,10 @@
     var categoryOptions = [
       { value: 'all', label: 'All Categories' },
       { value: 'Gastroenterology', label: 'Gastroenterology' },
-      { value: 'Cardiology', label: 'Cardiology' },
-      { value: 'Clinical Pharmacology', label: 'Clinical Pharmacology' },
-      { value: 'Electrophysiology', label: 'Electrophysiology' },
-      { value: 'Heart Failure & GDMT', label: 'Heart Failure & GDMT' }
+      { value: 'Endoscopy & Mucosal Healing', label: 'Endoscopy & Mucosal Healing' },
+      { value: 'Pharmacotherapy & P-CABs', label: 'Pharmacotherapy & P-CABs' },
+      { value: 'H. pylori Diagnostics', label: 'H. pylori Diagnostics' },
+      { value: 'Upper GI Motility', label: 'Upper GI Motility' }
     ];
 
     var pubOptions = [
@@ -1915,6 +2150,14 @@
       { value: 'published', label: 'Published Only' },
       { value: 'draft', label: 'Coming Soon / Drafts' }
     ];
+
+    var allCourses = courses();
+    var pubCoursesCount = allCourses.filter(function (c) { return c.published; }).length;
+    var totalModulesCount = allCourses.reduce(function (n, c) { return n + (c.modules ? c.modules.length : 0); }, 0);
+    var totalLecturesCount = allCourses.reduce(function (n, c) {
+      return n + (c.modules ? c.modules.reduce(function (mN, m) { return mN + (m.lectures ? m.lectures.length : 0); }, 0) : 0);
+    }, 0);
+    var totalSecondsSum = allCourses.reduce(function (n, c) { return n + RULES.totalSeconds(c); }, 0);
 
     var html =
       '<div class="adm-hero">' +
@@ -1931,16 +2174,63 @@
         '</div>' +
       '</div>' +
 
+      '<!-- Strategic Curriculum Telemetry KPI Shelf -->' +
+      '<div class="adm-kpi-grid" style="margin-bottom:24px;">' +
+        '<div class="adm-kpi-card adm-kpi-violet">' +
+          '<div class="adm-kpi-top">' +
+            '<div class="adm-kpi-icon"><i class="ms">school</i></div>' +
+            '<span class="adm-kpi-badge"><i class="ms" style="font-size:13px;">auto_stories</i> Syllabi</span>' +
+          '</div>' +
+          '<div class="adm-kpi-label">Total Curriculums</div>' +
+          '<div class="adm-kpi-val">' + allCourses.length + '</div>' +
+          '<div class="adm-kpi-sub"><i class="ms" style="font-size:15px;color:var(--adm-emerald);">check_circle</i> ' + pubCoursesCount + ' Published & Live</div>' +
+        '</div>' +
+
+        '<div class="adm-kpi-card adm-kpi-cyan">' +
+          '<div class="adm-kpi-top">' +
+            '<div class="adm-kpi-icon"><i class="ms">view_module</i></div>' +
+            '<span class="adm-kpi-badge"><i class="ms" style="font-size:13px;">layers</i> Modules</span>' +
+          '</div>' +
+          '<div class="adm-kpi-label">Learning Modules</div>' +
+          '<div class="adm-kpi-val">' + totalModulesCount + '</div>' +
+          '<div class="adm-kpi-sub"><i class="ms" style="font-size:15px;color:var(--adm-cyan);">tune</i> Structured progression tracks</div>' +
+        '</div>' +
+
+        '<div class="adm-kpi-card adm-kpi-emerald">' +
+          '<div class="adm-kpi-top">' +
+            '<div class="adm-kpi-icon"><i class="ms">videocam</i></div>' +
+            '<span class="adm-kpi-badge"><i class="ms" style="font-size:13px;">play_circle</i> Video Feed</span>' +
+          '</div>' +
+          '<div class="adm-kpi-label">Faculty Lectures</div>' +
+          '<div class="adm-kpi-val">' + totalLecturesCount + '</div>' +
+          '<div class="adm-kpi-sub"><i class="ms" style="font-size:15px;color:var(--adm-emerald);">speed</i> 90% Anti-skipping enforced</div>' +
+        '</div>' +
+
+        '<div class="adm-kpi-card adm-kpi-rose">' +
+          '<div class="adm-kpi-top">' +
+            '<div class="adm-kpi-icon"><i class="ms">schedule</i></div>' +
+            '<span class="adm-kpi-badge"><i class="ms" style="font-size:13px;">timelapse</i> CME Hours</span>' +
+          '</div>' +
+          '<div class="adm-kpi-label">Accredited Video Content</div>' +
+          '<div class="adm-kpi-val">' + fmtDur(totalSecondsSum) + '</div>' +
+          '<div class="adm-kpi-sub"><i class="ms" style="font-size:15px;color:#ff4760;">verified</i> Continuous medical education</div>' +
+        '</div>' +
+      '</div>' +
+
       '<div class="adm-section">' +
         '<div class="adm-section-head">' +
           '<div>' +
             '<span class="adm-section-num">01</span>' +
             '<h3 class="adm-section-title" style="display:inline;">Published Masterclasses & Syllabi</h3>' +
-            '<p class="adm-section-desc">Showing <strong>' + clist.length + '</strong> courses across cardiology and gastroenterology.</p>' +
+            '<p class="adm-section-desc">Showing <strong>' + clist.length + '</strong> courses across gastroenterology, acid peptic diseases, and endoscopic pharmacotherapy.</p>' +
           '</div>' +
-          '<div style="display:flex;align-items:center;gap:10px;">' +
+          '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">' +
+            '<div class="adm-list-header-search">' +
+              '<i class="ms">search</i>' +
+              '<input type="text" id="inpCourseSearchQueryHeader" placeholder="Search masterclasses by title, topic..." value="' + esc(courseFilterState.q) + '">' +
+            '</div>' +
             '<button type="button" class="adm-btn-outline" id="btnToggleCourseFilter">' +
-              '<i class="ms">tune</i> Search & Filter <i class="ms" style="font-size:16px;">expand_more</i>' +
+              '<i class="ms">tune</i> Filters <i class="ms" style="font-size:16px;">expand_more</i>' +
             '</button>' +
           '</div>' +
         '</div>' +
@@ -1948,9 +2238,6 @@
         '<!-- Collapsible Search & Filter Bar -->' +
         '<div class="adm-collapsible-search-wrap' + (courseFilterState.isOpen ? ' is-open' : '') + '" id="courseFilterPanel">' +
           '<div class="adm-collapsible-search-grid">' +
-            '<div>' +
-              '<input type="text" class="adm-search-input" id="inpCourseSearchQuery" placeholder="Filter by course title, topic, or category..." value="' + esc(courseFilterState.q) + '">' +
-            '</div>' +
             '<div>' +
               renderSearchableDropdown({
                 id: 'inpCourseCatFilter',
@@ -1981,7 +2268,7 @@
       html +=
         '<div class="adm-course-grid">' +
           clist.map(function (c) {
-            return '<div class="adm-course-card">' +
+            return '<div class="adm-course-card" data-course-id="' + c.id + '" title="Click to inspect course syllabus">' +
               '<div class="adm-course-thumb">' +
                 courseThumbSvg(c, false) +
                 '<div class="adm-thumb-badge-top">' +
@@ -2080,11 +2367,17 @@
       };
     }
 
-    var inpCQ = $('#inpCourseSearchQuery');
-    if (inpCQ) {
-      inpCQ.oninput = function () {
-        courseFilterState.q = inpCQ.value.trim();
+    var inpCourseHeader = $('#inpCourseSearchQueryHeader');
+    if (inpCourseHeader) {
+      inpCourseHeader.oninput = function () {
+        courseFilterState.q = inpCourseHeader.value.trim();
         viewCourseList();
+        var re = $('#inpCourseSearchQueryHeader');
+        if (re) {
+          re.focus();
+          var len = re.value.length;
+          re.setSelectionRange(len, len);
+        }
       };
     }
 
@@ -2130,6 +2423,14 @@
     var btnCreate = $('#btnCreateCourse');
     if (btnCreate) btnCreate.onclick = openCreateCourseDialog;
 
+    $$('.adm-course-card').forEach(function (card) {
+      card.onclick = function (e) {
+        if (e.target.closest('button, a')) return;
+        var cid = card.dataset.courseId;
+        if (cid) location.hash = '#courses/' + cid;
+      };
+    });
+
     $$('[data-pub-course]').forEach(function (b) {
       b.onclick = function () {
         var c = course(b.dataset.pubCourse);
@@ -2161,6 +2462,511 @@
         });
       };
     });
+  }
+
+  /* --------------------------------------------------------------------------
+     VIEW 5C: FULL-PAGE COURSE ONBOARDING STUDIO (#courses/new)
+     -------------------------------------------------------------------------- */
+  function viewCourseOnboarding() {
+    var catOptions = [
+      { value: 'Gastroenterology', label: 'Gastroenterology' },
+      { value: 'Endoscopy & Mucosal Healing', label: 'Endoscopy & Mucosal Healing' },
+      { value: 'Pharmacotherapy & P-CABs', label: 'Pharmacotherapy & P-CABs' },
+      { value: 'H. pylori Diagnostics', label: 'H. pylori Diagnostics' },
+      { value: 'Clinical Research', label: 'Clinical Research & Methodology' }
+    ];
+
+    var levelOptions = [
+      { value: 'Foundation', label: 'Foundation' },
+      { value: 'Intermediate', label: 'Intermediate' },
+      { value: 'Advanced', label: 'Advanced' }
+    ];
+
+    var accentOptions = [
+      { value: '#582be8', label: 'Electric Violet (#582be8)' },
+      { value: '#0284c7', label: 'Sky Cyan (#0284c7)' },
+      { value: '#ff4760', label: 'Cardiology Pulse (#ff4760)' },
+      { value: '#10b981', label: 'Clinical Emerald (#10b981)' },
+      { value: '#f59e0b', label: 'Amber Gold (#f59e0b)' }
+    ];
+
+    var thumbOptions = [
+      { value: 'pcab', label: 'P-CAB Molecule & Gastric Capsule' },
+      { value: 'endoscopy', label: 'Endoscopy Scope & Mucosal Wave' },
+      { value: 'clinic', label: 'Clinical Primary Care Cross' },
+      { value: 'device', label: 'Diagnostic Radar & ECG Monitor' }
+    ];
+
+    var initialTitle = 'Acid Peptic Disease & Advanced Therapeutics';
+    var initialSub = 'Evidence-based guidelines for refractory mucosal healing and clinical workup';
+    var initialCat = 'Gastroenterology';
+    var initialLevel = 'Foundation';
+    var initialAccent = '#582be8';
+    var initialThumb = 'pcab';
+    var initialDesc = 'Comprehensive CME accredited masterclass covering acute upper GI presentation, endoscopic LA grading, mucosal healing protocols, and the pharmacological role of Potassium-Competitive Acid Blockers.';
+
+    var initialMTitle = 'Module 1: Clinical Orientation & Diagnostic Evaluation';
+    var initialMSummary = 'Comprehensive overview of disease pathophysiology, presentation triage, Montreal classification, and guideline-based workup.';
+
+    var initialLTitle = 'Lecture 1: Clinical Workup & Risk Stratification';
+    var initialLPresenter = 'Prof. Sara Anwar';
+    var initialLMin = 12;
+    var initialLVideo = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+    var initialLSummary = 'Evidence-based workup algorithm, Montreal consensus grading, alarm signs triage, and endoscopic referral indications.';
+
+    var html =
+      crumbs([{ label: 'Courses', href: '#courses' }, { label: 'New Course Onboarding Studio' }]) +
+
+      '<!-- Onboarding Studio Hero Header -->' +
+      '<div class="adm-hero">' +
+        '<div>' +
+          '<h1 class="adm-hero-title"><i class="ms" style="color:var(--adm-primary);font-size:32px;">add_to_photos</i> Masterclass Onboarding Studio</h1>' +
+          '<p class="adm-hero-subtitle">Architect a complete CME masterclass: configure clinical metadata, module learning tracks, vector artwork, and accredited streaming video lectures.</p>' +
+        '</div>' +
+        '<div class="adm-hero-actions">' +
+          '<a href="#courses" class="adm-btn-outline"><i class="ms">close</i> Cancel</a>' +
+          '<button type="button" class="adm-btn-primary" id="btnPublishCourseTop"><i class="ms">verified</i> Launch & Publish Course</button>' +
+        '</div>' +
+      '</div>' +
+
+      '<!-- Stepper Rail -->' +
+      '<div class="adm-card" style="padding:16px 20px;margin-bottom:24px;">' +
+        '<div class="adm-wizard-steps" id="obWizardSteps" style="margin-bottom:0;padding-bottom:0;border-bottom:none;">' +
+          '<div class="adm-wizard-step active" data-step="1">' +
+            '<span class="adm-wizard-step-num">1</span>' +
+            '<span>01 · Course Identity & Vector Art</span>' +
+          '</div>' +
+          '<div class="adm-wizard-step" data-step="2">' +
+            '<span class="adm-wizard-step-num">2</span>' +
+            '<span>02 · Curriculum Module 1</span>' +
+          '</div>' +
+          '<div class="adm-wizard-step" data-step="3">' +
+            '<span class="adm-wizard-step-num">3</span>' +
+            '<span>03 · Video Lecture & Streaming Media</span>' +
+          '</div>' +
+          '<div class="adm-wizard-step" data-step="4">' +
+            '<span class="adm-wizard-step-num">4</span>' +
+            '<span>04 · Review & Verification</span>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+
+      '<!-- 2-Column Responsive Workspace Grid -->' +
+      '<div class="adm-grid-2col" style="grid-template-columns: 1.45fr 1fr; gap: 24px; align-items: start;">' +
+
+        '<!-- Left Column: Step Panels -->' +
+        '<div class="adm-card" style="padding: 28px 32px;">' +
+
+          '<!-- STEP 1 PANEL: IDENTITY & ART -->' +
+          '<div class="adm-wizard-panel active" id="obPanel1">' +
+            '<div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">' +
+              '<span class="adm-chip adm-chip-violet" style="font-weight:800;">Step 1 of 4</span>' +
+              '<h3 style="margin:0;font-size:18px;font-weight:800;color:var(--adm-ink);">Masterclass Identity & Vector Art</h3>' +
+            '</div>' +
+
+            '<div class="adm-form-group">' +
+              '<label class="adm-label">Course Title <span style="color:#ef4444;">*</span></label>' +
+              '<input type="text" class="adm-input" id="inpObTitle" placeholder="e.g. Upper GI Endoscopic Interventions & P-CABs" value="' + esc(initialTitle) + '">' +
+            '</div>' +
+
+            '<div class="adm-form-group">' +
+              '<label class="adm-label">Subtitle / Educational Hook</label>' +
+              '<input type="text" class="adm-input" id="inpObSubtitle" placeholder="e.g. Evidence-based guidelines for refractory mucosal healing" value="' + esc(initialSub) + '">' +
+            '</div>' +
+
+            '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">' +
+              '<div class="adm-form-group">' +
+                '<label class="adm-label">Clinical Category</label>' +
+                renderSearchableDropdown({
+                  id: 'inpObCat',
+                  options: catOptions,
+                  value: initialCat,
+                  label: 'Category'
+                }) +
+              '</div>' +
+              '<div class="adm-form-group">' +
+                '<label class="adm-label">Accreditation Level</label>' +
+                renderSearchableDropdown({
+                  id: 'inpObLevel',
+                  options: levelOptions,
+                  value: initialLevel,
+                  label: 'Level'
+                }) +
+              '</div>' +
+            '</div>' +
+
+            '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">' +
+              '<div class="adm-form-group">' +
+                '<label class="adm-label">Accent Theme Palette</label>' +
+                renderSearchableDropdown({
+                  id: 'inpObAccent',
+                  options: accentOptions,
+                  value: initialAccent,
+                  label: 'Accent Theme'
+                }) +
+              '</div>' +
+              '<div class="adm-form-group">' +
+                '<label class="adm-label">Vector Thumbnail Graphic</label>' +
+                renderSearchableDropdown({
+                  id: 'inpObThumb',
+                  options: thumbOptions,
+                  value: initialThumb,
+                  label: 'Thumbnail Graphic'
+                }) +
+              '</div>' +
+            '</div>' +
+
+            '<div class="adm-form-group">' +
+              '<label class="adm-label">Course Overview & Syllabus Summary</label>' +
+              '<textarea class="adm-textarea" id="inpObDesc" rows="3" placeholder="Comprehensive CME accredited curriculum...">' + esc(initialDesc) + '</textarea>' +
+            '</div>' +
+
+            '<div style="display:flex;justify-content:flex-end;margin-top:24px;padding-top:16px;border-top:1px solid var(--adm-line-light);">' +
+              '<button type="button" class="adm-btn-primary" id="btnObNext1" style="gap:8px;">Continue to Module 1 <i class="ms">arrow_forward</i></button>' +
+            '</div>' +
+          '</div>' +
+
+          '<!-- STEP 2 PANEL: MODULE 1 -->' +
+          '<div class="adm-wizard-panel" id="obPanel2">' +
+            '<div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">' +
+              '<span class="adm-chip adm-chip-violet" style="font-weight:800;">Step 2 of 4</span>' +
+              '<h3 style="margin:0;font-size:18px;font-weight:800;color:var(--adm-ink);">Curriculum Module 1 Architecture</h3>' +
+            '</div>' +
+
+            '<div style="padding:14px 18px;background:#f8fafc;border-left:4px solid var(--adm-primary);border-radius:var(--adm-radius-sm);margin-bottom:20px;font-size:13px;color:var(--adm-slate);line-height:1.5;">' +
+              '<strong>Structure Requirement:</strong> Each accredited masterclass contains structured learning modules that gate clinical learners with 90% video watch thresholds and 70% passing mark assessments.' +
+            '</div>' +
+
+            '<div class="adm-form-group">' +
+              '<label class="adm-label">Module 1 Title <span style="color:#ef4444;">*</span></label>' +
+              '<input type="text" class="adm-input" id="inpObMTitle" placeholder="e.g. Module 1: Clinical Orientation & Diagnostic Evaluation" value="' + esc(initialMTitle) + '">' +
+            '</div>' +
+
+            '<div class="adm-form-group">' +
+              '<label class="adm-label">Module Summary & Learning Objectives</label>' +
+              '<textarea class="adm-textarea" id="inpObMSummary" rows="4" placeholder="Module Objectives">' + esc(initialMSummary) + '</textarea>' +
+            '</div>' +
+
+            '<div style="padding:12px 16px;background:#f1f5f9;border-radius:var(--adm-radius-sm);margin-top:16px;font-size:12px;color:var(--adm-slate);display:flex;align-items:center;gap:8px;">' +
+              '<i class="ms" style="color:var(--adm-primary);">info</i>' +
+              '<span>Question bank pools can be attached and expanded in the Course Curriculum Studio after launch.</span>' +
+            '</div>' +
+
+            '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:24px;padding-top:16px;border-top:1px solid var(--adm-line-light);">' +
+              '<button type="button" class="adm-btn-outline" id="btnObBack1" style="gap:6px;"><i class="ms">arrow_back</i> Back to Details</button>' +
+              '<button type="button" class="adm-btn-primary" id="btnObNext2" style="gap:8px;">Continue to Video Lecture <i class="ms">arrow_forward</i></button>' +
+            '</div>' +
+          '</div>' +
+
+          '<!-- STEP 3 PANEL: VIDEO LECTURE -->' +
+          '<div class="adm-wizard-panel" id="obPanel3">' +
+            '<div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">' +
+              '<span class="adm-chip adm-chip-violet" style="font-weight:800;">Step 3 of 4</span>' +
+              '<h3 style="margin:0;font-size:18px;font-weight:800;color:var(--adm-ink);">Accredited Video Lecture & Streaming Media</h3>' +
+            '</div>' +
+
+            '<div style="padding:14px 18px;background:#f8fafc;border-left:4px solid var(--adm-emerald);border-radius:var(--adm-radius-sm);margin-bottom:20px;font-size:13px;color:var(--adm-slate);line-height:1.5;">' +
+              '<strong>Gated Video Playback:</strong> Configure the initial faculty lecture. The video player automatically enforces 90% watch velocity before unlocking module quizzes.' +
+            '</div>' +
+
+            '<div class="adm-form-group">' +
+              '<label class="adm-label">Lecture Title <span style="color:#ef4444;">*</span></label>' +
+              '<input type="text" class="adm-input" id="inpObLTitle" placeholder="e.g. Lecture 1: Clinical Workup & Risk Stratification" value="' + esc(initialLTitle) + '">' +
+            '</div>' +
+
+            '<div style="display:grid;grid-template-columns:1.2fr 0.8fr;gap:16px;">' +
+              '<div class="adm-form-group">' +
+                '<label class="adm-label">Faculty Presenter / Specialist</label>' +
+                '<input type="text" class="adm-input" id="inpObLPresenter" placeholder="e.g. Prof. Sara Anwar" value="' + esc(initialLPresenter) + '">' +
+              '</div>' +
+              '<div class="adm-form-group">' +
+                '<label class="adm-label">Duration (Minutes)</label>' +
+                '<input type="number" class="adm-input" id="inpObLMinutes" min="1" max="180" value="' + initialLMin + '">' +
+              '</div>' +
+            '</div>' +
+
+            '<div class="adm-form-group">' +
+              '<label class="adm-label">Video Stream / Direct MP4 URL <span style="color:#ef4444;">*</span></label>' +
+              '<input type="text" class="adm-input" id="inpObLVideo" placeholder="https://..." value="' + esc(initialLVideo) + '">' +
+              '<div style="display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap;font-size:11.5px;">' +
+                '<span style="color:var(--adm-slate);font-weight:600;">Media Presets:</span>' +
+                '<button type="button" class="adm-btn-text" id="btnObVid1" style="font-size:11.5px;padding:3px 8px;background:#f1f5f9;border-radius:9999px;">Sample GI Masterclass (BigBuckBunny)</button>' +
+                '<button type="button" class="adm-btn-text" id="btnObVid2" style="font-size:11.5px;padding:3px 8px;background:#f1f5f9;border-radius:9999px;">Clinical Procedure (ElephantsDream)</button>' +
+                '<button type="button" class="adm-btn-text" id="btnObVid3" style="font-size:11.5px;padding:3px 8px;background:#f1f5f9;border-radius:9999px;">Endoscopy Clip (ForBiggerBlazes)</button>' +
+              '</div>' +
+            '</div>' +
+
+            '<div class="adm-form-group">' +
+              '<label class="adm-label">Lecture Summary & Clinical Pearls</label>' +
+              '<textarea class="adm-textarea" id="inpObLSummary" rows="3" placeholder="Core takeaways and key clinical recommendations.">' + esc(initialLSummary) + '</textarea>' +
+            '</div>' +
+
+            '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:24px;padding-top:16px;border-top:1px solid var(--adm-line-light);">' +
+              '<button type="button" class="adm-btn-outline" id="btnObBack2" style="gap:6px;"><i class="ms">arrow_back</i> Back to Module 1</button>' +
+              '<button type="button" class="adm-btn-primary" id="btnObNext3" style="gap:8px;">Review & Verification <i class="ms">arrow_forward</i></button>' +
+            '</div>' +
+          '</div>' +
+
+          '<!-- STEP 4 PANEL: REVIEW & VERIFICATION -->' +
+          '<div class="adm-wizard-panel" id="obPanel4">' +
+            '<div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">' +
+              '<span class="adm-chip adm-chip-emerald" style="font-weight:800;">Step 4 of 4 · Ready</span>' +
+              '<h3 style="margin:0;font-size:18px;font-weight:800;color:var(--adm-ink);">Review & Accreditation Verification</h3>' +
+            '</div>' +
+
+            '<div style="background:#f8fafc;border:1px solid var(--adm-line);border-radius:var(--adm-radius-md);padding:20px;margin-bottom:20px;">' +
+              '<h4 style="margin:0 0 12px;font-size:14px;color:var(--adm-ink);font-weight:800;display:flex;align-items:center;gap:8px;">' +
+                '<i class="ms" style="color:var(--adm-emerald);">fact_check</i> Pre-Publication Compliance Checklist' +
+              '</h4>' +
+              '<div style="display:flex;flex-direction:column;gap:10px;font-size:13px;color:var(--adm-ink);">' +
+                '<div style="display:flex;align-items:center;gap:8px;"><i class="ms" style="color:var(--adm-emerald);font-size:18px;">check_circle</i> <span>Course Title & Clinical Metadata Validated</span></div>' +
+                '<div style="display:flex;align-items:center;gap:8px;"><i class="ms" style="color:var(--adm-emerald);font-size:18px;">check_circle</i> <span>Accredited Module 1 Track Initialized</span></div>' +
+                '<div style="display:flex;align-items:center;gap:8px;"><i class="ms" style="color:var(--adm-emerald);font-size:18px;">check_circle</i> <span>Streaming Video Lecture with 90% Anti-Skipping Gate</span></div>' +
+                '<div style="display:flex;align-items:center;gap:8px;"><i class="ms" style="color:var(--adm-emerald);font-size:18px;">check_circle</i> <span>FNV-1a Cryptographic Certificate Verification Linked</span></div>' +
+              '</div>' +
+            '</div>' +
+
+            '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:24px;padding-top:16px;border-top:1px solid var(--adm-line-light);">' +
+              '<button type="button" class="adm-btn-outline" id="btnObBack3" style="gap:6px;"><i class="ms">arrow_back</i> Back to Video Lecture</button>' +
+              '<button type="button" class="adm-btn-primary" id="btnPublishCourseBottom" style="padding:12px 28px;font-size:14px;gap:8px;"><i class="ms">rocket_launch</i> Launch & Publish Accredited Masterclass</button>' +
+            '</div>' +
+          '</div>' +
+
+        '</div>' +
+
+        '<!-- Right Column: Sticky Live Masterclass Card Preview Stage -->' +
+        '<div style="position:sticky;top:90px;">' +
+          '<div class="adm-card" style="padding:0;overflow:hidden;box-shadow:var(--adm-shadow-float);">' +
+            '<div style="padding:16px 20px;border-bottom:1px solid var(--adm-line-light);display:flex;align-items:center;justify-content:space-between;background:#f8fafc;">' +
+              '<span style="font-size:12px;font-weight:800;color:var(--adm-slate);text-transform:uppercase;letter-spacing:0.5px;display:flex;align-items:center;gap:6px;">' +
+                '<i class="ms" style="color:var(--adm-primary);font-size:16px;">visibility</i> Live Catalog Preview' +
+              '</span>' +
+              '<span class="adm-chip adm-chip-emerald" style="font-size:10.5px;">Live Sync</span>' +
+            '</div>' +
+
+            '<!-- Thumbnail Stage -->' +
+            '<div id="obPrevThumbStage" style="height:170px;position:relative;">' +
+              courseThumbSvg({ title: initialTitle, accent: initialAccent, thumbStyle: initialThumb }, false) +
+              '<div style="position:absolute;top:12px;left:12px;display:flex;gap:6px;">' +
+                '<span class="adm-thumb-chip"><i class="ms" style="font-size:12px;">school</i> ' + esc(initialCat + ' · ' + initialLevel) + '</span>' +
+              '</div>' +
+              '<div style="position:absolute;bottom:12px;left:12px;">' +
+                '<span class="adm-thumb-chip"><i class="ms" style="font-size:12px;">schedule</i> ' + initialLMin + 'm · 1 Lecture</span>' +
+              '</div>' +
+            '</div>' +
+
+            '<!-- Preview Content -->' +
+            '<div style="padding:22px 24px;">' +
+              '<h3 id="obPrevTitle" style="margin:0 0 6px;font-size:18px;font-weight:800;color:var(--adm-ink);line-height:1.3;">' + esc(initialTitle) + '</h3>' +
+              '<p id="obPrevSub" style="margin:0 0 16px;font-size:12.5px;color:var(--adm-slate);line-height:1.4;">' + esc(initialSub) + '</p>' +
+
+              '<div style="background:#f8fafc;border:1px solid var(--adm-line-light);border-radius:var(--adm-radius-md);padding:14px;margin-bottom:16px;">' +
+                '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">' +
+                  '<span id="obPrevMTitle" style="font-size:12px;font-weight:700;color:var(--adm-ink);">' + esc(initialMTitle) + '</span>' +
+                  '<span class="adm-chip adm-chip-violet" style="font-size:10px;">Module 1</span>' +
+                '</div>' +
+                '<div style="display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--adm-slate);">' +
+                  '<i class="ms" style="font-size:15px;color:var(--adm-emerald);">play_circle</i>' +
+                  '<span id="obPrevLTitle" style="font-weight:600;color:var(--adm-ink);">' + esc(initialLTitle) + '</span>' +
+                '</div>' +
+                '<div style="margin-top:4px;display:flex;justify-content:space-between;font-size:11px;color:var(--adm-slate);">' +
+                  '<span id="obPrevLPresenter">Presenter: ' + esc(initialLPresenter) + '</span>' +
+                  '<span id="obPrevLMin">' + initialLMin + ' mins</span>' +
+                '</div>' +
+              '</div>' +
+
+              '<div style="display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--adm-line-light);font-size:11.5px;color:var(--adm-slate);">' +
+                '<span style="display:flex;align-items:center;gap:4px;"><i class="ms" style="color:var(--adm-emerald);font-size:15px;">verified</i> PMDC Accredited</span>' +
+                '<span>90% Watch Gate</span>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+
+      '</div>';
+
+    $('#view').innerHTML = html;
+
+    // Stepper navigation logic
+    function setObStep(n) {
+      $$('#obWizardSteps .adm-wizard-step').forEach(function (el) {
+        var s = parseInt(el.getAttribute('data-step'), 10);
+        el.classList.toggle('active', s === n);
+        el.classList.toggle('completed', s < n);
+      });
+      $$('.adm-wizard-panel').forEach(function (p) { p.classList.remove('active'); });
+      var activeP = $('#obPanel' + n);
+      if (activeP) activeP.classList.add('active');
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }
+
+    $$('#obWizardSteps .adm-wizard-step').forEach(function (stepEl) {
+      stepEl.onclick = function () {
+        var s = parseInt(stepEl.getAttribute('data-step'), 10);
+        setObStep(s);
+      };
+    });
+
+    var bNext1 = $('#btnObNext1');
+    if (bNext1) bNext1.onclick = function () {
+      var t = ($('#inpObTitle') || {}).value || '';
+      if (!t.trim()) { snack('Please enter a course title in Step 1.'); return; }
+      setObStep(2);
+    };
+
+    var bNext2 = $('#btnObNext2');
+    if (bNext2) bNext2.onclick = function () {
+      var mt = ($('#inpObMTitle') || {}).value || '';
+      if (!mt.trim()) { snack('Please enter a module title in Step 2.'); return; }
+      setObStep(3);
+    };
+
+    var bNext3 = $('#btnObNext3');
+    if (bNext3) bNext3.onclick = function () {
+      var lt = ($('#inpObLTitle') || {}).value || '';
+      if (!lt.trim()) { snack('Please enter a lecture title in Step 3.'); return; }
+      setObStep(4);
+    };
+
+    var bBack1 = $('#btnObBack1'); if (bBack1) bBack1.onclick = function () { setObStep(1); };
+    var bBack2 = $('#btnObBack2'); if (bBack2) bBack2.onclick = function () { setObStep(2); };
+    var bBack3 = $('#btnObBack3'); if (bBack3) bBack3.onclick = function () { setObStep(3); };
+
+    // Media preset quick-links
+    var bVid1 = $('#btnObVid1');
+    if (bVid1) bVid1.onclick = function () {
+      var inp = $('#inpObLVideo'); if (inp) { inp.value = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'; }
+      snack('Sample GI Masterclass preset attached.');
+    };
+    var bVid2 = $('#btnObVid2');
+    if (bVid2) bVid2.onclick = function () {
+      var inp = $('#inpObLVideo'); if (inp) { inp.value = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4'; }
+      snack('Clinical Procedure preset attached.');
+    };
+    var bVid3 = $('#btnObVid3');
+    if (bVid3) bVid3.onclick = function () {
+      var inp = $('#inpObLVideo'); if (inp) { inp.value = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4'; }
+      snack('Endoscopy clip preset attached.');
+    };
+
+    // Live preview updating
+    function updateLivePreview() {
+      var title = ($('#inpObTitle') || {}).value || 'Course Title';
+      var sub = ($('#inpObSubtitle') || {}).value || 'Educational subtitle';
+      var cat = ($('#inpObCat') || {}).value || 'Gastroenterology';
+      var level = ($('#inpObLevel') || {}).value || 'Foundation';
+      var accent = ($('#inpObAccent') || {}).value || '#582be8';
+      var thumb = ($('#inpObThumb') || {}).value || 'pcab';
+
+      var mTitle = ($('#inpObMTitle') || {}).value || 'Module 1: Orientation';
+      var lTitle = ($('#inpObLTitle') || {}).value || 'Lecture 1: Workup';
+      var lPresenter = ($('#inpObLPresenter') || {}).value || 'Faculty Specialist';
+      var lMin = parseInt(($('#inpObLMinutes') || {}).value, 10) || 10;
+
+      var pStage = $('#obPrevThumbStage');
+      if (pStage) {
+        pStage.innerHTML =
+          courseThumbSvg({ title: title, accent: accent, thumbStyle: thumb }, false) +
+          '<div style="position:absolute;top:12px;left:12px;display:flex;gap:6px;">' +
+            '<span class="adm-thumb-chip"><i class="ms" style="font-size:12px;">school</i> ' + esc(cat + ' · ' + level) + '</span>' +
+          '</div>' +
+          '<div style="position:absolute;bottom:12px;left:12px;">' +
+            '<span class="adm-thumb-chip"><i class="ms" style="font-size:12px;">schedule</i> ' + lMin + 'm · 1 Lecture</span>' +
+          '</div>';
+      }
+
+      var tEl = $('#obPrevTitle'); if (tEl) tEl.textContent = title;
+      var sEl = $('#obPrevSub'); if (sEl) sEl.textContent = sub;
+      var mtEl = $('#obPrevMTitle'); if (mtEl) mtEl.textContent = mTitle;
+      var ltEl = $('#obPrevLTitle'); if (ltEl) ltEl.textContent = lTitle;
+      var lpEl = $('#obPrevLPresenter'); if (lpEl) lpEl.textContent = 'Presenter: ' + lPresenter;
+      var lmEl = $('#obPrevLMin'); if (lmEl) lmEl.textContent = lMin + ' mins';
+    }
+
+    ['#inpObTitle', '#inpObSubtitle', '#inpObMTitle', '#inpObLTitle', '#inpObLPresenter', '#inpObLMinutes'].forEach(function (sel) {
+      var el = $(sel);
+      if (el) el.addEventListener('input', updateLivePreview);
+    });
+
+    ['#inpObCat', '#inpObLevel', '#inpObAccent', '#inpObThumb'].forEach(function (sel) {
+      var el = $(sel);
+      if (el) el.addEventListener('change', updateLivePreview);
+    });
+
+    // Publication submission logic
+    function handlePublishCourse() {
+      var title = ($('#inpObTitle') || {}).value || '';
+      var sub = ($('#inpObSubtitle') || {}).value || '';
+      var cat = ($('#inpObCat') || {}).value || 'Gastroenterology';
+      var level = ($('#inpObLevel') || {}).value || 'Foundation';
+      var accent = ($('#inpObAccent') || {}).value || '#582be8';
+      var thumb = ($('#inpObThumb') || {}).value || 'pcab';
+      var desc = ($('#inpObDesc') || {}).value || '';
+
+      var mTitle = ($('#inpObMTitle') || {}).value || '';
+      var mSummary = ($('#inpObMSummary') || {}).value || '';
+
+      var lTitle = ($('#inpObLTitle') || {}).value || '';
+      var lPresenter = ($('#inpObLPresenter') || {}).value || 'Faculty Specialist';
+      var lMin = parseInt(($('#inpObLMinutes') || {}).value, 10) || 10;
+      var lVideo = ($('#inpObLVideo') || {}).value || '';
+      var lSummary = ($('#inpObLSummary') || {}).value || '';
+
+      if (!title.trim()) {
+        snack('Please enter a course title in Step 1.');
+        setObStep(1);
+        return;
+      }
+      if (!mTitle.trim()) {
+        snack('Please enter a module title in Step 2.');
+        setObStep(2);
+        return;
+      }
+      if (!lTitle.trim()) {
+        snack('Please enter a lecture title in Step 3.');
+        setObStep(3);
+        return;
+      }
+
+      var newC = addCourse({
+        title: title.trim(),
+        subtitle: sub.trim() || 'Accredited clinical education curriculum',
+        category: cat,
+        level: level,
+        accent: accent,
+        thumbStyle: thumb,
+        description: desc.trim() || 'Accredited gastroenterology curriculum for healthcare professionals.',
+        published: true,
+        modules: [
+          {
+            id: 'c-m1',
+            number: 1,
+            title: mTitle.trim(),
+            summary: mSummary.trim() || 'Foundational curriculum module.',
+            questionOffset: 0,
+            lectures: [
+              {
+                id: 'c-m1-l1',
+                title: lTitle.trim(),
+                presenter: lPresenter.trim() || 'Faculty Specialist',
+                seconds: lMin * 60,
+                videoUrl: lVideo.trim(),
+                summary: lSummary.trim() || 'First-line clinical evaluation.'
+              }
+            ],
+            pool: []
+          }
+        ]
+      });
+
+      snack('Masterclass "' + newC.title + '" onboarded and published with Module 1 & Lecture 1.');
+      location.hash = '#courses/' + newC.id;
+    }
+
+    var btnPubTop = $('#btnPublishCourseTop');
+    if (btnPubTop) btnPubTop.onclick = handlePublishCourse;
+    var btnPubBottom = $('#btnPublishCourseBottom');
+    if (btnPubBottom) btnPubBottom.onclick = handlePublishCourse;
   }
 
   /* --------------------------------------------------------------------------
@@ -2350,116 +3156,9 @@
      CRUD DIALOG BUILDERS (Courses, Modules, Lectures, Questions, Physicians, Patients)
      -------------------------------------------------------------------------- */
 
-  // 1. Create Course Dialog
+  // 1. Course Onboarding Launcher (Directs to Full-Page Studio)
   function openCreateCourseDialog() {
-    var catOptions = [
-      { value: 'Gastroenterology', label: 'Gastroenterology' },
-      { value: 'Cardiology & Heart Failure', label: 'Cardiology & Heart Failure' },
-      { value: 'Emergency Medicine', label: 'Emergency Medicine' },
-      { value: 'Pharmacotherapy', label: 'Clinical Pharmacotherapy' },
-      { value: 'Clinical Research', label: 'Clinical Research & Methodology' }
-    ];
-
-    var levelOptions = [
-      { value: 'Foundation', label: 'Foundation' },
-      { value: 'Intermediate', label: 'Intermediate' },
-      { value: 'Advanced', label: 'Advanced' }
-    ];
-
-    var accentOptions = [
-      { value: '#582be8', label: 'Electric Violet (#582be8)' },
-      { value: '#0284c7', label: 'Sky Cyan (#0284c7)' },
-      { value: '#ff4760', label: 'Cardiology Pulse (#ff4760)' },
-      { value: '#10b981', label: 'Clinical Emerald (#10b981)' },
-      { value: '#f59e0b', label: 'Amber Gold (#f59e0b)' }
-    ];
-
-    var body =
-      '<div class="adm-form-group">' +
-        '<label class="adm-label">Course Title</label>' +
-        '<input type="text" class="adm-input" id="inpC_title" placeholder="Gastroenterology Essentials">' +
-      '</div>' +
-      '<div class="adm-form-group">' +
-        '<label class="adm-label">Subtitle</label>' +
-        '<input type="text" class="adm-input" id="inpC_sub" placeholder="Clinical diagnosis & therapeutic optimization">' +
-      '</div>' +
-      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">' +
-        '<div class="adm-form-group">' +
-          '<label class="adm-label">Category</label>' +
-          renderSearchableDropdown({
-            id: 'inpC_cat',
-            options: catOptions,
-            value: 'Gastroenterology',
-            label: 'Category'
-          }) +
-        '</div>' +
-        '<div class="adm-form-group">' +
-          '<label class="adm-label">Level</label>' +
-          renderSearchableDropdown({
-            id: 'inpC_level',
-            options: levelOptions,
-            value: 'Foundation',
-            label: 'Level'
-          }) +
-        '</div>' +
-      '</div>' +
-      '<div class="adm-form-group">' +
-        '<label class="adm-label">Accent Theme Palette</label>' +
-        renderSearchableDropdown({
-          id: 'inpC_accent',
-          options: accentOptions,
-          value: '#582be8',
-          label: 'Accent Theme'
-        }) +
-      '</div>' +
-      '<div class="adm-form-group">' +
-        '<label class="adm-label">Course Overview Description</label>' +
-        '<textarea class="adm-textarea" id="inpC_desc" rows="3" placeholder="A practical CME accredited curriculum for practicing physicians..."></textarea>' +
-      '</div>';
-
-    openDialog({
-      title: 'Create New Accredited Course',
-      body: body,
-      confirmText: 'Create Course',
-      cancelText: 'Cancel',
-      onConfirm: function () {
-        var title = ($('#inpC_title') || {}).value || '';
-        var sub = ($('#inpC_sub') || {}).value || '';
-        var cat = ($('#inpC_cat') || {}).value || 'Gastroenterology';
-        var level = ($('#inpC_level') || {}).value || 'Foundation';
-        var accent = ($('#inpC_accent') || {}).value || '#582be8';
-        var desc = ($('#inpC_desc') || {}).value || '';
-
-        if (!title) { snack('Please enter a course title.'); return; }
-
-        var newC = addCourse({
-          title: title,
-          subtitle: sub,
-          category: cat,
-          level: level,
-          accent: accent,
-          description: desc,
-          published: true,
-          modules: [
-            {
-              id: 'c-m1',
-              number: 1,
-              title: 'Module 1: Clinical Orientation',
-              summary: 'Diagnostic fundamentals and guideline overview.',
-              lectures: [
-                { id: 'c-m1-l1', title: 'Clinical Presentation & Workup', presenter: 'Prof. Dr. Tahir', seconds: 480, summary: 'First-line clinical evaluation.' }
-              ],
-              pool: []
-            }
-          ]
-        });
-
-        snack('Course "' + title + '" created successfully.');
-        viewCourseList();
-      }
-    });
-
-    initSearchableDropdowns($('#appModalBody'));
+    location.hash = '#courses/new';
   }
 
   // 2. Edit Course Dialog
@@ -2469,9 +3168,9 @@
 
     var catOptions = [
       { value: 'Gastroenterology', label: 'Gastroenterology' },
-      { value: 'Cardiology & Heart Failure', label: 'Cardiology & Heart Failure' },
-      { value: 'Emergency Medicine', label: 'Emergency Medicine' },
-      { value: 'Pharmacotherapy', label: 'Clinical Pharmacotherapy' },
+      { value: 'Endoscopy & Mucosal Healing', label: 'Endoscopy & Mucosal Healing' },
+      { value: 'Pharmacotherapy & P-CABs', label: 'Pharmacotherapy & P-CABs' },
+      { value: 'H. pylori Diagnostics', label: 'H. pylori Diagnostics' },
       { value: 'Clinical Research', label: 'Clinical Research & Methodology' }
     ];
     if (!catOptions.some(function (o) { return o.value === c.category; })) {
@@ -2569,7 +3268,7 @@
       }
     });
 
-    initSearchableDropdowns($('#appModalBody'));
+    initSearchableDropdowns($('#activeDialogOverlay') || document);
   }
 
   // 3. Add Module Dialog
@@ -2969,7 +3668,7 @@
       }
     });
 
-    initSearchableDropdowns($('#appModalBody'));
+    initSearchableDropdowns($('#activeDialogOverlay') || document);
   }
 
   // 10. Register Trial Patient Dialog
@@ -3077,7 +3776,7 @@
       }
     });
 
-    initSearchableDropdowns($('#appModalBody'));
+    initSearchableDropdowns($('#activeDialogOverlay') || document);
   }
 
   // 11. Record Follow-Up Dialog
@@ -3135,7 +3834,7 @@
       }
     });
 
-    initSearchableDropdowns($('#appModalBody'));
+    initSearchableDropdowns($('#activeDialogOverlay') || document);
   }
 
   // 12. Enlist Doctor Dialog
@@ -3257,7 +3956,7 @@
       }
     });
 
-    initSearchableDropdowns($('#appModalBody'));
+    initSearchableDropdowns($('#activeDialogOverlay') || document);
   }
 
   /* --------------------------------------------------------------------------
@@ -3521,6 +4220,26 @@
      Initialization
      -------------------------------------------------------------------------- */
   window.addEventListener('hashchange', render);
+  window.addEventListener('popstate', function () {
+    var dlg = document.getElementById('activeDialogOverlay');
+    var drawer = document.getElementById('admDocDrawer');
+    var tray = document.getElementById('admNotificationTray');
+    if (dlg) {
+      closeDialog();
+      return;
+    }
+    if (drawer && drawer.classList.contains('open')) {
+      drawer.classList.remove('open');
+      var s = $('#admDocDrawerScrim');
+      if (s) s.classList.remove('open');
+      return;
+    }
+    if (tray && tray.classList.contains('open')) {
+      tray.classList.remove('open');
+      return;
+    }
+    render();
+  });
   render();
 
 })();

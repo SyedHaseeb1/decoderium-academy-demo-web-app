@@ -167,6 +167,104 @@
       padding: 3px 10px;
       width: fit-content;
     }
+    .pwa-reels-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .pwa-reel-card {
+      background: #f8fafc;
+      border: 1.5px solid var(--pwa-line);
+      border-radius: 14px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .pwa-reel-card:hover {
+      border-color: var(--pwa-primary);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(88,43,232,0.12);
+    }
+    .pwa-reel-thumb {
+      height: 120px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #0b1727 0%, #1e1b4b 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      position: relative;
+      overflow: hidden;
+    }
+    .pwa-reel-duration {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      background: rgba(0,0,0,0.75);
+      color: #ffffff;
+      font-size: 10.5px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .pwa-reel-play-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.9);
+      color: var(--pwa-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .pwa-gerdq-item {
+      padding: 12px;
+      background: #f8fafc;
+      border: 1px solid var(--pwa-line);
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }
+    .pwa-gerdq-q {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--pwa-ink);
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+    .pwa-gerdq-btns {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+    .pwa-gerdq-opt {
+      padding: 6px 4px;
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+      border: 1.5px solid var(--pwa-line);
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--pwa-slate);
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.15s ease;
+    }
+    .pwa-gerdq-opt:hover {
+      border-color: var(--pwa-primary);
+      color: var(--pwa-primary);
+    }
+    .pwa-gerdq-opt.is-selected {
+      background: var(--pwa-primary);
+      border-color: var(--pwa-primary);
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(88,43,232,0.25);
+    }
     .pwa-toast {
       position: fixed;
       bottom: 24px;
@@ -234,6 +332,8 @@
   <script>
   (function () {
     var $ = function (sel) { return document.querySelector(sel); };
+    var $$ = function (sel) { return Array.prototype.slice.call(document.querySelectorAll(sel)); };
+    var esc = window.esc || function (s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); };
     var toastTimer = null;
     function showToast(msg) {
       var t = $('#toast');
@@ -319,6 +419,36 @@
           '</button>' +
         '</div>' +
 
+        '<!-- GILEAP Video Guidance Reels (YouTube / PWA Reel Pipeline) -->' +
+        '<div class="pwa-card">' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+            '<span class="pwa-step-chip">Patient Guidance Reels</span>' +
+            '<span style="font-size:11px;font-weight:700;color:var(--pwa-primary);">Re-watch anytime</span>' +
+          '</div>' +
+          '<h3 style="font-size:15px;font-weight:800;margin:6px 0 2px;">Prescribed Treatment & Nutrition Reels</h3>' +
+          '<p style="font-size:12px;color:var(--pwa-slate);margin:0 0 10px;">Short 30-second video guidance messages recorded by your care team.</p>' +
+          '<div class="pwa-reels-grid">' +
+            '<!-- Reel 1: Doctor Adherence Reel -->' +
+            '<div class="pwa-reel-card" id="reelDoc">' +
+              '<div class="pwa-reel-thumb">' +
+                '<div class="pwa-reel-play-btn"><i class="ms" style="font-size:24px;">play_arrow</i></div>' +
+                '<span class="pwa-reel-duration">0:30</span>' +
+              '</div>' +
+              '<div style="font-size:12.5px;font-weight:800;color:var(--pwa-ink);line-height:1.3;">Doctor\'s Treatment Plan & Return Visit Message</div>' +
+              '<div style="font-size:11px;color:var(--pwa-slate);">' + esc(p.doctorName) + ' · P-CAB Adherence & Timing</div>' +
+            '</div>' +
+            '<!-- Reel 2: Nutritionist Dietary Reel -->' +
+            '<div class="pwa-reel-card" id="reelDiet">' +
+              '<div class="pwa-reel-thumb" style="background:linear-gradient(135deg, #064e3b 0%, #047857 100%);">' +
+                '<div class="pwa-reel-play-btn" style="color:#047857;"><i class="ms" style="font-size:24px;">restaurant_menu</i></div>' +
+                '<span class="pwa-reel-duration">0:30</span>' +
+              '</div>' +
+              '<div style="font-size:12.5px;font-weight:800;color:var(--pwa-ink);line-height:1.3;">Nutritionist Guidance: What to Eat & What to Avoid</div>' +
+              '<div style="font-size:11px;color:var(--pwa-slate);">Clinical Nutritionist · Acid Reflux Diet Rules</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+
         '<!-- Push Notifications Permission Card -->' +
         '<div class="pwa-card">' +
           '<div style="display:flex;align-items:center;gap:12px;">' +
@@ -332,7 +462,7 @@
           '</div>' +
           '<button type="button" class="pwa-btn-outline" id="btnEnablePush" style="' + (p.pushEnabled ? 'border-color:#10b981;color:#059669;' : '') + '">' +
             '<i class="ms" style="font-size:18px;">' + (p.pushEnabled ? 'notifications_active' : 'notifications_none') + '</i> ' +
-            (p.pushEnabled ? 'Push Reminders Active (PKR 0)' : 'Allow Notification Alerts') +
+            (p.pushEnabled ? 'Push Reminders Active ✓' : 'Allow Notification Alerts') +
           '</button>' +
         '</div>' +
 
@@ -356,9 +486,228 @@
             '<div style="font-size:11.5px;color:var(--pwa-emerald);text-align:center;font-weight:700;">' +
               '✓ Last recorded Day-3 score: ' + p.day3Score + ' / 10 · Synced with doctor\'s radar.' +
             '</div>' : '') +
+        '</div>' +
+
+        '<!-- Day 7 Validated GERD-Q (Gastroesophageal Reflux Disease Questionnaire) -->' +
+        '<div class="pwa-card" style="border:1.5px solid rgba(88,43,232,0.22);">' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+            '<span class="pwa-step-chip" style="background:rgba(88,43,232,0.12);color:var(--pwa-primary);">Day-7 Clinical Survey</span>' +
+            '<span style="font-size:11px;font-weight:700;color:var(--pwa-primary);">Validated GERD-Q Protocol</span>' +
+          '</div>' +
+          '<h3 style="font-size:15px;font-weight:800;margin:6px 0 2px;">Day-7 GERD-Q Diagnostic Assessment</h3>' +
+          '<p style="font-size:12px;color:var(--pwa-slate);margin:0 0 12px;">Over the past 7 days, how many days did you experience each symptom?</p>' +
+
+          '<div class="pwa-gerdq-item" data-q="q1">' +
+            '<div class="pwa-gerdq-q">1. Burning feeling behind your breastbone (Heartburn)?</div>' +
+            '<div class="pwa-gerdq-btns">' +
+              '<div class="pwa-gerdq-opt is-selected" data-val="0">0 days</div>' +
+              '<div class="pwa-gerdq-opt" data-val="1">1 day</div>' +
+              '<div class="pwa-gerdq-opt" data-val="2">2-3 days</div>' +
+              '<div class="pwa-gerdq-opt" data-val="3">4-7 days</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="pwa-gerdq-item" data-q="q2">' +
+            '<div class="pwa-gerdq-q">2. Stomach contents moving upwards to throat/mouth (Regurgitation)?</div>' +
+            '<div class="pwa-gerdq-btns">' +
+              '<div class="pwa-gerdq-opt is-selected" data-val="0">0 days</div>' +
+              '<div class="pwa-gerdq-opt" data-val="1">1 day</div>' +
+              '<div class="pwa-gerdq-opt" data-val="2">2-3 days</div>' +
+              '<div class="pwa-gerdq-opt" data-val="3">4-7 days</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="pwa-gerdq-item" data-q="q3">' +
+            '<div class="pwa-gerdq-q">3. Pain in the center of your upper stomach (Epigastric Pain)?</div>' +
+            '<div class="pwa-gerdq-btns">' +
+              '<div class="pwa-gerdq-opt is-selected" data-val="3">0 days</div>' +
+              '<div class="pwa-gerdq-opt" data-val="2">1 day</div>' +
+              '<div class="pwa-gerdq-opt" data-val="1">2-3 days</div>' +
+              '<div class="pwa-gerdq-opt" data-val="0">4-7 days</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="pwa-gerdq-item" data-q="q4">' +
+            '<div class="pwa-gerdq-q">4. Nausea or vomiting sensation?</div>' +
+            '<div class="pwa-gerdq-btns">' +
+              '<div class="pwa-gerdq-opt is-selected" data-val="3">0 days</div>' +
+              '<div class="pwa-gerdq-opt" data-val="2">1 day</div>' +
+              '<div class="pwa-gerdq-opt" data-val="1">2-3 days</div>' +
+              '<div class="pwa-gerdq-opt" data-val="0">4-7 days</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="pwa-gerdq-item" data-q="q5">' +
+            '<div class="pwa-gerdq-q">5. Difficulty sleeping at night because of heartburn or reflux?</div>' +
+            '<div class="pwa-gerdq-btns">' +
+              '<div class="pwa-gerdq-opt is-selected" data-val="0">0 days</div>' +
+              '<div class="pwa-gerdq-opt" data-val="1">1 day</div>' +
+              '<div class="pwa-gerdq-opt" data-val="2">2-3 days</div>' +
+              '<div class="pwa-gerdq-opt" data-val="3">4-7 days</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="pwa-gerdq-item" data-q="q6">' +
+            '<div class="pwa-gerdq-q">6. Taking additional over-the-counter medicine for heartburn?</div>' +
+            '<div class="pwa-gerdq-btns">' +
+              '<div class="pwa-gerdq-opt is-selected" data-val="0">0 days</div>' +
+              '<div class="pwa-gerdq-opt" data-val="1">1 day</div>' +
+              '<div class="pwa-gerdq-opt" data-val="2">2-3 days</div>' +
+              '<div class="pwa-gerdq-opt" data-val="3">4-7 days</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<div style="background:#ffffff;border:1.5px solid var(--pwa-line);border-radius:12px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;margin:10px 0;">' +
+            '<div>' +
+              '<div style="font-size:11px;font-weight:700;color:var(--pwa-slate);text-transform:uppercase;">Calculated Score</div>' +
+              '<strong id="lblGerdqScore" style="font-size:20px;color:var(--pwa-primary);">' + (p.gerdqScore !== undefined ? p.gerdqScore : '6') + ' / 18</strong>' +
+            '</div>' +
+            '<span id="lblGerdqStatus" style="font-size:11.5px;font-weight:800;padding:4px 10px;border-radius:9999px;background:#ecfdf5;color:#065f46;border:1.5px solid #a7f3d0;">' +
+              (p.gerdqScore >= 8 ? 'High GERD Likelihood ⚠️' : 'Controlled Symptoms ✓') +
+            '</span>' +
+          '</div>' +
+
+          '<button type="button" class="pwa-btn-primary" id="btnSubmitGerdq">' +
+            '<i class="ms" style="font-size:18px;">fact_check</i> Submit Day-7 GERD-Q to Doctor' +
+          '</button>' +
+          (p.gerdqScore !== undefined ?
+            '<div style="font-size:11.5px;color:var(--pwa-emerald);text-align:center;font-weight:700;margin-top:6px;">' +
+              '✓ Day-7 GERD-Q: ' + p.gerdqScore + ' / 18 (' + (p.gerdqCategory || 'Controlled') + ') · Linked to clinical record.' +
+            '</div>' : '') +
         '</div>';
 
       area.innerHTML = html;
+
+      // Video Reel Modal Trigger Function
+      function openReelModal(title, subtitle, speaker, scriptText, durationSec) {
+        var overlay = document.createElement('div');
+        overlay.style.cssText = 'position:fixed;inset:0;background:rgba(11,23,39,0.85);backdrop-filter:blur(6px);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px;';
+        overlay.innerHTML =
+          '<div style="background:#ffffff;border-radius:20px;max-width:440px;width:100%;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,0.4);animation:pwaFadeUp 0.2s ease forwards;">' +
+            '<div style="background:linear-gradient(135deg,#0b1727 0%,#1e1b4b 100%);color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;">' +
+              '<div>' +
+                '<span style="font-size:10px;font-weight:800;letter-spacing:0.8px;text-transform:uppercase;color:#38bdf8;">GILEAP Video Reel</span>' +
+                '<h4 style="font-size:15px;font-weight:800;margin:2px 0 0;">' + esc(title) + '</h4>' +
+              '</div>' +
+              '<button type="button" id="btnReelClose" style="background:transparent;border:none;color:#fff;font-size:24px;cursor:pointer;line-height:1;">&times;</button>' +
+            '</div>' +
+            '<div style="padding:16px;background:#000;position:relative;text-align:center;">' +
+              '<div style="position:relative;padding-top:56.25%;background:#0f172a;border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center;">' +
+                '<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;padding:16px;">' +
+                  '<div style="width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:8px;">' +
+                    '<i class="ms" style="font-size:32px;color:#fff;">videocam</i>' +
+                  '</div>' +
+                  '<div style="font-size:13px;font-weight:800;">' + esc(speaker) + '</div>' +
+                  '<div style="font-size:11px;color:#94a3b8;">YouTube Studio Server Stream · 0:' + durationSec + '</div>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div style="padding:16px 20px;">' +
+              '<div style="font-size:11px;font-weight:700;color:var(--pwa-slate);text-transform:uppercase;margin-bottom:4px;">Guidance Message Transcript</div>' +
+              '<p style="font-size:13px;color:var(--pwa-ink);line-height:1.5;margin:0 0 14px;background:#f8fafc;padding:12px;border-radius:10px;border:1px solid var(--pwa-line);">' +
+                esc(scriptText) +
+              '</p>' +
+              '<button type="button" class="pwa-btn-primary" id="btnReelDone" style="width:100%;">' +
+                '<i class="ms" style="font-size:18px;">check</i> Finished Watching Reel (Mark Watched)' +
+              '</button>' +
+            '</div>' +
+          '</div>';
+
+        document.body.appendChild(overlay);
+
+        var close = function () {
+          if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+        };
+        overlay.querySelector('#btnReelClose').onclick = close;
+        overlay.onclick = function (e) { if (e.target === overlay) close(); };
+        overlay.querySelector('#btnReelDone').onclick = function () {
+          close();
+          showToast('✓ Video reel completed and saved to your library.');
+        };
+      }
+
+      // Event: Click Reel 1 (Doctor)
+      var rDoc = $('#reelDoc');
+      if (rDoc) {
+        rDoc.onclick = function () {
+          openReelModal(
+            'Doctor\'s Prescription & Return Visit Guidance',
+            'Strong Follow-up & Treatment Adherence',
+            p.doctorName,
+            'Hello, I have prescribed your targeted therapy. It is critical to take your medication daily 30 minutes before your morning meal. Do not stop early even if symptoms improve. You will receive an alert on Day 3 and Day 7 to report your progress right here.',
+            30
+          );
+        };
+      }
+
+      // Event: Click Reel 2 (Nutritionist)
+      var rDiet = $('#reelDiet');
+      if (rDiet) {
+        rDiet.onclick = function () {
+          openReelModal(
+            'Nutritionist Guidance: What to Eat & What to Avoid',
+            'Clinical Dietary Rules for Acid Reflux & APD',
+            'Lead Clinical Dietician',
+            'Dietary rules for acid reflux: strictly avoid deep-fried foods, chili gravies, citrus juices, coffee, and carbonated beverages. Eat smaller, frequent meals. Never lie down within 2 hours of eating dinner, and elevate your bed head by 6 inches.',
+            30
+          );
+        };
+      }
+
+      // Event: GERD-Q Options Clicking & Score Calculation
+      var gerdqScores = { q1: 0, q2: 0, q3: 3, q4: 3, q5: 0, q6: 0 };
+      $$('.pwa-gerdq-item').forEach(function (group) {
+        var qKey = group.dataset.q;
+        group.querySelectorAll('.pwa-gerdq-opt').forEach(function (opt) {
+          opt.onclick = function () {
+            group.querySelectorAll('.pwa-gerdq-opt').forEach(function (o) { o.classList.remove('is-selected'); });
+            opt.classList.add('is-selected');
+            gerdqScores[qKey] = parseInt(opt.dataset.val, 10);
+            updateGerdqDisplay();
+          };
+        });
+      });
+
+      function calcGerdqTotal() {
+        return (gerdqScores.q1 || 0) + (gerdqScores.q2 || 0) + (gerdqScores.q3 || 0) +
+               (gerdqScores.q4 || 0) + (gerdqScores.q5 || 0) + (gerdqScores.q6 || 0);
+      }
+
+      function updateGerdqDisplay() {
+        var total = calcGerdqTotal();
+        var lbl = $('#lblGerdqScore');
+        var status = $('#lblGerdqStatus');
+        if (lbl) lbl.textContent = total + ' / 18';
+        if (status) {
+          if (total >= 8) {
+            status.textContent = 'High GERD Likelihood ⚠️';
+            status.style.background = '#fff1f2';
+            status.style.color = '#9f1239';
+            status.style.borderColor = '#fecdd3';
+          } else {
+            status.textContent = 'Controlled Symptoms ✓';
+            status.style.background = '#ecfdf5';
+            status.style.color = '#065f46';
+            status.style.borderColor = '#a7f3d0';
+          }
+        }
+      }
+
+      // Event: Submit GERD-Q
+      var btnGerdq = $('#btnSubmitGerdq');
+      if (btnGerdq) {
+        btnGerdq.onclick = function () {
+          var total = calcGerdqTotal();
+          var cat = total >= 8 ? 'High Likelihood of GERD' : 'Controlled';
+          p.gerdqScore = total;
+          p.gerdqCategory = cat;
+          p.gerdqCompletedAt = new Date().toISOString();
+          p.followupStatus = 'day7_done';
+          saveState();
+          showToast('✓ Day-7 GERD-Q score (' + total + '/18) submitted to Dr. ' + p.doctorName + '!');
+          renderPatientView(p);
+        };
+      }
 
       // Event: Install PWA
       $('#btnInstallPwa').onclick = function () {

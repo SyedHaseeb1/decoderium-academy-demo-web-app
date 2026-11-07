@@ -29,19 +29,19 @@
   --adm-ink: #0b1727;
   --adm-slate: #64748b;
   --adm-slate-light: #94a3b8;
-  --adm-canvas: #f6f8fc;
+  --adm-canvas: #edf2f7;
   --adm-card: #ffffff;
-  --adm-line: #e2e8f0;
-  --adm-line-light: #f1f5f9;
-  --adm-ring: rgba(88, 43, 232, 0.14);
+  --adm-line: #cbd5e1;
+  --adm-line-light: #e2e8f0;
+  --adm-ring: rgba(88, 43, 232, 0.16);
   --adm-shadow-sm: 0 2px 8px rgba(11, 23, 39, 0.04);
-  --adm-shadow: 0 10px 30px -10px rgba(88, 43, 232, 0.08), 0 4px 16px rgba(15, 23, 42, 0.04);
-  --adm-shadow-hover: 0 20px 40px -12px rgba(88, 43, 232, 0.14), 0 6px 20px rgba(15, 23, 42, 0.06);
+  --adm-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+  --adm-shadow-hover: 0 10px 28px -4px rgba(15, 23, 42, 0.1), 0 4px 10px -2px rgba(15, 23, 42, 0.04);
   --adm-shadow-float: 0 14px 34px -8px rgba(88, 43, 232, 0.22), 0 6px 14px rgba(11, 23, 39, 0.08);
-  --adm-radius-sm: 8px;
-  --adm-radius-md: 14px;
-  --adm-radius-lg: 20px;
-  --adm-radius-xl: 28px;
+  --adm-radius-sm: 12px;
+  --adm-radius-md: 20px;
+  --adm-radius-lg: 32px;
+  --adm-radius-xl: 36px;
   --adm-radius-pill: 9999px;
   --sidebar-w: 260px;
   --sidebar-w-collapsed: 80px;
@@ -245,8 +245,14 @@ body.admin-body {
   background: var(--adm-primary-soft);
   border-left: 3px solid var(--adm-primary);
   pointer-events: none;
-  transition: transform 0.28s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.2s ease, width 0.3s ease;
+  opacity: 0;
+  transition: none;
   z-index: 1;
+}
+
+.adm-nav-sliding-pill.ready {
+  opacity: 1;
+  transition: transform 0.28s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.2s ease, width 0.3s ease;
 }
 
 .adm-nav-item {
@@ -465,6 +471,11 @@ body.admin-body {
   color: var(--adm-slate);
   font-weight: 500;
   white-space: nowrap;
+  flex: 0 0 270px;
+  min-width: 270px;
+  max-width: 270px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .adm-breadcrumbs strong {
@@ -475,10 +486,11 @@ body.admin-body {
 /* Segmented Dual Dashboard Switcher (LMS vs Clinical) */
 .adm-mode-switcher {
   display: inline-flex;
-  background: var(--adm-line-light);
+  background: #ffffff;
   padding: 3px;
   border-radius: var(--adm-radius-pill);
-  border: 1px solid var(--adm-line);
+  border: 1.5px solid var(--adm-line);
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.05);
   position: relative;
 }
 
@@ -499,19 +511,25 @@ body.admin-body {
   white-space: nowrap;
 }
 
+.adm-mode-btn:hover {
+  color: var(--adm-ink);
+  background: rgba(15, 23, 42, 0.04);
+}
+
 .adm-mode-btn i {
   font-size: 16px;
 }
 
 .adm-mode-btn.active {
-  background: #ffffff;
-  color: var(--adm-primary);
-  box-shadow: 0 2px 8px rgba(88, 43, 232, 0.12);
+  background: var(--adm-primary) !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 10px rgba(88, 43, 232, 0.32);
 }
 
 .adm-mode-btn.active.clinical {
-  color: #ff4760;
-  box-shadow: 0 2px 8px rgba(255, 71, 96, 0.16);
+  background: #ff4760 !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 10px rgba(255, 71, 96, 0.38);
 }
 
 /* Live Telemetry Pulse Pill */
@@ -551,18 +569,19 @@ body.admin-body {
   align-items: center;
   gap: 8px;
   background: #ffffff;
-  border: 1px solid var(--adm-line);
-  padding: 0 12px;
-  height: 38px;
+  border: 1.5px solid var(--adm-line);
+  padding: 0 14px;
+  height: 40px;
   border-radius: var(--adm-radius-pill);
-  width: 260px;
-  transition: all 0.2s ease;
+  width: 340px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  transition: all 0.22s ease;
 }
 
 .adm-search-wrap:focus-within {
   border-color: var(--adm-primary);
   box-shadow: 0 0 0 3px var(--adm-ring);
-  width: 300px;
+  width: 390px;
 }
 
 .adm-search-wrap i {
@@ -570,13 +589,27 @@ body.admin-body {
   font-size: 18px;
 }
 
-.adm-search-wrap input {
-  border: none;
-  background: transparent;
-  outline: none;
-  font-size: 12.5px;
-  color: var(--adm-ink);
-  width: 100%;
+.adm-search-wrap input,
+.adm-search-wrap input:focus,
+.adm-search-wrap input:focus-visible,
+#admOmniSearch,
+#admOmniSearch:focus,
+#admOmniSearch:focus-visible {
+  border: 0 !important;
+  border-color: transparent !important;
+  background: transparent !important;
+  outline: 0 !important;
+  outline-color: transparent !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: var(--adm-ink) !important;
+  width: 100% !important;
+  height: 100% !important;
+  padding: 0 !important;
 }
 
 .adm-search-wrap input::placeholder {
@@ -620,6 +653,165 @@ body.admin-body {
   background: var(--adm-canvas);
   color: var(--adm-primary);
   border-color: rgba(88, 43, 232, 0.2);
+}
+
+/* Executive Notification Tray Dropdown */
+.adm-notification-tray {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 400px;
+  max-width: calc(100vw - 32px);
+  background: #ffffff;
+  border: 1.5px solid var(--adm-line);
+  border-radius: var(--adm-radius-lg);
+  box-shadow: 0 20px 48px -8px rgba(15, 23, 42, 0.22), 0 6px 16px rgba(15, 23, 42, 0.08);
+  z-index: 1200;
+  display: none;
+  overflow: hidden;
+  animation: admFadeSlideUp 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform-origin: top right;
+}
+
+.adm-notification-tray::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  right: 14px;
+  width: 10px;
+  height: 10px;
+  background: #f8fafc;
+  border-top: 1.5px solid var(--adm-line);
+  border-left: 1.5px solid var(--adm-line);
+  transform: rotate(45deg);
+  z-index: 2;
+}
+
+.adm-notification-tray.open {
+  display: block;
+}
+
+.adm-notif-header {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--adm-line-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8fafc;
+}
+
+.adm-notif-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--adm-ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.adm-notif-badge {
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(88, 43, 232, 0.12);
+  color: var(--adm-primary);
+  padding: 2px 7px;
+  border-radius: 9999px;
+}
+
+.adm-notif-clear {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--adm-slate);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.adm-notif-clear:hover {
+  color: var(--adm-primary);
+  background: rgba(88, 43, 232, 0.06);
+}
+
+.adm-notif-list {
+  max-height: 340px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.adm-notif-item {
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--adm-line-light);
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  transition: background 0.15s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.adm-notif-item:hover {
+  background: #f8fafc;
+}
+
+.adm-notif-item.unread {
+  background: rgba(88, 43, 232, 0.03);
+}
+
+.adm-notif-icon-wrap {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.adm-notif-item-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.adm-notif-item-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--adm-ink);
+  line-height: 1.3;
+}
+
+.adm-notif-item-desc {
+  font-size: 11.5px;
+  color: var(--adm-slate);
+  margin-top: 3px;
+  line-height: 1.4;
+}
+
+.adm-notif-item-time {
+  font-size: 10.5px;
+  color: var(--adm-slate-light);
+  margin-top: 4px;
+  font-weight: 600;
+}
+
+.adm-notif-footer {
+  padding: 10px 18px;
+  background: #f8fafc;
+  text-align: center;
+  border-top: 1px solid var(--adm-line-light);
+}
+
+.adm-notif-footer a {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--adm-primary);
+  text-decoration: none;
+}
+
+.adm-notif-footer a:hover {
+  text-decoration: underline;
 }
 
 .adm-icon-btn .badge-dot {
@@ -686,7 +878,7 @@ body.admin-body {
    -------------------------------------------------------------------------- */
 .adm-viewport {
   flex: 1;
-  padding: 20px 20px 48px;
+  padding: 16px 12px 48px;
   max-width: 100%;
   width: 100%;
   margin: 0;
@@ -742,74 +934,124 @@ body.admin-body {
   gap: 10px;
 }
 
-/* Modern Pill Buttons */
+/* ==========================================================================
+   UNIFIED SINGLE CSS BUTTON DESIGN SYSTEM (Primary, Outline, Hero & Action)
+   ========================================================================== */
+.adm-btn-primary,
+.adm-btn-outline,
+.adm-btn-hero-outline,
+.lms-hero-btn,
+.adm-btn-action {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  font-family: inherit !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  white-space: nowrap !important;
+  border-radius: var(--adm-radius-pill) !important;
+  box-sizing: border-box !important;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease !important;
+}
+
 .adm-btn-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 9px 20px;
-  border-radius: var(--adm-radius-pill);
-  background: var(--adm-gradient);
-  color: #ffffff;
-  font-size: 13px;
-  font-weight: 700;
-  text-decoration: none;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 4px 14px rgba(88, 43, 232, 0.25);
-  transition: transform 0.2s, box-shadow 0.2s;
+  padding: 9px 20px !important;
+  background: var(--adm-primary) !important;
+  color: #ffffff !important;
+  border: 1.5px solid var(--adm-primary) !important;
+  box-shadow: 0 4px 14px rgba(88, 43, 232, 0.28) !important;
 }
 
 .adm-btn-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(88, 43, 232, 0.35);
+  background: var(--adm-primary-hover) !important;
+  border-color: var(--adm-primary-hover) !important;
+  color: #ffffff !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 6px 20px rgba(88, 43, 232, 0.4) !important;
+}
+
+.adm-btn-primary:active {
+  transform: translateY(0) !important;
+  box-shadow: 0 2px 8px rgba(88, 43, 232, 0.2) !important;
 }
 
 .adm-btn-outline {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 18px;
-  border-radius: var(--adm-radius-pill);
-  background: #ffffff;
-  color: var(--adm-ink);
-  font-size: 13px;
-  font-weight: 700;
-  text-decoration: none;
-  border: 1px solid var(--adm-line);
-  cursor: pointer;
-  transition: all 0.2s;
+  padding: 8px 18px !important;
+  background: #ffffff !important;
+  color: var(--adm-ink) !important;
+  border: 1.5px solid var(--adm-line) !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
 }
 
 .adm-btn-outline:hover {
-  background: var(--adm-canvas);
-  border-color: var(--adm-primary);
+  background: #f8fafc !important;
+  border-color: var(--adm-primary) !important;
+  color: var(--adm-primary) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(88, 43, 232, 0.12) !important;
+}
+
+.adm-btn-outline:active {
+  transform: translateY(0) !important;
+}
+
+/* Primary Hero Banner Button */
+.lms-hero-btn {
+  padding: 10px 22px !important;
+  background: #ffffff !important;
+  color: var(--adm-primary) !important;
+  border: 1.5px solid #ffffff !important;
+  font-size: 13.5px !important;
+  font-weight: 800 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16) !important;
+}
+
+.lms-hero-btn:hover {
+  background: #f8fafc !important;
+  color: var(--adm-primary-hover) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.24) !important;
+}
+
+.lms-hero-btn .lms-hero-btn-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--adm-primary-soft);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lms-hero-btn .lms-hero-btn-icon i {
+  font-size: 14px;
   color: var(--adm-primary);
 }
 
-/* Glassmorphic Outline Button for Hero Banners (High Contrast) */
+/* Glassmorphic Outline Button for Hero Banners */
 .adm-btn-hero-outline {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 18px;
-  border-radius: var(--adm-radius-pill);
-  background: rgba(255, 255, 255, 0.18);
+  padding: 10px 20px !important;
+  background: rgba(255, 255, 255, 0.16) !important;
   color: #ffffff !important;
-  font-size: 13px;
-  font-weight: 700;
-  text-decoration: none;
-  border: 1.5px solid rgba(255, 255, 255, 0.45);
-  cursor: pointer;
-  backdrop-filter: blur(8px);
-  transition: all 0.2s ease;
+  border: 1.5px solid rgba(255, 255, 255, 0.55) !important;
+  backdrop-filter: blur(8px) !important;
 }
 
 .adm-btn-hero-outline:hover {
-  background: #ffffff;
+  background: #ffffff !important;
   color: var(--adm-ink) !important;
-  border-color: #ffffff;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  border-color: #ffffff !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+}
+
+.adm-btn-hero-outline:active {
+  transform: translateY(0) !important;
 }
 
 /* ==========================================================================
@@ -824,20 +1066,21 @@ body.admin-body {
 
 .adm-kpi-card {
   background: #ffffff;
-  border: 1px solid var(--adm-line);
+  border: 1.5px solid var(--adm-line);
   border-radius: var(--adm-radius-lg);
-  padding: 20px;
+  padding: 22px 20px;
   box-shadow: var(--adm-shadow);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   position: relative;
   overflow: hidden;
-  transition: transform 0.22s ease, box-shadow 0.22s ease;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.2s ease;
 }
 
 .adm-kpi-card:hover {
   transform: translateY(-2px);
+  border-color: #94a3b8;
   box-shadow: var(--adm-shadow-hover);
 }
 
@@ -895,17 +1138,16 @@ body.admin-body {
 
 /* Card Visual Variants - High Contrast & Non-Blending Badges */
 .adm-kpi-violet .adm-kpi-icon { background: var(--adm-primary-soft); color: var(--adm-primary); }
-.adm-kpi-violet .adm-kpi-badge { background: #ffffff; border: 1.5px solid #ddd6fe; color: #582be8; box-shadow: 0 1px 3px rgba(88, 43, 232, 0.08); }
+.adm-kpi-violet .adm-kpi-badge { background: #f5f3ff !important; border: 1.5px solid #c4b5fd !important; color: #4338ca !important; font-weight: 800 !important; box-shadow: 0 1px 3px rgba(88, 43, 232, 0.1) !important; }
 
 .adm-kpi-rose .adm-kpi-icon { background: var(--adm-pulse-gradient); color: #ffffff; }
-.adm-kpi-rose .adm-kpi-badge { background: #ffffff; border: 1.5px solid #fecdd3; color: #e11d48; box-shadow: 0 1px 3px rgba(225, 29, 72, 0.08); }
+.adm-kpi-rose .adm-kpi-badge { background: #fff1f2 !important; border: 1.5px solid #fecdd3 !important; color: #9f1239 !important; font-weight: 800 !important; box-shadow: 0 1px 3px rgba(225, 29, 72, 0.1) !important; }
 
 .adm-kpi-emerald .adm-kpi-icon { background: var(--adm-emerald-soft); color: var(--adm-emerald); }
-.adm-kpi-emerald .adm-kpi-badge { background: #ffffff; border: 1.5px solid #a7f3d0; color: #059669; box-shadow: 0 1px 3px rgba(16, 185, 129, 0.08); }
+.adm-kpi-emerald .adm-kpi-badge { background: #ecfdf5 !important; border: 1.5px solid #a7f3d0 !important; color: #065f46 !important; font-weight: 800 !important; box-shadow: 0 1px 3px rgba(16, 185, 129, 0.1) !important; }
 
 .adm-kpi-cyan .adm-kpi-icon { background: var(--adm-cyan-soft); color: #0284c7; }
-.adm-kpi-cyan .adm-kpi-badge { background: #ffffff; border: 1.5px solid #bae6fd; color: #0284c7; box-shadow: 0 1px 3px rgba(2, 132, 199, 0.08); }
-.adm-kpi-cyan .adm-kpi-badge { background: var(--adm-cyan-soft); color: #0284c7; }
+.adm-kpi-cyan .adm-kpi-badge { background: #f0f9ff !important; border: 1.5px solid #bae6fd !important; color: #075985 !important; font-weight: 800 !important; box-shadow: 0 1px 3px rgba(2, 132, 199, 0.1) !important; }
 
 /* Subtle Top Accent Border on Cards */
 .adm-kpi-card::before {
@@ -943,11 +1185,17 @@ body.admin-body {
 
 .adm-card {
   background: #ffffff;
-  border: 1px solid var(--adm-line);
+  border: 1.5px solid var(--adm-line);
   border-radius: var(--adm-radius-lg);
   padding: 24px;
   box-shadow: var(--adm-shadow);
   position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.adm-card:hover {
+  border-color: #94a3b8;
+  box-shadow: var(--adm-shadow-hover);
 }
 
 .adm-card-head {
@@ -1087,8 +1335,12 @@ body.admin-body {
    ========================================================================== */
 .adm-table-wrap {
   width: 100%;
-  overflow-x: auto;
+  max-height: 540px;
+  overflow: auto;
   border-radius: var(--adm-radius-md);
+  position: relative;
+  scrollbar-width: thin;
+  scrollbar-color: var(--adm-line) transparent;
 }
 
 .adm-table {
@@ -1098,7 +1350,11 @@ body.admin-body {
   text-align: left;
 }
 
-.adm-table th {
+.adm-table th,
+.adm-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 5;
   padding: 12px 16px;
   background: var(--adm-canvas);
   color: var(--adm-slate);
@@ -1107,6 +1363,7 @@ body.admin-body {
   text-transform: uppercase;
   letter-spacing: 0.6px;
   border-bottom: 1px solid var(--adm-line);
+  box-shadow: 0 1px 0 var(--adm-line);
   white-space: nowrap;
 }
 
@@ -1141,28 +1398,70 @@ body.admin-body {
   white-space: nowrap;
 }
 
-.adm-chip-active { background: var(--adm-emerald-soft); color: var(--adm-emerald); }
-.adm-chip-warn { background: var(--adm-amber-soft); color: var(--adm-amber); }
-.adm-chip-danger { background: var(--adm-rose-soft); color: var(--adm-rose); }
-.adm-chip-violet { background: var(--adm-primary-soft); color: var(--adm-primary); }
+/* High-Contrast Non-Blending Status Chips */
+.adm-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: var(--adm-radius-pill);
+  font-size: 11.5px;
+  font-weight: 800;
+  white-space: nowrap;
+  letter-spacing: -0.1px;
+}
+
+.adm-chip-active {
+  background: #ecfdf5 !important;
+  color: #065f46 !important;
+  border: 1.5px solid #a7f3d0 !important;
+  box-shadow: 0 1px 3px rgba(16, 185, 129, 0.1);
+}
+
+.adm-chip-warn {
+  background: #fffbeb !important;
+  color: #92400e !important;
+  border: 1.5px solid #fde68a !important;
+  box-shadow: 0 1px 3px rgba(245, 158, 11, 0.1);
+}
+
+.adm-chip-danger {
+  background: #fff1f2 !important;
+  color: #9f1239 !important;
+  border: 1.5px solid #fecdd3 !important;
+  box-shadow: 0 1px 3px rgba(225, 29, 72, 0.1);
+}
+
+.adm-chip-violet {
+  background: #f5f3ff !important;
+  color: #4338ca !important;
+  border: 1.5px solid #ddd6fe !important;
+  box-shadow: 0 1px 3px rgba(88, 43, 232, 0.1);
+}
 
 /* Table Action Buttons */
 .adm-btn-action {
-  padding: 5px 12px;
-  border-radius: var(--adm-radius-pill);
-  border: 1px solid var(--adm-line);
-  background: #ffffff;
-  color: var(--adm-ink);
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  padding: 5px 14px !important;
+  border-radius: var(--adm-radius-pill) !important;
+  border: 1.5px solid var(--adm-line) !important;
+  background: #ffffff !important;
+  color: var(--adm-ink) !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 .adm-btn-action:hover {
-  background: var(--adm-canvas);
-  border-color: var(--adm-primary);
-  color: var(--adm-primary);
+  background: var(--adm-primary) !important;
+  border-color: var(--adm-primary) !important;
+  color: #ffffff !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(88, 43, 232, 0.25) !important;
+}
+
+.adm-btn-action:active {
+  transform: translateY(0) !important;
 }
 
 /* ==========================================================================
@@ -1303,6 +1602,7 @@ body.admin-body {
   flex-direction: column;
   transition: transform 0.24s cubic-bezier(0.2, 0.9, 0.3, 1), box-shadow 0.24s ease;
   position: relative;
+  cursor: pointer;
 }
 
 .adm-course-card:hover {
@@ -1560,6 +1860,7 @@ body.admin-body {
 
 /* ==========================================================================
    UNIFIED SINGLE CSS FOR ALL INPUTS, SELECTS, TEXTAREAS & SEARCH BARS
+   (Aligned to Login Single Design: Soft Surface, Subtle Pill Border & Ambient Glow)
    ========================================================================== */
 .adm-input,
 .adm-select,
@@ -1567,27 +1868,29 @@ body.admin-body {
 .adm-search-input,
 .adm-search-dropdown-btn {
   width: 100%;
-  height: 38px;
-  min-height: 38px;
-  line-height: 36px;
-  padding: 0 12px;
-  font-size: 13px;
+  height: 42px;
+  min-height: 42px;
+  line-height: 40px;
+  padding: 0 16px;
+  font-size: 13.5px;
   font-weight: 500;
   color: var(--adm-ink);
-  background: #ffffff;
-  border: 1.5px solid #cbd5e1;
-  border-radius: 8px;
+  background: #f8fafc;
+  border: 1.5px solid var(--adm-line);
+  border-radius: var(--adm-radius-pill);
   box-sizing: border-box;
   outline: none;
   font-family: inherit;
-  transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
 .adm-textarea {
-  min-height: 80px;
+  border-radius: var(--adm-radius-md);
+  min-height: 84px;
   height: auto;
   line-height: 1.5;
-  padding: 10px 12px;
+  padding: 12px 16px;
   resize: vertical;
 }
 
@@ -1596,7 +1899,9 @@ body.admin-body {
 .adm-textarea:hover,
 .adm-search-input:hover,
 .adm-search-dropdown-btn:hover {
-  border-color: #94a3b8;
+  border-color: #a78bfa;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.08);
 }
 
 .adm-input:focus,
@@ -1604,9 +1909,10 @@ body.admin-body {
 .adm-textarea:focus,
 .adm-search-input:focus,
 .adm-search-dropdown-btn.is-open {
-  border-color: var(--adm-primary);
-  box-shadow: 0 0 0 3px rgba(88, 43, 232, 0.15);
-  background: #ffffff;
+  border-color: var(--adm-primary) !important;
+  box-shadow: 0 0 0 4px var(--adm-ring), 0 2px 8px rgba(88, 43, 232, 0.08) !important;
+  background: #ffffff !important;
+  outline: none !important;
 }
 
 /* Reusable Searchable Dropdown Button & Menu Container */
@@ -1641,16 +1947,25 @@ body.admin-body {
   transform: rotate(180deg);
 }
 
+.adm-search-dropdown {
+  position: relative;
+  width: 100%;
+}
+
+.adm-search-dropdown.is-open {
+  z-index: 3000 !important;
+}
+
 .adm-search-dropdown-menu {
   position: absolute;
   top: calc(100% + 4px);
   left: 0;
   right: 0;
   background: #ffffff;
-  border: 1.5px solid #cbd5e1;
-  border-radius: 10px;
-  box-shadow: 0 10px 25px rgba(11, 23, 39, 0.12);
-  z-index: 100;
+  border: 1.5px solid var(--adm-line);
+  border-radius: var(--adm-radius-md);
+  box-shadow: 0 20px 48px -4px rgba(11, 23, 39, 0.24), 0 8px 20px rgba(11, 23, 39, 0.12);
+  z-index: 9999 !important;
   display: none;
   overflow: hidden;
   animation: admFadeSlideUp 0.15s ease forwards;
@@ -1658,6 +1973,63 @@ body.admin-body {
 
 .adm-search-dropdown-menu.open {
   display: block;
+}
+
+.adm-search-dropdown-menu.open-upwards {
+  top: auto;
+  bottom: calc(100% + 4px);
+  box-shadow: 0 -20px 48px -4px rgba(11, 23, 39, 0.24), 0 -8px 20px rgba(11, 23, 39, 0.12);
+}
+
+/* Ensure modal dialog cards and bodies allow dropdown menus to overlay without clipping */
+.lms-dialog-overlay {
+  overflow-y: auto !important;
+  padding: 30px 20px !important;
+  box-sizing: border-box !important;
+}
+
+.lms-dialog-card {
+  border-radius: var(--adm-radius-lg) !important;
+  max-width: 660px !important;
+  width: min(660px, 94vw) !important;
+  overflow: visible !important;
+  background: #ffffff !important;
+  box-shadow: 0 25px 65px -10px rgba(15, 23, 42, 0.28), 0 10px 24px -4px rgba(15, 23, 42, 0.1) !important;
+  margin: auto !important;
+  position: relative !important;
+}
+
+.lms-dialog-card.adm-dialog-wide {
+  max-width: 860px !important;
+  width: min(860px, 95vw) !important;
+}
+
+.lms-dialog-header {
+  border-top-left-radius: calc(var(--adm-radius-lg) - 1.5px) !important;
+  border-top-right-radius: calc(var(--adm-radius-lg) - 1.5px) !important;
+  padding: 22px 30px 18px !important;
+  position: relative !important;
+  z-index: 5 !important;
+}
+
+.lms-dialog-body {
+  overflow: visible !important;
+  padding: 24px 30px !important;
+  position: relative !important;
+  z-index: 20 !important;
+}
+
+.lms-dialog-footer {
+  border-bottom-left-radius: calc(var(--adm-radius-lg) - 1.5px) !important;
+  border-bottom-right-radius: calc(var(--adm-radius-lg) - 1.5px) !important;
+  padding: 18px 30px 24px !important;
+  position: relative !important;
+  z-index: 5 !important;
+}
+
+.lms-dialog-body:last-child {
+  border-bottom-left-radius: calc(var(--adm-radius-lg) - 1.5px) !important;
+  border-bottom-right-radius: calc(var(--adm-radius-lg) - 1.5px) !important;
 }
 
 .adm-dropdown-search-box {
@@ -1674,14 +2046,18 @@ body.admin-body {
   color: #94a3b8;
 }
 
-.adm-dropdown-search-box input {
-  width: 100%;
-  border: none;
-  background: transparent;
-  outline: none;
-  font-size: 12.5px;
-  color: var(--adm-ink);
-  font-family: inherit;
+.adm-dropdown-search-box input,
+.adm-dropdown-search-box input:focus,
+.adm-dropdown-search-box input:focus-visible {
+  width: 100% !important;
+  border: none !important;
+  background: transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+  font-size: 12.5px !important;
+  color: var(--adm-ink) !important;
+  font-family: inherit !important;
+  padding: 0 !important;
 }
 
 .adm-dropdown-list {
@@ -1732,27 +2108,29 @@ body.admin-body {
 }
 
 /* ==========================================================================
-   CARDS & SECTIONS DESIGN SEPARATED BY BG SECTIONS
+   PROMINENT CARDS & SECTIONS DESIGN WITH DISTINCT BACKGROUND TONES
    ========================================================================== */
 .adm-section {
   background: #ffffff;
-  border: 1px solid var(--adm-line);
-  border-radius: 18px;
-  padding: 24px;
+  border: 1.5px solid var(--adm-line);
+  border-radius: var(--adm-radius-xl);
+  padding: 26px 24px;
   margin-bottom: 28px;
-  box-shadow: 0 2px 8px rgba(11, 23, 39, 0.03);
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
   position: relative;
 }
 
 .adm-section.adm-section-tinted {
-  background: #f8fafc;
-  border-color: var(--adm-line);
+  background: #f1f5f9;
+  border: 1.5px solid #cbd5e1;
+  box-shadow: 0 4px 18px -2px rgba(15, 23, 42, 0.05);
 }
 
 .adm-section.adm-section-clinical {
-  background: #fffcfd;
-  border-color: rgba(225, 29, 72, 0.14);
-  border-left: 4px solid #ff4760;
+  background: #ffffff;
+  border: 1.5px solid #fecdd3;
+  border-left: 6px solid #ff4760;
+  box-shadow: 0 4px 22px -2px rgba(225, 29, 72, 0.08);
 }
 
 .adm-section-head {
@@ -1792,19 +2170,27 @@ body.admin-body {
 }
 
 /* ==========================================================================
-   DUAL DASHBOARD THEMES: LMS ACADEMY vs CLINICAL TRIAL RADAR
+   DUAL DASHBOARD THEMES: LMS ACADEMY vs CLINICAL TRIAL RADAR (DISTINCT IDENTITIES)
    ========================================================================== */
 .adm-mode-lms {
-  background: radial-gradient(circle at 10% 5%, rgba(88, 43, 232, 0.035) 0%, transparent 60%), #f8fafc;
+  background: radial-gradient(circle at 12% 8%, rgba(88, 43, 232, 0.06) 0%, transparent 60%), #edf2f7 !important;
+}
+
+.adm-mode-lms .adm-topbar {
+  border-bottom: 3.5px solid var(--adm-primary) !important;
 }
 
 .adm-mode-clinical {
-  background: radial-gradient(circle at 90% 5%, rgba(225, 29, 72, 0.035) 0%, transparent 60%), #fcfafb;
+  background: radial-gradient(circle at 88% 8%, rgba(255, 71, 96, 0.07) 0%, transparent 60%), #edf2f7 !important;
+}
+
+.adm-mode-clinical .adm-topbar {
+  border-bottom: 3.5px solid #ff4760 !important;
 }
 
 .clinical-hero-banner {
   background: linear-gradient(135deg, #e11d48 0%, #be123c 45%, #881337 100%);
-  border-radius: 20px;
+  border-radius: var(--adm-radius-xl);
   padding: 32px 36px;
   color: #ffffff;
   position: relative;
@@ -1896,18 +2282,24 @@ body.admin-body {
 }
 
 .adm-pillar-val {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--adm-primary);
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #3730a3;
   margin-bottom: 6px;
   user-select: none;
   transition: all 0.2s;
   letter-spacing: -0.2px;
+  height: 16px;
+  line-height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
 }
 
 .adm-pillar-col.is-peak .adm-pillar-val {
-  color: #ff4760;
-  font-weight: 800;
+  color: #4f46e5;
+  font-weight: 900;
   font-size: 11.5px;
 }
 
@@ -1935,8 +2327,8 @@ body.admin-body {
 }
 
 .adm-pillar-fill.tone-pulse {
-  background: linear-gradient(180deg, #ff4760 0%, #e11d48 100%);
-  box-shadow: 0 2px 10px rgba(255, 71, 96, 0.35);
+  background: linear-gradient(180deg, #8b5cf6 0%, #4f46e5 100%);
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
 }
 
 .adm-pillar-fill.tone-red {
@@ -1956,23 +2348,29 @@ body.admin-body {
 }
 
 .adm-pillar-label {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--adm-slate);
+  font-size: 12px;
+  font-weight: 700;
+  color: #1e293b;
   margin-top: 8px;
   user-select: none;
+  height: 16px;
+  line-height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
 }
 
 .adm-pillar-col.is-peak .adm-pillar-label {
-  color: var(--adm-ink);
-  font-weight: 800;
+  color: #0b1727;
+  font-weight: 900;
 }
 
 /* Crisp Competency Panels */
 .adm-competency-grid {
   margin-top: 18px;
   padding-top: 16px;
-  border-top: 1px solid var(--adm-line-light);
+  border-top: 1px solid var(--adm-line);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -1994,7 +2392,7 @@ body.admin-body {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 12px;
+  font-size: 12.5px;
   font-weight: 700;
   color: var(--adm-ink);
 }
@@ -2002,26 +2400,28 @@ body.admin-body {
 .adm-comp-badge {
   font-size: 11px;
   font-weight: 800;
-  padding: 2px 8px;
+  padding: 2.5px 9px;
   border-radius: 9999px;
   letter-spacing: -0.2px;
 }
 
 .adm-comp-badge.tone-emerald {
-  background: rgba(16, 185, 129, 0.1);
-  color: #059669;
-  border: 1px solid rgba(16, 185, 129, 0.25);
+  background: #ecfdf5 !important;
+  color: #065f46 !important;
+  border: 1.5px solid #a7f3d0 !important;
+  box-shadow: 0 1px 3px rgba(16, 185, 129, 0.1) !important;
 }
 
 .adm-comp-badge.tone-violet {
-  background: rgba(88, 43, 232, 0.1);
-  color: #582be8;
-  border: 1px solid rgba(88, 43, 232, 0.25);
+  background: #f5f3ff !important;
+  color: #4338ca !important;
+  border: 1.5px solid #c4b5fd !important;
+  box-shadow: 0 1px 3px rgba(88, 43, 232, 0.1) !important;
 }
 
 .adm-comp-track {
-  height: 6px;
-  background: rgba(100, 116, 139, 0.1);
+  height: 8px;
+  background: #e2e8f0;
   border-radius: 9999px;
   overflow: hidden;
 }
@@ -2057,27 +2457,34 @@ body.admin-body {
 }
 
 .adm-pwa-badge.status-installed {
-  background: rgba(56, 189, 248, 0.12);
-  color: #0284c7;
-  border-color: rgba(56, 189, 248, 0.3);
+  background: #f0f9ff !important;
+  color: #075985 !important;
+  border: 1.5px solid #bae6fd !important;
+  font-weight: 800 !important;
+  box-shadow: 0 1px 3px rgba(2, 132, 199, 0.1);
 }
 
 .adm-pwa-badge.status-pending {
-  background: rgba(245, 158, 11, 0.12);
-  color: #d97706;
-  border-color: rgba(245, 158, 11, 0.3);
+  background: #fffbeb !important;
+  color: #92400e !important;
+  border: 1.5px solid #fde68a !important;
+  font-weight: 800 !important;
+  box-shadow: 0 1px 3px rgba(245, 158, 11, 0.1);
 }
 
 .adm-pwa-badge.status-delivered {
-  background: rgba(16, 185, 129, 0.12);
-  color: #059669;
-  border-color: rgba(16, 185, 129, 0.3);
+  background: #ecfdf5 !important;
+  color: #065f46 !important;
+  border: 1.5px solid #a7f3d0 !important;
+  font-weight: 800 !important;
+  box-shadow: 0 1px 3px rgba(16, 185, 129, 0.1);
 }
 
 .adm-pwa-badge.status-scheduled {
-  background: rgba(100, 116, 139, 0.1);
-  color: #64748b;
-  border-color: rgba(100, 116, 139, 0.2);
+  background: #f8fafc !important;
+  color: #334155 !important;
+  border: 1.5px solid #cbd5e1 !important;
+  font-weight: 800 !important;
 }
 
 .adm-qr-leaflet-box {
@@ -2107,13 +2514,64 @@ body.admin-body {
 /* ==========================================================================
    COLLAPSIBLE HEADER SEARCH BAR & FILTER DRAWER
    ========================================================================== */
+.adm-list-header-search {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-radius: var(--adm-radius-pill);
+  padding: 0 14px;
+  height: 40px;
+  min-width: 320px;
+  max-width: 440px;
+  width: 340px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
+}
+
+.adm-list-header-search:focus-within {
+  border-color: var(--adm-primary);
+  box-shadow: 0 0 0 3px rgba(88, 43, 232, 0.15);
+  background: #ffffff;
+  width: 380px;
+}
+
+.adm-list-header-search i {
+  color: #64748b;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.adm-list-header-search input,
+.adm-list-header-search input:focus,
+.adm-list-header-search input:focus-visible {
+  border: none !important;
+  background: transparent !important;
+  outline: none !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: var(--adm-ink) !important;
+  width: 100% !important;
+  height: 100% !important;
+  padding: 0 !important;
+  line-height: normal !important;
+  box-shadow: none !important;
+}
+
+.adm-list-header-search input::placeholder {
+  color: #94a3b8;
+}
+
 .adm-collapsible-search-wrap {
-  background: #f8fafc;
-  border: 1px solid var(--adm-line);
-  border-radius: 12px;
-  padding: 14px 16px;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-radius: var(--adm-radius-md);
+  padding: 16px 18px;
   margin-bottom: 16px;
   display: none;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
   animation: admFadeSlideUp 0.2s ease forwards;
 }
 
@@ -2123,7 +2581,7 @@ body.admin-body {
 
 .adm-collapsible-search-grid {
   display: grid;
-  grid-template-columns: 2fr 1.2fr 1.2fr auto;
+  grid-template-columns: 1fr 1fr auto;
   gap: 12px;
   align-items: center;
 }
@@ -2146,7 +2604,7 @@ body.admin-body {
   text-align: center;
   background: #ffffff;
   border: 1.5px dashed #cbd5e1;
-  border-radius: 14px;
+  border-radius: var(--adm-radius-lg);
   margin: 12px 0;
 }
 
@@ -2299,6 +2757,78 @@ body.admin-body {
   justify-content: center;
   font-size: 13px;
   flex-shrink: 0;
+}
+
+/* ==========================================================================
+   COURSE ONBOARDING WIZARD
+   ========================================================================== */
+.adm-wizard-steps {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--adm-line-light);
+  overflow-x: auto;
+}
+
+.adm-wizard-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: var(--adm-radius-pill);
+  background: #f1f5f9;
+  color: var(--adm-slate);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.adm-wizard-step.active {
+  background: var(--adm-primary);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(88, 43, 232, 0.25);
+}
+
+.adm-wizard-step.completed {
+  background: var(--adm-emerald-soft);
+  color: var(--adm-emerald);
+}
+
+.adm-wizard-step-num {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+}
+
+.adm-wizard-step.active .adm-wizard-step-num {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+.adm-wizard-panel {
+  display: none;
+  animation: admFadeSlideUp 0.18s ease;
+}
+
+.adm-wizard-panel.active {
+  display: block;
+}
+
+.adm-wizard-preview {
+  margin-top: 16px;
+  padding: 14px;
+  background: #f8fafc;
+  border: 1px dashed var(--adm-line);
+  border-radius: var(--adm-radius-md);
 }
 
 /* ==========================================================================

@@ -158,15 +158,42 @@ textarea:focus,
 .search input,
 label.search input,
 .search-expandable input,
+.search-pill-box input,
+.adm-search-wrap input,
+.adm-list-header-search input,
+.adm-dropdown-search-box input,
+.lms-search-input-wrap input,
+.verify-search-box input,
+.search-with-go-pill input,
+#admOmniSearch,
 .search input:focus,
 label.search input:focus,
 .search-expandable input:focus,
+.search-pill-box input:focus,
+.adm-search-wrap input:focus,
+.adm-list-header-search input:focus,
+.adm-dropdown-search-box input:focus,
+.lms-search-input-wrap input:focus,
+.verify-search-box input:focus,
+.search-with-go-pill input:focus,
+#admOmniSearch:focus,
 .search input:focus-visible,
 label.search input:focus-visible,
-.search-expandable input:focus-visible {
+.search-expandable input:focus-visible,
+.search-pill-box input:focus-visible,
+.adm-search-wrap input:focus-visible,
+.adm-list-header-search input:focus-visible,
+.adm-dropdown-search-box input:focus-visible,
+.lms-search-input-wrap input:focus-visible,
+.verify-search-box input:focus-visible,
+.search-with-go-pill input:focus-visible,
+#admOmniSearch:focus-visible {
   border: 0 !important;
-  outline: none !important;
+  border-color: transparent !important;
+  outline: 0 !important;
+  outline-color: transparent !important;
   box-shadow: none !important;
+  -webkit-box-shadow: none !important;
   background: transparent !important;
 }
 
