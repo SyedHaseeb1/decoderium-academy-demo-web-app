@@ -80,16 +80,65 @@ function newState() {
     if (between(r, 0, 3) > 0) seedCourse(progress[d.id], c2, between(r, 0, 4), r, frac);
   });
   var s = ACADEMY_DATA.settings;
-  return { v: 2, doctors: doctors, progress: progress, published: {}, settings: { quiz: JSON.parse(JSON.stringify(s.quiz)), certificate: JSON.parse(JSON.stringify(s.certificate)) }, activeQuiz: null };
+  return { v: 2, doctors: doctors, progress: progress, published: {}, settings: { quiz: JSON.parse(JSON.stringify(s.quiz)), certificate: JSON.parse(JSON.stringify(s.certificate)) }, activeQuiz: null, courses: COURSES, patients: seedInitialPatients() };
+}
+
+function seedInitialPatients() {
+  var indications = ['GERD & Chronic Dyspepsia', 'Acid Peptic Disease (APD)', 'Functional Dyspepsia', 'Erosive Esophagitis', 'Gastric Ulceration'];
+  var genders = ['Male', 'Female'];
+  var pts = [];
+  var docList = ACADEMY_DATA.doctors.doctors;
+  for (var i = 1; i <= 48; i++) {
+    var doc = docList[(i - 1) % docList.length];
+    var isPending = (i === 2 || i === 9 || i === 18);
+    var baseline = 7.0 + Math.round(((i * 7) % 25) / 10 * 10) / 10;
+    var day3 = isPending ? null : Math.max(2.0, Math.round((baseline - 3.5 - ((i % 5) / 5)) * 10) / 10);
+    var day7 = (isPending || i > 30) ? null : Math.max(1.0, Math.round((day3 - 2.0) * 10) / 10);
+    var pwaInstalled = (i % 4 !== 0); // ~75% installed
+    var pushEnabled = pwaInstalled && (i % 3 !== 0); // ~50% notifications on
+    var notifStatus = (day3 !== null || day7 !== null) ? (pushEnabled ? 'delivered' : 'undelivered') : 'scheduled';
+    pts.push({
+      id: 'pt' + (i < 10 ? '0' + i : i),
+      code: 'PT-' + (400 + i),
+      age: 28 + ((i * 13) % 45),
+      gender: genders[i % 2],
+      indication: indications[i % indications.length],
+      doctorId: doc.id,
+      doctorName: doc.name,
+      hospital: doc.hospital,
+      city: doc.city,
+      baselineScore: baseline,
+      day3Score: day3,
+      day7Score: day7,
+      followupStatus: isPending ? 'due_today' : (day7 !== null ? 'completed' : 'day3_done'),
+      adverseEvents: 'None',
+      enrolledOn: isoDaysAgo(14 - (i % 12)),
+      pwaInstalled: pwaInstalled,
+      pushEnabled: pushEnabled,
+      notificationStatus: notifStatus
+    });
+  }
+  return pts;
 }
 
 function applyPublished() { COURSES.forEach(function (c) { if (ST.published.hasOwnProperty(c.id)) c.published = ST.published[c.id]; }); }
-function saveState() { try { localStorage.setItem(STATE_KEY, JSON.stringify(ST)); } catch (e) { } }
+function saveState() {
+  if (ST) ST.courses = COURSES;
+  try { localStorage.setItem(STATE_KEY, JSON.stringify(ST)); } catch (e) { }
+}
 function loadState() {
   buildCourses();
   var saved = null;
   try { saved = JSON.parse(localStorage.getItem(STATE_KEY)); } catch (e) { }
   ST = saved && saved.v === 2 && saved.doctors && saved.doctors.length ? saved : newState();
+  if (ST.courses && ST.courses.length && ST.courses[0] && ST.courses[0].title && ST.courses[0].title.indexOf('Acid Peptic') > -1) {
+    COURSES = ST.courses;
+  } else {
+    ST.courses = COURSES;
+  }
+  if (!ST.patients || !ST.patients.length || !ST.patients[0].hasOwnProperty('pwaInstalled')) {
+    ST.patients = seedInitialPatients();
+  }
   applyPublished();
 }
 function resetDemo() { try { localStorage.removeItem(STATE_KEY); } catch (e) { } loadState(); saveState(); }
@@ -189,6 +238,190 @@ function addDoctor(d) {
   return '';
 }
 function setDoctorActive(id, active) { var d = ST.doctors.filter(function (x) { return x.id === id; })[0]; if (d) { d.active = active; saveState(); } }
+function updateDoctor(id, updates) {
+  var d = ST.doctors.filter(function (x) { return x.id === id; })[0];
+  if (!d) return 'Doctor not found.';
+  Object.keys(updates || {}).forEach(function (k) { d[k] = updates[k]; });
+  saveState();
+  return '';
+}
+function deleteDoctor(id) {
+  var idx = ST.doctors.findIndex ? ST.doctors.findIndex(function (x) { return x.id === id; }) : -1;
+  if (idx === -1) {
+    for (var i = 0; i < ST.doctors.length; i++) { if (ST.doctors[i].id === id) { idx = i; break; } }
+  }
+  if (idx > -1) {
+    ST.doctors.splice(idx, 1);
+    delete ST.progress[id];
+    saveState();
+    return true;
+  }
+  return false;
+}
+
+/* Course CRUD */
+function addCourse(c) {
+  if (!c.id) c.id = 'c' + (COURSES.length + 1) + Math.random().toString(36).slice(2, 5);
+  c.modules = c.modules || [];
+  c.published = !!c.published;
+  c.accent = c.accent || '#582be8';
+  COURSES.push(c);
+  ST.courses = COURSES;
+  saveState();
+  return c;
+}
+function updateCourse(id, updates) {
+  var c = course(id);
+  if (!c) return false;
+  Object.keys(updates || {}).forEach(function (k) { c[k] = updates[k]; });
+  ST.courses = COURSES;
+  saveState();
+  return true;
+}
+function deleteCourse(id) {
+  var idx = -1;
+  for (var i = 0; i < COURSES.length; i++) { if (COURSES[i].id === id) { idx = i; break; } }
+  if (idx > -1) {
+    COURSES.splice(idx, 1);
+    ST.courses = COURSES;
+    delete ST.published[id];
+    saveState();
+    return true;
+  }
+  return false;
+}
+
+/* Module CRUD */
+function addModule(courseId, m) {
+  var c = course(courseId);
+  if (!c) return null;
+  if (!m.id) m.id = c.id + '-m' + (c.modules.length + 1);
+  m.courseId = c.id;
+  m.number = c.modules.length + 1;
+  m.lectures = m.lectures || [];
+  m.pool = m.pool || [];
+  c.modules.push(m);
+  ST.courses = COURSES;
+  saveState();
+  return m;
+}
+function updateModule(courseId, moduleId, updates) {
+  var c = course(courseId); if (!c) return false;
+  var m = c.modules.filter(function (x) { return x.id === moduleId; })[0];
+  if (!m) return false;
+  Object.keys(updates || {}).forEach(function (k) { m[k] = updates[k]; });
+  ST.courses = COURSES;
+  saveState();
+  return true;
+}
+function deleteModule(courseId, moduleId) {
+  var c = course(courseId); if (!c) return false;
+  var idx = -1;
+  for (var i = 0; i < c.modules.length; i++) { if (c.modules[i].id === moduleId) { idx = i; break; } }
+  if (idx > -1) {
+    c.modules.splice(idx, 1);
+    c.modules.forEach(function (m, i) { m.number = i + 1; });
+    ST.courses = COURSES;
+    saveState();
+    return true;
+  }
+  return false;
+}
+
+/* Lecture CRUD */
+function addLecture(courseId, moduleId, l) {
+  var f = findModule(moduleId); if (!f) return null;
+  if (!l.id) l.id = moduleId + '-l' + (f.module.lectures.length + 1);
+  l.moduleId = moduleId;
+  l.seconds = Math.max(60, Math.floor(l.seconds || 300));
+  f.module.lectures.push(l);
+  ST.courses = COURSES;
+  saveState();
+  return l;
+}
+function updateLecture(courseId, moduleId, lectureId, updates) {
+  var f = findLecture(lectureId); if (!f) return false;
+  Object.keys(updates || {}).forEach(function (k) { f.lecture[k] = updates[k]; });
+  ST.courses = COURSES;
+  saveState();
+  return true;
+}
+function deleteLecture(courseId, moduleId, lectureId) {
+  var f = findModule(moduleId); if (!f) return false;
+  var idx = -1;
+  for (var i = 0; i < f.module.lectures.length; i++) { if (f.module.lectures[i].id === lectureId) { idx = i; break; } }
+  if (idx > -1) {
+    f.module.lectures.splice(idx, 1);
+    ST.courses = COURSES;
+    saveState();
+    return true;
+  }
+  return false;
+}
+
+/* Question Pool CRUD */
+function addQuestion(courseId, moduleId, q) {
+  var f = findModule(moduleId); if (!f) return null;
+  if (!q.id) q.id = moduleId + '-q' + (f.module.pool.length + 1);
+  q.options = q.options && q.options.length ? q.options : ['Correct Answer', 'Option B', 'Option C', 'Option D'];
+  q.explanation = q.explanation || 'Official curriculum clinical guidance rationale.';
+  f.module.pool.push(q);
+  ST.courses = COURSES;
+  saveState();
+  return q;
+}
+function updateQuestion(courseId, moduleId, questionId, updates) {
+  var f = findModule(moduleId); if (!f) return false;
+  var q = f.module.pool.filter(function (x) { return x.id === questionId; })[0];
+  if (!q) return false;
+  Object.keys(updates || {}).forEach(function (k) { q[k] = updates[k]; });
+  ST.courses = COURSES;
+  saveState();
+  return true;
+}
+function deleteQuestion(courseId, moduleId, questionId) {
+  var f = findModule(moduleId); if (!f) return false;
+  var idx = -1;
+  for (var i = 0; i < f.module.pool.length; i++) { if (f.module.pool[i].id === questionId) { idx = i; break; } }
+  if (idx > -1) {
+    f.module.pool.splice(idx, 1);
+    ST.courses = COURSES;
+    saveState();
+    return true;
+  }
+  return false;
+}
+
+/* Clinical Trial Patients CRUD */
+function patients() { return ST.patients || []; }
+function addPatient(p) {
+  if (!p.id) p.id = 'pt' + (ST.patients.length + 1) + Math.random().toString(36).slice(2, 5);
+  p.code = p.code || ('PT-' + (400 + ST.patients.length + 1));
+  p.enrolledOn = p.enrolledOn || isoDaysAgo(0);
+  p.followupStatus = p.followupStatus || 'due_today';
+  ST.patients.unshift(p);
+  saveState();
+  return p;
+}
+function updatePatient(id, updates) {
+  var p = (ST.patients || []).filter(function (x) { return x.id === id; })[0];
+  if (!p) return false;
+  Object.keys(updates || {}).forEach(function (k) { p[k] = updates[k]; });
+  saveState();
+  return true;
+}
+function deletePatient(id) {
+  var pts = ST.patients || [];
+  var idx = -1;
+  for (var i = 0; i < pts.length; i++) { if (pts[i].id === id) { idx = i; break; } }
+  if (idx > -1) {
+    pts.splice(idx, 1);
+    saveState();
+    return true;
+  }
+  return false;
+}
+
 function setPublished(id, flag) { var c = course(id); if (c) { c.published = flag; ST.published[id] = flag; saveState(); } }
 function saveSettings(quiz, cert) { ST.settings.quiz = quiz; ST.settings.certificate = cert; saveState(); }
 

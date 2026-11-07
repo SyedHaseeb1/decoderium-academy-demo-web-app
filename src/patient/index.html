@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Patient Intake & Follow-Up Portal · STAND-HF</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#582be8">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="Arm 2 Observational Gastro Study Patient Intake & Day-3 Telemetry Portal">
+  <link rel="icon" type="image/svg+xml" href="../assets/decoderium-mark.svg">
+  <link rel="stylesheet" href="../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../assets/base.css">
+  <style>
+    :root {
+      --pwa-primary: #582be8;
+      --pwa-accent: #ff4760;
+      --pwa-emerald: #10b981;
+      --pwa-ink: #0b1727;
+      --pwa-slate: #64748b;
+      --pwa-canvas: #f6f8fc;
+      --pwa-card: #ffffff;
+      --pwa-line: #e2e8f0;
+      --pwa-shadow: 0 12px 32px -8px rgba(88, 43, 232, 0.12), 0 4px 16px rgba(11, 23, 39, 0.04);
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--pwa-canvas);
+      color: var(--pwa-ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .pwa-header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--pwa-line);
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .pwa-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 15px;
+      color: var(--pwa-ink);
+    }
+    .pwa-badge-arm {
+      background: rgba(225, 29, 72, 0.10);
+      color: #e11d48;
+      border: 1px solid rgba(225, 29, 72, 0.25);
+      border-radius: 9999px;
+      padding: 3px 10px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: -0.2px;
+    }
+    .pwa-shell {
+      max-width: 500px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 16px 20px 40px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .pwa-card {
+      background: #ffffff;
+      border: 1.5px solid var(--pwa-line);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: var(--pwa-shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .pwa-btn-primary {
+      background: var(--pwa-primary);
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 20px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .pwa-btn-primary:hover { background: #481dd3; }
+    .pwa-btn-outline {
+      background: #ffffff;
+      color: var(--pwa-ink);
+      border: 1.5px solid var(--pwa-line);
+      border-radius: 12px;
+      padding: 11px 16px;
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .pwa-input {
+      width: 100%;
+      border: 1.5px solid var(--pwa-line);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 16px;
+      font-weight: 700;
+      box-sizing: border-box;
+      outline: none;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: border-color 0.2s;
+    }
+    .pwa-input:focus { border-color: var(--pwa-primary); }
+    .pwa-scale-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 12px 0;
+    }
+    .pwa-scale-slider {
+      width: 100%;
+      -webkit-appearance: none;
+      height: 8px;
+      border-radius: 4px;
+      background: linear-gradient(to right, #10b981 0%, #f59e0b 50%, #ef4444 100%);
+      outline: none;
+    }
+    .pwa-scale-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 3px solid var(--pwa-primary);
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .pwa-step-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--pwa-primary);
+      background: rgba(88,43,232,0.08);
+      border-radius: 9999px;
+      padding: 3px 10px;
+      width: fit-content;
+    }
+    .pwa-toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0b1727;
+      color: #ffffff;
+      padding: 10px 20px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 700;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+      z-index: 100;
+      display: none;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="pwa-header">
+    <div class="pwa-brand">
+      <img src="../assets/decoderium-mark.svg" alt="Decoderium" style="width:24px;height:24px;">
+      <span>STAND-HF · Patient Intake</span>
+    </div>
+    <span class="pwa-badge-arm">Arm 2 Observational Study</span>
+  </header>
+
+  <main class="pwa-shell" id="app">
+    <!-- View 1: Enter ID / Verify Patient -->
+    <div class="pwa-card" id="cardLookup">
+      <div style="text-align:center;">
+        <span class="pwa-step-chip">Step 1 of 3 · Patient Key</span>
+        <h2 style="font-size:20px;font-weight:800;margin:10px 0 6px;">Welcome to Gastro Study Portal</h2>
+        <p style="font-size:13px;color:var(--pwa-slate);line-height:1.5;margin:0;">
+          Please enter the Patient ID printed on your clinic leaflet to connect with your gastroenterologist.
+        </p>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <label style="font-size:12px;font-weight:700;color:var(--pwa-slate);">Patient ID (e.g. PT-401)</label>
+        <input type="text" class="pwa-input" id="inpPatientKey" placeholder="PT-401" value="" autofocus>
+      </div>
+
+      <button type="button" class="pwa-btn-primary" id="btnVerifyKey">
+        <i class="ms" style="font-size:18px;">qr_code_scanner</i> Verify Patient Code
+      </button>
+
+      <div style="text-align:center;font-size:11.5px;color:var(--pwa-slate);">
+        <i class="ms" style="font-size:13px;vertical-align:-2px;color:var(--pwa-emerald);">lock</i>
+        Encrypted clinical trial connection. No personal identity shared publicly.
+      </div>
+    </div>
+
+    <!-- View 2: Connected Patient Portal (Rendered dynamically) -->
+    <div id="patientDetailsArea" style="display:none;flex-direction:column;gap:16px;"></div>
+  </main>
+
+  <div class="pwa-toast" id="toast"></div>
+
+  <script src="../assets/boot.js"></script>
+  <script src="../assets/rules.js"></script>
+  <script src="../assets/access.js"></script>
+
+  <script>
+  (function () {
+    var $ = function (sel) { return document.querySelector(sel); };
+    var toastTimer = null;
+    function showToast(msg) {
+      var t = $('#toast');
+      if (!t) return;
+      t.textContent = msg;
+      t.style.display = 'block';
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function () { t.style.display = 'none'; }, 3200);
+    }
+
+    boot(function () {
+      loadState();
+
+      // Check URL Query Param for ID
+      var params = new URLSearchParams(location.search);
+      var queryId = (params.get('id') || '').trim();
+      if (queryId) {
+        $('#inpPatientKey').value = queryId;
+        verifyAndRender(queryId);
+      }
+
+      $('#btnVerifyKey').onclick = function () {
+        var key = ($('#inpPatientKey').value || '').trim();
+        if (!key) {
+          showToast('Please enter your Patient ID code.');
+          return;
+        }
+        verifyAndRender(key);
+      };
+    });
+
+    function verifyAndRender(code) {
+      code = code.toUpperCase();
+      var pts = patients();
+      var p = pts.filter(function (x) { return x.code.toUpperCase() === code; })[0];
+
+      if (!p) {
+        showToast('Patient code ' + code + ' not found in study registry.');
+        return;
+      }
+
+      $('#cardLookup').style.display = 'none';
+      var area = $('#patientDetailsArea');
+      area.style.display = 'flex';
+
+      renderPatientView(p);
+    }
+
+    function renderPatientView(p) {
+      var area = $('#patientDetailsArea');
+      var html =
+        '<!-- Patient Profile Banner -->' +
+        '<div class="pwa-card" style="border-left:4px solid var(--pwa-primary);">' +
+          '<div style="display:flex;justify-content:space-between;align-items:flex-start;">' +
+            '<div>' +
+              '<span class="pwa-step-chip">Patient Record Active</span>' +
+              '<h2 style="font-size:18px;font-weight:800;margin:6px 0 2px;">Patient ' + p.code + ' (' + p.gender + ', ' + p.age + 'y)</h2>' +
+              '<p style="font-size:12.5px;color:var(--pwa-slate);margin:0;">' + p.indication + '</p>' +
+            '</div>' +
+            '<span style="font-size:11px;font-weight:800;color:var(--pwa-emerald);background:rgba(16,185,129,0.1);padding:4px 8px;border-radius:6px;">Connected</span>' +
+          '</div>' +
+          '<div style="font-size:12px;color:var(--pwa-ink);background:var(--pwa-canvas);padding:10px 14px;border-radius:10px;line-height:1.4;">' +
+            '<strong>Attending Gastroenterologist:</strong> ' + p.doctorName + '<br>' +
+            '<strong>Facility:</strong> ' + p.hospital + ', ' + p.city + '<br>' +
+            '<strong>Baseline Discomfort Score:</strong> <strong style="color:#ef4444;">' + p.baselineScore + ' / 10</strong>' +
+          '</div>' +
+        '</div>' +
+
+        '<!-- PWA Install Card -->' +
+        '<div class="pwa-card">' +
+          '<div style="display:flex;align-items:center;gap:12px;">' +
+            '<div style="width:40px;height:40px;border-radius:12px;background:rgba(88,43,232,0.1);display:flex;align-items:center;justify-content:center;color:var(--pwa-primary);flex-shrink:0;">' +
+              '<i class="ms" style="font-size:22px;">smartphone</i>' +
+            '</div>' +
+            '<div>' +
+              '<h3 style="font-size:14.5px;font-weight:800;margin:0 0 2px;">Install Health App to Home Screen</h3>' +
+              '<p style="font-size:12px;color:var(--pwa-slate);margin:0;">Add to your phone for instant 1-tap symptom checkups without typing URL.</p>' +
+            '</div>' +
+          '</div>' +
+          '<button type="button" class="pwa-btn-primary" id="btnInstallPwa" style="' + (p.pwaInstalled ? 'background:#10b981;' : '') + '">' +
+            '<i class="ms" style="font-size:18px;">' + (p.pwaInstalled ? 'check_circle' : 'add_to_home_screen') + '</i> ' +
+            (p.pwaInstalled ? 'App Installed on Device' : 'Add App to Home Screen') +
+          '</button>' +
+        '</div>' +
+
+        '<!-- Push Notifications Permission Card -->' +
+        '<div class="pwa-card">' +
+          '<div style="display:flex;align-items:center;gap:12px;">' +
+            '<div style="width:40px;height:40px;border-radius:12px;background:rgba(56,189,248,0.12);display:flex;align-items:center;justify-content:center;color:#0284c7;flex-shrink:0;">' +
+              '<i class="ms" style="font-size:22px;">notifications_active</i>' +
+            '</div>' +
+            '<div>' +
+              '<h3 style="font-size:14.5px;font-weight:800;margin:0 0 2px;">Enable Follow-Up Visit Reminders</h3>' +
+              '<p style="font-size:12px;color:var(--pwa-slate);margin:0;">Receive free reminders for Day-3 and Day-7 follow-up checks at zero SMS fee.</p>' +
+            '</div>' +
+          '</div>' +
+          '<button type="button" class="pwa-btn-outline" id="btnEnablePush" style="' + (p.pushEnabled ? 'border-color:#10b981;color:#059669;' : '') + '">' +
+            '<i class="ms" style="font-size:18px;">' + (p.pushEnabled ? 'notifications_active' : 'notifications_none') + '</i> ' +
+            (p.pushEnabled ? 'Push Reminders Active (PKR 0)' : 'Allow Notification Alerts') +
+          '</button>' +
+        '</div>' +
+
+        '<!-- Symptom Severity Logger (Day 3 / Day 7) -->' +
+        '<div class="pwa-card">' +
+          '<span class="pwa-step-chip">Point-of-Care Outcome</span>' +
+          '<h3 style="font-size:15px;font-weight:800;margin:6px 0 2px;">How is your GI discomfort today?</h3>' +
+          '<p style="font-size:12px;color:var(--pwa-slate);margin:0;">Rate your heartburn, acid reflux, and stomach burning from 1 (No pain) to 10 (Severe pain).</p>' +
+          '<div class="pwa-scale-container">' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+              '<span style="font-size:12px;font-weight:700;color:#10b981;">1 (Mild / Relieved)</span>' +
+              '<strong id="lblScore" style="font-size:22px;color:var(--pwa-primary);">' + (p.day3Score || '4.0') + ' / 10</strong>' +
+              '<span style="font-size:12px;font-weight:700;color:#ef4444;">10 (Severe)</span>' +
+            '</div>' +
+            '<input type="range" class="pwa-scale-slider" id="inpScore" min="1" max="10" step="0.5" value="' + (p.day3Score || '4.0') + '">' +
+          '</div>' +
+          '<button type="button" class="pwa-btn-primary" id="btnSubmitScore" style="background:#059669;">' +
+            '<i class="ms" style="font-size:18px;">cloud_upload</i> Submit Score to ' + p.doctorName +
+          '</button>' +
+          (p.day3Score !== null ?
+            '<div style="font-size:11.5px;color:var(--pwa-emerald);text-align:center;font-weight:700;">' +
+              '✓ Last recorded Day-3 score: ' + p.day3Score + ' / 10 · Synced with doctor\'s radar.' +
+            '</div>' : '') +
+        '</div>';
+
+      area.innerHTML = html;
+
+      // Event: Install PWA
+      $('#btnInstallPwa').onclick = function () {
+        p.pwaInstalled = true;
+        saveState();
+        showToast('📱 App added to device! Doctor now sees you as PWA Installed.');
+        renderPatientView(p);
+      };
+
+      // Event: Enable Push
+      $('#btnEnablePush').onclick = function () {
+        if ('Notification' in window) {
+          Notification.requestPermission().then(function (perm) {
+            p.pushEnabled = (perm === 'granted');
+            p.notificationStatus = 'delivered';
+            saveState();
+            showToast('🔔 Visit reminder alerts enabled! Doctor notified.');
+            renderPatientView(p);
+          }).catch(function () {
+            p.pushEnabled = true;
+            p.notificationStatus = 'delivered';
+            saveState();
+            showToast('🔔 Visit reminder alerts enabled!');
+            renderPatientView(p);
+          });
+        } else {
+          p.pushEnabled = true;
+          p.notificationStatus = 'delivered';
+          saveState();
+          showToast('🔔 Visit reminder alerts enabled!');
+          renderPatientView(p);
+        }
+      };
+
+      // Event: Slider Score
+      $('#inpScore').oninput = function () {
+        $('#lblScore').textContent = this.value + ' / 10';
+      };
+
+      // Event: Submit Score
+      $('#btnSubmitScore').onclick = function () {
+        var val = parseFloat($('#inpScore').value);
+        p.day3Score = val;
+        p.followupStatus = 'day3_done';
+        p.notificationStatus = 'delivered';
+        saveState();
+        showToast('✓ Score ' + val + ' / 10 submitted! Dr. ' + p.doctorName + '\'s radar updated.');
+        renderPatientView(p);
+      };
+    }
+  })();
+  </script>
+</body>
+</html>

@@ -1,26 +1,206 @@
 {
-  "_note": "Sample questions only. In each entry the first option is the correct one; every attempt shuffles the options. A module's quiz draws from `poolSize` consecutive questions starting at its `questionOffset` (wrapping around).",
-  "poolSize": 14,
+  "_note": "Authentic clinical Gastroenterology question bank. In each entry the first option is the correct one; every attempt shuffles the options. A module's quiz draws from poolSize consecutive questions starting at its questionOffset (wrapping around).",
+  "poolSize": 10,
   "bank": [
-    { "text": "What left ventricular ejection fraction (LVEF) defines heart failure with reduced ejection fraction (HFrEF)?", "options": ["40% or less", "41% to 49%", "50% or more", "55% or less"], "explanation": "HFrEF is LVEF of 40% or less. 41–49% is mildly reduced and 50% or more is preserved." },
-    { "text": "Which set lists the four foundational drug groups in HFrEF?", "options": ["ARNI (or ACE-I/ARB), beta-blocker, MRA, SGLT2 inhibitor", "Loop diuretic, digoxin, nitrate, calcium-channel blocker", "ACE-I, statin, aspirin, loop diuretic", "ARB, thiazide, digoxin, ivabradine"], "explanation": "The four pillars are RAS inhibition with ARNI, an evidence-based beta-blocker, an MRA and an SGLT2 inhibitor." },
-    { "text": "Sacubitril/valsartan combines a neprilysin inhibitor with which drug?", "options": ["An angiotensin receptor blocker (valsartan)", "An ACE inhibitor", "A calcium-channel blocker", "A mineralocorticoid receptor antagonist"], "explanation": "Valsartan is the ARB component of the ARNI." },
-    { "text": "A patient taking an ACE inhibitor is to start sacubitril/valsartan. What is the minimum washout?", "options": ["36 hours", "No washout is needed", "7 days", "2 hours"], "explanation": "Stop the ACE inhibitor at least 36 hours before the first ARNI dose because of the risk of angioedema." },
-    { "text": "Which beta-blockers have proven mortality benefit in HFrEF?", "options": ["Bisoprolol, carvedilol and metoprolol succinate", "Atenolol, propranolol and labetalol", "Metoprolol tartrate and atenolol", "Any beta-blocker at any dose"], "explanation": "Only these three have outcome trials in HFrEF." },
-    { "text": "Which tests are essential after starting or increasing an MRA?", "options": ["Serum potassium and creatinine", "Liver enzymes only", "Fasting lipids", "Thyroid function"], "explanation": "MRAs can raise potassium and creatinine, so check both within the first weeks." },
-    { "text": "SGLT2 inhibitors such as dapagliflozin and empagliflozin reduce HF events in HFrEF:", "options": ["With or without diabetes", "Only in diabetic patients", "Only when eGFR is above 90", "Only in patients on insulin"], "explanation": "The benefit in HFrEF is independent of diabetes status." },
-    { "text": "A patient is breathless at rest. Which NYHA class is this?", "options": ["Class IV", "Class I", "Class II", "Class III"], "explanation": "NYHA IV means symptoms at rest or with any physical activity." },
-    { "text": "Which blood test is commonly used to help rule out heart failure when the value is low?", "options": ["BNP or NT-proBNP", "Troponin", "CRP", "HbA1c"], "explanation": "Natriuretic peptides rise with ventricular wall stress; a low value makes heart failure unlikely." },
-    { "text": "In HFrEF, loop diuretics are mainly used to:", "options": ["Relieve congestion and symptoms", "Prolong survival", "Slow the heart rate", "Prevent arrhythmias"], "explanation": "Diuretics control fluid but have not been shown to improve survival." },
-    { "text": "Ivabradine may be considered when a patient is in sinus rhythm with LVEF of 35% or less and:", "options": ["Resting heart rate is 70 bpm or more despite maximum tolerated beta-blocker", "Heart rate is under 50 bpm", "The patient has atrial fibrillation", "The patient cannot take any beta-blocker and is hypotensive"], "explanation": "Ivabradine lowers heart rate in sinus rhythm and is added on top of a maximally tolerated beta-blocker." },
-    { "text": "An ICD for primary prevention is generally considered when LVEF is:", "options": ["35% or less after at least 3 months of optimal medical therapy", "Below 55% on any echo", "40% on the first echo", "Reduced during an acute admission only"], "explanation": "Reassess LVEF on optimal therapy before deciding on a primary-prevention ICD." },
-    { "text": "Which patient is the best candidate for cardiac resynchronisation therapy (CRT)?", "options": ["LVEF 35% or less, sinus rhythm and left bundle branch block with QRS 150 ms or more", "LVEF 55% with narrow QRS", "Any patient with atrial fibrillation", "Narrow QRS and LVEF 45%"], "explanation": "CRT benefit is greatest with LBBB and a wide QRS." },
-    { "text": "Which of these should usually be avoided in a patient with HFrEF?", "options": ["Regular NSAIDs", "Spironolactone", "Dapagliflozin", "Bisoprolol"], "explanation": "NSAIDs cause sodium and water retention and can worsen heart failure and kidney function." },
-    { "text": "A patient on an MRA has a serum potassium of 5.8 mmol/L. What is the right next step?", "options": ["Reduce or stop the MRA and recheck potassium urgently", "Increase the dose", "Continue unchanged and repeat in 3 months", "Add a potassium supplement"], "explanation": "Potassium above 5.5 mmol/L needs the MRA dose reduced or stopped and close monitoring." },
-    { "text": "How should a beta-blocker be started in HFrEF?", "options": ["In a stable, euvolaemic patient at a low dose, then up-titrated", "At full dose during acute decompensation", "Only after all other drugs are at target", "Never in patients with diabetes"], "explanation": "Start low, go slow, and avoid starting during acute congestion." },
-    { "text": "The 1-minute sit-to-stand test (1MSTS) measures:", "options": ["Lower-limb functional capacity, as repetitions in 60 seconds", "Resting heart rate", "Left ventricular ejection fraction", "Blood pressure response to standing"], "explanation": "The number of chair stands in one minute is a simple measure of functional capacity." },
-    { "text": "In the ACC/AHA classification, Stage C heart failure means:", "options": ["Structural heart disease with current or previous symptoms", "Risk factors only, no structural disease", "Structural disease without symptoms", "Refractory symptoms needing specialised interventions"], "explanation": "Stage C patients have structural disease and have had symptoms of heart failure." },
-    { "text": "Hydralazine with isosorbide dinitrate is mainly used in HFrEF:", "options": ["When ACE-I, ARB and ARNI cannot be used or are not tolerated", "As first-line therapy for all patients", "To replace beta-blockers", "Only in right heart failure"], "explanation": "It is an alternative for patients who cannot take RAS inhibitors, for example because of renal failure or hyperkalaemia." },
-    { "text": "Which approach to GDMT is recommended?", "options": ["Start all four pillars early at low doses, then titrate", "Maximise one drug fully before starting the next", "Wait for symptoms to worsen before adding drugs", "Start only drugs that lower blood pressure"], "explanation": "Rapid sequencing of all four pillars improves outcomes more than slow, one-at-a-time optimisation." }
+    {
+      "text": "According to the Montreal Definition, which two symptoms are the cardinal, most reliable clinical indicators of Gastroesophageal Reflux Disease (GERD) in primary care?",
+      "options": [
+        "Heartburn (pyrosis) and acid regurgitation",
+        "Epigastric burning and early satiety",
+        "Postprandial bloating and belching",
+        "Nausea and retrosternal sharp pleuritic pain"
+      ],
+      "explanation": "The Montreal Definition establishes heartburn and acid regurgitation as the two cardinal symptoms of GERD with high specificity for esophageal acid exposure."
+    },
+    {
+      "text": "A 48-year-old patient undergoes endoscopy for severe reflux symptoms, revealing continuous mucosal breaks spanning across three mucosal folds, involving 65% of the esophageal circumference. What is the Los Angeles (LA) grade, and what is the recommended management?",
+      "options": [
+        "LA Grade C; 8-week intensive acid suppression followed by mandatory repeat endoscopy after healing to rule out underlying Barrett's esophagus or neoplasia",
+        "LA Grade B; on-demand low-dose PPI without repeat endoscopy",
+        "LA Grade D; immediate surgical fundoplication without trial of medical acid suppression",
+        "LA Grade A; lifestyle modification and antacids alone"
+      ],
+      "explanation": "LA Grade C is defined as mucosal breaks extending between 2 or more mucosal folds involving <75% of circumference. ACG/BSG guidelines mandate intensive acid suppression (e.g., standard/double dose PPI or P-CAB) and follow-up endoscopy after 8 weeks to assess healing and unmask underlying Barrett's esophagus."
+    },
+    {
+      "text": "How does the pharmacological mechanism of Potassium-Competitive Acid Blockers (P-CABs, e.g., Vonoprazan) differ fundamentally from traditional Proton Pump Inhibitors (PPIs)?",
+      "options": [
+        "P-CABs reversibly bind the K+ exchange channel of active and inactive H+/K+-ATPases without requiring acid activation, whereas PPIs are prodrugs requiring acid activation to covalently bind sulfhydryl groups",
+        "P-CABs irreversibly destroy the H+/K+-ATPase pump through irreversible sulfhydryl alkylation",
+        "P-CABs act primarily as selective histamine H2 receptor antagonists on gastric parietal cells",
+        "P-CABs inhibit gastric gastrin release from G-cells without affecting parietal cell proton pumps"
+      ],
+      "explanation": "Vonoprazan is an acid-stable, high-pKa weak base that concentrates in parietal cell canaliculi and reversibly and competitively blocks the K+ binding site on both active and resting H+/K+-ATPases, eliminating the requirement for enteric coating or meal-timed acid activation."
+    },
+    {
+      "text": "A clinician is counseling a patient who frequently skips breakfast and works alternating shift schedules regarding acid suppression. Why might a Potassium-Competitive Acid Blocker (P-CAB) offer superior clinical adherence over a conventional PPI?",
+      "options": [
+        "P-CABs provide rapid, meal-independent acid suppression and can be taken with or without food at any time of day",
+        "P-CABs must be taken strictly 60 minutes prior to the largest fatty meal of the day",
+        "P-CABs only work when taken with high-calcium meals",
+        "P-CABs require twice-daily dosing only during nocturnal sleep"
+      ],
+      "explanation": "Traditional delayed-release PPIs require administration 30–60 minutes before a meal to coincide with peak proton pump recruitment; P-CABs do not require pump activation and can be dosed completely independently of meal timing."
+    },
+    {
+      "text": "Which of the following clinical presentations in a patient presenting with dyspepsia constitutes an urgent 'alarm feature' warranting prompt referral for upper GI endoscopy?",
+      "options": [
+        "Progressive dysphagia, unintentional weight loss, and new-onset microcytic anemia",
+        "Epigastric fullness aggravated by eating fatty foods",
+        "Occasional mild regurgitation following carbonated drinks",
+        "Intermittent nocturnal hunger pains relieved by milk"
+      ],
+      "explanation": "Alarm features ('red flags') include dysphagia, unintentional weight loss, persistent vomiting, overt or occult GI bleeding/anemia, palpable abdominal mass, and new-onset dyspepsia in individuals over 55–60 years."
+    },
+    {
+      "text": "To avoid false-negative results, what is the mandatory minimum washout period for Proton Pump Inhibitors (PPIs) and antibiotics/bismuth prior to performing a 13C-Urea Breath Test or Stool Antigen Test?",
+      "options": [
+        "Discontinue PPIs for at least 2 weeks, and antibiotics/bismuth for at least 4 weeks",
+        "Discontinue PPIs for 24 hours and antibiotics for 48 hours",
+        "No medication discontinuation is necessary for stool antigen tests",
+        "Discontinue only H2-receptor antagonists for 6 weeks"
+      ],
+      "explanation": "PPIs suppress H. pylori bacterial load and urease activity, causing false-negatives unless paused for at least 14 days. Antibiotics and bismuth agents have direct antibacterial effects requiring at least a 4-week washout."
+    },
+    {
+      "text": "Why do current clinical guidelines (ACG and Maastricht VI) explicitly advise against using Helicobacter pylori serum IgG antibody testing to confirm active infection or eradication?",
+      "options": [
+        "Serum IgG antibodies persist in the bloodstream for months to years even after successful bacterial eradication, preventing distinction between active and past infection",
+        "Serology requires an invasive endoscopy and biopsy",
+        "Serological testing has near zero sensitivity for Helicobacter species",
+        "Serum antibodies only appear during the acute primary bacteremic phase"
+      ],
+      "explanation": "H. pylori serology cannot distinguish between an active ongoing infection and a cured past infection due to circulating IgG antibodies persisting indefinitely post-eradication."
+    },
+    {
+      "text": "In regions with known clarithromycin resistance exceeding 15% (including South Asia), which regimen is recommended as the first-line empirical eradication therapy for Helicobacter pylori?",
+      "options": [
+        "14-day Bismuth Quadruple Therapy (PPI/P-CAB + Bismuth subsalicylate/subcitrate + Metronidazole + Tetracycline)",
+        "7-day Triple Therapy (PPI + Clarithromycin + Amoxicillin)",
+        "5-day Dual Therapy (PPI + Ciprofloxacin)",
+        "10-day Monotherapy with high-dose Amoxicillin"
+      ],
+      "explanation": "Maastricht VI and ACG consensus guidelines designate 14-day Bismuth Quadruple Therapy as the preferred first-line empiric regimen in areas where clarithromycin resistance is high or unknown."
+    },
+    {
+      "text": "Following completion of a 14-day eradication regimen for H. pylori, when and how should cure of infection be routinely verified?",
+      "options": [
+        "At least 4 to 8 weeks post-treatment using a 13C-Urea Breath Test or Monoclonal Stool Antigen Test",
+        "Immediately on day 15 using serum anti-H. pylori IgG titers",
+        "At 6 months using routine abdominal ultrasonography",
+        "Testing is never indicated if the patient becomes asymptomatic"
+      ],
+      "explanation": "Confirmation of eradication is recommended in all treated patients, best performed >= 4 weeks post-antimicrobial completion (with PPI held for >= 2 weeks) via urea breath test or stool antigen."
+    },
+    {
+      "text": "Under the Rome IV criteria, a patient presenting with postprandial fullness and early satiation preventing completion of a normal-sized meal at least 3 days per week is classified into which functional dyspepsia subtype?",
+      "options": [
+        "Postprandial Distress Syndrome (PDS)",
+        "Epigastric Pain Syndrome (EPS)",
+        "Cyclic Vomiting Syndrome",
+        "Non-Erosive Reflux Disease (NERD)"
+      ],
+      "explanation": "Rome IV categorizes functional dyspepsia into Postprandial Distress Syndrome (PDS; meal-induced fullness and early satiation) and Epigastric Pain Syndrome (EPS; localized epigastric pain/burning not strictly meal-related)."
+    },
+    {
+      "text": "In a patient diagnosed with Rome IV Epigastric Pain Syndrome (EPS) who tests negative for H. pylori, what is the recommended first-line pharmacological intervention?",
+      "options": [
+        "Empirical trial of standard-dose acid suppression (PPI or P-CAB) for 4 to 8 weeks",
+        "High-dose prokinetic monotherapy (e.g. metoclopramide) for 6 months",
+        "Immediate opioid analgesics and antispasmodics",
+        "Long-term broad-spectrum antibiotics"
+      ],
+      "explanation": "In EPS, acid-related pathophysiology predominates, making an 4–8 week empirical course of acid suppression the first-line evidence-based pharmacotherapy. Prokinetics or neuromodulators are preferred in PDS."
+    },
+    {
+      "text": "During an endoscopy for long-standing heartburn, the endoscopist notes circumferential columnar-lined esophagus extending 2 cm above the gastroesophageal junction, with a maximum tongue extending 5 cm above the GEJ. How is this recorded using the Prague criteria?",
+      "options": [
+        "Prague C2M5",
+        "Prague C5M2",
+        "Prague Grade 3B",
+        "Prague LA-C"
+      ],
+      "explanation": "The validated Prague criteria quantify Barrett's esophagus extent by Circumferential length (C) and Maximum extent (M) in centimeters above the gastroesophageal junction. Here, C = 2 cm and M = 5 cm (C2M5)."
+    },
+    {
+      "text": "A 54-year-old male is confirmed to have non-dysplastic Barrett's esophagus with a segment length of 4 cm (C2M4). What is the standard endoscopic surveillance interval recommended by international guidelines?",
+      "options": [
+        "Surveillance endoscopy every 3 to 5 years",
+        "Surveillance endoscopy every 3 months",
+        "Annual computed tomography (CT) of the chest and abdomen",
+        "No further surveillance is required once diagnosed"
+      ],
+      "explanation": "For patients with non-dysplastic Barrett's esophagus with segments >= 3 cm, ACG/BSG guidelines recommend high-definition white light surveillance endoscopy with 4-quadrant Seattle protocol biopsies every 3 to 5 years."
+    },
+    {
+      "text": "A patient with Barrett's esophagus has biopsy-confirmed high-grade dysplasia reviewed by two expert GI pathologists. What is the preferred therapeutic management?",
+      "options": [
+        "Endoscopic mucosal resection (EMR) for any visible mucosal irregularity/nodule, followed by radiofrequency ablation (RFA) of the remaining Barrett's segment",
+        "Immediate radical total esophagectomy with colonic interposition",
+        "Watchful waiting with annual surveillance biopsies without treatment",
+        "Chemotherapy and external beam radiation therapy"
+      ],
+      "explanation": "Endoscopic eradication therapy (endoscopic resection of focal visible lesions followed by radiofrequency ablation of flat Barrett's mucosa) is the gold standard for high-grade dysplasia and intramucosal adenocarcinoma."
+    },
+    {
+      "text": "The Glasgow-Blatchford Score (GBS) is evaluated in patients presenting with acute upper GI bleeding. A GBS score of 0 to 1 indicates which clinical decision?",
+      "options": [
+        "Very low risk; patient can be safely considered for outpatient management without mandatory emergency inpatient endoscopy",
+        "Extreme rebleeding mortality; requires immediate emergency bedside laparotomy",
+        "Definitive variceal bleeding requiring prophylactic balloon tamponade",
+        "Necessity for immediate 4-unit packed red blood cell transfusion"
+      ],
+      "explanation": "A GBS score of 0 or 1 identifies very low-risk patients with acute upper GI bleeding who have <= 1% risk of requiring intervention and who can be safely managed in the outpatient setting."
+    },
+    {
+      "text": "During urgent endoscopy for melena, a gastric ulcer is visualized with an actively spurting arterial hemorrhage. What is the Forrest classification and the indicated endoscopic treatment?",
+      "options": [
+        "Forrest Ia; dual endoscopic therapy (e.g., dilute epinephrine injection combined with mechanical hemoclips or thermal coagulation)",
+        "Forrest IIc; no endoscopic intervention required, routine diet",
+        "Forrest III; biopsy only, no acid suppression",
+        "Forrest IIb; gentle water lavage only without clip placement"
+      ],
+      "explanation": "Forrest Ia represents active arterial spurting (rebleeding risk up to 90%). Clinical guidelines mandate dual-modality endoscopic hemostasis (epinephrine plus mechanical clips or thermal probe) plus continuous IV acid suppression."
+    },
+    {
+      "text": "A 68-year-old patient with osteoarthritis and a history of a bleeding duodenal ulcer 2 years ago requires ongoing anti-inflammatory therapy. What is the most effective gastroprotective strategy?",
+      "options": [
+        "Co-prescription of a COX-2 selective inhibitor (e.g., celecoxib) plus a standard-dose PPI or P-CAB",
+        "High-dose non-selective ibuprofen taken with milk",
+        "Switching to enteric-coated aspirin without acid suppression",
+        "Alternating naproxen with acetaminophen on alternate weeks"
+      ],
+      "explanation": "In high-risk patients (prior ulcer complication, elderly), the safest regimen is combining a COX-2 selective NSAID with a PPI or P-CAB, which dramatically reduces recurrent ulceration compared to either strategy alone."
+    },
+    {
+      "text": "Which cluster of clinical conditions is recognized as having established associations with gastroesophageal acid reflux disease (extra-esophageal GERD syndrome)?",
+      "options": [
+        "Reflux cough syndrome, reflux laryngitis, reflux-associated asthma, and dental enamel erosions",
+        "Sensorineural hearing loss, parotitis, and optic neuritis",
+        "Biliary dyskinesia, pancreatitis, and mesenteric ischemia",
+        "Achalasia, Zenker's diverticulum, and eosinophilic esophagitis"
+      ],
+      "explanation": "The Montreal consensus defines established extra-esophageal GERD associations as reflux cough syndrome, reflux laryngitis, reflux asthma syndrome, and dental erosions."
+    },
+    {
+      "text": "What defines 'Refractory GERD' in a patient presenting with persistent heartburn, and what is the initial investigation of choice?",
+      "options": [
+        "Failure of symptoms to respond satisfactorily to a minimum 8-week course of optimized twice-daily PPI therapy; investigated by verifying adherence and performing upper endoscopy/impedance-pH monitoring",
+        "Symptoms that fail to resolve after 3 days of once-daily antacids; investigated by barium swallow",
+        "Persistent retrosternal burning relieved within 15 minutes by milk; investigated by abdominal ultrasound",
+        "Heartburn occurring exclusively after heavy spicy dinners once a month"
+      ],
+      "explanation": "Refractory GERD is defined as incomplete symptom response after 8–12 weeks of double-dose PPI therapy taken correctly before meals. Initial workup requires verifying compliance and scheduling endoscopy followed by combined impedance-pH testing."
+    },
+    {
+      "text": "A clinician is reviewing long-term acid suppression therapy in an elderly patient. Which laboratory monitoring is clinically warranted in patients taking long-term high-dose PPIs, particularly when co-prescribed with loop or thiazide diuretics?",
+      "options": [
+        "Serum magnesium levels, due to the risk of PPI-induced hypomagnesemia and associated secondary hypocalcemia",
+        "Routine 24-hour urinary cortisol clearance",
+        "Weekly serum gastrin levels to titrate medication dose",
+        "Monthly arterial blood gas analysis to detect metabolic alkalosis"
+      ],
+      "explanation": "FDA and clinical drug safety alerts highlight that prolonged PPI therapy can impair intestinal magnesium absorption, particularly in patients taking concurrent diuretics, which warrants checking baseline and periodic serum magnesium."
+    }
   ]
 }

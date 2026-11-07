@@ -61,14 +61,17 @@
       '</div>' +
     '</div>' +
 
-    /* Video Player Viewport (100% width, mobile & tablet touch optimized) */
+    /* Video Player Viewport with Real HTML5 Video */
     '<div class="player-container" id="playerWrap">' +
-      '<div class="player-screen">' +
-        '<div style="position:absolute;top:14px;left:14px;background:rgba(17,24,39,0.75);backdrop-filter:blur(6px);color:#fff;padding:4px 12px;border-radius:var(--radius-pill);font-size:11.5px;font-weight:700;">' +
+      '<div class="player-screen" style="position:relative;background:#000;overflow:hidden;border-radius:inherit;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;">' +
+        '<video id="lectureVid" class="player-video" playsinline preload="metadata" style="width:100%;height:100%;object-fit:contain;background:#000;">' +
+          '<source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">' +
+        '</video>' +
+        '<div style="position:absolute;top:14px;left:14px;background:rgba(17,24,39,0.78);backdrop-filter:blur(6px);color:#fff;padding:4px 12px;border-radius:var(--radius-pill);font-size:11.5px;font-weight:700;z-index:2;pointer-events:none;">' +
           '<i class="ms" style="font-size:14px;vertical-align:-2px;">visibility</i> 842 Physicians Enrolled' +
         '</div>' +
-        '<span id="chip" style="position:absolute;top:14px;right:14px;background:rgba(17,24,39,0.75);backdrop-filter:blur(6px);color:#fff;padding:4px 12px;border-radius:var(--radius-pill);font-size:11px;font-weight:700;border:1px solid rgba(255,255,255,0.15);"></span>' +
-        '<button class="player-big-btn" id="big" type="button" aria-label="Play lecture"><i class="ms">play_arrow</i></button>' +
+        '<span id="chip" style="position:absolute;top:14px;right:14px;background:rgba(17,24,39,0.78);backdrop-filter:blur(6px);color:#fff;padding:4px 12px;border-radius:var(--radius-pill);font-size:11px;font-weight:700;border:1px solid rgba(255,255,255,0.18);z-index:2;pointer-events:none;"></span>' +
+        '<button class="player-big-btn" id="big" type="button" aria-label="Play lecture" style="z-index:3;"><i class="ms">play_arrow</i></button>' +
       '</div>' +
 
       '<div class="player-controls-bar">' +
@@ -77,7 +80,7 @@
         '<button class="player-ctl-btn" id="forward10" type="button" aria-label="Forward 10 seconds" title="Forward 10s"><i class="ms">forward_10</i></button>' +
         '<span class="player-timer-lbl" id="time">00:00 / 00:00</span>' +
         '<input class="player-timeline-bar" id="seek" type="range" min="0" max="' + dur + '" value="0" aria-label="Seek">' +
-        '<button class="btn" id="spd" type="button" style="border-radius:var(--radius-pill);padding:4px 12px;background:rgba(255,255,255,0.12);color:#fff;border:none;cursor:pointer;font-size:11.5px;font-weight:700;" title="Toggle Playback Speed">Demo 30×</button>' +
+        '<button class="btn" id="spd" type="button" style="border-radius:var(--radius-pill);padding:4px 12px;background:rgba(255,255,255,0.14);color:#fff;border:none;cursor:pointer;font-size:11.5px;font-weight:700;" title="Toggle Playback Speed">30× Sim</button>' +
         '<button class="player-ctl-btn" id="fsBtn" type="button" aria-label="Fullscreen" title="Toggle Fullscreen"><i class="ms">fullscreen</i></button>' +
       '</div>' +
       '<div class="player-watch-meter" id="watchMeter">' +
@@ -109,9 +112,9 @@
         '<div class="ui-card">' +
           '<h4 style="font-size:14px;font-weight:800;color:var(--navy);margin:0 0 10px;">Clinical Key Takeaways</h4>' +
           '<ul style="margin:0;padding-left:18px;font-size:13px;color:var(--slate-dark);display:flex;flex-direction:column;gap:8px;line-height:1.5;">' +
-            '<li>Stratify heart failure phenotype based on LVEF (HFrEF $\\le 40\\%$, HFmrEF $41-49\\%$, HFpEF $\\ge 50\\%$).</li>' +
-            '<li>Measure baseline NT-proBNP cutoffs and initiate quadruple guideline-directed medical therapy early.</li>' +
-            '<li>Titrate SGLT2 inhibitors and ARNI with close potassium and renal monitoring.</li>' +
+            '<li>Montreal criteria for GERD: heartburn and acid regurgitation; distinguish erosive vs non-erosive reflux disease (NERD).</li>' +
+            '<li>Optimize acid suppression with PPIs or P-CABs (Vonoprazan) for meal-independent, 24-hour pH control.</li>' +
+            '<li>Screen for alarm features (dysphagia, weight loss, anemia) and follow Los Angeles classification (LA Grade A-D).</li>' +
           '</ul>' +
         '</div>' +
       '</div>' +
@@ -190,12 +193,18 @@
     }
   }
 
-  function save() { lastSaved = max; recordWatch(l.id, max); }
-  function stop() { playing = false; clearInterval(timer); timer = null; }
+  var vid = $('#lectureVid');
+  var isSimulating = false;
 
-  function tick() {
-    pos = Math.min(dur, pos + 0.25 * speed);
-    max = Math.max(max, Math.floor(pos));
+  function save() { lastSaved = max; recordWatch(l.id, max); }
+  function stop() {
+    playing = false;
+    clearInterval(timer);
+    timer = null;
+    if (vid && !vid.paused) vid.pause();
+  }
+
+  function checkCompletion() {
     var just = !done && RULES.lectureComplete(max, dur, frac);
     if (just || Math.floor(pos) - lastSaved >= 5 || pos >= dur) save();
     if (just) {
@@ -205,24 +214,85 @@
         sideAlert('Lecture Threshold Passed (90%)', 'Module lecture marked complete. The timed evaluation is now unlocked!', 'success');
       }
     }
-    if (pos >= dur) stop();
-    paint();
+  }
+
+  function tick() {
+    if (isSimulating) {
+      pos = Math.min(dur, pos + 0.25 * 30);
+      max = Math.max(max, Math.floor(pos));
+      if (vid && !isNaN(vid.duration)) {
+        try { vid.currentTime = Math.min(vid.duration, pos); } catch (e) {}
+      }
+      checkCompletion();
+      if (pos >= dur) stop();
+      paint();
+    }
   }
 
   function toggle() {
-    if (playing) { stop(); save(); paint(); return; }
+    if (playing) {
+      stop();
+      save();
+      paint();
+      return;
+    }
     if (pos >= dur) pos = 0;
-    playing = true; timer = setInterval(tick, 250); paint();
+    playing = true;
+    if (isSimulating) {
+      timer = setInterval(tick, 250);
+    } else if (vid) {
+      vid.currentTime = Math.min(vid.duration || dur, pos);
+      vid.play().catch(function () {
+        // Fallback to internal ticker if video autoplay blocked
+        isSimulating = true;
+        timer = setInterval(tick, 250);
+      });
+    }
+    paint();
+  }
+
+  if (vid) {
+    vid.addEventListener('timeupdate', function () {
+      if (!isSimulating && playing) {
+        pos = Math.min(dur, vid.currentTime);
+        max = Math.max(max, Math.floor(pos));
+        checkCompletion();
+        paint();
+      }
+    });
+
+    vid.addEventListener('ended', function () {
+      stop();
+      save();
+      paint();
+    });
+
+    // Guard native seek bar scrubbing
+    vid.addEventListener('seeking', function () {
+      if (!done && vid.currentTime > max + 2) {
+        vid.currentTime = max;
+        pos = max;
+        snack('Forward scrubbing is locked. Complete sequentially to reach 90% threshold.');
+      }
+    });
   }
 
   $('#big').onclick = toggle;
   $('#tog').onclick = toggle;
 
   var r10 = $('#rewind10');
-  if (r10) r10.onclick = function () { pos = Math.max(0, pos - 10); paint(); };
+  if (r10) r10.onclick = function () {
+    pos = Math.max(0, pos - 10);
+    if (vid) vid.currentTime = pos;
+    paint();
+  };
 
   var f10 = $('#forward10');
-  if (f10) f10.onclick = function () { pos = Math.min(max, pos + 10); paint(); };
+  if (f10) f10.onclick = function () {
+    pos = Math.min(max, pos + 10);
+    if (vid) vid.currentTime = pos;
+    paint();
+  };
 
   var fs = $('#fsBtn'), pw = $('#playerWrap');
   if (fs && pw) {
@@ -236,8 +306,38 @@
     };
   }
 
-  $('#spd').onclick = function () { speed = speed > 1 ? 1 : ACADEMY_DATA.settings.demoPlaybackSpeed; paint(); };
-  $('#seek').oninput = function () { pos = Math.min(parseInt(this.value, 10) || 0, max); paint(); };
+  $('#spd').onclick = function () {
+    isSimulating = !isSimulating;
+    clearInterval(timer);
+    timer = null;
+    if (playing) {
+      if (isSimulating) {
+        if (vid && !vid.paused) vid.pause();
+        timer = setInterval(tick, 250);
+      } else {
+        if (vid) {
+          vid.currentTime = pos;
+          vid.play().catch(function () {});
+        }
+      }
+    }
+    this.textContent = isSimulating ? '30× Active' : '30× Sim';
+    this.style.background = isSimulating ? 'var(--primary)' : 'rgba(255,255,255,0.14)';
+    paint();
+  };
+
+  $('#seek').oninput = function () {
+    var target = parseInt(this.value, 10) || 0;
+    if (target > max && !done) {
+      this.value = Math.floor(pos);
+      snack('Forward scrubbing is locked until 90% completion.');
+      return;
+    }
+    pos = target;
+    if (vid && !isNaN(vid.duration)) vid.currentTime = target;
+    paint();
+  };
+
   window.addEventListener('pagehide', function () { if (max > lastSaved) save(); });
 
   /* Mobile/Tablet tab switcher */

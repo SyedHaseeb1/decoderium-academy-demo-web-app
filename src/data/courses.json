@@ -1,60 +1,271 @@
 {
   "courses": [
     {
-      "id": "c1", "title": "HFrEF Essentials", "subtitle": "From diagnosis to optimised therapy",
-      "description": "A practical course on recognising heart failure with reduced ejection fraction and starting, titrating and monitoring guideline-directed medical therapy.",
-      "category": "Heart failure", "level": "Foundation", "published": true,
+      "id": "c1",
+      "title": "Acid Peptic Disease & GERD",
+      "subtitle": "From mucosal defense to modern acid suppression",
+      "description": "Comprehensive evidence-based CME course on gastroesophageal reflux disease, erosive esophagitis, refractory heartburn, and modern acid suppression protocols including Potassium-Competitive Acid Blockers (P-CABs).",
+      "category": "Gastroenterology",
+      "level": "Foundation",
+      "published": true,
       "modules": [
-        { "id": "c1-m1", "number": 1, "title": "Understanding HFrEF", "summary": "Definitions, mechanisms and how the diagnosis is made.", "questionOffset": 0,
+        {
+          "id": "c1-m1",
+          "number": 1,
+          "title": "Understanding APD & GERD",
+          "summary": "Pathophysiology, Montreal definitions, and the clinical spectrum of erosive vs non-erosive reflux disease.",
+          "questionOffset": 0,
           "lectures": [
-            { "id": "c1-m1-l1", "title": "What is HFrEF? Definitions and burden", "presenter": "Prof. Sara Anwar", "seconds": 540, "summary": "Classification by ejection fraction and why HFrEF carries the clearest treatment benefit." },
-            { "id": "c1-m1-l2", "title": "Pathophysiology in ten minutes", "presenter": "Prof. Sara Anwar", "seconds": 600, "summary": "Neurohormonal activation, remodelling and the targets of modern therapy." },
-            { "id": "c1-m1-l3", "title": "Diagnosis: ECG, echo and natriuretic peptides", "presenter": "Dr. Tahir Mahmood", "seconds": 480, "summary": "A simple work-up that works in an outpatient clinic." } ] },
-        { "id": "c1-m2", "number": 2, "title": "The four pillars of GDMT", "summary": "What each drug class does and the evidence behind it.", "questionOffset": 5,
+            {
+              "id": "c1-m1-l1",
+              "title": "What is GERD? Classification & Regional Burden",
+              "presenter": "Prof. Sara Anwar",
+              "seconds": 540,
+              "summary": "Montreal consensus definitions, physiological vs pathological acid reflux, and epidemiological disease burden in South Asia."
+            },
+            {
+              "id": "c1-m1-l2",
+              "title": "Pathophysiology of Esophageal Mucosal Injury",
+              "presenter": "Prof. Sara Anwar",
+              "seconds": 600,
+              "summary": "Transient lower esophageal sphincter relaxations (TLESRs), epithelial junction breakdown, and acid-pepsin synergy."
+            },
+            {
+              "id": "c1-m1-l3",
+              "title": "Endoscopic Evaluation: The Los Angeles (LA) Classification",
+              "presenter": "Dr. Tahir Mahmood",
+              "seconds": 480,
+              "summary": "Grading mucosal breaks from LA Grade A to D and identifying patients needing long-term maintenance therapy."
+            }
+          ]
+        },
+        {
+          "id": "c1-m2",
+          "number": 2,
+          "title": "Acid Suppression Pharmacology & P-CABs",
+          "summary": "Mechanism of PPIs, limitations in nighttime control, and the clinical role of Potassium-Competitive Acid Blockers.",
+          "questionOffset": 5,
           "lectures": [
-            { "id": "c1-m2-l1", "title": "ARNI and the move beyond ACE-I and ARB", "presenter": "Dr. Tahir Mahmood", "seconds": 660, "summary": "Sacubitril/valsartan: when to start, how to switch, what to watch." },
-            { "id": "c1-m2-l2", "title": "Evidence-based beta-blockers", "presenter": "Dr. Tahir Mahmood", "seconds": 570, "summary": "Bisoprolol, carvedilol and metoprolol succinate: starting low and going slow." },
-            { "id": "c1-m2-l3", "title": "MRAs and SGLT2 inhibitors", "presenter": "Prof. Sara Anwar", "seconds": 630, "summary": "Two pillars that are often missed in everyday practice." } ] },
-        { "id": "c1-m3", "number": 3, "title": "Titration and monitoring", "summary": "Getting patients to target doses safely.", "questionOffset": 10,
+            {
+              "id": "c1-m2-l1",
+              "title": "Proton Pump Inhibitors: Pharmacokinetics & Clinical Gaps",
+              "presenter": "Dr. Tahir Mahmood",
+              "seconds": 660,
+              "summary": "CYP2C19 genotypes, delayed onset, meal-timing compliance, and nocturnal acid breakthrough."
+            },
+            {
+              "id": "c1-m2-l2",
+              "title": "Vonoprazan & The P-CAB Paradigm Shift",
+              "presenter": "Dr. Tahir Mahmood",
+              "seconds": 570,
+              "summary": "Reversible competitive K+ antagonism, meal independence, prolonged 24-hour pH > 4 maintenance, and clinical efficacy in severe erosive esophagitis."
+            },
+            {
+              "id": "c1-m2-l3",
+              "title": "Optimizing Acid Suppression in Severe Erosive Esophagitis",
+              "presenter": "Prof. Sara Anwar",
+              "seconds": 630,
+              "summary": "Dosing strategies, switching protocols, and managing severe Grade C/D erosive disease."
+            }
+          ]
+        },
+        {
+          "id": "c1-m3",
+          "number": 3,
+          "title": "Refractory Symptoms & Extra-Esophageal GERD",
+          "summary": "Diagnostic workup for persistent heartburn and atypical ENT/pulmonary presentations.",
+          "questionOffset": 10,
           "lectures": [
-            { "id": "c1-m3-l1", "title": "Starting and up-titrating safely", "presenter": "Dr. Nadia Rehman", "seconds": 600, "summary": "A practical schedule for follow-up visits and dose steps." },
-            { "id": "c1-m3-l2", "title": "Managing hypotension, hyperkalaemia and renal dysfunction", "presenter": "Dr. Nadia Rehman", "seconds": 690, "summary": "What to do before you stop a pillar, and which reasons are valid." } ] },
-        { "id": "c1-m4", "number": 4, "title": "Devices, follow-up and function", "summary": "Who needs a device, and how to track progress.", "questionOffset": 14,
+            {
+              "id": "c1-m3-l1",
+              "title": "Stepwise Workup of Refractory GERD",
+              "presenter": "Dr. Nadia Rehman",
+              "seconds": 600,
+              "summary": "Stepwise clinical workup: verifying adherence, 24-hour impedance-pH monitoring, and excluding motility disorders."
+            },
+            {
+              "id": "c1-m3-l2",
+              "title": "Extra-Esophageal Syndromes: Cough, Laryngitis & Asthma",
+              "presenter": "Dr. Nadia Rehman",
+              "seconds": 690,
+              "summary": "Recognising micro-aspiration and vagal reflexes, multidisciplinary ENT co-management, and realistic expectations of acid suppression."
+            }
+          ]
+        },
+        {
+          "id": "c1-m4",
+          "number": 4,
+          "title": "Complications, Barrett's Esophagus & Follow-Up",
+          "summary": "Peptic strictures, screening protocols for Barrett's esophagus, and long-term surveillance.",
+          "questionOffset": 15,
           "lectures": [
-            { "id": "c1-m4-l1", "title": "ICD and CRT: who qualifies?", "presenter": "Dr. Tahir Mahmood", "seconds": 510, "summary": "Selection criteria and referral pathways." },
-            { "id": "c1-m4-l2", "title": "Functional assessment: the 1-minute sit-to-stand test", "presenter": "Dr. Nadia Rehman", "seconds": 420, "summary": "A quick bedside measure of lower-limb function." },
-            { "id": "c1-m4-l3", "title": "Patient education and adherence", "presenter": "Prof. Sara Anwar", "seconds": 480, "summary": "Self-care, diet, medicines and when to call the clinic." } ] }
+            {
+              "id": "c1-m4-l1",
+              "title": "Barrett's Esophagus: Prague Criteria & Biopsy Rules",
+              "presenter": "Dr. Tahir Mahmood",
+              "seconds": 510,
+              "summary": "Identifying intestinal metaplasia, calculating circumferential and maximal extent (Prague C & M), and surveillance intervals."
+            },
+            {
+              "id": "c1-m4-l2",
+              "title": "Peptic Stricture Prevention & Endoscopic Dilation",
+              "presenter": "Dr. Nadia Rehman",
+              "seconds": 420,
+              "summary": "Endoscopic balloon dilation, aggressive post-dilation acid inhibition, and dysphagia monitoring."
+            },
+            {
+              "id": "c1-m4-l3",
+              "title": "Patient Education, Lifestyle & De-escalation",
+              "presenter": "Prof. Sara Anwar",
+              "seconds": 480,
+              "summary": "Weight reduction, head-of-bed elevation, tapering strategies, and reassurance for benign dyspepsia."
+            }
+          ]
+        }
       ]
     },
     {
-      "id": "c2", "title": "Heart Failure in Primary Care", "subtitle": "Recognise early, refer well, follow up closely",
-      "description": "For general practitioners and physicians who see heart failure patients every week and need clear rules for referral and follow-up.",
-      "category": "Primary care", "level": "Foundation", "published": true,
+      "id": "c2",
+      "title": "Primary Care Dyspepsia & H. pylori",
+      "subtitle": "Recognise early, test accurately, eradicate cleanly",
+      "description": "Essential primary care pathway for managing uninvestigated dyspepsia, Rome IV criteria for functional dyspepsia, non-invasive H. pylori diagnosis, and first-line eradication.",
+      "category": "Primary care",
+      "level": "Foundation",
+      "published": true,
       "modules": [
-        { "id": "c2-m1", "number": 1, "title": "Recognising heart failure", "summary": "Symptoms, signs and first tests.", "questionOffset": 3,
+        {
+          "id": "c2-m1",
+          "number": 1,
+          "title": "Dyspepsia Triage & Alarm Features",
+          "summary": "Differentiating organic disease from functional dyspepsia and identifying urgent referral red flags.",
+          "questionOffset": 3,
           "lectures": [
-            { "id": "c2-m1-l1", "title": "Breathlessness: is it the heart?", "presenter": "Dr. Nadia Rehman", "seconds": 450, "summary": "Clinical clues and when to order an echo." },
-            { "id": "c2-m1-l2", "title": "Red flags and urgent referral", "presenter": "Dr. Nadia Rehman", "seconds": 390, "summary": "Who needs same-day assessment." } ] },
-        { "id": "c2-m2", "number": 2, "title": "Living with other conditions", "summary": "Diabetes, kidney disease and hypertension alongside HF.", "questionOffset": 8,
+            {
+              "id": "c2-m1-l1",
+              "title": "Uninvestigated Dyspepsia in Primary Care",
+              "presenter": "Dr. Nadia Rehman",
+              "seconds": 450,
+              "summary": "Clinical presentation, epigastric pain vs postprandial fullness, and the test-and-treat strategy."
+            },
+            {
+              "id": "c2-m1-l2",
+              "title": "Red Flags & Urgent Endoscopy Referral",
+              "presenter": "Dr. Nadia Rehman",
+              "seconds": 390,
+              "summary": "Weight loss, anemia, persistent vomiting, dysphagia, and age cutoffs for fast-track endoscopy."
+            }
+          ]
+        },
+        {
+          "id": "c2-m2",
+          "number": 2,
+          "title": "H. pylori Testing & Quadruple Eradication",
+          "summary": "Selecting reliable tests and overcoming high regional clarithromycin resistance.",
+          "questionOffset": 8,
           "lectures": [
-            { "id": "c2-m2-l1", "title": "Heart failure and diabetes", "presenter": "Prof. Sara Anwar", "seconds": 540, "summary": "Why SGLT2 inhibitors serve both conditions." },
-            { "id": "c2-m2-l2", "title": "Heart failure and kidney disease", "presenter": "Dr. Tahir Mahmood", "seconds": 570, "summary": "Safe prescribing when eGFR is reduced." },
-            { "id": "c2-m2-l3", "title": "Blood pressure and heart rate targets", "presenter": "Dr. Tahir Mahmood", "seconds": 420, "summary": "Practical numbers for titration visits." } ] },
-        { "id": "c2-m3", "number": 3, "title": "Community follow-up", "summary": "Keeping patients on treatment.", "questionOffset": 12,
+            {
+              "id": "c2-m2-l1",
+              "title": "Diagnostic Modalities: Urea Breath Test & Stool Antigen",
+              "presenter": "Prof. Sara Anwar",
+              "seconds": 540,
+              "summary": "Why serology fails, the 2-week PPI and 4-week antibiotic washout rules, and test accuracy."
+            },
+            {
+              "id": "c2-m2-l2",
+              "title": "First-Line Eradication: Bismuth Quadruple Regimens",
+              "presenter": "Dr. Tahir Mahmood",
+              "seconds": 570,
+              "summary": "Formulating 14-day Bismuth Quadruple Therapy (PPI, bismuth, tetracycline, metronidazole) to counteract macrolide resistance."
+            },
+            {
+              "id": "c2-m2-l3",
+              "title": "Confirming Cure & Salvage Therapies",
+              "presenter": "Dr. Tahir Mahmood",
+              "seconds": 420,
+              "summary": "Post-treatment verification timing (minimum 4 weeks) and second-line levofloxacin/P-CAB triple regimens."
+            }
+          ]
+        },
+        {
+          "id": "c2-m3",
+          "number": 3,
+          "title": "Functional Dyspepsia & Long-Term Care",
+          "summary": "Managing Postprandial Distress Syndrome (PDS) and Epigastric Pain Syndrome (EPS).",
+          "questionOffset": 12,
           "lectures": [
-            { "id": "c2-m3-l1", "title": "A follow-up visit checklist", "presenter": "Dr. Nadia Rehman", "seconds": 480, "summary": "What to record at every visit." },
-            { "id": "c2-m3-l2", "title": "Supporting adherence and self-care", "presenter": "Prof. Sara Anwar", "seconds": 450, "summary": "Affordability, family involvement and simple tools." } ] }
+            {
+              "id": "c2-m3-l1",
+              "title": "Rome IV Functional Dyspepsia Subtypes",
+              "presenter": "Dr. Nadia Rehman",
+              "seconds": 480,
+              "summary": "Tailoring therapy: acid suppression for EPS vs prokinetics and gut-brain neuromodulators for PDS."
+            },
+            {
+              "id": "c2-m3-l2",
+              "title": "NSAID Co-Prescribing & Gastric Protection",
+              "presenter": "Prof. Sara Anwar",
+              "seconds": 450,
+              "summary": "Assessing ulcer bleeding risk, prophylactic PPI/P-CAB co-prescription, and cardiovascular vs GI safety trade-offs."
+            }
+          ]
+        }
       ]
     },
     {
-      "id": "c3", "title": "Advanced Heart Failure and Devices", "subtitle": "Coming soon",
-      "description": "Advanced therapies, device selection and palliative care. Content is being recorded.",
-      "category": "Heart failure", "level": "Advanced", "published": false,
+      "id": "c3",
+      "title": "Advanced Endoscopic Interventions",
+      "subtitle": "Acute Hemostasis, EMR, and Enteral Stenting",
+      "description": "Specialist-level masterclass in advanced interventional endoscopy: acute upper GI bleeding control, mucosal resection (EMR), dysplastic Barrett's ablation, and stricture management.",
+      "category": "Gastroenterology",
+      "level": "Advanced",
+      "published": true,
       "modules": [
-        { "id": "c3-m1", "number": 1, "title": "Advanced therapies", "summary": "Selection and referral.", "questionOffset": 2,
+        {
+          "id": "c3-m1",
+          "number": 1,
+          "title": "Non-Variceal Upper GI Bleeding Hemostasis",
+          "summary": "Risk scores, Forrest classification, and multi-modal endoscopic hemostatic techniques.",
+          "questionOffset": 2,
           "lectures": [
-            { "id": "c3-m1-l1", "title": "Recognising advanced HF", "presenter": "Prof. Sara Anwar", "seconds": 500, "summary": "Triggers for referral to a specialist centre." },
-            { "id": "c3-m1-l2", "title": "Devices and mechanical support", "presenter": "Dr. Tahir Mahmood", "seconds": 560, "summary": "An overview for referring clinicians." } ] }
+            {
+              "id": "c3-m1-l1",
+              "title": "Emergency Resuscitation & Risk Stratification",
+              "presenter": "Prof. Sara Anwar",
+              "seconds": 500,
+              "summary": "Glasgow-Blatchford Score, pre-endoscopy high-dose IV acid suppression, and timing of urgent endoscopy."
+            },
+            {
+              "id": "c3-m1-l2",
+              "title": "Endoscopic Hemostatic Modalities",
+              "presenter": "Dr. Tahir Mahmood",
+              "seconds": 560,
+              "summary": "Dual therapy: adrenaline injection plus mechanical hemoclips or thermal coagulation, and topical hemostatic powders."
+            }
+          ]
+        },
+        {
+          "id": "c3-m2",
+          "number": 2,
+          "title": "Endoscopic Mucosal Resection & Barrett's Ablation",
+          "summary": "Resection of superficial mucosal lesions and radiofrequency ablation for dysplastic Barrett's esophagus.",
+          "questionOffset": 7,
+          "lectures": [
+            {
+              "id": "c3-m2-l1",
+              "title": "Upper GI EMR Principles & Technique",
+              "presenter": "Dr. Tahir Mahmood",
+              "seconds": 540,
+              "summary": "Submucosal injection, snare resection, margins assessment, and managing intraprocedural bleeding."
+            },
+            {
+              "id": "c3-m2-l2",
+              "title": "Radiofrequency Ablation (RFA) in Barrett's Neoplasia",
+              "presenter": "Prof. Sara Anwar",
+              "seconds": 510,
+              "summary": "Indications for RFA in confirmed low-grade and high-grade dysplasia, post-ablation acid suppression, and surveillance protocols."
+            }
+          ]
+        }
       ]
     }
   ]

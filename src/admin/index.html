@@ -2,226 +2,3528 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Decoderium Academy · Administration Portal</title>
+  <title>Decoderium Academy · Executive Administration</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#ff4760">
+  <meta name="theme-color" content="#582be8">
   <link rel="icon" type="image/svg+xml" href="../assets/decoderium-mark.svg">
   <link rel="stylesheet" href="../assets/fonts/fonts.css">
   <link rel="stylesheet" href="../assets/base.css">
   <link rel="stylesheet" href="../assets/academy.css">
+  <link rel="stylesheet" href="admin.css">
 </head>
-<body data-page="admin">
-<div class="app" id="app">
-  <aside class="side" id="side" aria-label="Main navigation"></aside>
-  <div class="main">
-    <div id="app-header"></div>
-    <div id="view"></div>
+<body data-page="admin" class="admin-body">
+
+<!-- Ambient Background Glow Orbs from Login Palette -->
+<div class="adm-ambient-glow adm-glow-tl" aria-hidden="true"></div>
+<div class="adm-ambient-glow adm-glow-br" aria-hidden="true"></div>
+
+<!-- 3 Main Containers: Shell Host -->
+<div class="adm-app-shell" id="app">
+
+  <!-- CONTAINER 2: SIDEBAR (Collapsible with Floating Arrow & Sliding Indicator) -->
+  <aside class="adm-sidebar" id="admSide" aria-label="Executive Administration Navigation">
+    
+    <!-- Floating Arrow Collapse Toggle Button -->
+    <button type="button" class="adm-side-toggle-btn" id="admSideToggle" aria-label="Toggle navigation drawer" title="Collapse sidebar">
+      <i class="ms" id="admSideArrowIcon">chevron_left</i>
+    </button>
+
+    <div>
+      <!-- Brand Header -->
+      <div class="adm-brand-wrap">
+        <div class="adm-brand-logo">
+          <img src="../assets/decoderium-mark.svg" alt="Decoderium Mark">
+        </div>
+        <div class="adm-brand-meta">
+          <span class="adm-brand-title">Decoderium</span>
+          <span class="adm-brand-badge"><i class="ms" style="font-size:12px;">admin_panel_settings</i> Executive Admin</span>
+        </div>
+      </div>
+
+      <!-- Navigation List with Animated Sliding Selector Pill -->
+      <nav class="adm-nav-list" id="admNavList">
+        <!-- Floating Animated Sliding Selector Pill -->
+        <div class="adm-nav-sliding-pill" id="admNavPill"></div>
+
+        <div class="adm-nav-header">Intelligence & Radar</div>
+        <a class="adm-nav-item" href="#lms" data-route="lms" title="LMS Academy Intelligence">
+          <i class="ms">space_dashboard</i>
+          <span class="adm-nav-text">LMS Intelligence</span>
+        </a>
+        <a class="adm-nav-item" href="#clinical" data-route="clinical" title="Clinical Trial & Follow-up Radar">
+          <i class="ms">radar</i>
+          <span class="adm-nav-text">Clinical Trial Radar</span>
+        </a>
+
+        <div class="adm-nav-header">Governance & Operations</div>
+        <a class="adm-nav-item" href="#doctors" data-route="doctors" title="Doctor Directory & Licensing">
+          <i class="ms">groups</i>
+          <span class="adm-nav-text">Physician Directory</span>
+        </a>
+        <a class="adm-nav-item" href="#courses" data-route="courses" title="Curriculum & Question Banks">
+          <i class="ms">auto_stories</i>
+          <span class="adm-nav-text">Curriculum & Courses</span>
+        </a>
+
+        <div class="adm-nav-header">Analytics & Platform</div>
+        <a class="adm-nav-item" href="#regions" data-route="regions" title="Regional Performance Matrix">
+          <i class="ms">public</i>
+          <span class="adm-nav-text">Regional Matrix</span>
+        </a>
+        <a class="adm-nav-item" href="#settings" data-route="settings" title="Accreditation & System Rules">
+          <i class="ms">tune</i>
+          <span class="adm-nav-text">System Rules</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- Sidebar Bottom Status & Sign Out -->
+    <div class="adm-side-footer">
+      <div class="adm-pmdc-card" title="PMDC Health Telemetry: Online">
+        <div class="adm-pmdc-icon"><i class="ms">verified_user</i></div>
+        <div class="adm-pmdc-info">
+          <div style="font-size:11.5px;font-weight:800;color:var(--adm-ink);">PMDC Telemetry</div>
+          <div style="font-size:10px;color:var(--adm-slate);">Accreditation Sync OK</div>
+        </div>
+      </div>
+      <button type="button" class="adm-logout-btn" id="admLogoutBtn" title="Sign out of Admin Console">
+        <i class="ms" style="font-size:18px;">logout</i>
+        <span>Sign out</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN WRAPPER (Top Bar + Center Container) -->
+  <div class="adm-main-wrap">
+
+    <!-- CONTAINER 1: TOP BAR (Header with Omni-Search, Mode Toggle, Telemetry Pill) -->
+    <header class="adm-topbar" id="admTopbar">
+      <div class="adm-topbar-left">
+        <!-- Breadcrumbs / View Title -->
+        <div class="adm-breadcrumbs" id="admBreadcrumbs">
+          <span>Admin</span>
+          <i class="ms" style="font-size:16px;">chevron_right</i>
+          <strong id="admCurrentTitle">LMS Intelligence</strong>
+        </div>
+
+        <!-- Segmented Dual Dashboard Switcher (LMS vs Clinical) -->
+        <div class="adm-mode-switcher" role="tablist" aria-label="Dashboard Mode Switcher">
+          <button type="button" class="adm-mode-btn active" id="btnModeLms" role="tab" aria-selected="true">
+            <i class="ms">school</i> LMS Academy
+          </button>
+          <button type="button" class="adm-mode-btn clinical" id="btnModeClinical" role="tab" aria-selected="false">
+            <i class="ms">monitor_heart</i> Clinical Trial Radar
+          </button>
+        </div>
+      </div>
+
+      <div class="adm-topbar-right">
+        <!-- Live Telemetry Pulse Pill -->
+        <div class="adm-telemetry-pill" id="admTelemetryStatus" title="Real-time telemetry link to clinician and trial nodes">
+          <span class="adm-pulse-dot"></span>
+          <span>Live Telemetry: 12 Nodes Online</span>
+        </div>
+
+        <!-- Omni-Search Box with Keyboard Shortcut -->
+        <div class="adm-search-wrap" role="search">
+          <i class="ms">search</i>
+          <input type="text" id="admOmniSearch" placeholder="Search doctors, PMDC, city..." aria-label="Omni search">
+          <kbd class="adm-kbd-shortcut">Ctrl+K</kbd>
+        </div>
+
+        <!-- Notification Bell with Telemetry Alert -->
+        <button type="button" class="adm-icon-btn" id="admAlertBell" title="Live Telemetry Event Notifications" aria-label="Notifications">
+          <i class="ms" style="font-size:20px;">notifications_none</i>
+          <span class="badge-dot"></span>
+        </button>
+
+        <!-- Admin Profile Pill -->
+        <div class="adm-profile-pill" id="admProfilePill" role="button" aria-haspopup="true" aria-expanded="false" title="Administrator Profile">
+          <div class="adm-profile-avatar">AD</div>
+          <div class="adm-profile-meta">
+            <span class="adm-profile-name">Administrator</span>
+            <span class="adm-profile-role">Super Admin</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- CONTAINER 3: CENTER MAIN VIEWPORT (#view) -->
+    <main class="adm-viewport" id="view" role="region" aria-label="Administration Viewport">
+      <!-- SPA view content mounts here dynamically without reloading the browser -->
+    </main>
+
   </div>
 </div>
+
+<!-- Slide-Over Drawer for Deep Telemetry Inspection -->
+<div class="adm-drawer-scrim" id="admDrawerScrim" aria-hidden="true"></div>
+<aside class="adm-drawer" id="admDrawer" role="dialog" aria-modal="true" aria-label="Clinician Telemetry Detail">
+  <div class="adm-drawer-head">
+    <div>
+      <h3 style="margin:0;font-size:17px;font-weight:800;color:var(--adm-ink);" id="admDrawerTitle">Physician Telemetry</h3>
+      <div style="font-size:12px;color:var(--adm-slate);" id="admDrawerSubtitle">Audit logs & watch integrity</div>
+    </div>
+    <button type="button" class="adm-drawer-close" id="admDrawerClose" aria-label="Close drawer">
+      <i class="ms">close</i>
+    </button>
+  </div>
+  <div class="adm-drawer-body" id="admDrawerBody">
+    <!-- Populated dynamically via inspectDoctor() -->
+  </div>
+</aside>
+
+<!-- Modal Host & Toast Snack -->
 <div class="snack" id="snack" role="status" aria-live="polite"></div>
 
+<!-- Core Static Bootloader -->
 <script src="../assets/boot.js"></script>
 <script type="text/plain" data-src="ui.js"></script>
 <script type="text/plain" data-src="rules.js"></script>
 <script type="text/plain" data-src="access.js"></script>
 <script type="text/plain" data-src="views.js"></script>
+
+<!-- Dedicated Admin Engine Script -->
 <script type="text/plain">
 (function () {
   if (!requireRole('admin')) return;
-  var pubCourses = function () { return courses().filter(function (c) { return c.published; }); };
-  var docName = function (id) { var x = doctors().filter(function (d) { return d.id === id; })[0]; return x ? x.name : id; };
-  var allAttempts = function () {
-    var a = [];
-    Object.keys(ST.progress).forEach(function (k) {
-      ST.progress[k].attempts.forEach(function (x) {
-        var y = JSON.parse(JSON.stringify(x));
-        y.doctorId = k;
-        a.push(y);
+
+  var currentRoute = 'lms';
+  var searchFilter = '';
+  var courseViewMode = 'grid'; // 'grid' | 'table'
+
+  /* --------------------------------------------------------------------------
+     1. Course Vector SVG Thumbnail Generator
+     -------------------------------------------------------------------------- */
+  function courseThumbSvg(c, isMini) {
+    var id = c.id || '';
+    var accent = c.accent || '#582be8';
+    var w = isMini ? 58 : 340;
+    var h = isMini ? 40 : 165;
+    var gradId = 'thumbGrad_' + id.replace(/[^a-zA-Z0-9]/g, '_') + (isMini ? '_m' : '');
+
+    var art = '';
+    if (id === 'c1' || /hfref|heart|cardio/i.test(c.title)) {
+      art = '<path d="M 0 82 Q 40 82, 80 82 L 105 82 L 115 50 L 130 115 L 145 60 L 155 95 L 165 82 Q 240 82, 340 82" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="' + (isMini ? '2.5' : '3.5') + '" stroke-linecap="round"/>' +
+            '<circle cx="' + (isMini ? '28' : '130') + '" cy="' + (isMini ? '20' : '115') + '" r="' + (isMini ? '3' : '5') + '" fill="#ff4760"/>' +
+            (!isMini ? '<path d="M 280 40 C 270 20, 240 25, 240 45 C 240 65, 280 95, 280 95 C 280 95, 320 65, 320 45 C 320 25, 290 20, 280 40 Z" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>' : '');
+    } else if (id === 'c2' || /primary|clinic|referral/i.test(c.title)) {
+      art = '<circle cx="' + (isMini ? '29' : '170') + '" cy="' + (isMini ? '20' : '82') + '" r="' + (isMini ? '12' : '44') + '" fill="rgba(255,255,255,0.1)"/>' +
+            '<path d="M ' + (isMini ? '29' : '170') + ' ' + (isMini ? '13' : '56') + ' L ' + (isMini ? '29' : '170') + ' ' + (isMini ? '27' : '108') + ' M ' + (isMini ? '22' : '144') + ' ' + (isMini ? '20' : '82') + ' L ' + (isMini ? '36' : '196') + ' ' + (isMini ? '20' : '82') + '" stroke="#ffffff" stroke-width="' + (isMini ? '2.5' : '4') + '" stroke-linecap="round"/>';
+    } else if (id === 'c3' || /device|advanced|icd/i.test(c.title)) {
+      art = '<circle cx="' + (isMini ? '29' : '170') + '" cy="' + (isMini ? '20' : '82') + '" r="' + (isMini ? '8' : '26') + '" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>' +
+            '<circle cx="' + (isMini ? '29' : '170') + '" cy="' + (isMini ? '20' : '82') + '" r="' + (isMini ? '15' : '52') + '" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" stroke-dasharray="4 4"/>' +
+            '<circle cx="' + (isMini ? '29' : '170') + '" cy="' + (isMini ? '20' : '82') + '" r="' + (isMini ? '3' : '6') + '" fill="#ffffff"/>';
+    } else {
+      var inits = c.title ? c.title.split(' ').map(function (w) { return w[0]; }).slice(0, 2).join('').toUpperCase() : 'ME';
+      art = '<circle cx="' + (isMini ? '29' : '170') + '" cy="' + (isMini ? '20' : '82') + '" r="' + (isMini ? '14' : '38') + '" fill="rgba(255,255,255,0.18)"/>' +
+            '<text x="' + (isMini ? '29' : '170') + '" y="' + (isMini ? '24' : '90') + '" font-size="' + (isMini ? '11' : '24') + '" font-weight="900" fill="#ffffff" text-anchor="middle" font-family="-apple-system, sans-serif">' + inits + '</text>';
+    }
+
+    return '<svg viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none" style="width:100%;height:100%;display:block;">' +
+      '<defs>' +
+        '<linearGradient id="' + gradId + '" x1="0%" y1="0%" x2="100%" y2="100%">' +
+          '<stop offset="0%" stop-color="' + accent + '"/>' +
+          '<stop offset="100%" stop-color="#0b1727"/>' +
+        '</linearGradient>' +
+      '</defs>' +
+      '<rect width="' + w + '" height="' + h + '" fill="url(#' + gradId + ')"/>' +
+      '<circle cx="20" cy="20" r="60" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="20"/>' +
+      '<circle cx="' + (w - 20) + '" cy="' + (h - 20) + '" r="80" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="30"/>' +
+      art +
+    '</svg>';
+  }
+
+  /* --------------------------------------------------------------------------
+     2. Animated Number Counter & Live Telemetry Utilities
+     -------------------------------------------------------------------------- */
+  /* Flag to ensure leading animations (counters and SVG draws) run only on initial load */
+  var hasLeadingAnimationRun = false;
+
+  function animateValue(elem, start, end, duration, suffix) {
+    if (!elem) return;
+    suffix = suffix || '';
+    if (start === end) {
+      elem.textContent = end + suffix;
+      return;
+    }
+    var range = end - start;
+    var startTime = performance.now();
+
+    function update(now) {
+      var progress = Math.min((now - startTime) / duration, 1);
+      var ease = 1 - (1 - progress) * (1 - progress);
+      var current = Math.floor(start + range * ease);
+      elem.textContent = current + suffix;
+      if (progress < 1) {
+        requestAnimationFrame(update);
+      } else {
+        elem.textContent = end + suffix;
+      }
+    }
+    requestAnimationFrame(update);
+  }
+
+  /* --------------------------------------------------------------------------
+     3. Sidebar Collapse & Floating Arrow Button Handler
+     -------------------------------------------------------------------------- */
+  var side = $('#admSide');
+  var sideToggle = $('#admSideToggle');
+  var sideIcon = $('#admSideArrowIcon');
+
+  function updateSidebarState(isCollapsed) {
+    if (!side) return;
+    side.classList.toggle('collapsed', isCollapsed);
+    if (sideIcon) {
+      sideIcon.textContent = isCollapsed ? 'chevron_right' : 'chevron_left';
+    }
+    if (sideToggle) {
+      sideToggle.setAttribute('title', isCollapsed ? 'Expand sidebar' : 'Collapse sidebar');
+      sideToggle.setAttribute('aria-label', isCollapsed ? 'Expand sidebar' : 'Collapse sidebar');
+    }
+    try {
+      localStorage.setItem('adm_side_collapsed', isCollapsed ? '1' : '0');
+    } catch (e) {}
+    updateNavIndicator();
+  }
+
+  if (sideToggle) {
+    sideToggle.onclick = function (e) {
+      e.preventDefault();
+      var isCol = !side.classList.contains('collapsed');
+      updateSidebarState(isCol);
+    };
+  }
+
+  try {
+    if (localStorage.getItem('adm_side_collapsed') === '1' && window.innerWidth > 960) {
+      updateSidebarState(true);
+    }
+  } catch (e) {}
+
+  /* --------------------------------------------------------------------------
+     4. Animated Sliding Active Selector Pill
+     -------------------------------------------------------------------------- */
+  var navPill = $('#admNavPill');
+  function updateNavIndicator(immediate) {
+    if (!navPill) return;
+    var activeItem = $('.adm-nav-item.active');
+    if (activeItem) {
+      if (immediate) {
+        navPill.style.transition = 'none';
+      }
+      var topPos = activeItem.offsetTop;
+      var h = activeItem.offsetHeight;
+      navPill.style.transform = 'translateY(' + topPos + 'px)';
+      navPill.style.height = h + 'px';
+      navPill.style.opacity = '1';
+      if (immediate) {
+        navPill.offsetHeight; // force reflow
+        setTimeout(function () {
+          navPill.style.transition = '';
+        }, 50);
+      }
+    } else {
+      navPill.style.opacity = '0';
+    }
+  }
+
+  window.addEventListener('resize', function () { updateNavIndicator(false); });
+
+  /* --------------------------------------------------------------------------
+     5. Navigation & Dual Mode Segmented Switcher
+     -------------------------------------------------------------------------- */
+  var btnModeLms = $('#btnModeLms');
+  var btnModeClinical = $('#btnModeClinical');
+
+  if (btnModeLms) {
+    btnModeLms.onclick = function () { location.hash = '#lms'; };
+  }
+  if (btnModeClinical) {
+    btnModeClinical.onclick = function () { location.hash = '#clinical'; };
+  }
+
+  var logoutBtn = $('#admLogoutBtn');
+  if (logoutBtn) {
+    logoutBtn.onclick = function () { signOut('../login/'); };
+  }
+
+  var profPill = $('#admProfilePill');
+  if (profPill) {
+    profPill.onclick = function () {
+      openDialog({
+        title: 'System Administrator',
+        body: '<p><strong>Logged in as:</strong> Administrator (Super Admin)</p>' +
+              '<p><strong>Scope:</strong> Full accreditation oversight, PMDC credential validation, and multi-center observational clinical trial telemetry.</p>' +
+              '<p><strong>Storage State:</strong> ' + esc(STATE_KEY) + '</p>',
+        confirmText: 'Sign Out',
+        cancelText: 'Close',
+        onConfirm: function () { signOut('../login/'); }
+      });
+    };
+  }
+
+  var alertBell = $('#admAlertBell');
+  if (alertBell) {
+    alertBell.onclick = function () {
+      sideAlert('Clinical Telemetry Pulse', '12 regional physician nodes synced. Day-3 follow-up triage radar active with pending actions.', 'cme');
+    };
+  }
+
+  var omniSearch = $('#admOmniSearch');
+  if (omniSearch) {
+    omniSearch.oninput = function () {
+      searchFilter = omniSearch.value.trim().toLowerCase();
+      if (currentRoute !== 'doctors' && currentRoute !== 'courses' && searchFilter.length > 0) {
+        location.hash = '#doctors';
+      } else if (currentRoute === 'doctors') {
+        viewDoctorList();
+      } else if (currentRoute === 'courses') {
+        viewCourseList();
+      }
+    };
+  }
+
+  window.addEventListener('keydown', function (e) {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      if (omniSearch) { omniSearch.focus(); omniSearch.select(); }
+    }
+  });
+
+  /* --------------------------------------------------------------------------
+     5B. Reusable Searchable Dropdowns & Standardized Empty State Engine
+     -------------------------------------------------------------------------- */
+  function renderSearchableDropdown(config) {
+    var id = config.id;
+    var name = config.name || id;
+    var options = config.options || []; // [{ value, label, sub? }]
+    var selectedVal = config.value !== undefined ? String(config.value) : (options[0] ? String(options[0].value) : '');
+    var placeholder = config.placeholder || 'Select option';
+    var selectedItem = options.find(function (o) { return String(o.value) === String(selectedVal); });
+    var displayLabel = selectedItem ? selectedItem.label : placeholder;
+
+    return '<div class="adm-search-dropdown" id="dropdown_' + id + '" data-name="' + name + '">' +
+      '<input type="hidden" id="' + id + '" name="' + name + '" value="' + esc(selectedVal) + '"/>' +
+      '<button type="button" class="adm-search-dropdown-btn" id="btn_' + id + '">' +
+        '<span class="dropdown-label">' + esc(displayLabel) + '</span>' +
+        '<i class="ms arrow-icon">expand_more</i>' +
+      '</button>' +
+      '<div class="adm-search-dropdown-menu" id="menu_' + id + '">' +
+        '<div class="adm-dropdown-search-box">' +
+          '<i class="ms">search</i>' +
+          '<input type="text" placeholder="Search ' + esc(config.label || 'options') + '..." class="adm-dropdown-search-input"/>' +
+        '</div>' +
+        '<div class="adm-dropdown-list">' +
+          options.map(function (opt) {
+            var isSel = String(opt.value) === String(selectedVal);
+            return '<div class="adm-dropdown-item' + (isSel ? ' is-selected' : '') + '" data-value="' + esc(opt.value) + '" data-label="' + esc(opt.label) + '">' +
+              '<div>' +
+                '<span>' + esc(opt.label) + '</span>' +
+                (opt.sub ? '<div style="font-size:10.5px;color:var(--adm-slate);margin-top:1px;">' + esc(opt.sub) + '</div>' : '') +
+              '</div>' +
+              '<i class="ms check-icon">check</i>' +
+            '</div>';
+          }).join('') +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function initSearchableDropdowns(container) {
+    var root = container || document;
+    var dropdowns = root.querySelectorAll('.adm-search-dropdown');
+    dropdowns.forEach(function (dd) {
+      if (dd._inited) return;
+      dd._inited = true;
+
+      var btn = dd.querySelector('.adm-search-dropdown-btn');
+      var menu = dd.querySelector('.adm-search-dropdown-menu');
+      var searchInput = dd.querySelector('.adm-dropdown-search-input');
+      var hiddenInput = dd.querySelector('input[type="hidden"]');
+      var labelSpan = dd.querySelector('.dropdown-label');
+      var items = dd.querySelectorAll('.adm-dropdown-item');
+
+      btn.onclick = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var isOpen = menu.classList.contains('open');
+        document.querySelectorAll('.adm-search-dropdown-menu.open').forEach(function (m) {
+          if (m !== menu) {
+            m.classList.remove('open');
+            var pBtn = m.parentElement.querySelector('.adm-search-dropdown-btn');
+            if (pBtn) pBtn.classList.remove('is-open');
+          }
+        });
+
+        menu.classList.toggle('open', !isOpen);
+        btn.classList.toggle('is-open', !isOpen);
+        if (!isOpen && searchInput) {
+          searchInput.value = '';
+          items.forEach(function (it) { it.style.display = 'flex'; });
+          setTimeout(function () { searchInput.focus(); }, 40);
+        }
+      };
+
+      if (searchInput) {
+        searchInput.onclick = function (e) { e.stopPropagation(); };
+        searchInput.oninput = function () {
+          var q = searchInput.value.toLowerCase().trim();
+          var visibleCount = 0;
+          items.forEach(function (it) {
+            var text = (it.getAttribute('data-label') || it.textContent).toLowerCase();
+            var matches = !q || text.indexOf(q) > -1;
+            it.style.display = matches ? 'flex' : 'none';
+            if (matches) visibleCount++;
+          });
+          var emptyMsg = dd.querySelector('.adm-dropdown-empty');
+          if (visibleCount === 0) {
+            if (!emptyMsg) {
+              var list = dd.querySelector('.adm-dropdown-list');
+              var emptyEl = document.createElement('div');
+              emptyEl.className = 'adm-dropdown-empty';
+              emptyEl.textContent = 'No matching options';
+              list.appendChild(emptyEl);
+            }
+          } else if (emptyMsg) {
+            emptyMsg.remove();
+          }
+        };
+      }
+
+      items.forEach(function (it) {
+        it.onclick = function (e) {
+          e.stopPropagation();
+          var val = it.getAttribute('data-value');
+          var lbl = it.getAttribute('data-label') || it.querySelector('span').textContent;
+
+          hiddenInput.value = val;
+          labelSpan.textContent = lbl;
+
+          items.forEach(function (other) { other.classList.remove('is-selected'); });
+          it.classList.add('is-selected');
+
+          menu.classList.remove('open');
+          btn.classList.remove('is-open');
+
+          var evt = new Event('change', { bubbles: true });
+          hiddenInput.dispatchEvent(evt);
+        };
       });
     });
-    return a;
-  };
+  }
+
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.adm-search-dropdown')) {
+      document.querySelectorAll('.adm-search-dropdown-menu.open').forEach(function (m) {
+        m.classList.remove('open');
+        var pBtn = m.parentElement.querySelector('.adm-search-dropdown-btn');
+        if (pBtn) pBtn.classList.remove('is-open');
+      });
+    }
+  });
+
+  function renderEmptyState(title, subtitle, onResetText) {
+    return '<div class="adm-empty-state">' +
+      '<div class="adm-empty-state-icon"><i class="ms">search_off</i></div>' +
+      '<h4 class="adm-empty-state-title">' + esc(title || 'No Matching Records Found') + '</h4>' +
+      '<p class="adm-empty-state-sub">' + esc(subtitle || 'Try adjusting your search terms or active filters to broaden your search.') + '</p>' +
+      (onResetText ? '<button type="button" class="adm-btn-outline adm-btn-reset-filters"><i class="ms" style="font-size:14px;">restart_alt</i> ' + esc(onResetText) + '</button>' : '') +
+    '</div>';
+  }
+
+  /* --------------------------------------------------------------------------
+     6. SPA Router: Swaps Center Container (#view) Without Reloading
+     -------------------------------------------------------------------------- */
+  var isInitialRender = true;
 
   function render() {
-    var h = location.hash.slice(1).split('/'), sec = h[0] || 'overview';
-    var map = {
-      overview: overview,
-      courses: function () { return h[1] ? courseView(h[1]) : courseList(); },
-      doctors: doctorList,
-      reports: reports,
-      settings: settingsView
+    var raw = location.hash.slice(1).trim();
+    if (!raw || raw === 'overview') raw = 'lms';
+    var parts = raw.split('/');
+    var sec = parts[0] || 'lms';
+    currentRoute = sec;
+
+    $$('.adm-nav-item').forEach(function (el) {
+      var r = el.getAttribute('data-route');
+      var match = (r === sec) || (sec === 'lms' && r === 'lms') || (sec === 'clinical' && r === 'clinical');
+      el.classList.toggle('active', match);
+    });
+    updateNavIndicator(isInitialRender);
+    isInitialRender = false;
+
+    if (btnModeLms && btnModeClinical) {
+      btnModeLms.classList.toggle('active', sec === 'lms');
+      btnModeClinical.classList.toggle('active', sec === 'clinical');
+    }
+
+    var appEl = $('#admApp') || document.body;
+    appEl.classList.toggle('adm-mode-lms', sec === 'lms');
+    appEl.classList.toggle('adm-mode-clinical', sec === 'clinical');
+
+    var titleMap = {
+      lms: 'LMS Academy Intelligence',
+      clinical: 'Clinical Trial Radar',
+      doctors: 'Physician Directory & Licensing',
+      courses: 'Curriculum & Courses',
+      regions: 'Regional Performance Matrix',
+      settings: 'Accreditation & System Rules'
     };
-    (map[sec] || overview)();
-    if (window.academyUpdateNav) window.academyUpdateNav();
+    var tElem = $('#admCurrentTitle');
+    if (tElem) {
+      tElem.textContent = titleMap[sec] || 'Administration';
+    }
+
+    var viewEl = $('#view');
+    viewEl.className = 'adm-viewport adm-view-enter' + (sec === 'lms' ? ' adm-mode-lms' : (sec === 'clinical' ? ' adm-mode-clinical' : ''));
+
+    var routeMap = {
+      lms: viewLmsDashboard,
+      clinical: viewClinicalDashboard,
+      courses: function () { return parts[1] ? viewCourseDetail(parts[1]) : viewCourseList(); },
+      doctors: viewDoctorList,
+      regions: viewRegionalMatrix,
+      settings: viewSettings
+    };
+
+    (routeMap[sec] || viewLmsDashboard)();
+    initSearchableDropdowns(viewEl);
     window.scrollTo(0, 0);
   }
 
-  /* 1. Overview Telemetry */
-  function overview() {
-    var act = doctors().filter(function (d) { return d.active; }), att = allAttempts();
-    var certs = Object.keys(ST.progress).reduce(function (n, k) { return n + ST.progress[k].certs.length; }, 0);
-    var rate = att.length ? Math.round(att.filter(function (a) { return a.passed; }).length * 100 / att.length) : 0;
-    var prog = act.map(function (d) { return progressOf(d.id); });
+  /* --------------------------------------------------------------------------
+     VIEW 1: LMS INTELLIGENCE DASHBOARD (#lms) — ONLINE COURSING AESTHETIC
+     -------------------------------------------------------------------------- */
+  function viewLmsDashboard() {
+    var actDocs = doctors().filter(function (d) { return d.active; });
+    var pubCourses = courses().filter(function (c) { return c.published; });
+    var allAtt = [];
+    Object.keys(ST.progress).forEach(function (k) {
+      ST.progress[k].attempts.forEach(function (x) { allAtt.push(x); });
+    });
 
-    var bars = pubCourses().map(function (c) {
-      var dn = prog.filter(function (p) { return RULES.courseComplete(c, p); }).length;
-      var st = prog.filter(function (p) { return RULES.courseStarted(c, p); }).length;
-      var avg = prog.length ? Math.round(prog.reduce(function (n, p) { return n + RULES.percent(c, p); }, 0) / prog.length) : 0;
-      return '<div style="background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow-card);margin-bottom:14px;">' +
-        '<div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:700;color:var(--navy);margin-bottom:6px;">' +
-          '<span>' + esc(c.title) + '</span><span>' + avg + '% Avg Completion</span>' +
-        '</div>' +
-        '<div style="height:8px;background:var(--surface-subtle);border-radius:var(--radius-pill);overflow:hidden;">' +
-          '<div style="height:100%;width:' + avg + '%;background:var(--primary);border-radius:var(--radius-pill);"></div>' +
-        '</div>' +
-      '</div>';
-    }).join('');
+    var certCount = Object.keys(ST.progress).reduce(function (n, k) {
+      return n + ST.progress[k].certs.length;
+    }, 0);
 
-    $('#view').innerHTML =
-      '<div class="admin-hero-bar">' +
-        '<div><h1 style="font-size:26px;font-weight:800;color:var(--navy);margin:0 0 4px;">Executive Administration</h1><p style="font-size:13.5px;color:var(--slate);margin:0;">Platform governance, doctor licensing telemetry, and curriculum analytics.</p></div>' +
-        '<div style="display:flex;gap:10px;"><a class="btn-premium-pill" href="#doctors"><i class="ms">person_add</i> Enlist Doctor</a></div>' +
+    var passRate = allAtt.length ? Math.round(allAtt.filter(function (a) { return a.passed; }).length * 100 / allAtt.length) : 88;
+    var progList = actDocs.map(function (d) { return progressOf(d.id); });
+    var c1 = pubCourses[0] || courses()[0];
+    var avgC1 = progList.length && c1 ? Math.round(progList.reduce(function (n, p) { return n + RULES.percent(c1, p); }, 0) / progList.length) : 68;
+
+    var facultyMentors = [
+      { name: 'Prof. Sara Anwar', role: 'Professor of Cardiology', hospital: 'Punjab Institute of Cardiology', spec: 'HFrEF & GDMT Fellow', initial: 'SA' },
+      { name: 'Dr. Tahir Mahmood', role: 'Consultant Physician', hospital: 'Federal General Hospital, Islamabad', spec: 'Clinical Pharmacology', initial: 'TM' },
+      { name: 'Dr. Nadia Rehman', role: 'Clinical Electrophysiologist', hospital: 'Aga Khan University Hospital', spec: 'Device Selection & CRT', initial: 'NR' }
+    ];
+
+    var html =
+      '<!-- 1. Electric Violet Curved Hero Banner (COURSUE Online Coursing Aesthetic) -->' +
+      '<div class="lms-hero-banner">' +
+        '<svg class="lms-hero-sparkles" viewBox="0 0 220 170" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+          '<path d="M150 15 C150 50, 165 65, 200 65 C165 65, 150 80, 150 115 C150 80, 135 65, 100 65 C135 65, 150 50, 150 15 Z" fill="white" fill-opacity="0.22"/>' +
+          '<path d="M60 75 C60 100, 70 110, 95 110 C70 110, 60 120, 60 145 C60 120, 50 110, 25 110 C50 110, 60 100, 60 75 Z" fill="white" fill-opacity="0.16"/>' +
+          '<circle cx="170" cy="130" r="4" fill="white" fill-opacity="0.3"/>' +
+          '<circle cx="95" cy="35" r="3" fill="white" fill-opacity="0.25"/>' +
+        '</svg>' +
+        '<div>' +
+          '<span class="lms-hero-badge"><i class="ms" style="font-size:13px;">school</i> ACCREDITED ONLINE CME SUITE</span>' +
+          '<h1 class="lms-hero-title">Sharpen Clinical Precision with Guideline-Directed Heart Failure & Gastroenterology Masterclasses</h1>' +
+          '<p style="font-size:13.5px;color:rgba(255,255,255,0.9);max-width:560px;margin:0 0 24px;line-height:1.5;">' +
+            'Empowering 12 regional hospital hubs across Pakistan with structured CME video curriculum, 90% watch-time anti-skipping telemetry, and verified PMDC credentials.' +
+          '</p>' +
+        '</div>' +
+        '<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">' +
+          '<a href="#courses" class="lms-hero-btn">' +
+            '<span>Explore Course Catalog</span>' +
+            '<span class="lms-hero-btn-icon"><i class="ms">play_arrow</i></span>' +
+          '</a>' +
+          '<button type="button" class="adm-btn-hero-outline" id="btnHeroEnlistDoc">' +
+            '<i class="ms">person_add</i> Enlist Physician' +
+          '</button>' +
+        '</div>' +
       '</div>' +
 
-      '<div class="kpi-row-modern">' +
-        '<div class="kpi-card-modern"><span class="kpi-lbl">Active Physicians</span><span class="kpi-val">' + act.length + '</span></div>' +
-        '<div class="kpi-card-modern"><span class="kpi-lbl">Published Courses</span><span class="kpi-val">' + pubCourses().length + '</span></div>' +
-        '<div class="kpi-card-modern"><span class="kpi-lbl">Certificates Issued</span><span class="kpi-val">' + certs + '</span></div>' +
-        '<div class="kpi-card-modern"><span class="kpi-lbl">Quiz Pass Rate</span><span class="kpi-val">' + rate + '%</span></div>' +
+      '<!-- Section 1: Quick Progress Learning Modules (COURSUE Style) -->' +
+      '<div class="adm-section adm-section-tinted">' +
+        '<div class="adm-section-head">' +
+          '<div>' +
+            '<span class="adm-section-num">01</span>' +
+            '<h3 class="adm-section-title" style="display:inline;">Active CME Learning Modules & Velocity</h3>' +
+            '<p class="adm-section-desc">Key accredited curriculum modules with real-time video watch velocity.</p>' +
+          '</div>' +
+        '</div>' +
+        '<div class="lms-progress-pills-grid">' +
+          '<a href="#courses/c1" class="lms-progress-pill tone-violet" title="Inspect Module 1">' +
+            '<div class="lms-pill-icon-wrap"><i class="ms">cardiology</i></div>' +
+            '<div class="lms-pill-text">' +
+              '<div class="lms-pill-meta">2/3 Watched · 67% Avg Velocity</div>' +
+              '<div class="lms-pill-name">Module 1 · HFrEF Diagnosis & Phenotypes</div>' +
+            '</div>' +
+            '<span class="adm-chip adm-chip-violet" style="font-size:10px;padding:2px 8px;">Active</span>' +
+          '</a>' +
+          '<a href="#courses/c1" class="lms-progress-pill tone-rose" title="Inspect Module 2">' +
+            '<div class="lms-pill-icon-wrap"><i class="ms">medication</i></div>' +
+            '<div class="lms-pill-text">' +
+              '<div class="lms-pill-meta">3/3 Complete · 88% Quiz Pass</div>' +
+              '<div class="lms-pill-name">Module 2 · The 4 Pillars of GDMT</div>' +
+            '</div>' +
+            '<span class="adm-chip adm-chip-danger" style="font-size:10px;padding:2px 8px;">Key Pillar</span>' +
+          '</a>' +
+          '<a href="#courses/c1" class="lms-progress-pill tone-sky" title="Inspect Module 3">' +
+            '<div class="lms-pill-icon-wrap"><i class="ms">speed</i></div>' +
+            '<div class="lms-pill-text">' +
+              '<div class="lms-pill-meta">1/2 Watched · 50% Avg Completion</div>' +
+              '<div class="lms-pill-name">Module 3 · Drug Titration & Safety Gates</div>' +
+            '</div>' +
+            '<span class="adm-chip adm-chip-active" style="font-size:10px;padding:2px 8px;">In Progress</span>' +
+          '</a>' +
+        '</div>' +
+
+        '<!-- Animated Live Telemetry KPI Cards -->' +
+        '<div class="adm-kpi-grid">' +
+          '<div class="adm-kpi-card adm-kpi-violet">' +
+            '<div class="adm-kpi-top">' +
+              '<div class="adm-kpi-icon"><i class="ms">groups</i></div>' +
+              '<span class="adm-kpi-badge"><i class="ms" style="font-size:13px;">verified</i> 100% Active</span>' +
+            '</div>' +
+            '<div class="adm-kpi-label">Enlisted Physicians</div>' +
+            '<div class="adm-kpi-val" id="kpiDocs">' + (hasLeadingAnimationRun ? actDocs.length : '0') + '</div>' +
+            '<div class="adm-kpi-sub"><i class="ms" style="font-size:15px;color:var(--adm-emerald);">trending_up</i> 12 Regional hubs in Pakistan</div>' +
+          '</div>' +
+
+          '<div class="adm-kpi-card adm-kpi-cyan">' +
+            '<div class="adm-kpi-top">' +
+              '<div class="adm-kpi-icon"><i class="ms">play_circle</i></div>' +
+              '<span class="adm-kpi-badge"><i class="ms" style="font-size:13px;">speed</i> 90% Gate</span>' +
+            '</div>' +
+            '<div class="adm-kpi-label">Avg Watch Completion</div>' +
+            '<div class="adm-kpi-val" id="kpiWatch">' + (hasLeadingAnimationRun ? avgC1 + '%' : '0%') + '</div>' +
+            '<div class="adm-kpi-sub"><i class="ms" style="font-size:15px;color:var(--adm-cyan);">lock</i> Anti-skipping gate enforced</div>' +
+          '</div>' +
+
+          '<div class="adm-kpi-card adm-kpi-emerald">' +
+            '<div class="adm-kpi-top">' +
+              '<div class="adm-kpi-icon"><i class="ms">quiz</i></div>' +
+              '<span class="adm-kpi-badge"><i class="ms" style="font-size:13px;">check_circle</i> 70% Pass Mark</span>' +
+            '</div>' +
+            '<div class="adm-kpi-label">Quiz First-Pass Rate</div>' +
+            '<div class="adm-kpi-val" id="kpiPass">' + (hasLeadingAnimationRun ? passRate + '%' : '0%') + '</div>' +
+            '<div class="adm-kpi-sub"><i class="ms" style="font-size:15px;color:var(--adm-emerald);">timer</i> 10 MCQs / 10 Min limit</div>' +
+          '</div>' +
+
+          '<div class="adm-kpi-card adm-kpi-rose">' +
+            '<div class="adm-kpi-top">' +
+              '<div class="adm-kpi-icon"><i class="ms">workspace_premium</i></div>' +
+              '<span class="adm-kpi-badge"><i class="ms" style="font-size:13px;">qr_code_2</i> FNV-1a Hash</span>' +
+            '</div>' +
+            '<div class="adm-kpi-label">Certificates Issued</div>' +
+            '<div class="adm-kpi-val" id="kpiCerts">' + (hasLeadingAnimationRun ? certCount : '0') + '</div>' +
+            '<div class="adm-kpi-sub"><i class="ms" style="font-size:15px;color:#ff4760;">verified_user</i> PMDC verified credentials</div>' +
+          '</div>' +
+        '</div>' +
       '</div>' +
 
-      '<h3 style="font-size:17px;font-weight:800;color:var(--navy);margin:24px 0 12px;">Curriculum Progression</h3>' +
-      bars;
+      '<!-- Section 2: Active Curriculum Shelf (Online Course Showcase Grid) -->' +
+      '<div class="adm-section">' +
+        '<div class="adm-section-head">' +
+          '<div>' +
+            '<span class="adm-section-num">02</span>' +
+            '<h3 class="adm-section-title" style="display:inline;">Active Learning Curriculum Shelf</h3>' +
+            '<p class="adm-section-desc">Accredited clinical courses currently enrolled across 12 Pakistan regional hubs.</p>' +
+          '</div>' +
+          '<a href="#courses" class="adm-btn-outline" style="font-size:12px;padding:6px 14px;">View All Courses (' + courses().length + ') &rarr;</a>' +
+        '</div>' +
+
+        '<div class="adm-course-grid">' +
+          pubCourses.map(function (c, cidx) {
+            var avg = progList.length ? Math.round(progList.reduce(function (n, p) { return n + RULES.percent(c, p); }, 0) / progList.length) : 0;
+            var mentor = facultyMentors[cidx % facultyMentors.length];
+            return '<div class="adm-course-card">' +
+              '<div class="adm-course-thumb">' +
+                courseThumbSvg(c, false) +
+                '<div class="adm-thumb-badge-top">' +
+                  '<span class="adm-thumb-chip"><i class="ms" style="font-size:12px;">school</i> ' + esc(c.category + ' · ' + c.level) + '</span>' +
+                '</div>' +
+                '<div class="adm-thumb-badge-bottom">' +
+                  '<span class="adm-thumb-chip"><i class="ms" style="font-size:12px;">schedule</i> ' + fmtDur(RULES.totalSeconds(c)) + ' · ' + RULES.lectureCount(c) + ' Lectures</span>' +
+                '</div>' +
+              '</div>' +
+              '<div class="adm-course-card-body">' +
+                '<h3 class="adm-course-card-title">' + esc(c.title) + '</h3>' +
+                '<div class="adm-course-card-sub">' + esc(c.subtitle || '') + '</div>' +
+                '<div style="margin-bottom:12px;">' +
+                  '<div style="display:flex;justify-content:space-between;font-size:11.5px;font-weight:700;color:var(--adm-ink);margin-bottom:4px;">' +
+                    '<span>Cohort Progress</span>' +
+                    '<span style="color:var(--adm-primary);">' + avg + '% Avg</span>' +
+                  '</div>' +
+                  '<div class="adm-progress-bar-bg" style="height:6px;">' +
+                    '<div class="adm-progress-bar-fill" style="width:' + avg + '%;"></div>' +
+                  '</div>' +
+                '</div>' +
+                '<div style="display:flex;align-items:center;gap:10px;padding:8px 0 12px;border-top:1px solid var(--adm-line-light);">' +
+                  '<div style="width:30px;height:30px;border-radius:50%;background:var(--adm-primary-soft);color:var(--adm-primary);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;">' +
+                    mentor.initial +
+                  '</div>' +
+                  '<div style="min-width:0;flex:1;">' +
+                    '<div style="font-size:12px;font-weight:700;color:var(--adm-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + esc(mentor.name) + '</div>' +
+                    '<div style="font-size:10.5px;color:var(--adm-slate);">' + esc(mentor.spec) + '</div>' +
+                  '</div>' +
+                '</div>' +
+                '<div class="adm-course-card-actions">' +
+                  '<a href="#courses/' + c.id + '" class="adm-btn-action" style="background:var(--adm-primary-soft);color:var(--adm-primary);border-color:var(--adm-ring);font-weight:800;">Inspect Syllabus &rarr;</a>' +
+                  '<a href="#courses/' + c.id + '" class="adm-btn-action" style="font-size:12px;">Preview Video</a>' +
+                '</div>' +
+              '</div>' +
+            '</div>';
+          }).join('') +
+        '</div>' +
+      '</div>' +
+
+      '<!-- Section 3: Interactive Learning Velocity (Modern Rounded Bar Chart) & Faculty Mentors -->' +
+      '<div class="adm-section adm-section-tinted">' +
+        '<div class="adm-section-head">' +
+          '<div>' +
+            '<span class="adm-section-num">03</span>' +
+            '<h3 class="adm-section-title" style="display:inline;">CME Learning Velocity & Faculty Mentors</h3>' +
+            '<p class="adm-section-desc">Weekly study hours logged across Pakistan study centers and accredited webinar schedules.</p>' +
+          '</div>' +
+        '</div>' +
+        '<div class="adm-grid-2col">' +
+          '<!-- Left: Crisp Pixel-Perfect Weekly CME Study Hours Flex Bar Chart -->' +
+          '<div class="adm-card">' +
+            '<div class="adm-card-head">' +
+              '<div>' +
+                '<h3 class="adm-card-title"><i class="ms" style="color:var(--adm-primary);">bar_chart</i> Weekly CME Learning Velocity & Study Hours</h3>' +
+                '<p class="adm-card-subtitle">Aggregated video watch time (hours) logged by physicians across Pakistan</p>' +
+              '</div>' +
+              '<span class="adm-chip adm-chip-active">Weekly Total: 142 hrs</span>' +
+            '</div>' +
+            '<div class="adm-crisp-barchart">' +
+              '<div class="adm-chart-gridlines">' +
+                '<div class="adm-gridline"><span class="adm-grid-val">60h</span></div>' +
+                '<div class="adm-gridline"><span class="adm-grid-val">40h</span></div>' +
+                '<div class="adm-gridline"><span class="adm-grid-val">20h</span></div>' +
+                '<div class="adm-gridline adm-gridline-base"></div>' +
+              '</div>' +
+              '<div class="adm-chart-pillars">' +
+                '<div class="adm-pillar-col" title="Mon: 14 hours">' +
+                  '<div class="adm-pillar-val">14h</div>' +
+                  '<div class="adm-pillar-track"><div class="adm-pillar-fill tone-violet" style="height:23%;"></div></div>' +
+                  '<div class="adm-pillar-label">Mon</div>' +
+                '</div>' +
+                '<div class="adm-pillar-col" title="Tue: 28 hours">' +
+                  '<div class="adm-pillar-val">28h</div>' +
+                  '<div class="adm-pillar-track"><div class="adm-pillar-fill tone-violet" style="height:45%;"></div></div>' +
+                  '<div class="adm-pillar-label">Tue</div>' +
+                '</div>' +
+                '<div class="adm-pillar-col" title="Wed: 22 hours">' +
+                  '<div class="adm-pillar-val">22h</div>' +
+                  '<div class="adm-pillar-track"><div class="adm-pillar-fill tone-violet" style="height:35%;"></div></div>' +
+                  '<div class="adm-pillar-label">Wed</div>' +
+                '</div>' +
+                '<div class="adm-pillar-col" title="Thu: 48 hours">' +
+                  '<div class="adm-pillar-val">48h</div>' +
+                  '<div class="adm-pillar-track"><div class="adm-pillar-fill tone-violet" style="height:77%;"></div></div>' +
+                  '<div class="adm-pillar-label">Thu</div>' +
+                '</div>' +
+                '<div class="adm-pillar-col" title="Fri: 36 hours">' +
+                  '<div class="adm-pillar-val">36h</div>' +
+                  '<div class="adm-pillar-track"><div class="adm-pillar-fill tone-violet" style="height:58%;"></div></div>' +
+                  '<div class="adm-pillar-label">Fri</div>' +
+                '</div>' +
+                '<div class="adm-pillar-col is-peak" title="Sat: 62 hours (Peak Study Velocity)">' +
+                  '<div class="adm-pillar-val">62h ★</div>' +
+                  '<div class="adm-pillar-track"><div class="adm-pillar-fill tone-pulse" style="height:100%;"></div></div>' +
+                  '<div class="adm-pillar-label">Sat</div>' +
+                '</div>' +
+                '<div class="adm-pillar-col" title="Sun: 40 hours">' +
+                  '<div class="adm-pillar-val">40h</div>' +
+                  '<div class="adm-pillar-track"><div class="adm-pillar-fill tone-violet" style="height:65%;"></div></div>' +
+                  '<div class="adm-pillar-label">Sun</div>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="adm-competency-grid">' +
+              '<div class="adm-competency-item">' +
+                '<div class="adm-comp-top">' +
+                  '<div class="adm-comp-title">' +
+                    '<i class="ms" style="color:var(--adm-emerald);font-size:16px;">verified</i>' +
+                    '<span>Acid Peptic Disease Diagnostic Workup & LA Classification</span>' +
+                  '</div>' +
+                  '<span class="adm-comp-badge tone-emerald">94% Competency</span>' +
+                '</div>' +
+                '<div class="adm-comp-track"><div class="adm-comp-fill tone-emerald" style="width:94%;"></div></div>' +
+              '</div>' +
+              '<div class="adm-competency-item">' +
+                '<div class="adm-comp-top">' +
+                  '<div class="adm-comp-title">' +
+                    '<i class="ms" style="color:var(--adm-primary);font-size:16px;">medication</i>' +
+                    '<span>P-CAB & PPI Pharmacotherapy & H. pylori Protocols</span>' +
+                  '</div>' +
+                  '<span class="adm-comp-badge tone-violet">88% Competency</span>' +
+                '</div>' +
+                '<div class="adm-comp-track"><div class="adm-comp-fill tone-violet" style="width:88%;"></div></div>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<!-- Right: Faculty Mentors & Grand Rounds Schedule -->' +
+          '<div class="adm-card">' +
+            '<div class="adm-card-head">' +
+              '<div>' +
+                '<h3 class="adm-card-title"><i class="ms" style="color:#ff4760;">event_available</i> Clinical Grand Rounds & Faculty</h3>' +
+                '<p class="adm-card-subtitle">Accredited CME webinars and faculty director panel</p>' +
+              '</div>' +
+              '<span class="adm-chip adm-chip-danger">Live Panel</span>' +
+            '</div>' +
+
+            '<!-- Upcoming Grand Rounds Announcement Banner -->' +
+            '<div style="background:linear-gradient(135deg,rgba(255,71,96,0.08),rgba(88,43,232,0.08));border:1px solid rgba(255,71,96,0.22);border-radius:var(--adm-radius-md);padding:14px;margin-bottom:16px;">' +
+              '<div style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:800;color:#ff4760;text-transform:uppercase;margin-bottom:4px;">' +
+                '<i class="ms" style="font-size:15px;">broadcast_on_home</i> Upcoming Grand Rounds' +
+              '</div>' +
+              '<strong style="font-size:13.5px;color:var(--adm-ink);display:block;margin-bottom:4px;">Refractory Heart Failure & Comorbid GI Distress Panel</strong>' +
+              '<div style="font-size:11.5px;color:var(--adm-slate);margin-bottom:10px;">Broadcast date: <strong>Thursday, Nov 12 · 08:00 PM PKT</strong> (1.5 CME Credits)</div>' +
+              '<button type="button" class="adm-btn-action" id="btnJoinGrandRounds" style="background:#ffffff;color:#ff4760;border-color:rgba(255,71,96,0.3);font-size:11px;font-weight:800;">View Webinar Schedule &rarr;</button>' +
+            '</div>' +
+
+            '<h4 style="font-size:13px;font-weight:800;color:var(--adm-ink);margin:0 0 10px;">Clinical Faculty Mentors</h4>' +
+            '<div style="display:flex;flex-direction:column;gap:8px;">' +
+              facultyMentors.map(function (m) {
+                return '<div class="adm-faculty-card">' +
+                  '<div class="adm-faculty-avatar">' + m.initial + '</div>' +
+                  '<div style="flex:1;min-width:0;">' +
+                    '<div style="font-size:13px;font-weight:700;color:var(--adm-ink);">' + esc(m.name) + '</div>' +
+                    '<div style="font-size:11px;color:var(--adm-slate);">' + esc(m.spec) + ' · ' + esc(m.hospital) + '</div>' +
+                  '</div>' +
+                  '<span class="adm-chip adm-chip-active" style="font-size:10.5px;">Accredited</span>' +
+                '</div>';
+              }).join('') +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+
+      '<!-- Section 4: Physician Learning Progression Table -->' +
+      '<div class="adm-section">' +
+        '<div class="adm-section-head">' +
+          '<div>' +
+            '<span class="adm-section-num">04</span>' +
+            '<h3 class="adm-section-title" style="display:inline;">Top Clinician Learners & Credential Telemetry</h3>' +
+            '<p class="adm-section-desc">Real-time status of enrolled physicians, video watch meters, and issued certificates.</p>' +
+          '</div>' +
+          '<div style="display:flex;gap:10px;">' +
+            '<a href="#doctors" class="adm-btn-outline" style="font-size:12px;padding:6px 14px;">View All Doctors &rarr;</a>' +
+          '</div>' +
+        '</div>' +
+        '<div class="adm-table-wrap">' +
+          '<table class="adm-table">' +
+            '<thead>' +
+              '<tr>' +
+                '<th>Physician</th>' +
+                '<th>PMDC ID</th>' +
+                '<th>Location & Hospital</th>' +
+                '<th>HFrEF Course 1</th>' +
+                '<th>Primary Care</th>' +
+                '<th>Certificates</th>' +
+                '<th>Telemetry Audit</th>' +
+              '</tr>' +
+            '</thead>' +
+            '<tbody>' +
+              actDocs.slice(0, 6).map(function (doc) {
+                var p = progressOf(doc.id);
+                var pc1 = pubCourses[0] ? RULES.percent(pubCourses[0], p) : 0;
+                var pc2 = pubCourses[1] ? RULES.percent(pubCourses[1], p) : 0;
+                var certs = p.certs.length;
+                return '<tr>' +
+                  '<td>' +
+                    '<div style="display:flex;align-items:center;gap:10px;">' +
+                      '<div style="width:34px;height:34px;border-radius:50%;background:var(--adm-primary-soft);color:var(--adm-primary);font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;">' +
+                        esc(initials(doc.name)) +
+                      '</div>' +
+                      '<div>' +
+                        '<strong>' + esc(doc.name) + '</strong>' +
+                        '<div style="font-size:11px;color:var(--adm-slate);">' + esc(doc.speciality) + '</div>' +
+                      '</div>' +
+                    '</div>' +
+                  '</td>' +
+                  '<td><span style="font-family:monospace;font-weight:700;color:var(--adm-ink);background:var(--adm-canvas);padding:3px 8px;border-radius:6px;border:1px solid var(--adm-line);">' + esc(doc.pmdcId) + '</span></td>' +
+                  '<td>' + esc(doc.hospital) + '<div style="font-size:11.5px;color:var(--adm-slate);">' + esc(doc.city) + '</div></td>' +
+                  '<td>' +
+                    '<div style="display:flex;align-items:center;gap:8px;">' +
+                      '<div class="adm-progress-bar-bg" style="width:80px;"><div class="adm-progress-bar-fill" style="width:' + pc1 + '%;"></div></div>' +
+                      '<span style="font-size:12px;font-weight:700;">' + pc1 + '%</span>' +
+                    '</div>' +
+                  '</td>' +
+                  '<td>' +
+                    '<div style="display:flex;align-items:center;gap:8px;">' +
+                      '<div class="adm-progress-bar-bg" style="width:80px;"><div class="adm-progress-bar-fill" style="width:' + pc2 + '%;"></div></div>' +
+                      '<span style="font-size:12px;font-weight:700;">' + pc2 + '%</span>' +
+                    '</div>' +
+                  '</td>' +
+                  '<td>' +
+                    (certs > 0 ?
+                      '<span class="adm-chip adm-chip-active"><i class="ms" style="font-size:13px;">verified</i> ' + certs + ' Verified</span>' :
+                      '<span class="adm-chip adm-chip-warn">In Progress</span>') +
+                  '</td>' +
+                  '<td>' +
+                    '<button type="button" class="adm-btn-action" data-inspect="' + doc.id + '"><i class="ms" style="font-size:14px;">visibility</i> Inspect</button>' +
+                  '</td>' +
+                '</tr>';
+              }).join('') +
+            '</tbody>' +
+          '</table>' +
+        '</div>' +
+      '</div></div>';
+
+    $('#view').innerHTML = html;
+
+    if (!hasLeadingAnimationRun) {
+      animateValue($('#kpiDocs'), 0, actDocs.length, 1100);
+      animateValue($('#kpiWatch'), 0, avgC1, 1300, '%');
+      animateValue($('#kpiPass'), 0, passRate, 1200, '%');
+      animateValue($('#kpiCerts'), 0, certCount, 1400);
+      hasLeadingAnimationRun = true;
+    }
+
+    var btnHeroEnlist = $('#btnHeroEnlistDoc');
+    if (btnHeroEnlist) btnHeroEnlist.onclick = openEnlistDoctorDialog;
+
+    var btnGrandRounds = $('#btnJoinGrandRounds');
+    if (btnGrandRounds) {
+      btnGrandRounds.onclick = function () {
+        snack('Grand Rounds Schedule: Broadcast link will activate on Nov 12, 08:00 PM PKT.');
+      };
+    }
+
+    bindInspectButtons();
   }
 
-  /* 2. Course Management */
-  function courseList() {
-    $('#view').innerHTML =
-      '<div class="admin-hero-bar">' +
-        '<div><h1 style="font-size:26px;font-weight:800;color:var(--navy);margin:0 0 4px;">Curriculum & Courses</h1><p style="font-size:13.5px;color:var(--slate);margin:0;">Manage course publishing, lecture video streams, and question banks.</p></div>' +
+  /* --------------------------------------------------------------------------
+     VIEW 2: CLINICAL TRIAL RADAR & PATIENT REGISTRY (#clinical)
+     -------------------------------------------------------------------------- */
+  var patientFilters = { q: '', ind: 'all', status: 'all', isOpen: false };
+
+  function viewClinicalDashboard() {
+    var actDocs = doctors().filter(function (d) { return d.active; });
+    var pts = patients();
+    var pendingPatients = pts.filter(function (p) { return p.followupStatus === 'due_today'; });
+
+    // Apply patient filters
+    var filteredPatients = pts.filter(function (p) {
+      if (patientFilters.q) {
+        var query = patientFilters.q.toLowerCase();
+        var matchQ = (p.code && p.code.toLowerCase().indexOf(query) > -1) ||
+                     (p.doctorName && p.doctorName.toLowerCase().indexOf(query) > -1) ||
+                     (p.hospital && p.hospital.toLowerCase().indexOf(query) > -1) ||
+                     (p.city && p.city.toLowerCase().indexOf(query) > -1) ||
+                     (p.indication && p.indication.toLowerCase().indexOf(query) > -1);
+        if (!matchQ) return false;
+      }
+      if (patientFilters.ind && patientFilters.ind !== 'all' && p.indication !== patientFilters.ind) {
+        return false;
+      }
+      if (patientFilters.status && patientFilters.status !== 'all') {
+        if (patientFilters.status === 'due_today' && p.followupStatus !== 'due_today') return false;
+        if (patientFilters.status === 'completed' && p.day7Score === null) return false;
+        if (patientFilters.status === 'day3_done' && (p.day3Score === null || p.day7Score !== null)) return false;
+      }
+      return true;
+    });
+
+    var indicationOptions = [
+      { value: 'all', label: 'All Indications' },
+      { value: 'GERD & Chronic Dyspepsia', label: 'GERD & Chronic Dyspepsia' },
+      { value: 'Acid Peptic Disease (APD)', label: 'Acid Peptic Disease (APD)' },
+      { value: 'Functional Dyspepsia', label: 'Functional Dyspepsia' },
+      { value: 'Erosive Esophagitis', label: 'Erosive Esophagitis' },
+      { value: 'Gastric Ulceration', label: 'Gastric Ulceration' }
+    ];
+
+    var statusOptions = [
+      { value: 'all', label: 'All Follow-up States' },
+      { value: 'due_today', label: 'Due Today (Urgent Radar)' },
+      { value: 'day3_done', label: 'Day-3 Complete' },
+      { value: 'completed', label: 'Study Completed (Day 7)' }
+    ];
+
+    var html =
+      '<!-- Dedicated Clinical Crimson Hero Banner -->' +
+      '<div class="clinical-hero-banner">' +
+        '<svg class="clinical-ecg-bg" viewBox="0 0 500 120" preserveAspectRatio="none">' +
+          '<polyline points="0,60 100,60 120,40 140,80 160,20 180,100 200,60 300,60 320,45 340,75 360,30 380,90 400,60 500,60" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>' +
+        '</svg>' +
+        '<div style="position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">' +
+          '<div style="max-width:760px;">' +
+            '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">' +
+              '<span class="adm-chip" style="background:rgba(255,255,255,0.22);color:#ffffff;border:1px solid rgba(255,255,255,0.4);font-weight:800;font-size:11px;">' +
+                '<i class="ms" style="font-size:13px;">radar</i> ARM 2 CLINICAL TRIAL RADAR' +
+              '</span>' +
+              '<span class="adm-chip" style="background:rgba(0,0,0,0.25);color:#ffffff;font-size:11px;">' +
+                '<i class="ms" style="font-size:13px;">sensors</i> Real-Time Patient Pipeline' +
+              '</span>' +
+              '<span class="adm-chip" style="background:rgba(255,255,255,0.22);color:#ffffff;font-size:11px;">' +
+                '<i class="ms" style="font-size:13px;">verified</i> GCP Observational Protocol' +
+              '</span>' +
+            '</div>' +
+            '<h1 style="font-size:24px;font-weight:900;margin:0 0 6px;color:#ffffff;letter-spacing:-0.5px;">Clinical Trial Radar & Longitudinal E-CRF Cohort</h1>' +
+            '<p style="font-size:13px;color:rgba(255,255,255,0.92);margin:0;line-height:1.5;">' +
+              'Arm 2: Multi-center observational gastroenterology patient cohort and active Day-3 Follow-Up Radar across 12 Pakistan study centers.' +
+            '</p>' +
+          '</div>' +
+          '<div>' +
+            '<button type="button" class="adm-btn-outline" id="btnRegisterPatient" style="background:#ffffff;color:#e11d48;border-color:#ffffff;box-shadow:0 6px 20px rgba(0,0,0,0.2);padding:10px 20px;font-size:13.5px;font-weight:800;">' +
+              '<i class="ms" style="color:#e11d48;">person_add</i> + Register Trial Patient' +
+            '</button>' +
+          '</div>' +
+        '</div>' +
       '</div>' +
 
-      '<div class="admin-table-card">' +
-        '<table class="admin-table">' +
-          '<thead><tr><th>Course Title</th><th>Modules</th><th>Lectures</th><th>Duration</th><th>Status</th><th>Actions</th></tr></thead>' +
-          '<tbody>' +
-            courses().map(function (c) {
-              return '<tr>' +
-                '<td><strong>' + esc(c.title) + '</strong><div style="font-size:12px;color:var(--slate);">' + esc(c.subtitle) + '</div></td>' +
-                '<td>' + c.modules.length + '</td>' +
-                '<td>' + RULES.lectureCount(c) + '</td>' +
-                '<td>' + fmtDur(RULES.totalSeconds(c)) + '</td>' +
-                '<td>' + (c.published ? '<span class="filter-chip-sm" style="color:#059669;font-weight:700;">Published</span>' : '<span class="filter-chip-sm" style="color:#f59e0b;font-weight:700;">Coming Soon</span>') + '</td>' +
-                '<td>' +
-                  '<div style="display:flex;gap:8px;">' +
-                    '<a href="#courses/' + c.id + '" class="btn" style="border-radius:var(--radius-pill);padding:6px 14px;border:1px solid var(--line);font-size:12px;font-weight:700;">Manage</a>' +
-                    '<button class="btn" data-pub="' + c.id + '" style="border-radius:var(--radius-pill);padding:6px 14px;border:1px solid var(--line);font-size:12px;font-weight:700;">' + (c.published ? 'Hide' : 'Publish') + '</button>' +
+      '<!-- Section 1: Clinical Telemetry KPI Cards -->' +
+      '<div class="adm-section adm-section-clinical">' +
+        '<div class="adm-section-head">' +
+          '<div>' +
+            '<span class="adm-section-num" style="background:rgba(225,29,72,0.12);color:#e11d48;">01</span>' +
+            '<h3 class="adm-section-title" style="display:inline;">Observational Trial Recruitment & Protocol Safety</h3>' +
+            '<p class="adm-section-desc">Key performance telemetry across 12 active study sites in Pakistan.</p>' +
+          '</div>' +
+        '</div>' +
+        '<div class="adm-kpi-grid">' +
+          '<div class="adm-kpi-card adm-kpi-rose">' +
+            '<div class="adm-kpi-top">' +
+              '<div class="adm-kpi-icon"><i class="ms">personal_injury</i></div>' +
+              '<span class="adm-kpi-badge"><i class="ms" style="font-size:13px;">check_circle</i> Arm 2 Cohort</span>' +
+            '</div>' +
+            '<div class="adm-kpi-label">Enrolled Patients</div>' +
+            '<div class="adm-kpi-val" id="kpiPatients">' + (hasLeadingAnimationRun ? pts.length : '0') + '</div>' +
+            '<div class="adm-kpi-sub"><i class="ms" style="font-size:15px;color:#ff4760;">trending_up</i> Multi-center observational trial</div>' +
+          '</div>' +
+
+          '<div class="adm-kpi-card adm-kpi-violet">' +
+            '<div class="adm-kpi-top">' +
+              '<div class="adm-kpi-icon"><i class="ms">local_hospital</i></div>' +
+              '<span class="adm-kpi-badge"><i class="ms" style="font-size:13px;">domain</i> 12 Hubs</span>' +
+            '</div>' +
+            '<div class="adm-kpi-label">Active Investigator Sites</div>' +
+            '<div class="adm-kpi-val" id="kpiSites">' + (hasLeadingAnimationRun ? actDocs.length : '0') + '</div>' +
+            '<div class="adm-kpi-sub"><i class="ms" style="font-size:15px;color:var(--adm-primary);">location_city</i> 12 Pakistani Cities</div>' +
+          '</div>' +
+
+          '<div class="adm-kpi-card adm-kpi-cyan">' +
+            '<div class="adm-kpi-top">' +
+              '<div class="adm-kpi-icon"><i class="ms">schedule</i></div>' +
+              '<span class="adm-kpi-badge"><i class="ms" style="font-size:13px;">radar</i> 92% Compliance</span>' +
+            '</div>' +
+            '<div class="adm-kpi-label">Day-3 Follow-Up Rate</div>' +
+            '<div class="adm-kpi-val" id="kpiFollow">' + (hasLeadingAnimationRun ? '92%' : '0%') + '</div>' +
+            '<div class="adm-kpi-sub"><i class="ms" style="font-size:15px;color:var(--adm-cyan);">notifications_active</i> ' + pendingPatients.length + ' Actions Due Today</div>' +
+          '</div>' +
+
+          '<div class="adm-kpi-card adm-kpi-emerald">' +
+            '<div class="adm-kpi-top">' +
+              '<div class="adm-kpi-icon"><i class="ms">shield</i></div>' +
+              '<span class="adm-kpi-badge"><i class="ms" style="font-size:13px;">verified</i> Safe</span>' +
+            '</div>' +
+            '<div class="adm-kpi-label">Critical Adverse Events</div>' +
+            '<div class="adm-kpi-val" id="kpiSafety">0</div>' +
+            '<div class="adm-kpi-sub"><i class="ms" style="font-size:15px;color:var(--adm-emerald);">check_circle</i> 100% Protocol safety verified</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+
+      '<!-- Section 2: Day-3 Follow-Up Radar Triage Card -->' +
+      '<div class="adm-section adm-section-clinical">' +
+        '<div class="adm-section-head">' +
+          '<div>' +
+            '<span class="adm-section-num" style="background:rgba(255,71,96,0.14);color:#ff4760;">02</span>' +
+            '<h3 class="adm-section-title" style="display:inline;">Day-3 Patient Follow-Up Radar (Urgent Actions)</h3>' +
+            '<p class="adm-section-desc">Digital protocol requires a mandatory 3-day post-treatment GI outcome check.</p>' +
+          '</div>' +
+          '<span class="adm-radar-badge">' + pendingPatients.length + ' Patients Pending Contact</span>' +
+        '</div>' +
+        '<div style="display:flex;flex-direction:column;gap:10px;">' +
+          (pendingPatients.length === 0 ?
+            '<div style="padding:16px;text-align:center;color:var(--adm-emerald);font-weight:700;">All Day-3 follow-ups are up to date!</div>' :
+            pendingPatients.map(function (p) {
+              return '<div class="adm-radar-card-item">' +
+                '<div style="display:flex;align-items:center;gap:12px;">' +
+                  '<div class="adm-patient-avatar">' + esc(p.code.slice(3)) + '</div>' +
+                  '<div>' +
+                    '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">' +
+                      '<strong style="font-size:13.5px;color:var(--adm-ink);">' + esc(p.code) + ' (' + p.gender + ', ' + p.age + 'y · ' + esc(p.indication) + ')</strong>' +
+                      '<span class="adm-pwa-badge ' + (p.pwaInstalled ? 'status-installed' : 'status-pending') + '">' +
+                        '<i class="ms" style="font-size:12px;">' + (p.pwaInstalled ? 'smartphone' : 'hourglass_empty') + '</i> ' + (p.pwaInstalled ? 'App Installed' : 'App Pending') +
+                      '</span>' +
+                      '<span class="adm-pwa-badge ' + (p.notificationStatus === 'delivered' ? 'status-delivered' : 'status-scheduled') + '">' +
+                        '<i class="ms" style="font-size:12px;">' + (p.notificationStatus === 'delivered' ? 'done_all' : 'schedule') + '</i> ' + (p.notificationStatus === 'delivered' ? 'Alert Delivered' : 'Scheduled') +
+                      '</span>' +
+                    '</div>' +
+                    '<div style="font-size:11.5px;color:var(--adm-slate);margin-top:2px;">Attending: <strong>' + esc(p.doctorName) + '</strong> · ' + esc(p.hospital + ', ' + p.city) + '</div>' +
                   '</div>' +
-                '</td>' +
-              '</tr>';
-            }).join('') +
-          '</tbody>' +
-        '</table>' +
+                '</div>' +
+                '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">' +
+                  '<button type="button" class="adm-btn-action" data-record-follow="' + p.id + '" style="color:var(--adm-emerald);border-color:rgba(16,185,129,0.3);"><i class="ms" style="font-size:14px;">assignment_turned_in</i> Record</button>' +
+                  '<button type="button" class="adm-btn-action" data-qr-leaflet="' + esc(p.code) + '" style="color:var(--adm-primary);border-color:rgba(88,43,232,0.3);"><i class="ms" style="font-size:14px;">qr_code_scanner</i> QR Leaflet</button>' +
+                  '<button type="button" class="adm-btn-action" data-push-alert="' + p.id + '" style="color:#ff4760;border-color:rgba(255,71,96,0.3);"><i class="ms" style="font-size:14px;">send</i> Send Push</button>' +
+                '</div>' +
+              '</div>';
+            }).join('')) +
+        '</div>' +
+      '</div>' +
+
+      '<!-- Section 3: Clinical Severity Reduction (Modern 5-Step Bar Progression) & Regional Intake -->' +
+      '<div class="adm-section adm-section-clinical">' +
+        '<div class="adm-section-head">' +
+          '<div>' +
+            '<span class="adm-section-num" style="background:rgba(225,29,72,0.12);color:#e11d48;">03</span>' +
+            '<h3 class="adm-section-title" style="display:inline;">Gastroenterology Severity Score & Provincial Distribution</h3>' +
+            '<p class="adm-section-desc">Timeline relief scores and patient cohort allocation across administrative divisions.</p>' +
+          '</div>' +
+        '</div>' +
+        '<div class="adm-grid-2col">' +
+          '<!-- Left: Crisp 5-Step Severity Bar Chart -->' +
+          '<div class="adm-card">' +
+            '<div class="adm-card-head">' +
+              '<div>' +
+                '<h3 class="adm-card-title"><i class="ms" style="color:#ff4760;">bar_chart</i> GI Symptom Severity Reduction (1 - 10 Scale)</h3>' +
+                '<p class="adm-card-subtitle">Mean patient discomfort progression across 7-day study timeline</p>' +
+              '</div>' +
+              '<span class="adm-chip adm-chip-emerald">78% Relief at Day 7</span>' +
+            '</div>' +
+            '<div class="adm-crisp-barchart">' +
+              '<div class="adm-chart-gridlines">' +
+                '<div class="adm-gridline"><span class="adm-grid-val">8.0</span></div>' +
+                '<div class="adm-gridline"><span class="adm-grid-val">5.0</span></div>' +
+                '<div class="adm-gridline"><span class="adm-grid-val">2.0</span></div>' +
+                '<div class="adm-gridline adm-gridline-base"></div>' +
+              '</div>' +
+              '<div class="adm-chart-pillars">' +
+                '<div class="adm-pillar-col" title="Baseline: 8.4 / 10">' +
+                  '<div class="adm-pillar-val" style="color:#ef4444;font-weight:800;">8.4</div>' +
+                  '<div class="adm-pillar-track"><div class="adm-pillar-fill tone-red" style="height:84%;"></div></div>' +
+                  '<div class="adm-pillar-label">Baseline</div>' +
+                '</div>' +
+                '<div class="adm-pillar-col" title="Day 1: 7.1 / 10">' +
+                  '<div class="adm-pillar-val" style="color:#ea580c;font-weight:800;">7.1</div>' +
+                  '<div class="adm-pillar-track"><div class="adm-pillar-fill tone-orange" style="height:71%;"></div></div>' +
+                  '<div class="adm-pillar-label">Day 1</div>' +
+                '</div>' +
+                '<div class="adm-pillar-col is-peak" title="Day 3: 4.1 / 10 (Triage Radar)">' +
+                  '<div class="adm-pillar-val" style="color:#d97706;font-weight:800;">4.1 ★</div>' +
+                  '<div class="adm-pillar-track"><div class="adm-pillar-fill tone-amber" style="height:41%;"></div></div>' +
+                  '<div class="adm-pillar-label" style="color:#ff4760;font-weight:800;">Day 3 (Radar)</div>' +
+                '</div>' +
+                '<div class="adm-pillar-col" title="Day 5: 2.6 / 10">' +
+                  '<div class="adm-pillar-val" style="color:#65a30d;font-weight:800;">2.6</div>' +
+                  '<div class="adm-pillar-track"><div class="adm-pillar-fill tone-emerald" style="height:26%;"></div></div>' +
+                  '<div class="adm-pillar-label">Day 5</div>' +
+                '</div>' +
+                '<div class="adm-pillar-col" title="Day 7: 1.8 / 10 (Protocol End)">' +
+                  '<div class="adm-pillar-val" style="color:#059669;font-weight:800;">1.8 ✓</div>' +
+                  '<div class="adm-pillar-track"><div class="adm-pillar-fill tone-emerald" style="height:18%;"></div></div>' +
+                  '<div class="adm-pillar-label" style="color:#059669;font-weight:800;">Day 7 (End)</div>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<!-- Right Chart: Regional Cohort Distribution -->' +
+          '<div class="adm-card">' +
+            '<div class="adm-card-head">' +
+              '<div>' +
+                '<h3 class="adm-card-title"><i class="ms" style="color:var(--adm-primary);">pie_chart</i> Patient Intake by Province</h3>' +
+                '<p class="adm-card-subtitle">Recruitment across 5 administrative divisions</p>' +
+              '</div>' +
+              '<span class="adm-chip adm-chip-violet">Total: ' + pts.length + '</span>' +
+            '</div>' +
+            '<div style="display:flex;flex-direction:column;gap:12px;margin-top:10px;">' +
+              '<div>' +
+                '<div style="display:flex;justify-content:space-between;font-size:12.5px;font-weight:700;margin-bottom:4px;">' +
+                  '<span>Punjab (Lahore, Rawalpindi, Faisalabad, Multan, etc.)</span>' +
+                  '<span style="color:var(--adm-primary);">26 Patients (54%)</span>' +
+                '</div>' +
+                '<div class="adm-progress-bar-bg"><div class="adm-progress-bar-fill" style="width:54%;"></div></div>' +
+              '</div>' +
+              '<div>' +
+                '<div style="display:flex;justify-content:space-between;font-size:12.5px;font-weight:700;margin-bottom:4px;">' +
+                  '<span>Sindh (Karachi, Hyderabad)</span>' +
+                  '<span style="color:#ff4760;">10 Patients (21%)</span>' +
+                '</div>' +
+                '<div class="adm-progress-bar-bg"><div class="adm-progress-bar-fill" style="width:21%;background:var(--adm-pulse-gradient);"></div></div>' +
+              '</div>' +
+              '<div>' +
+                '<div style="display:flex;justify-content:space-between;font-size:12.5px;font-weight:700;margin-bottom:4px;">' +
+                  '<span>Khyber Pakhtunkhwa (Peshawar)</span>' +
+                  '<span style="color:#0284c7;">5 Patients (10%)</span>' +
+                '</div>' +
+                '<div class="adm-progress-bar-bg"><div class="adm-progress-bar-fill" style="width:10%;background:#0284c7;"></div></div>' +
+              '</div>' +
+              '<div>' +
+                '<div style="display:flex;justify-content:space-between;font-size:12.5px;font-weight:700;margin-bottom:4px;">' +
+                  '<span>Federal Territory (Islamabad)</span>' +
+                  '<span style="color:#10b981;">4 Patients (8%)</span>' +
+                '</div>' +
+                '<div class="adm-progress-bar-bg"><div class="adm-progress-bar-fill" style="width:8%;background:#10b981;"></div></div>' +
+              '</div>' +
+              '<div>' +
+                '<div style="display:flex;justify-content:space-between;font-size:12.5px;font-weight:700;margin-bottom:4px;">' +
+                  '<span>Balochistan (Quetta)</span>' +
+                  '<span style="color:#f59e0b;">3 Patients (7%)</span>' +
+                '</div>' +
+                '<div class="adm-progress-bar-bg"><div class="adm-progress-bar-fill" style="width:7%;background:#f59e0b;"></div></div>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+
+      '<!-- Section 4: Active Trial Patient Cohort Table with Collapsible Search & Searchable Dropdowns -->' +
+      '<div class="adm-section adm-section-clinical">' +
+        '<div class="adm-section-head">' +
+          '<div>' +
+            '<span class="adm-section-num" style="background:rgba(225,29,72,0.12);color:#e11d48;">04</span>' +
+            '<h3 class="adm-section-title" style="display:inline;">Active Trial Patient Cohort (Arm 2 Electronic CRF)</h3>' +
+            '<p class="adm-section-desc">Showing ' + filteredPatients.length + ' of ' + pts.length + ' longitudinal patients enrolled across Pakistan study centers.</p>' +
+          '</div>' +
+          '<div style="display:flex;gap:10px;align-items:center;">' +
+            '<button type="button" class="adm-btn-outline" id="btnTogglePatientSearch">' +
+              '<i class="ms">tune</i> Filter Cohort <i class="ms" style="font-size:16px;">expand_more</i>' +
+            '</button>' +
+          '</div>' +
+        '</div>' +
+
+        '<!-- Collapsible Search Header -->' +
+        '<div class="adm-collapsible-search-wrap' + (patientFilters.isOpen ? ' is-open' : '') + '" id="patientSearchPanel">' +
+          '<div class="adm-collapsible-search-grid">' +
+            '<div>' +
+              '<input type="text" class="adm-search-input" id="inpPatientSearchQuery" placeholder="Search by code, doctor, hospital, or city..." value="' + esc(patientFilters.q) + '">' +
+            '</div>' +
+            '<div>' +
+              renderSearchableDropdown({
+                id: 'inpPatientIndFilter',
+                options: indicationOptions,
+                value: patientFilters.ind,
+                label: 'Indications'
+              }) +
+            '</div>' +
+            '<div>' +
+              renderSearchableDropdown({
+                id: 'inpPatientStatusFilter',
+                options: statusOptions,
+                value: patientFilters.status,
+                label: 'Status'
+              }) +
+            '</div>' +
+            '<div>' +
+              '<button type="button" class="adm-btn-outline" id="btnResetPatientFilters" style="white-space:nowrap;">Reset</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+
+        (filteredPatients.length === 0 ?
+          renderEmptyState('No Patient Records Found', 'No trial patients matched your active search query or indication filters.', 'Reset Filters') :
+          '<div class="adm-table-wrap">' +
+            '<table class="adm-table">' +
+              '<thead>' +
+                '<tr>' +
+                  '<th>Patient Code</th>' +
+                  '<th>Demographics & Indication</th>' +
+                  '<th>Attending Clinician</th>' +
+                  '<th>Baseline / Day-3</th>' +
+                  '<th>PWA Mobile App</th>' +
+                  '<th>Push Alerts</th>' +
+                  '<th>Study Status</th>' +
+                  '<th>Actions</th>' +
+                '</tr>' +
+              '</thead>' +
+              '<tbody>' +
+                filteredPatients.map(function (p) {
+                  var isDue = p.followupStatus === 'due_today';
+                  return '<tr>' +
+                    '<td><span style="font-family:monospace;font-weight:800;color:var(--adm-ink);background:var(--adm-canvas);padding:3px 8px;border-radius:6px;border:1px solid var(--adm-line);">' + esc(p.code) + '</span></td>' +
+                    '<td>' +
+                      '<strong>' + p.gender + ', ' + p.age + 'y</strong>' +
+                      '<div style="font-size:11px;color:var(--adm-slate);">' + esc(p.indication) + '</div>' +
+                    '</td>' +
+                    '<td><strong>' + esc(p.doctorName) + '</strong><div style="font-size:11px;color:var(--adm-slate);">' + esc(p.hospital + ', ' + p.city) + '</div></td>' +
+                    '<td><span style="color:#ef4444;font-weight:700;">' + p.baselineScore + '</span> / ' + (p.day3Score !== null ? '<strong style="color:var(--adm-emerald);">' + p.day3Score + '</strong>' : '<span style="color:var(--adm-slate);">--</span>') + '</td>' +
+                    '<td>' +
+                      '<span class="adm-pwa-badge ' + (p.pwaInstalled ? 'status-installed' : 'status-pending') + '">' +
+                        '<i class="ms" style="font-size:12px;">' + (p.pwaInstalled ? 'smartphone' : 'hourglass_empty') + '</i> ' + (p.pwaInstalled ? 'Installed' : 'Pending') +
+                      '</span>' +
+                    '</td>' +
+                    '<td>' +
+                      '<span class="adm-pwa-badge ' + (p.notificationStatus === 'delivered' ? 'status-delivered' : (p.pushEnabled ? 'status-scheduled' : 'status-pending')) + '">' +
+                        '<i class="ms" style="font-size:12px;">' + (p.notificationStatus === 'delivered' ? 'done_all' : (p.pushEnabled ? 'schedule' : 'notifications_off')) + '</i> ' + (p.notificationStatus === 'delivered' ? 'Delivered' : (p.pushEnabled ? 'Scheduled' : 'No Push')) +
+                      '</span>' +
+                    '</td>' +
+                    '<td>' +
+                      (isDue ?
+                        '<span class="adm-chip adm-chip-danger">Due Today</span>' :
+                        p.day7Score !== null ?
+                          '<span class="adm-chip adm-chip-active">Completed</span>' :
+                          '<span class="adm-chip adm-chip-violet">Day-3 Done</span>') +
+                    '</td>' +
+                    '<td>' +
+                      '<div style="display:flex;gap:6px;">' +
+                        '<button type="button" class="adm-btn-action" data-record-follow="' + p.id + '" title="Record E-CRF Visit">Record</button>' +
+                        '<button type="button" class="adm-btn-action" data-qr-leaflet="' + esc(p.code) + '" title="Print Clinic Leaflet & QR"><i class="ms" style="font-size:13px;">qr_code</i></button>' +
+                        '<button type="button" class="adm-btn-action" data-delete-patient="' + p.id + '" style="color:var(--adm-rose);">&times;</button>' +
+                      '</div>' +
+                    '</td>' +
+                  '</tr>';
+                }).join('') +
+              '</tbody>' +
+            '</table>' +
+          '</div>') +
       '</div>';
 
-    $$('[data-pub]').forEach(function (b) {
+    $('#view').innerHTML = html;
+
+    if (!hasLeadingAnimationRun) {
+      animateValue($('#kpiPatients'), 0, pts.length, 1100);
+      animateValue($('#kpiSites'), 0, actDocs.length, 1200);
+      animateValue($('#kpiFollow'), 0, 92, 1300, '%');
+      animateValue($('#kpiSafety'), 0, 0, 800);
+      hasLeadingAnimationRun = true;
+    }
+
+    var btnToggleSearch = $('#btnTogglePatientSearch');
+    if (btnToggleSearch) {
+      btnToggleSearch.onclick = function () {
+        patientFilters.isOpen = !patientFilters.isOpen;
+        var panel = $('#patientSearchPanel');
+        if (panel) panel.classList.toggle('is-open', patientFilters.isOpen);
+      };
+    }
+
+    var inpQuery = $('#inpPatientSearchQuery');
+    if (inpQuery) {
+      inpQuery.oninput = function () {
+        patientFilters.q = inpQuery.value.trim();
+        viewClinicalDashboard();
+      };
+    }
+
+    var inpInd = $('#inpPatientIndFilter');
+    if (inpInd) {
+      inpInd.onchange = function () {
+        patientFilters.ind = inpInd.value;
+        viewClinicalDashboard();
+      };
+    }
+
+    var inpStat = $('#inpPatientStatusFilter');
+    if (inpStat) {
+      inpStat.onchange = function () {
+        patientFilters.status = inpStat.value;
+        viewClinicalDashboard();
+      };
+    }
+
+    var btnReset = $('#btnResetPatientFilters') || $('.adm-btn-reset-filters');
+    if (btnReset) {
+      btnReset.onclick = function () {
+        patientFilters = { q: '', ind: 'all', status: 'all', isOpen: true };
+        viewClinicalDashboard();
+      };
+    }
+
+    $$('[data-ping]').forEach(function (b) {
       b.onclick = function () {
-        var c = course(b.dataset.pub);
-        setPublished(c.id, !c.published);
-        snack(c.published ? 'Course published to doctors.' : 'Course unpublished.');
-        courseList();
+        snack('Telemetry Reminder Ping sent to ' + b.dataset.ping + ' via SMS & in-app alert.');
+      };
+    });
+
+    $$('[data-push-alert]').forEach(function (b) {
+      b.onclick = function () {
+        var pid = b.dataset.pushAlert;
+        var p = (patients() || []).filter(function (x) { return x.id === pid; })[0];
+        if (!p) return;
+        p.notificationStatus = 'delivered';
+        saveState();
+        snack('✓ Web Push Follow-up Notification dispatched to ' + p.code + ' (Delivered ✓✓).');
+        viewClinicalDashboard();
+      };
+    });
+
+    $$('[data-qr-leaflet]').forEach(function (b) {
+      b.onclick = function () {
+        openPatientQrLeafletDialog(b.dataset.qrLeaflet);
+      };
+    });
+
+    var btnReg = $('#btnRegisterPatient');
+    if (btnReg) btnReg.onclick = openRegisterPatientDialog;
+
+    $$('[data-record-follow]').forEach(function (b) {
+      b.onclick = function () { openRecordFollowupDialog(b.dataset.recordFollow); };
+    });
+
+    $$('[data-delete-patient]').forEach(function (b) {
+      b.onclick = function () {
+        var pid = b.dataset.deletePatient;
+        openDialog({
+          title: 'Discontinue Patient?',
+          body: '<p>Are you sure you want to discontinue this patient from the study cohort?</p>',
+          confirmText: 'Discontinue',
+          cancelText: 'Cancel',
+          onConfirm: function () {
+            deletePatient(pid);
+            snack('Patient record removed from trial cohort.');
+            viewClinicalDashboard();
+          }
+        });
       };
     });
   }
 
-  function courseView(id) {
-    var c = course(id);
-    if (!c) { courseList(); return; }
-    $('#view').innerHTML =
-      crumbs([{ label: 'Courses', href: '#courses' }, { label: c.title }]) +
-      '<div class="admin-hero-bar">' +
-        '<div><h1 style="font-size:24px;font-weight:800;color:var(--navy);margin:0 0 4px;">' + esc(c.title) + '</h1><p style="font-size:13.5px;color:var(--slate);margin:0;">Course Modules & Question Bank Structure</p></div>' +
+  function openPatientQrLeafletDialog(patientCode) {
+    var p = (patients() || []).filter(function (x) { return x.code === patientCode; })[0];
+    if (!p) return;
+
+    var portalUrl = location.origin + location.pathname.replace('/admin/', '/patient/') + '?id=' + encodeURIComponent(p.code);
+    var qrApiUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=' + encodeURIComponent(portalUrl);
+
+    var body =
+      '<div class="adm-qr-leaflet-box">' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;width:100%;border-bottom:1.5px solid var(--adm-line-light);padding-bottom:10px;">' +
+          '<div style="text-align:left;">' +
+            '<div style="font-size:14px;font-weight:800;color:var(--adm-ink);">Decoderium Digital Health · Arm 2 E-CRF</div>' +
+            '<div style="font-size:11px;color:var(--adm-slate);">Gastroenterology Observational Study Patient Leaflet</div>' +
+          '</div>' +
+          '<span class="adm-chip adm-chip-emerald">PKR 0 Push Telemetry</span>' +
+        '</div>' +
+        '<div style="display:grid;grid-template-columns:160px 1fr;gap:18px;align-items:center;text-align:left;margin-top:6px;">' +
+          '<div style="background:#fff;padding:8px;border:1.5px solid var(--adm-line);border-radius:12px;text-align:center;">' +
+            '<img src="' + qrApiUrl + '" alt="QR Code" style="width:144px;height:144px;display:block;border-radius:6px;" onerror="this.outerHTML=\'<div style=padding:24px;font-weight:bold;color:var(--adm-primary);>QR CODE<br>' + esc(p.code) + '</div>\'">' +
+          '</div>' +
+          '<div style="display:flex;flex-direction:column;gap:8px;">' +
+            '<div class="adm-leaflet-token">' +
+              '<div style="font-size:10px;color:var(--adm-slate);text-transform:uppercase;letter-spacing:0.5px;">Prescribed Patient ID</div>' +
+              '<div>' + esc(p.code) + '</div>' +
+            '</div>' +
+            '<div style="font-size:12px;color:var(--adm-ink);line-height:1.4;">' +
+              '<strong>Attending:</strong> ' + esc(p.doctorName) + '<br>' +
+              '<strong>Facility:</strong> ' + esc(p.hospital + ', ' + p.city) + '<br>' +
+              '<strong>Indication:</strong> ' + esc(p.indication) +
+            '</div>' +
+            '<div style="font-size:11.5px;color:var(--adm-slate);line-height:1.4;">' +
+              '1. Scan QR with smartphone camera.<br>' +
+              '2. Tap <strong>"Install App"</strong> (Chrome PWA).<br>' +
+              '3. Enable notifications for Day-3 & Day-7 follow-up checkups.' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+
+    openDialog({
+      title: 'Patient QR Leaflet · ' + p.code,
+      body: body,
+      confirmText: 'Print Leaflet 🖨️',
+      cancelText: 'Open Patient View ↗',
+      onConfirm: function () {
+        window.print();
+      }
+    });
+
+    var cancelBtn = $('.adm-modal-footer .adm-btn-outline') || $('.adm-modal-footer button:first-child');
+    if (cancelBtn) {
+      cancelBtn.onclick = function () {
+        window.open('../patient/?id=' + encodeURIComponent(p.code), '_blank');
+        closeDialog();
+      };
+    }
+  }
+
+  /* --------------------------------------------------------------------------
+     VIEW 3: REGIONAL PERFORMANCE MATRIX (#regions)
+     -------------------------------------------------------------------------- */
+  function viewRegionalMatrix() {
+    var actDocs = doctors().filter(function (d) { return d.active; });
+    var pubCourses = courses().filter(function (c) { return c.published; });
+
+    var provinceData = [
+      { name: 'Punjab', cities: 'Lahore, Rawalpindi, Faisalabad, Multan, Gujranwala, Sialkot, Bahawalpur', docs: 7, patients: 26, avgProgress: 74, status: 'Leading Hub' },
+      { name: 'Sindh', cities: 'Karachi, Hyderabad', docs: 2, patients: 10, avgProgress: 68, status: 'Optimal' },
+      { name: 'Khyber Pakhtunkhwa', cities: 'Peshawar', docs: 1, patients: 5, avgProgress: 62, status: 'Active' },
+      { name: 'Federal Capital', cities: 'Islamabad', docs: 1, patients: 4, avgProgress: 95, status: 'Exemplary' },
+      { name: 'Balochistan', cities: 'Quetta', docs: 1, patients: 3, avgProgress: 55, status: 'Expanding' }
+    ];
+
+    var html =
+      '<div class="adm-hero">' +
+        '<div>' +
+          '<h1 class="adm-hero-title"><i class="ms" style="color:var(--adm-primary);font-size:30px;">public</i> Regional Performance & Pakistan Hub Matrix</h1>' +
+          '<p class="adm-hero-subtitle">Geographic physician distribution, clinical trial participant intake, and accreditation progress across 12 Pakistan urban clusters.</p>' +
+        '</div>' +
       '</div>' +
 
-      '<div style="display:flex;flex-direction:column;gap:16px;">' +
-        c.modules.map(function (m) {
-          return '<div style="background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow-card);">' +
-            '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">' +
-              '<h3 style="font-size:16px;font-weight:800;color:var(--navy);margin:0;">Module ' + m.number + ': ' + esc(m.title) + '</h3>' +
-              '<span class="filter-chip-sm">' + m.lectures.length + ' Lectures</span>' +
+      '<div class="adm-card" style="margin-bottom:24px;">' +
+        '<div class="adm-card-head">' +
+          '<div>' +
+            '<h3 class="adm-card-title"><i class="ms" style="color:var(--adm-primary);">military_tech</i> Provincial Healthcare Performance Leaderboard</h3>' +
+            '<p class="adm-card-subtitle">Comparative audit of physician accreditation rate and patient trial accrual</p>' +
+          '</div>' +
+        '</div>' +
+        '<div class="adm-table-wrap">' +
+          '<table class="adm-table">' +
+            '<thead>' +
+              '<tr>' +
+                '<th>Province / Territory</th>' +
+                '<th>Included Urban Centers</th>' +
+                '<th>Principal Investigators</th>' +
+                '<th>Patient Accrual</th>' +
+                '<th>CME Completion Avg</th>' +
+                '<th>Operational Tier</th>' +
+              '</tr>' +
+            '</thead>' +
+            '<tbody>' +
+              provinceData.map(function (p) {
+                return '<tr>' +
+                  '<td><strong style="font-size:13.5px;color:var(--adm-ink);">' + esc(p.name) + '</strong></td>' +
+                  '<td style="font-size:12px;color:var(--adm-slate);">' + esc(p.cities) + '</td>' +
+                  '<td><strong>' + p.docs + '</strong> Clinicians</td>' +
+                  '<td><strong style="color:var(--adm-primary);">' + p.patients + '</strong> Patients</td>' +
+                  '<td>' +
+                    '<div style="display:flex;align-items:center;gap:6px;">' +
+                      '<div class="adm-progress-bar-bg" style="width:70px;"><div class="adm-progress-bar-fill" style="width:' + p.avgProgress + '%;"></div></div>' +
+                      '<span style="font-size:12px;font-weight:700;">' + p.avgProgress + '%</span>' +
+                    '</div>' +
+                  '</td>' +
+                  '<td><span class="adm-chip ' + (p.avgProgress >= 70 ? 'adm-chip-active' : 'adm-chip-violet') + '">' + esc(p.status) + '</span></td>' +
+                '</tr>';
+              }).join('') +
+            '</tbody>' +
+          '</table>' +
+        '</div>' +
+      '</div>' +
+
+      '<h3 style="font-size:17px;font-weight:800;color:var(--adm-ink);margin:0 0 14px;">12 Urban Regional Node Detail</h3>' +
+      '<div class="adm-region-grid">' +
+        doctors().map(function (d, i) {
+          var prog = progressOf(d.id);
+          var c1 = pubCourses[0];
+          var pc = c1 ? RULES.percent(c1, prog) : 0;
+          var pCount = 3 + (i % 4);
+          return '<div class="adm-city-card">' +
+            '<div class="adm-city-head">' +
+              '<span class="adm-city-name"><i class="ms" style="font-size:16px;color:var(--adm-primary);vertical-align:middle;margin-right:4px;">place</i>' + esc(d.city) + '</span>' +
+              '<span class="adm-province-tag">' + (d.active ? 'Active Node' : 'Suspended') + '</span>' +
             '</div>' +
-            '<div style="font-size:13px;color:var(--slate-dark);">' + esc(m.summary) + '</div>' +
-            '<div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--line);display:flex;justify-content:space-between;font-size:12px;color:var(--slate);">' +
-              '<span>Question Bank: <strong>' + m.pool.length + ' Questions</strong></span>' +
-              '<span style="color:#059669;font-weight:700;">10 Questions / Attempt (70% Pass)</span>' +
+            '<div style="font-size:13px;font-weight:700;color:var(--adm-ink);margin-bottom:2px;">' + esc(d.name) + '</div>' +
+            '<div style="font-size:11.5px;color:var(--adm-slate);margin-bottom:12px;">' + esc(d.hospital) + '</div>' +
+            '<div style="background:var(--adm-canvas);padding:8px 10px;border-radius:8px;border:1px solid var(--adm-line);">' +
+              '<div style="display:flex;justify-content:space-between;font-size:11.5px;font-weight:600;color:var(--adm-slate);margin-bottom:4px;">' +
+                '<span>CME Progress</span>' +
+                '<span style="color:var(--adm-primary);font-weight:700;">' + pc + '%</span>' +
+              '</div>' +
+              '<div class="adm-progress-bar-bg" style="height:6px;"><div class="adm-progress-bar-fill" style="width:' + pc + '%;"></div></div>' +
+              '<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--adm-slate);margin-top:6px;">' +
+                '<span>PMDC: <strong>' + esc(d.pmdcId) + '</strong></span>' +
+                '<span>Trial Cohort: <strong>' + pCount + ' Pts</strong></span>' +
+              '</div>' +
             '</div>' +
           '</div>';
         }).join('') +
       '</div>';
+
+    $('#view').innerHTML = html;
   }
 
-  /* 3. Doctor Directory & PMDC Management */
-  function doctorList() {
-    $('#view').innerHTML =
-      '<div class="admin-hero-bar">' +
-        '<div><h1 style="font-size:26px;font-weight:800;color:var(--navy);margin:0 0 4px;">Doctor Management</h1><p style="font-size:13.5px;color:var(--slate);margin:0;">Enlisted physicians, PMDC license credentials, and activation state.</p></div>' +
+  /* --------------------------------------------------------------------------
+     VIEW 4: DOCTOR DIRECTORY & USER MANAGEMENT (#doctors)
+     -------------------------------------------------------------------------- */
+  var docFilterState = { q: '', city: 'all', spec: 'all', status: 'all', isOpen: false };
+
+  function viewDoctorList() {
+    var docs = doctors();
+    var filtered = docs.filter(function (d) {
+      if (docFilterState.q) {
+        var query = docFilterState.q.toLowerCase();
+        var matchQ = d.name.toLowerCase().indexOf(query) > -1 ||
+                     d.pmdcId.toLowerCase().indexOf(query) > -1 ||
+                     d.city.toLowerCase().indexOf(query) > -1 ||
+                     d.hospital.toLowerCase().indexOf(query) > -1 ||
+                     d.email.toLowerCase().indexOf(query) > -1;
+        if (!matchQ) return false;
+      }
+      if (docFilterState.city !== 'all' && d.city !== docFilterState.city) return false;
+      if (docFilterState.spec !== 'all' && d.speciality !== docFilterState.spec) return false;
+      if (docFilterState.status !== 'all') {
+        if (docFilterState.status === 'active' && !d.active) return false;
+        if (docFilterState.status === 'suspended' && d.active) return false;
+      }
+      return true;
+    });
+
+    var cityOptions = [
+      { value: 'all', label: 'All Cities' },
+      { value: 'Lahore', label: 'Lahore (Punjab)' },
+      { value: 'Karachi', label: 'Karachi (Sindh)' },
+      { value: 'Islamabad', label: 'Islamabad (Federal)' },
+      { value: 'Rawalpindi', label: 'Rawalpindi (Punjab)' },
+      { value: 'Faisalabad', label: 'Faisalabad (Punjab)' },
+      { value: 'Multan', label: 'Multan (Punjab)' },
+      { value: 'Peshawar', label: 'Peshawar (KP)' },
+      { value: 'Quetta', label: 'Quetta (Balochistan)' }
+    ];
+
+    var specOptions = [
+      { value: 'all', label: 'All Specialties' },
+      { value: 'Consultant Gastroenterologist', label: 'Consultant Gastroenterologist' },
+      { value: 'Consultant Cardiologist', label: 'Consultant Cardiologist' },
+      { value: 'General Physician / Interventionalist', label: 'General Physician' },
+      { value: 'Electrophysiologist & Pacing Specialist', label: 'Electrophysiologist' },
+      { value: 'Clinical Pharmacologist', label: 'Clinical Pharmacologist' }
+    ];
+
+    var statusOptions = [
+      { value: 'all', label: 'All Account Statuses' },
+      { value: 'active', label: 'Active & Verified' },
+      { value: 'suspended', label: 'Suspended' }
+    ];
+
+    var html =
+      '<div class="adm-hero">' +
+        '<div>' +
+          '<h1 class="adm-hero-title"><i class="ms" style="color:var(--adm-primary);font-size:30px;">groups</i> Physician Governance & User Directory</h1>' +
+          '<p class="adm-hero-subtitle">Enlisted clinicians, PMDC license credentials, activation switches, and CME audit trails.</p>' +
+        '</div>' +
+        '<div class="adm-hero-actions">' +
+          '<button type="button" class="adm-btn-primary" id="btnEnlistDoc"><i class="ms">person_add</i> + Enlist New Physician</button>' +
+        '</div>' +
       '</div>' +
 
-      '<div class="admin-table-card">' +
-        '<table class="admin-table">' +
-          '<thead><tr><th>Physician Name</th><th>PMDC ID</th><th>Speciality</th><th>Hospital</th><th>Status</th><th>Toggle</th></tr></thead>' +
-          '<tbody>' +
-            doctors().map(function (doc) {
-              return '<tr>' +
-                '<td><strong>' + esc(doc.name) + '</strong><div style="font-size:11.5px;color:var(--slate);">' + esc(doc.email) + '</div></td>' +
-                '<td><span style="font-family:monospace;font-weight:700;">' + esc(doc.pmdcId) + '</span></td>' +
-                '<td>' + esc(doc.speciality) + '</td>' +
-                '<td>' + esc(doc.hospital + ', ' + doc.city) + '</td>' +
-                '<td>' + (doc.active ? '<span class="filter-chip-sm" style="color:#059669;font-weight:700;">Active</span>' : '<span class="filter-chip-sm" style="color:#ef4444;font-weight:700;">Suspended</span>') + '</td>' +
-                '<td><button class="btn" data-doc="' + doc.id + '" style="border-radius:var(--radius-pill);padding:6px 14px;border:1px solid var(--line);font-size:12px;font-weight:700;">' + (doc.active ? 'Deactivate' : 'Activate') + '</button></td>' +
-              '</tr>';
-            }).join('') +
-          '</tbody>' +
-        '</table>' +
+      '<div class="adm-section">' +
+        '<div class="adm-section-head">' +
+          '<div>' +
+            '<span class="adm-section-num">01</span>' +
+            '<h3 class="adm-section-title" style="display:inline;">Enlisted Clinician Cohort</h3>' +
+            '<p class="adm-section-desc">Showing <strong>' + filtered.length + '</strong> of ' + docs.length + ' registered healthcare providers across Pakistan hubs.</p>' +
+          '</div>' +
+          '<div style="display:flex;align-items:center;gap:10px;">' +
+            '<button type="button" class="adm-btn-outline" id="btnToggleDocFilter">' +
+              '<i class="ms">tune</i> Search & Filter <i class="ms" style="font-size:16px;">expand_more</i>' +
+            '</button>' +
+          '</div>' +
+        '</div>' +
+
+        '<!-- Collapsible Search & Filter Bar -->' +
+        '<div class="adm-collapsible-search-wrap' + (docFilterState.isOpen ? ' is-open' : '') + '" id="docFilterPanel">' +
+          '<div class="adm-collapsible-search-grid">' +
+            '<div>' +
+              '<input type="text" class="adm-search-input" id="inpDocSearchQuery" placeholder="Filter by name, PMDC, hospital, city..." value="' + esc(docFilterState.q) + '">' +
+            '</div>' +
+            '<div>' +
+              renderSearchableDropdown({
+                id: 'inpDocCityFilter',
+                options: cityOptions,
+                value: docFilterState.city,
+                label: 'Cities'
+              }) +
+            '</div>' +
+            '<div>' +
+              renderSearchableDropdown({
+                id: 'inpDocSpecFilter',
+                options: specOptions,
+                value: docFilterState.spec,
+                label: 'Specialty'
+              }) +
+            '</div>' +
+            '<div>' +
+              '<button type="button" class="adm-btn-outline" id="btnResetDocFilters" style="white-space:nowrap;">Reset</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+
+        (filtered.length === 0 ?
+          renderEmptyState('No Clinicians Found', 'No physician matches your active query or specialty filter.', 'Reset Filters') :
+          '<div class="adm-table-wrap">' +
+            '<table class="adm-table">' +
+              '<thead>' +
+                '<tr>' +
+                  '<th>Physician</th>' +
+                  '<th>PMDC License</th>' +
+                  '<th>Hospital & City</th>' +
+                  '<th>Contact</th>' +
+                  '<th>Status</th>' +
+                  '<th>Account Switch</th>' +
+                  '<th>Actions</th>' +
+                '</tr>' +
+              '</thead>' +
+              '<tbody>' +
+                filtered.map(function (doc) {
+                  return '<tr>' +
+                    '<td>' +
+                      '<div style="display:flex;align-items:center;gap:10px;">' +
+                        '<div style="width:36px;height:36px;border-radius:50%;background:var(--adm-primary-soft);color:var(--adm-primary);font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;">' +
+                          esc(initials(doc.name)) +
+                        '</div>' +
+                        '<div>' +
+                          '<strong>' + esc(doc.name) + '</strong>' +
+                          '<div style="font-size:11.5px;color:var(--adm-slate);">' + esc(doc.speciality) + '</div>' +
+                        '</div>' +
+                      '</div>' +
+                    '</td>' +
+                    '<td><span style="font-family:monospace;font-weight:800;background:var(--adm-canvas);padding:3px 8px;border-radius:6px;border:1px solid var(--adm-line);color:var(--adm-ink);">' + esc(doc.pmdcId) + '</span></td>' +
+                    '<td>' + esc(doc.hospital) + '<div style="font-size:11px;color:var(--adm-slate);">' + esc(doc.city) + '</div></td>' +
+                    '<td>' +
+                      '<div style="font-size:12px;color:var(--adm-ink);">' + esc(doc.phone) + '</div>' +
+                      '<div style="font-size:11px;color:var(--adm-slate);">' + esc(doc.email) + '</div>' +
+                    '</td>' +
+                    '<td>' +
+                      (doc.active ?
+                        '<span class="adm-chip adm-chip-active">Active</span>' :
+                        '<span class="adm-chip adm-chip-danger">Suspended</span>') +
+                    '</td>' +
+                    '<td>' +
+                      '<button type="button" class="adm-btn-action" data-toggle-doc="' + doc.id + '" style="font-size:11.5px;">' +
+                        (doc.active ? 'Deactivate' : 'Activate') +
+                      '</button>' +
+                    '</td>' +
+                    '<td>' +
+                      '<div style="display:flex;gap:6px;">' +
+                        '<button type="button" class="adm-btn-action" data-inspect="' + doc.id + '" title="Inspect Telemetry"><i class="ms" style="font-size:14px;">visibility</i></button>' +
+                        '<button type="button" class="adm-btn-action" data-edit-doc="' + doc.id + '" title="Edit Physician"><i class="ms" style="font-size:14px;">edit</i></button>' +
+                        '<button type="button" class="adm-btn-action" data-delete-doc="' + doc.id + '" title="Delete Physician" style="color:var(--adm-rose);">&times;</button>' +
+                      '</div>' +
+                    '</td>' +
+                  '</tr>';
+                }).join('') +
+              '</tbody>' +
+            '</table>' +
+          '</div>') +
       '</div>';
 
-    $$('[data-doc]').forEach(function (b) {
+    $('#view').innerHTML = html;
+
+    var btnToggle = $('#btnToggleDocFilter');
+    if (btnToggle) {
+      btnToggle.onclick = function () {
+        docFilterState.isOpen = !docFilterState.isOpen;
+        var p = $('#docFilterPanel');
+        if (p) p.classList.toggle('is-open', docFilterState.isOpen);
+      };
+    }
+
+    var inpQ = $('#inpDocSearchQuery');
+    if (inpQ) {
+      inpQ.oninput = function () {
+        docFilterState.q = inpQ.value.trim();
+        viewDoctorList();
+      };
+    }
+
+    var inpCity = $('#inpDocCityFilter');
+    if (inpCity) {
+      inpCity.onchange = function () {
+        docFilterState.city = inpCity.value;
+        viewDoctorList();
+      };
+    }
+
+    var inpSpec = $('#inpDocSpecFilter');
+    if (inpSpec) {
+      inpSpec.onchange = function () {
+        docFilterState.spec = inpSpec.value;
+        viewDoctorList();
+      };
+    }
+
+    var btnReset = $('#btnResetDocFilters') || $('.adm-btn-reset-filters');
+    if (btnReset) {
+      btnReset.onclick = function () {
+        docFilterState = { q: '', city: 'all', spec: 'all', status: 'all', isOpen: true };
+        viewDoctorList();
+      };
+    }
+
+    $$('[data-toggle-doc]').forEach(function (b) {
       b.onclick = function () {
-        var id = b.dataset.doc;
-        var doc = doctors().filter(function (x) { return x.id === id; })[0];
-        if (doc) {
-          doc.active = !doc.active;
+        var id = b.dataset.toggleDoc;
+        var d = doctors().filter(function (x) { return x.id === id; })[0];
+        if (d) {
+          d.active = !d.active;
           saveState();
-          snack('Doctor status updated.');
-          doctorList();
+          snack('Physician ' + d.name + ' is now ' + (d.active ? 'Active' : 'Suspended') + '.');
+          viewDoctorList();
         }
+      };
+    });
+
+    $$('[data-edit-doc]').forEach(function (b) {
+      b.onclick = function () { openEditDoctorDialog(b.dataset.editDoc); };
+    });
+
+    $$('[data-delete-doc]').forEach(function (b) {
+      b.onclick = function () {
+        var id = b.dataset.deleteDoc;
+        openDialog({
+          title: 'Delete Physician?',
+          body: '<p>Are you sure you want to remove this physician account and all associated progress logs?</p>',
+          confirmText: 'Delete',
+          cancelText: 'Cancel',
+          onConfirm: function () {
+            deleteDoctor(id);
+            snack('Physician removed.');
+            viewDoctorList();
+          }
+        });
+      };
+    });
+
+    var btnEnlist = $('#btnEnlistDoc');
+    if (btnEnlist) btnEnlist.onclick = openEnlistDoctorDialog;
+    bindInspectButtons();
+  }
+
+  /* --------------------------------------------------------------------------
+     VIEW 5: CURRICULUM & COURSES (#courses) WITH THUMBNAILS & FULL CRUD
+     -------------------------------------------------------------------------- */
+  var courseFilterState = { q: '', cat: 'all', pub: 'all', isOpen: false };
+
+  function viewCourseList() {
+    var clist = courses().filter(function (c) {
+      if (courseFilterState.q) {
+        var query = courseFilterState.q.toLowerCase();
+        var matchQ = c.title.toLowerCase().indexOf(query) > -1 ||
+                     (c.subtitle && c.subtitle.toLowerCase().indexOf(query) > -1) ||
+                     (c.category && c.category.toLowerCase().indexOf(query) > -1);
+        if (!matchQ) return false;
+      }
+      if (courseFilterState.cat !== 'all' && c.category !== courseFilterState.cat) return false;
+      if (courseFilterState.pub !== 'all') {
+        if (courseFilterState.pub === 'published' && !c.published) return false;
+        if (courseFilterState.pub === 'draft' && c.published) return false;
+      }
+      return true;
+    });
+
+    var categoryOptions = [
+      { value: 'all', label: 'All Categories' },
+      { value: 'Gastroenterology', label: 'Gastroenterology' },
+      { value: 'Cardiology', label: 'Cardiology' },
+      { value: 'Clinical Pharmacology', label: 'Clinical Pharmacology' },
+      { value: 'Electrophysiology', label: 'Electrophysiology' },
+      { value: 'Heart Failure & GDMT', label: 'Heart Failure & GDMT' }
+    ];
+
+    var pubOptions = [
+      { value: 'all', label: 'All Visibility' },
+      { value: 'published', label: 'Published Only' },
+      { value: 'draft', label: 'Coming Soon / Drafts' }
+    ];
+
+    var html =
+      '<div class="adm-hero">' +
+        '<div>' +
+          '<h1 class="adm-hero-title"><i class="ms" style="color:var(--adm-primary);font-size:30px;">auto_stories</i> Curriculum & Course Management</h1>' +
+          '<p class="adm-hero-subtitle">Design course curriculums, manage rich vector thumbnails, watch threshold gates, and quiz question pools.</p>' +
+        '</div>' +
+        '<div class="adm-hero-actions">' +
+          '<div class="adm-view-toggle">' +
+            '<button type="button" class="adm-view-toggle-btn ' + (courseViewMode === 'grid' ? 'active' : '') + '" id="btnViewGrid"><i class="ms">grid_view</i> Grid</button>' +
+            '<button type="button" class="adm-view-toggle-btn ' + (courseViewMode === 'table' ? 'active' : '') + '" id="btnViewTable"><i class="ms">table_rows</i> Table</button>' +
+          '</div>' +
+          '<button type="button" class="adm-btn-primary" id="btnCreateCourse"><i class="ms">add</i> + Create New Course</button>' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="adm-section">' +
+        '<div class="adm-section-head">' +
+          '<div>' +
+            '<span class="adm-section-num">01</span>' +
+            '<h3 class="adm-section-title" style="display:inline;">Published Masterclasses & Syllabi</h3>' +
+            '<p class="adm-section-desc">Showing <strong>' + clist.length + '</strong> courses across cardiology and gastroenterology.</p>' +
+          '</div>' +
+          '<div style="display:flex;align-items:center;gap:10px;">' +
+            '<button type="button" class="adm-btn-outline" id="btnToggleCourseFilter">' +
+              '<i class="ms">tune</i> Search & Filter <i class="ms" style="font-size:16px;">expand_more</i>' +
+            '</button>' +
+          '</div>' +
+        '</div>' +
+
+        '<!-- Collapsible Search & Filter Bar -->' +
+        '<div class="adm-collapsible-search-wrap' + (courseFilterState.isOpen ? ' is-open' : '') + '" id="courseFilterPanel">' +
+          '<div class="adm-collapsible-search-grid">' +
+            '<div>' +
+              '<input type="text" class="adm-search-input" id="inpCourseSearchQuery" placeholder="Filter by course title, topic, or category..." value="' + esc(courseFilterState.q) + '">' +
+            '</div>' +
+            '<div>' +
+              renderSearchableDropdown({
+                id: 'inpCourseCatFilter',
+                options: categoryOptions,
+                value: courseFilterState.cat,
+                label: 'Categories'
+              }) +
+            '</div>' +
+            '<div>' +
+              renderSearchableDropdown({
+                id: 'inpCoursePubFilter',
+                options: pubOptions,
+                value: courseFilterState.pub,
+                label: 'Visibility'
+              }) +
+            '</div>' +
+            '<div>' +
+              '<button type="button" class="adm-btn-outline" id="btnResetCourseFilters" style="white-space:nowrap;">Reset</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+
+    if (clist.length === 0) {
+      html += renderEmptyState('No Courses Found', 'No course matches your active search query or category filter.', 'Reset Filters');
+    } else
+
+    if (courseViewMode === 'grid') {
+      html +=
+        '<div class="adm-course-grid">' +
+          clist.map(function (c) {
+            return '<div class="adm-course-card">' +
+              '<div class="adm-course-thumb">' +
+                courseThumbSvg(c, false) +
+                '<div class="adm-thumb-badge-top">' +
+                  '<span class="adm-thumb-chip"><i class="ms" style="font-size:12px;">layers</i> ' + c.modules.length + ' Modules</span>' +
+                  '<span class="adm-thumb-chip"><i class="ms" style="font-size:12px;">schedule</i> ' + fmtDur(RULES.totalSeconds(c)) + '</span>' +
+                '</div>' +
+                '<div class="adm-thumb-badge-bottom">' +
+                  (c.published ?
+                    '<span class="adm-chip adm-chip-active" style="box-shadow:0 2px 8px rgba(0,0,0,0.25);">Published</span>' :
+                    '<span class="adm-chip adm-chip-warn" style="box-shadow:0 2px 8px rgba(0,0,0,0.25);">Coming Soon</span>') +
+                '</div>' +
+              '</div>' +
+              '<div class="adm-course-card-body">' +
+                '<div class="adm-course-card-meta">' +
+                  '<span style="font-size:11px;font-weight:700;color:var(--adm-primary);text-transform:uppercase;">' + esc(c.category + ' · ' + c.level) + '</span>' +
+                '</div>' +
+                '<h3 class="adm-course-card-title">' + esc(c.title) + '</h3>' +
+                '<div class="adm-course-card-sub">' + esc(c.subtitle || '') + '</div>' +
+                '<p class="adm-course-card-desc">' + esc(c.description || 'Comprehensive clinical accredited course.') + '</p>' +
+                '<div class="adm-course-card-stats">' +
+                  '<span><i class="ms" style="font-size:15px;color:var(--adm-primary);">videocam</i> ' + RULES.lectureCount(c) + ' Lectures</span>' +
+                  '<span><i class="ms" style="font-size:15px;color:var(--adm-cyan);">quiz</i> 10 MCQs / Module</span>' +
+                '</div>' +
+                '<div class="adm-course-card-actions">' +
+                  '<a href="#courses/' + c.id + '" class="adm-btn-action" style="background:var(--adm-primary-soft);color:var(--adm-primary);border-color:var(--adm-ring);font-weight:800;">Inspect Modules &rarr;</a>' +
+                  '<div style="display:flex;gap:6px;">' +
+                    '<button type="button" class="adm-btn-action" data-pub-course="' + c.id + '" title="' + (c.published ? 'Unpublish' : 'Publish') + '">' + (c.published ? 'Hide' : 'Publish') + '</button>' +
+                    '<button type="button" class="adm-btn-action" data-edit-course="' + c.id + '" title="Edit Course"><i class="ms" style="font-size:14px;">edit</i></button>' +
+                    '<button type="button" class="adm-btn-action" data-delete-course="' + c.id + '" title="Delete Course" style="color:var(--adm-rose);">&times;</button>' +
+                  '</div>' +
+                '</div>' +
+              '</div>' +
+            '</div>';
+          }).join('') +
+        '</div>';
+    } else {
+      html +=
+        '<div class="adm-card">' +
+          '<div class="adm-table-wrap">' +
+            '<table class="adm-table">' +
+              '<thead>' +
+                '<tr>' +
+                  '<th>Thumbnail</th>' +
+                  '<th>Course Title</th>' +
+                  '<th>Category & Level</th>' +
+                  '<th>Modules</th>' +
+                  '<th>Lectures</th>' +
+                  '<th>Duration</th>' +
+                  '<th>State</th>' +
+                  '<th>Actions</th>' +
+                '</tr>' +
+              '</thead>' +
+              '<tbody>' +
+                clist.map(function (c) {
+                  return '<tr>' +
+                    '<td><div class="adm-thumb-mini">' + courseThumbSvg(c, true) + '</div></td>' +
+                    '<td>' +
+                      '<strong>' + esc(c.title) + '</strong>' +
+                      '<div style="font-size:11.5px;color:var(--adm-slate);">' + esc(c.subtitle) + '</div>' +
+                    '</td>' +
+                    '<td>' + esc(c.category + ' · ' + c.level) + '</td>' +
+                    '<td>' + c.modules.length + '</td>' +
+                    '<td>' + RULES.lectureCount(c) + '</td>' +
+                    '<td>' + fmtDur(RULES.totalSeconds(c)) + '</td>' +
+                    '<td>' +
+                      (c.published ?
+                        '<span class="adm-chip adm-chip-active">Published</span>' :
+                        '<span class="adm-chip adm-chip-warn">Coming Soon</span>') +
+                    '</td>' +
+                    '<td>' +
+                      '<div style="display:flex;gap:6px;">' +
+                        '<a href="#courses/' + c.id + '" class="adm-btn-action" style="font-weight:700;">Inspect</a>' +
+                        '<button class="adm-btn-action" data-pub-course="' + c.id + '">' + (c.published ? 'Hide' : 'Publish') + '</button>' +
+                        '<button class="adm-btn-action" data-edit-course="' + c.id + '"><i class="ms" style="font-size:14px;">edit</i></button>' +
+                        '<button class="adm-btn-action" data-delete-course="' + c.id + '" style="color:var(--adm-rose);">&times;</button>' +
+                      '</div>' +
+                    '</td>' +
+                  '</tr>';
+                }).join('') +
+              '</tbody>' +
+            '</table>' +
+          '</div>' +
+        '</div>';
+    }
+
+    html += '</div>'; // close adm-section
+
+    $('#view').innerHTML = html;
+
+    var btnToggleCourse = $('#btnToggleCourseFilter');
+    if (btnToggleCourse) {
+      btnToggleCourse.onclick = function () {
+        courseFilterState.isOpen = !courseFilterState.isOpen;
+        var p = $('#courseFilterPanel');
+        if (p) p.classList.toggle('is-open', courseFilterState.isOpen);
+      };
+    }
+
+    var inpCQ = $('#inpCourseSearchQuery');
+    if (inpCQ) {
+      inpCQ.oninput = function () {
+        courseFilterState.q = inpCQ.value.trim();
+        viewCourseList();
+      };
+    }
+
+    var inpCCat = $('#inpCourseCatFilter');
+    if (inpCCat) {
+      inpCCat.onchange = function () {
+        courseFilterState.cat = inpCCat.value;
+        viewCourseList();
+      };
+    }
+
+    var inpCPub = $('#inpCoursePubFilter');
+    if (inpCPub) {
+      inpCPub.onchange = function () {
+        courseFilterState.pub = inpCPub.value;
+        viewCourseList();
+      };
+    }
+
+    var btnResetCourse = $('#btnResetCourseFilters') || $('.adm-btn-reset-filters');
+    if (btnResetCourse) {
+      btnResetCourse.onclick = function () {
+        courseFilterState = { q: '', cat: 'all', pub: 'all', isOpen: true };
+        viewCourseList();
+      };
+    }
+
+    var btnGrid = $('#btnViewGrid');
+    var btnTable = $('#btnViewTable');
+    if (btnGrid) {
+      btnGrid.onclick = function () {
+        courseViewMode = 'grid';
+        viewCourseList();
+      };
+    }
+    if (btnTable) {
+      btnTable.onclick = function () {
+        courseViewMode = 'table';
+        viewCourseList();
+      };
+    }
+
+    var btnCreate = $('#btnCreateCourse');
+    if (btnCreate) btnCreate.onclick = openCreateCourseDialog;
+
+    $$('[data-pub-course]').forEach(function (b) {
+      b.onclick = function () {
+        var c = course(b.dataset.pubCourse);
+        if (c) {
+          setPublished(c.id, !c.published);
+          snack(c.published ? 'Course published to doctors.' : 'Course unpublished.');
+          viewCourseList();
+        }
+      };
+    });
+
+    $$('[data-edit-course]').forEach(function (b) {
+      b.onclick = function () { openEditCourseDialog(b.dataset.editCourse); };
+    });
+
+    $$('[data-delete-course]').forEach(function (b) {
+      b.onclick = function () {
+        var cid = b.dataset.deleteCourse;
+        openDialog({
+          title: 'Delete Course?',
+          body: '<p>Are you sure you want to delete this course and all its modules and quiz banks?</p>',
+          confirmText: 'Delete Course',
+          cancelText: 'Cancel',
+          onConfirm: function () {
+            deleteCourse(cid);
+            snack('Course deleted.');
+            viewCourseList();
+          }
+        });
       };
     });
   }
 
-  function reports() { overview(); }
-  function settingsView() {
-    var s = settings();
-    $('#view').innerHTML =
-      '<div class="admin-hero-bar">' +
-        '<div><h1 style="font-size:26px;font-weight:800;color:var(--navy);margin:0 0 4px;">System Rules & Settings</h1><p style="font-size:13.5px;color:var(--slate);margin:0;">Accreditation parameters, quiz limits, and watch thresholds.</p></div>' +
-      '</div>' +
-      '<div style="background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);padding:28px;box-shadow:var(--shadow-card);max-width:680px;">' +
-        '<div style="display:flex;flex-direction:column;gap:16px;font-size:14px;color:var(--navy);">' +
-          '<div><strong>Quiz Question Count:</strong> 10 MCQs</div>' +
-          '<div><strong>Countdown Timer:</strong> 10 Minutes</div>' +
-          '<div><strong>Passing Score:</strong> 70% (7/10 required)</div>' +
-          '<div><strong>Lecture Watch Gate:</strong> 90% Duration enforced</div>' +
-          '<div><strong>Certificate Hash Algorithm:</strong> 32-bit FNV-1a Cryptographic Hash</div>' +
+  /* --------------------------------------------------------------------------
+     VIEW 5B: COURSE DETAIL WITH MODULE & QUESTION BANK CRUD (#courses/:id)
+     -------------------------------------------------------------------------- */
+  function viewCourseDetail(cid) {
+    var c = course(cid);
+    if (!c) { viewCourseList(); return; }
+
+    var html =
+      crumbs([{ label: 'Courses', href: '#courses' }, { label: c.title }]) +
+      '<div class="adm-card" style="margin-bottom:24px;overflow:hidden;padding:0;">' +
+        '<div style="height:180px;position:relative;">' +
+          courseThumbSvg(c, false) +
+          '<div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(11,23,39,0.85), transparent);display:flex;align-items:flex-end;padding:24px;">' +
+            '<div>' +
+              '<span class="adm-thumb-chip" style="margin-bottom:6px;">' + esc(c.category + ' · ' + c.level) + '</span>' +
+              '<h1 style="color:#ffffff;font-size:24px;font-weight:900;margin:0 0 4px;">' + esc(c.title) + '</h1>' +
+              '<div style="color:rgba(255,255,255,0.8);font-size:13px;">' + esc(c.subtitle || '') + '</div>' +
+            '</div>' +
+          '</div>' +
         '</div>' +
+        '<div style="padding:18px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;background:#ffffff;">' +
+          '<div style="display:flex;gap:16px;font-size:13px;color:var(--adm-slate);">' +
+            '<span><i class="ms" style="font-size:16px;vertical-align:middle;color:var(--adm-primary);">layers</i> <strong>' + c.modules.length + '</strong> Modules</span>' +
+            '<span><i class="ms" style="font-size:16px;vertical-align:middle;color:var(--adm-cyan);">videocam</i> <strong>' + RULES.lectureCount(c) + '</strong> Lectures</span>' +
+            '<span><i class="ms" style="font-size:16px;vertical-align:middle;color:var(--adm-emerald);">schedule</i> <strong>' + fmtDur(RULES.totalSeconds(c)) + '</strong> Duration</span>' +
+          '</div>' +
+          '<div style="display:flex;gap:8px;">' +
+            '<button type="button" class="adm-btn-outline" id="btnEditCurCourse"><i class="ms">edit</i> Edit Details</button>' +
+            '<button type="button" class="adm-btn-primary" id="btnAddModule"><i class="ms">add</i> + Add New Module</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+
+      '<div style="display:flex;flex-direction:column;gap:20px;">' +
+        c.modules.map(function (m) {
+          return '<div class="adm-module-box">' +
+            '<div class="adm-card-head">' +
+              '<div>' +
+                '<h3 class="adm-card-title">Module ' + m.number + ': ' + esc(m.title) + '</h3>' +
+                '<p class="adm-card-subtitle">' + esc(m.summary) + '</p>' +
+              '</div>' +
+              '<div style="display:flex;gap:6px;">' +
+                '<button type="button" class="adm-btn-action" data-add-lecture="' + m.id + '"><i class="ms" style="font-size:14px;">video_call</i> + Lecture</button>' +
+                '<button type="button" class="adm-btn-action" data-add-question="' + m.id + '"><i class="ms" style="font-size:14px;">post_add</i> + Question</button>' +
+                '<button type="button" class="adm-btn-action" data-edit-module="' + m.id + '"><i class="ms" style="font-size:14px;">edit</i></button>' +
+                '<button type="button" class="adm-btn-action" data-delete-module="' + m.id + '" style="color:var(--adm-rose);">&times;</button>' +
+              '</div>' +
+            '</div>' +
+
+            '<!-- Lectures List -->' +
+            '<h4 style="font-size:13px;font-weight:800;color:var(--adm-ink);margin:0 0 8px;">Video Lectures (90% Watch Telemetry Enforced)</h4>' +
+            '<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;">' +
+              (m.lectures.length === 0 ?
+                '<div style="font-size:12px;color:var(--adm-slate);padding:8px;">No lectures added yet.</div>' :
+                m.lectures.map(function (l) {
+                  return '<div class="adm-lecture-card">' +
+                    '<div>' +
+                      '<strong style="font-size:13px;color:var(--adm-ink);">' + esc(l.title) + '</strong>' +
+                      '<div style="font-size:11.5px;color:var(--adm-slate);">Speaker: ' + esc(l.presenter) + ' · ' + fmtClock(l.seconds) + '</div>' +
+                    '</div>' +
+                    '<div style="display:flex;align-items:center;gap:6px;">' +
+                      '<span class="adm-chip adm-chip-active" style="font-size:10.5px;">90% Gate</span>' +
+                      '<button type="button" class="adm-btn-action" data-edit-lec="' + l.id + '" data-mod="' + m.id + '"><i class="ms" style="font-size:13px;">edit</i></button>' +
+                      '<button type="button" class="adm-btn-action" data-del-lec="' + l.id + '" data-mod="' + m.id + '" style="color:var(--adm-rose);">&times;</button>' +
+                    '</div>' +
+                  '</div>';
+                }).join('')) +
+            '</div>' +
+
+            '<!-- Question Pool List -->' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">' +
+              '<h4 style="font-size:13px;font-weight:800;color:var(--adm-ink);margin:0;">Assessment Question Pool (' + m.pool.length + ' Questions)</h4>' +
+              '<span style="font-size:11.5px;color:var(--adm-emerald);font-weight:700;">10 Questions / Assessment (70% Pass Mark)</span>' +
+            '</div>' +
+            '<div style="display:flex;flex-direction:column;gap:8px;">' +
+              (m.pool.length === 0 ?
+                '<div style="font-size:12px;color:var(--adm-slate);padding:8px;">No questions in pool yet.</div>' :
+                m.pool.map(function (q, qidx) {
+                  return '<div class="adm-question-card">' +
+                    '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">' +
+                      '<strong style="font-size:13px;color:var(--adm-ink);">Q' + (qidx + 1) + '. ' + esc(q.text) + '</strong>' +
+                      '<div style="display:flex;gap:4px;">' +
+                        '<button type="button" class="adm-btn-action" data-edit-q="' + q.id + '" data-mod="' + m.id + '"><i class="ms" style="font-size:13px;">edit</i></button>' +
+                        '<button type="button" class="adm-btn-action" data-del-q="' + q.id + '" data-mod="' + m.id + '" style="color:var(--adm-rose);">&times;</button>' +
+                      '</div>' +
+                    '</div>' +
+                    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;">' +
+                      q.options.map(function (opt, oidx) {
+                        return '<div class="adm-question-opt ' + (oidx === 0 ? 'correct' : 'incorrect') + '">' +
+                          '<i class="ms" style="font-size:14px;">' + (oidx === 0 ? 'check_circle' : 'radio_button_unchecked') + '</i> ' + esc(opt) +
+                        '</div>';
+                      }).join('') +
+                    '</div>' +
+                    '<div style="font-size:11.5px;color:var(--adm-slate);"><strong style="color:var(--adm-ink);">Rationale:</strong> ' + esc(q.explanation) + '</div>' +
+                  '</div>';
+                }).join('')) +
+            '</div>' +
+          '</div>';
+        }).join('') +
       '</div>';
+
+    $('#view').innerHTML = html;
+
+    var btnEditCur = $('#btnEditCurCourse');
+    if (btnEditCur) btnEditCur.onclick = function () { openEditCourseDialog(c.id); };
+
+    var btnAddM = $('#btnAddModule');
+    if (btnAddM) btnAddM.onclick = function () { openAddModuleDialog(c.id); };
+
+    $$('[data-add-lecture]').forEach(function (b) {
+      b.onclick = function () { openAddLectureDialog(c.id, b.dataset.addLecture); };
+    });
+
+    $$('[data-add-question]').forEach(function (b) {
+      b.onclick = function () { openAddQuestionDialog(c.id, b.dataset.addQuestion); };
+    });
+
+    $$('[data-edit-module]').forEach(function (b) {
+      b.onclick = function () { openEditModuleDialog(c.id, b.dataset.editModule); };
+    });
+
+    $$('[data-delete-module]').forEach(function (b) {
+      b.onclick = function () {
+        var mid = b.dataset.deleteModule;
+        openDialog({
+          title: 'Delete Module?',
+          body: '<p>Are you sure you want to delete this module and all its lectures and questions?</p>',
+          confirmText: 'Delete Module',
+          cancelText: 'Cancel',
+          onConfirm: function () {
+            deleteModule(c.id, mid);
+            snack('Module deleted.');
+            viewCourseDetail(c.id);
+          }
+        });
+      };
+    });
+
+    $$('[data-edit-lec]').forEach(function (b) {
+      b.onclick = function () { openEditLectureDialog(c.id, b.dataset.mod, b.dataset.editLec); };
+    });
+
+    $$('[data-del-lec]').forEach(function (b) {
+      b.onclick = function () {
+        var lid = b.dataset.delLec;
+        var mid = b.dataset.mod;
+        openDialog({
+          title: 'Delete Lecture?',
+          body: '<p>Are you sure you want to delete this lecture video?</p>',
+          confirmText: 'Delete',
+          cancelText: 'Cancel',
+          onConfirm: function () {
+            deleteLecture(c.id, mid, lid);
+            snack('Lecture deleted.');
+            viewCourseDetail(c.id);
+          }
+        });
+      };
+    });
+
+    $$('[data-edit-q]').forEach(function (b) {
+      b.onclick = function () { openEditQuestionDialog(c.id, b.dataset.mod, b.dataset.editQ); };
+    });
+
+    $$('[data-del-q]').forEach(function (b) {
+      b.onclick = function () {
+        var qid = b.dataset.delQ;
+        var mid = b.dataset.mod;
+        openDialog({
+          title: 'Delete Question?',
+          body: '<p>Are you sure you want to remove this question from the module pool?</p>',
+          confirmText: 'Delete',
+          cancelText: 'Cancel',
+          onConfirm: function () {
+            deleteQuestion(c.id, mid, qid);
+            snack('Question removed from pool.');
+            viewCourseDetail(c.id);
+          }
+        });
+      };
+    });
   }
 
+  /* --------------------------------------------------------------------------
+     CRUD DIALOG BUILDERS (Courses, Modules, Lectures, Questions, Physicians, Patients)
+     -------------------------------------------------------------------------- */
+
+  // 1. Create Course Dialog
+  function openCreateCourseDialog() {
+    var catOptions = [
+      { value: 'Gastroenterology', label: 'Gastroenterology' },
+      { value: 'Cardiology & Heart Failure', label: 'Cardiology & Heart Failure' },
+      { value: 'Emergency Medicine', label: 'Emergency Medicine' },
+      { value: 'Pharmacotherapy', label: 'Clinical Pharmacotherapy' },
+      { value: 'Clinical Research', label: 'Clinical Research & Methodology' }
+    ];
+
+    var levelOptions = [
+      { value: 'Foundation', label: 'Foundation' },
+      { value: 'Intermediate', label: 'Intermediate' },
+      { value: 'Advanced', label: 'Advanced' }
+    ];
+
+    var accentOptions = [
+      { value: '#582be8', label: 'Electric Violet (#582be8)' },
+      { value: '#0284c7', label: 'Sky Cyan (#0284c7)' },
+      { value: '#ff4760', label: 'Cardiology Pulse (#ff4760)' },
+      { value: '#10b981', label: 'Clinical Emerald (#10b981)' },
+      { value: '#f59e0b', label: 'Amber Gold (#f59e0b)' }
+    ];
+
+    var body =
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Course Title</label>' +
+        '<input type="text" class="adm-input" id="inpC_title" placeholder="Gastroenterology Essentials">' +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Subtitle</label>' +
+        '<input type="text" class="adm-input" id="inpC_sub" placeholder="Clinical diagnosis & therapeutic optimization">' +
+      '</div>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">' +
+        '<div class="adm-form-group">' +
+          '<label class="adm-label">Category</label>' +
+          renderSearchableDropdown({
+            id: 'inpC_cat',
+            options: catOptions,
+            value: 'Gastroenterology',
+            label: 'Category'
+          }) +
+        '</div>' +
+        '<div class="adm-form-group">' +
+          '<label class="adm-label">Level</label>' +
+          renderSearchableDropdown({
+            id: 'inpC_level',
+            options: levelOptions,
+            value: 'Foundation',
+            label: 'Level'
+          }) +
+        '</div>' +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Accent Theme Palette</label>' +
+        renderSearchableDropdown({
+          id: 'inpC_accent',
+          options: accentOptions,
+          value: '#582be8',
+          label: 'Accent Theme'
+        }) +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Course Overview Description</label>' +
+        '<textarea class="adm-textarea" id="inpC_desc" rows="3" placeholder="A practical CME accredited curriculum for practicing physicians..."></textarea>' +
+      '</div>';
+
+    openDialog({
+      title: 'Create New Accredited Course',
+      body: body,
+      confirmText: 'Create Course',
+      cancelText: 'Cancel',
+      onConfirm: function () {
+        var title = ($('#inpC_title') || {}).value || '';
+        var sub = ($('#inpC_sub') || {}).value || '';
+        var cat = ($('#inpC_cat') || {}).value || 'Gastroenterology';
+        var level = ($('#inpC_level') || {}).value || 'Foundation';
+        var accent = ($('#inpC_accent') || {}).value || '#582be8';
+        var desc = ($('#inpC_desc') || {}).value || '';
+
+        if (!title) { snack('Please enter a course title.'); return; }
+
+        var newC = addCourse({
+          title: title,
+          subtitle: sub,
+          category: cat,
+          level: level,
+          accent: accent,
+          description: desc,
+          published: true,
+          modules: [
+            {
+              id: 'c-m1',
+              number: 1,
+              title: 'Module 1: Clinical Orientation',
+              summary: 'Diagnostic fundamentals and guideline overview.',
+              lectures: [
+                { id: 'c-m1-l1', title: 'Clinical Presentation & Workup', presenter: 'Prof. Dr. Tahir', seconds: 480, summary: 'First-line clinical evaluation.' }
+              ],
+              pool: []
+            }
+          ]
+        });
+
+        snack('Course "' + title + '" created successfully.');
+        viewCourseList();
+      }
+    });
+
+    initSearchableDropdowns($('#appModalBody'));
+  }
+
+  // 2. Edit Course Dialog
+  function openEditCourseDialog(cid) {
+    var c = course(cid);
+    if (!c) return;
+
+    var catOptions = [
+      { value: 'Gastroenterology', label: 'Gastroenterology' },
+      { value: 'Cardiology & Heart Failure', label: 'Cardiology & Heart Failure' },
+      { value: 'Emergency Medicine', label: 'Emergency Medicine' },
+      { value: 'Pharmacotherapy', label: 'Clinical Pharmacotherapy' },
+      { value: 'Clinical Research', label: 'Clinical Research & Methodology' }
+    ];
+    if (!catOptions.some(function (o) { return o.value === c.category; })) {
+      catOptions.unshift({ value: c.category, label: c.category });
+    }
+
+    var levelOptions = [
+      { value: 'Foundation', label: 'Foundation' },
+      { value: 'Intermediate', label: 'Intermediate' },
+      { value: 'Advanced', label: 'Advanced' }
+    ];
+
+    var accentOptions = [
+      { value: '#582be8', label: 'Electric Violet (#582be8)' },
+      { value: '#0284c7', label: 'Sky Cyan (#0284c7)' },
+      { value: '#ff4760', label: 'Cardiology Pulse (#ff4760)' },
+      { value: '#10b981', label: 'Clinical Emerald (#10b981)' },
+      { value: '#f59e0b', label: 'Amber Gold (#f59e0b)' }
+    ];
+    if (!accentOptions.some(function (o) { return o.value === c.accent; })) {
+      accentOptions.unshift({ value: c.accent, label: c.accent });
+    }
+
+    var body =
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Course Title</label>' +
+        '<input type="text" class="adm-input" id="inpC_title" value="' + esc(c.title) + '">' +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Subtitle</label>' +
+        '<input type="text" class="adm-input" id="inpC_sub" value="' + esc(c.subtitle || '') + '">' +
+      '</div>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">' +
+        '<div class="adm-form-group">' +
+          '<label class="adm-label">Category</label>' +
+          renderSearchableDropdown({
+            id: 'inpC_cat',
+            options: catOptions,
+            value: c.category,
+            label: 'Category'
+          }) +
+        '</div>' +
+        '<div class="adm-form-group">' +
+          '<label class="adm-label">Level</label>' +
+          renderSearchableDropdown({
+            id: 'inpC_level',
+            options: levelOptions,
+            value: c.level || 'Foundation',
+            label: 'Level'
+          }) +
+        '</div>' +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Accent Theme Palette</label>' +
+        renderSearchableDropdown({
+          id: 'inpC_accent',
+          options: accentOptions,
+          value: c.accent || '#582be8',
+          label: 'Accent Theme'
+        }) +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Course Overview Description</label>' +
+        '<textarea class="adm-textarea" id="inpC_desc" rows="3">' + esc(c.description || '') + '</textarea>' +
+      '</div>';
+
+    openDialog({
+      title: 'Edit Course Details',
+      body: body,
+      confirmText: 'Save Changes',
+      cancelText: 'Cancel',
+      onConfirm: function () {
+        var title = ($('#inpC_title') || {}).value || c.title;
+        var sub = ($('#inpC_sub') || {}).value || '';
+        var cat = ($('#inpC_cat') || {}).value || c.category;
+        var level = ($('#inpC_level') || {}).value || c.level;
+        var accent = ($('#inpC_accent') || {}).value || c.accent;
+        var desc = ($('#inpC_desc') || {}).value || '';
+
+        updateCourse(c.id, {
+          title: title,
+          subtitle: sub,
+          category: cat,
+          level: level,
+          accent: accent,
+          description: desc
+        });
+
+        snack('Course details updated.');
+        if (currentRoute === 'courses' && location.hash.indexOf('/') > -1) {
+          viewCourseDetail(c.id);
+        } else {
+          viewCourseList();
+        }
+      }
+    });
+
+    initSearchableDropdowns($('#appModalBody'));
+  }
+
+  // 3. Add Module Dialog
+  function openAddModuleDialog(cid) {
+    var c = course(cid);
+    if (!c) return;
+
+    var nextNum = c.modules.length + 1;
+    var body =
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Module Title</label>' +
+        '<input type="text" class="adm-input" id="inpM_title" placeholder="Pharmacotherapy & Dosing Protocols">' +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Module Summary</label>' +
+        '<textarea class="adm-textarea" id="inpM_sum" rows="3" placeholder="Key clinical endpoints and prescribing guidelines..."></textarea>' +
+      '</div>';
+
+    openDialog({
+      title: 'Add Module to ' + c.title,
+      body: body,
+      confirmText: 'Add Module',
+      cancelText: 'Cancel',
+      onConfirm: function () {
+        var title = ($('#inpM_title') || {}).value || '';
+        var sum = ($('#inpM_sum') || {}).value || '';
+        if (!title) { snack('Please provide a module title.'); return; }
+
+        addModule(c.id, {
+          title: title,
+          summary: sum,
+          lectures: [],
+          pool: []
+        });
+
+        snack('Module ' + nextNum + ' added.');
+        viewCourseDetail(c.id);
+      }
+    });
+  }
+
+  // 4. Edit Module Dialog
+  function openEditModuleDialog(cid, mid) {
+    var f = findModule(mid);
+    if (!f) return;
+
+    var body =
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Module Title</label>' +
+        '<input type="text" class="adm-input" id="inpM_title" value="' + esc(f.module.title) + '">' +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Module Summary</label>' +
+        '<textarea class="adm-textarea" id="inpM_sum" rows="3">' + esc(f.module.summary) + '</textarea>' +
+      '</div>';
+
+    openDialog({
+      title: 'Edit Module ' + f.module.number,
+      body: body,
+      confirmText: 'Save Module',
+      cancelText: 'Cancel',
+      onConfirm: function () {
+        var title = ($('#inpM_title') || {}).value || f.module.title;
+        var sum = ($('#inpM_sum') || {}).value || f.module.summary;
+
+        updateModule(cid, mid, { title: title, summary: sum });
+        snack('Module updated.');
+        viewCourseDetail(cid);
+      }
+    });
+  }
+
+  // 5. Add Lecture Dialog
+  function openAddLectureDialog(cid, mid) {
+    var body =
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Lecture Video Title</label>' +
+        '<input type="text" class="adm-input" id="inpL_title" placeholder="Pathophysiology & Guideline Directed Care">' +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Speaker / Presenter</label>' +
+        '<input type="text" class="adm-input" id="inpL_pres" placeholder="Prof. Sara Anwar">' +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Duration (Minutes)</label>' +
+        '<input type="number" class="adm-input" id="inpL_dur" min="1" max="180" value="10">' +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Lecture Summary</label>' +
+        '<textarea class="adm-textarea" id="inpL_sum" rows="2" placeholder="Clinical summary and key learning points..."></textarea>' +
+      '</div>';
+
+    openDialog({
+      title: 'Add Lecture Video to Module',
+      body: body,
+      confirmText: 'Add Lecture',
+      cancelText: 'Cancel',
+      onConfirm: function () {
+        var title = ($('#inpL_title') || {}).value || '';
+        var pres = ($('#inpL_pres') || {}).value || 'Faculty Clinician';
+        var durMin = parseInt(($('#inpL_dur') || {}).value || '10', 10);
+        var sum = ($('#inpL_sum') || {}).value || '';
+
+        if (!title) { snack('Please provide a lecture title.'); return; }
+
+        addLecture(cid, mid, {
+          title: title,
+          presenter: pres,
+          seconds: Math.max(60, durMin * 60),
+          summary: sum
+        });
+
+        snack('Lecture added successfully.');
+        viewCourseDetail(cid);
+      }
+    });
+  }
+
+  // 6. Edit Lecture Dialog
+  function openEditLectureDialog(cid, mid, lid) {
+    var f = findLecture(lid);
+    if (!f) return;
+
+    var curMin = Math.round(f.lecture.seconds / 60);
+    var body =
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Lecture Video Title</label>' +
+        '<input type="text" class="adm-input" id="inpL_title" value="' + esc(f.lecture.title) + '">' +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Speaker / Presenter</label>' +
+        '<input type="text" class="adm-input" id="inpL_pres" value="' + esc(f.lecture.presenter) + '">' +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Duration (Minutes)</label>' +
+        '<input type="number" class="adm-input" id="inpL_dur" min="1" max="180" value="' + curMin + '">' +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Lecture Summary</label>' +
+        '<textarea class="adm-textarea" id="inpL_sum" rows="2">' + esc(f.lecture.summary || '') + '</textarea>' +
+      '</div>';
+
+    openDialog({
+      title: 'Edit Lecture Details',
+      body: body,
+      confirmText: 'Save Lecture',
+      cancelText: 'Cancel',
+      onConfirm: function () {
+        var title = ($('#inpL_title') || {}).value || f.lecture.title;
+        var pres = ($('#inpL_pres') || {}).value || f.lecture.presenter;
+        var durMin = parseInt(($('#inpL_dur') || {}).value || '10', 10);
+        var sum = ($('#inpL_sum') || {}).value || f.lecture.summary;
+
+        updateLecture(cid, mid, lid, {
+          title: title,
+          presenter: pres,
+          seconds: Math.max(60, durMin * 60),
+          summary: sum
+        });
+
+        snack('Lecture updated.');
+        viewCourseDetail(cid);
+      }
+    });
+  }
+
+  // 7. Add Question Dialog
+  function openAddQuestionDialog(cid, mid) {
+    var body =
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Question Text</label>' +
+        '<textarea class="adm-textarea" id="inpQ_text" rows="2" placeholder="Which medication is recognized as foundational therapy...?"></textarea>' +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label" style="color:var(--adm-emerald);">Correct Option (Answer A)</label>' +
+        '<input type="text" class="adm-input" id="inpQ_opt1" placeholder="Sacubitril/valsartan (ARNI)">' +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Incorrect Option B</label>' +
+        '<input type="text" class="adm-input" id="inpQ_opt2" placeholder="Diltiazem">' +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Incorrect Option C</label>' +
+        '<input type="text" class="adm-input" id="inpQ_opt3" placeholder="Furosemide monotherapy">' +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Incorrect Option D</label>' +
+        '<input type="text" class="adm-input" id="inpQ_opt4" placeholder="Digoxin monotherapy">' +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Clinical Explanation / Rationale</label>' +
+        '<textarea class="adm-textarea" id="inpQ_exp" rows="2" placeholder="Guideline recommendation based on randomized trial evidence..."></textarea>' +
+      '</div>';
+
+    openDialog({
+      title: 'Add Question to Module Assessment Pool',
+      body: body,
+      confirmText: 'Add Question',
+      cancelText: 'Cancel',
+      onConfirm: function () {
+        var text = ($('#inpQ_text') || {}).value || '';
+        var o1 = ($('#inpQ_opt1') || {}).value || '';
+        var o2 = ($('#inpQ_opt2') || {}).value || '';
+        var o3 = ($('#inpQ_opt3') || {}).value || '';
+        var o4 = ($('#inpQ_opt4') || {}).value || '';
+        var exp = ($('#inpQ_exp') || {}).value || '';
+
+        if (!text || !o1 || !o2) { snack('Please enter the question text and at least 2 options.'); return; }
+
+        addQuestion(cid, mid, {
+          text: text,
+          options: [o1, o2, o3 || 'None of the above', o4 || 'All of the above'],
+          explanation: exp || 'Official accredited curriculum guidance.'
+        });
+
+        snack('Question added to module pool.');
+        viewCourseDetail(cid);
+      }
+    });
+  }
+
+  // 8. Edit Question Dialog
+  function openEditQuestionDialog(cid, mid, qid) {
+    var f = findModule(mid);
+    if (!f) return;
+    var q = f.module.pool.filter(function (x) { return x.id === qid; })[0];
+    if (!q) return;
+
+    var body =
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Question Text</label>' +
+        '<textarea class="adm-textarea" id="inpQ_text" rows="2">' + esc(q.text) + '</textarea>' +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label" style="color:var(--adm-emerald);">Correct Option (Answer A)</label>' +
+        '<input type="text" class="adm-input" id="inpQ_opt1" value="' + esc(q.options[0] || '') + '">' +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Incorrect Option B</label>' +
+        '<input type="text" class="adm-input" id="inpQ_opt2" value="' + esc(q.options[1] || '') + '">' +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Incorrect Option C</label>' +
+        '<input type="text" class="adm-input" id="inpQ_opt3" value="' + esc(q.options[2] || '') + '">' +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Incorrect Option D</label>' +
+        '<input type="text" class="adm-input" id="inpQ_opt4" value="' + esc(q.options[3] || '') + '">' +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Clinical Explanation / Rationale</label>' +
+        '<textarea class="adm-textarea" id="inpQ_exp" rows="2">' + esc(q.explanation || '') + '</textarea>' +
+      '</div>';
+
+    openDialog({
+      title: 'Edit Question',
+      body: body,
+      confirmText: 'Save Question',
+      cancelText: 'Cancel',
+      onConfirm: function () {
+        var text = ($('#inpQ_text') || {}).value || q.text;
+        var o1 = ($('#inpQ_opt1') || {}).value || q.options[0];
+        var o2 = ($('#inpQ_opt2') || {}).value || q.options[1];
+        var o3 = ($('#inpQ_opt3') || {}).value || q.options[2];
+        var o4 = ($('#inpQ_opt4') || {}).value || q.options[3];
+        var exp = ($('#inpQ_exp') || {}).value || q.explanation;
+
+        updateQuestion(cid, mid, qid, {
+          text: text,
+          options: [o1, o2, o3, o4],
+          explanation: exp
+        });
+
+        snack('Question updated.');
+        viewCourseDetail(cid);
+      }
+    });
+  }
+
+  // 9. Edit Doctor Dialog
+  function openEditDoctorDialog(docId) {
+    var d = doctors().filter(function (x) { return x.id === docId; })[0];
+    if (!d) return;
+
+    var specList = [
+      { value: 'Consultant Gastroenterologist', label: 'Consultant Gastroenterologist' },
+      { value: 'Consultant Cardiologist', label: 'Consultant Cardiologist' },
+      { value: 'General Physician / Interventionalist', label: 'General Physician' },
+      { value: 'Electrophysiologist & Pacing Specialist', label: 'Electrophysiologist' },
+      { value: 'Clinical Pharmacologist', label: 'Clinical Pharmacologist' }
+    ];
+    if (!specList.some(function (x) { return x.value === d.speciality; })) {
+      specList.unshift({ value: d.speciality, label: d.speciality });
+    }
+
+    var hospList = [
+      { value: 'Services Hospital, Lahore', label: 'Services Hospital, Lahore' },
+      { value: 'Punjab Institute of Cardiology, Lahore', label: 'Punjab Institute of Cardiology, Lahore' },
+      { value: 'Aga Khan University Hospital, Karachi', label: 'Aga Khan University Hospital, Karachi' },
+      { value: 'Federal General Hospital, Islamabad', label: 'Federal General Hospital, Islamabad' },
+      { value: 'PIMS Islamabad', label: 'PIMS Islamabad' },
+      { value: 'Lady Reading Hospital, Peshawar', label: 'Lady Reading Hospital, Peshawar' },
+      { value: 'Sandeman Provincial Hospital, Quetta', label: 'Sandeman Provincial Hospital, Quetta' },
+      { value: 'Nishtar Hospital, Multan', label: 'Nishtar Hospital, Multan' }
+    ];
+    if (!hospList.some(function (x) { return x.value === d.hospital; })) {
+      hospList.unshift({ value: d.hospital, label: d.hospital });
+    }
+
+    var cityList = [
+      { value: 'Lahore', label: 'Lahore (Punjab)' },
+      { value: 'Karachi', label: 'Karachi (Sindh)' },
+      { value: 'Islamabad', label: 'Islamabad (Federal)' },
+      { value: 'Rawalpindi', label: 'Rawalpindi (Punjab)' },
+      { value: 'Faisalabad', label: 'Faisalabad (Punjab)' },
+      { value: 'Multan', label: 'Multan (Punjab)' },
+      { value: 'Peshawar', label: 'Peshawar (KP)' },
+      { value: 'Quetta', label: 'Quetta (Balochistan)' }
+    ];
+    if (!cityList.some(function (x) { return x.value === d.city; })) {
+      cityList.unshift({ value: d.city, label: d.city });
+    }
+
+    var body =
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Physician Name</label>' +
+        '<input type="text" class="adm-input" id="inpD_name" value="' + esc(d.name) + '">' +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">PMDC License ID</label>' +
+        '<input type="text" class="adm-input" id="inpD_pmdc" value="' + esc(d.pmdcId) + '">' +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Specialty / Designation</label>' +
+        renderSearchableDropdown({
+          id: 'inpD_spec',
+          options: specList,
+          value: d.speciality,
+          label: 'Specialty'
+        }) +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Hospital Healthcare Facility</label>' +
+        renderSearchableDropdown({
+          id: 'inpD_hosp',
+          options: hospList,
+          value: d.hospital,
+          label: 'Hospital'
+        }) +
+      '</div>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">' +
+        '<div class="adm-form-group">' +
+          '<label class="adm-label">City Hub</label>' +
+          renderSearchableDropdown({
+            id: 'inpD_city',
+            options: cityList,
+            value: d.city,
+            label: 'City'
+          }) +
+        '</div>' +
+        '<div class="adm-form-group">' +
+          '<label class="adm-label">Phone</label>' +
+          '<input type="text" class="adm-input" id="inpD_phone" value="' + esc(d.phone) + '">' +
+        '</div>' +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Email</label>' +
+        '<input type="email" class="adm-input" id="inpD_email" value="' + esc(d.email) + '">' +
+      '</div>';
+
+    openDialog({
+      title: 'Edit Physician Record',
+      body: body,
+      confirmText: 'Save Doctor',
+      cancelText: 'Cancel',
+      onConfirm: function () {
+        var name = ($('#inpD_name') || {}).value || d.name;
+        var pmdc = ($('#inpD_pmdc') || {}).value || d.pmdcId;
+        var spec = ($('#inpD_spec') || {}).value || d.speciality;
+        var hosp = ($('#inpD_hosp') || {}).value || d.hospital;
+        var city = ($('#inpD_city') || {}).value || d.city;
+        var phone = ($('#inpD_phone') || {}).value || d.phone;
+        var email = ($('#inpD_email') || {}).value || d.email;
+
+        updateDoctor(docId, {
+          name: name,
+          pmdcId: pmdc,
+          speciality: spec,
+          hospital: hosp,
+          city: city,
+          phone: phone,
+          email: email
+        });
+
+        snack('Physician record updated.');
+        viewDoctorList();
+      }
+    });
+
+    initSearchableDropdowns($('#appModalBody'));
+  }
+
+  // 10. Register Trial Patient Dialog
+  function openRegisterPatientDialog() {
+    var actDocs = doctors().filter(function (d) { return d.active; });
+    var nextCode = 'PT-' + (400 + patients().length + 1);
+
+    var genderOptions = [
+      { value: 'Male', label: 'Male' },
+      { value: 'Female', label: 'Female' }
+    ];
+
+    var indicationOptions = [
+      { value: 'GERD & Chronic Dyspepsia', label: 'GERD & Chronic Dyspepsia' },
+      { value: 'Acid Peptic Disease (APD)', label: 'Acid Peptic Disease (APD)' },
+      { value: 'Functional Dyspepsia', label: 'Functional Dyspepsia' },
+      { value: 'Erosive Esophagitis', label: 'Erosive Esophagitis' },
+      { value: 'Gastric Ulceration', label: 'Gastric Ulceration' }
+    ];
+
+    var doctorOptions = actDocs.map(function (d) {
+      return {
+        value: d.id,
+        label: d.name + ' (' + d.hospital + ', ' + d.city + ')'
+      };
+    });
+
+    var body =
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">' +
+        '<div class="adm-form-group">' +
+          '<label class="adm-label">Patient Code</label>' +
+          '<input type="text" class="adm-input" id="inpP_code" value="' + nextCode + '" readonly style="background:var(--adm-canvas);">' +
+        '</div>' +
+        '<div class="adm-form-group">' +
+          '<label class="adm-label">Age & Gender</label>' +
+          '<div style="display:flex;gap:6px;">' +
+            '<input type="number" class="adm-input" id="inpP_age" value="52" min="18" max="100" style="width:70px;">' +
+            '<div style="flex:1;">' +
+              renderSearchableDropdown({
+                id: 'inpP_gen',
+                options: genderOptions,
+                value: 'Male',
+                label: 'Gender'
+              }) +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Primary Gastroenterology Indication</label>' +
+        renderSearchableDropdown({
+          id: 'inpP_ind',
+          options: indicationOptions,
+          value: 'GERD & Chronic Dyspepsia',
+          label: 'Indication'
+        }) +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Attending Principal Investigator</label>' +
+        renderSearchableDropdown({
+          id: 'inpP_doc',
+          options: doctorOptions,
+          value: (actDocs[0] || {}).id || '',
+          label: 'Investigator'
+        }) +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Baseline GI Discomfort Severity (1 - 10)</label>' +
+        '<input type="number" class="adm-input" id="inpP_score" min="1" max="10" step="0.5" value="8.0">' +
+      '</div>';
+
+    openDialog({
+      title: 'Register Observational Trial Patient (Arm 2)',
+      body: body,
+      confirmText: 'Register Patient',
+      cancelText: 'Cancel',
+      onConfirm: function () {
+        var code = ($('#inpP_code') || {}).value || nextCode;
+        var age = parseInt(($('#inpP_age') || {}).value || '50', 10);
+        var gen = ($('#inpP_gen') || {}).value || 'Male';
+        var ind = ($('#inpP_ind') || {}).value || 'GERD';
+        var docId = ($('#inpP_doc') || {}).value || actDocs[0].id;
+        var score = parseFloat(($('#inpP_score') || {}).value || '8.0');
+
+        var doc = actDocs.filter(function (x) { return x.id === docId; })[0] || actDocs[0];
+
+        addPatient({
+          code: code,
+          age: age,
+          gender: gen,
+          indication: ind,
+          doctorId: doc.id,
+          doctorName: doc.name,
+          hospital: doc.hospital,
+          city: doc.city,
+          baselineScore: score,
+          day3Score: null,
+          day7Score: null,
+          followupStatus: 'due_today',
+          adverseEvents: 'None'
+        });
+
+        snack('Trial patient ' + code + ' registered into observational study cohort.');
+        viewClinicalDashboard();
+      }
+    });
+
+    initSearchableDropdowns($('#appModalBody'));
+  }
+
+  // 11. Record Follow-Up Dialog
+  function openRecordFollowupDialog(pid) {
+    var p = patients().filter(function (x) { return x.id === pid; })[0];
+    if (!p) return;
+
+    var advOptions = [
+      { value: 'None', label: 'None (Well Tolerated)' },
+      { value: 'Mild Nausea', label: 'Mild Nausea' },
+      { value: 'Transient Headache', label: 'Transient Headache' },
+      { value: 'Mild Abdominal Bloating', label: 'Mild Abdominal Bloating' },
+      { value: 'Loose Stools', label: 'Loose Stools' }
+    ];
+
+    var body =
+      '<p style="font-size:13px;color:var(--adm-slate);margin-top:0;">' +
+        'Patient <strong>' + esc(p.code) + '</strong> (' + esc(p.gender) + ', ' + p.age + 'y) · Baseline Score: <strong style="color:#ef4444;">' + p.baselineScore + ' / 10</strong>' +
+      '</p>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Day-3 GI Symptom Score (1 - 10)</label>' +
+        '<input type="number" class="adm-input" id="inpF_score" min="1" max="10" step="0.5" value="' + (p.day3Score || '4.0') + '">' +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Adverse Events Flagged</label>' +
+        renderSearchableDropdown({
+          id: 'inpF_adv',
+          options: advOptions,
+          value: p.adverseEvents || 'None',
+          label: 'Adverse Event'
+        }) +
+      '</div>' +
+      '<div class="adm-form-group">' +
+        '<label class="adm-label">Investigator Telemetry Clinical Notes</label>' +
+        '<textarea class="adm-textarea" id="inpF_notes" rows="2" placeholder="Patient reports marked symptomatic improvement at Day 3..."></textarea>' +
+      '</div>';
+
+    openDialog({
+      title: 'Record Day-3 Patient Follow-Up',
+      body: body,
+      confirmText: 'Save Follow-Up',
+      cancelText: 'Cancel',
+      onConfirm: function () {
+        var score = parseFloat(($('#inpF_score') || {}).value || '4.0');
+        var adv = ($('#inpF_adv') || {}).value || 'None';
+
+        updatePatient(pid, {
+          day3Score: score,
+          followupStatus: 'day3_done',
+          adverseEvents: adv
+        });
+
+        snack('Day-3 Follow-Up recorded for ' + p.code + '.');
+        viewClinicalDashboard();
+      }
+    });
+
+    initSearchableDropdowns($('#appModalBody'));
+  }
+
+  // 12. Enlist Doctor Dialog
+  function openEnlistDoctorDialog() {
+    var specList = [
+      { value: 'Consultant Gastroenterologist', label: 'Consultant Gastroenterologist' },
+      { value: 'Consultant Cardiologist', label: 'Consultant Cardiologist' },
+      { value: 'General Physician / Interventionalist', label: 'General Physician' },
+      { value: 'Electrophysiologist & Pacing Specialist', label: 'Electrophysiologist' },
+      { value: 'Clinical Pharmacologist', label: 'Clinical Pharmacologist' }
+    ];
+
+    var hospList = [
+      { value: 'Services Hospital, Lahore', label: 'Services Hospital, Lahore' },
+      { value: 'Punjab Institute of Cardiology, Lahore', label: 'Punjab Institute of Cardiology, Lahore' },
+      { value: 'Aga Khan University Hospital, Karachi', label: 'Aga Khan University Hospital, Karachi' },
+      { value: 'Federal General Hospital, Islamabad', label: 'Federal General Hospital, Islamabad' },
+      { value: 'PIMS Islamabad', label: 'PIMS Islamabad' },
+      { value: 'Lady Reading Hospital, Peshawar', label: 'Lady Reading Hospital, Peshawar' },
+      { value: 'Sandeman Provincial Hospital, Quetta', label: 'Sandeman Provincial Hospital, Quetta' },
+      { value: 'Nishtar Hospital, Multan', label: 'Nishtar Hospital, Multan' }
+    ];
+
+    var cityList = [
+      { value: 'Lahore', label: 'Lahore (Punjab)' },
+      { value: 'Karachi', label: 'Karachi (Sindh)' },
+      { value: 'Islamabad', label: 'Islamabad (Federal)' },
+      { value: 'Rawalpindi', label: 'Rawalpindi (Punjab)' },
+      { value: 'Faisalabad', label: 'Faisalabad (Punjab)' },
+      { value: 'Multan', label: 'Multan (Punjab)' },
+      { value: 'Peshawar', label: 'Peshawar (KP)' },
+      { value: 'Quetta', label: 'Quetta (Balochistan)' }
+    ];
+
+    var body =
+      '<div style="display:flex;flex-direction:column;gap:12px;">' +
+        '<div class="adm-form-group">' +
+          '<label class="adm-label">Physician Full Name</label>' +
+          '<input type="text" class="adm-input" id="inpDocName" placeholder="Dr. Muhammad Ali">' +
+        '</div>' +
+        '<div class="adm-form-group">' +
+          '<label class="adm-label">PMDC Registration Number</label>' +
+          '<input type="text" class="adm-input" id="inpDocPmdc" placeholder="54129-P">' +
+        '</div>' +
+        '<div class="adm-form-group">' +
+          '<label class="adm-label">Specialty / Clinical Designation</label>' +
+          renderSearchableDropdown({
+            id: 'inpDocSpec',
+            options: specList,
+            value: 'Consultant Gastroenterologist',
+            label: 'Specialty'
+          }) +
+        '</div>' +
+        '<div class="adm-form-group">' +
+          '<label class="adm-label">Hospital / Healthcare Facility</label>' +
+          renderSearchableDropdown({
+            id: 'inpDocHosp',
+            options: hospList,
+            value: 'Services Hospital, Lahore',
+            label: 'Hospital'
+          }) +
+        '</div>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">' +
+          '<div class="adm-form-group">' +
+            '<label class="adm-label">City Hub</label>' +
+            renderSearchableDropdown({
+              id: 'inpDocCity',
+              options: cityList,
+              value: 'Lahore',
+              label: 'City'
+            }) +
+          '</div>' +
+          '<div class="adm-form-group">' +
+            '<label class="adm-label">Phone Number</label>' +
+            '<input type="text" class="adm-input" id="inpDocPhone" placeholder="03001234567">' +
+          '</div>' +
+        '</div>' +
+        '<div class="adm-form-group">' +
+          '<label class="adm-label">Email Address</label>' +
+          '<input type="email" class="adm-input" id="inpDocEmail" placeholder="m.ali@hospital.example">' +
+        '</div>' +
+      '</div>';
+
+    openDialog({
+      title: 'Enlist New Clinical Physician',
+      body: body,
+      confirmText: 'Verify & Enlist',
+      cancelText: 'Cancel',
+      onConfirm: function () {
+        var name = ($('#inpDocName') || {}).value || '';
+        var pmdc = ($('#inpDocPmdc') || {}).value || '';
+        var spec = ($('#inpDocSpec') || {}).value || 'Consultant Gastroenterologist';
+        var hosp = ($('#inpDocHosp') || {}).value || 'Services Hospital, Lahore';
+        var city = ($('#inpDocCity') || {}).value || 'Lahore';
+        var phone = ($('#inpDocPhone') || {}).value || '03000000000';
+        var email = ($('#inpDocEmail') || {}).value || '';
+
+        if (!name || !pmdc || !email) {
+          snack('Please fill out Name, PMDC ID, and Email.');
+          return;
+        }
+
+        var err = addDoctor({
+          name: name,
+          pmdcId: pmdc,
+          speciality: spec,
+          hospital: hosp,
+          city: city,
+          phone: phone,
+          email: email
+        });
+
+        if (err) {
+          snack(err);
+        } else {
+          snack('Physician ' + name + ' successfully enlisted into Decoderium Registry.');
+          viewDoctorList();
+        }
+      }
+    });
+
+    initSearchableDropdowns($('#appModalBody'));
+  }
+
+  /* --------------------------------------------------------------------------
+     DOCTOR TELEMETRY INSPECTOR (Slide-Over Drawer)
+     -------------------------------------------------------------------------- */
+  function inspectDoctor(docId) {
+    var doc = doctors().filter(function (d) { return d.id === docId; })[0];
+    if (!doc) return;
+    var p = progressOf(doc.id);
+    var drawer = $('#admDrawer');
+    var scrim = $('#admDrawerScrim');
+    var title = $('#admDrawerTitle');
+    var sub = $('#admDrawerSubtitle');
+    var body = $('#admDrawerBody');
+
+    title.textContent = doc.name;
+    sub.textContent = doc.pmdcId + ' · ' + doc.speciality + ' · ' + doc.hospital + ', ' + doc.city;
+
+    var pubCourses = courses().filter(function (c) { return c.published; });
+
+    var html =
+      '<div style="background:var(--adm-canvas);border:1px solid var(--adm-line);border-radius:var(--adm-radius-md);padding:14px;margin-bottom:18px;">' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">' +
+          '<span style="font-size:12px;color:var(--adm-slate);">License Status</span>' +
+          '<span class="adm-chip ' + (doc.active ? 'adm-chip-active' : 'adm-chip-danger') + '">' + (doc.active ? 'Licensed & Verified' : 'Suspended') + '</span>' +
+        '</div>' +
+        '<div style="font-size:12px;color:var(--adm-ink);line-height:1.6;">' +
+          '<div><strong>Email:</strong> ' + esc(doc.email) + '</div>' +
+          '<div><strong>Phone:</strong> ' + esc(doc.phone) + '</div>' +
+          '<div><strong>Joined:</strong> ' + esc(doc.joinedOn || 'Recently') + '</div>' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="adm-section-head" style="margin-top:20px;">' +
+        '<div>' +
+          '<h4 class="adm-section-title"><i class="ms" style="color:var(--adm-primary);">school</i> Enrolled Curriculum Progress</h4>' +
+          '<p class="adm-section-desc">Course-by-course breakdown with anti-skipping watch meters and quiz scores.</p>' +
+        '</div>' +
+      '</div>' +
+      '<div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">' +
+        pubCourses.map(function (c, cIdx) {
+          var cPct = RULES.percent(c, p);
+          var totalLecs = RULES.lectureCount(c);
+          var doneLecs = c.modules.reduce(function (tot, m) {
+            return tot + m.lectures.filter(function (l) { return RULES.lectureDone(p, l.id); }).length;
+          }, 0);
+          var isOpen = cIdx === 0;
+
+          return '<div class="adm-drawer-course-accordion' + (isOpen ? ' is-open' : '') + '">' +
+            '<div class="adm-drawer-course-header">' +
+              '<div style="display:flex;align-items:center;gap:10px;">' +
+                '<span class="adm-section-num" style="font-size:10px;">' + esc(c.id.toUpperCase()) + '</span>' +
+                '<div>' +
+                  '<strong style="font-size:13px;color:var(--adm-ink);">' + esc(c.title) + '</strong>' +
+                  '<div style="font-size:11px;color:var(--adm-slate);">' + doneLecs + '/' + totalLecs + ' Lectures Done · ' + cPct + '% Velocity</div>' +
+                '</div>' +
+              '</div>' +
+              '<div style="display:flex;align-items:center;gap:8px;">' +
+                '<span class="adm-chip ' + (cPct >= 100 ? 'adm-chip-active' : 'adm-chip-warn') + '" style="font-size:10.5px;">' + cPct + '%</span>' +
+                '<i class="ms arrow-toggle">expand_more</i>' +
+              '</div>' +
+            '</div>' +
+            '<div class="adm-drawer-course-body">' +
+              c.modules.map(function (m, mIdx) {
+                var mAttempts = p.attempts.filter(function (a) { return a.moduleId === m.id; });
+                var lastAtt = mAttempts[mAttempts.length - 1];
+                return '<div style="margin-bottom:14px;background:#f8fafc;border:1px solid var(--adm-line);border-radius:8px;padding:10px;">' +
+                  '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">' +
+                    '<strong style="font-size:12px;color:var(--adm-ink);">Module ' + (mIdx + 1) + ' · ' + esc(m.title) + '</strong>' +
+                    (lastAtt ?
+                      '<span class="adm-chip ' + (lastAtt.passed ? 'adm-chip-active' : 'adm-chip-danger') + '" style="font-size:10px;">Quiz: ' + lastAtt.percent + '% (' + (lastAtt.passed ? 'PASSED' : 'RETRY') + ')</span>' :
+                      '<span class="adm-chip" style="font-size:10px;background:#e2e8f0;color:#64748b;">Quiz: Not Taken</span>') +
+                  '</div>' +
+                  '<div style="display:flex;flex-direction:column;gap:6px;">' +
+                    m.lectures.map(function (l) {
+                      var w = RULES.watched(p, l.id);
+                      var done = RULES.lectureDone(p, l.id);
+                      var pc = Math.min(100, Math.round(w * 100 / l.seconds));
+                      return '<div style="background:#ffffff;border:1px solid #e2e8f0;border-radius:6px;padding:8px;font-size:11.5px;">' +
+                        '<div style="display:flex;justify-content:space-between;margin-bottom:3px;">' +
+                          '<span style="font-weight:600;color:var(--adm-ink);">' + esc(l.title) + '</span>' +
+                          '<span style="font-weight:700;color:' + (done ? 'var(--adm-emerald)' : 'var(--adm-slate)') + ';">' + (done ? '✓ 90% PASSED' : pc + '%') + '</span>' +
+                        '</div>' +
+                        '<div class="adm-progress-bar-bg" style="height:4px;"><div class="adm-progress-bar-fill" style="width:' + pc + '%;background:' + (done ? 'var(--adm-emerald)' : 'var(--adm-primary)') + ';"></div></div>' +
+                        '<div style="display:flex;justify-content:space-between;font-size:10px;color:var(--adm-slate);margin-top:3px;">' +
+                          '<span>' + fmtClock(w) + ' of ' + fmtClock(l.seconds) + '</span>' +
+                          '<span>Presenter: ' + esc(l.presenter || 'Faculty') + '</span>' +
+                        '</div>' +
+                      '</div>';
+                    }).join('') +
+                  '</div>' +
+                '</div>';
+              }).join('') +
+            '</div>' +
+          '</div>';
+        }).join('') +
+      '</div>' +
+
+      '<h4 style="font-size:14px;font-weight:800;color:var(--adm-ink);margin:0 0 10px;">Quiz Assessments & Scoring</h4>' +
+      '<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;">' +
+        (p.attempts.length === 0 ?
+          '<div style="font-size:12px;color:var(--adm-slate);">No quiz attempts recorded yet.</div>' :
+          p.attempts.map(function (a, n) {
+            return '<div style="background:#ffffff;border:1px solid var(--adm-line);border-radius:8px;padding:10px;display:flex;justify-content:space-between;align-items:center;">' +
+              '<div>' +
+                '<strong style="font-size:12.5px;color:var(--adm-ink);">Attempt #' + (n + 1) + ' · ' + esc(a.moduleId) + '</strong>' +
+                '<div style="font-size:11px;color:var(--adm-slate);">' + fmtDate(a.submittedAt) + '</div>' +
+              '</div>' +
+              '<span class="adm-chip ' + (a.passed ? 'adm-chip-active' : 'adm-chip-danger') + '">' + a.percent + '% (' + (a.passed ? 'PASSED' : 'FAILED') + ')</span>' +
+            '</div>';
+          }).join('')) +
+      '</div>' +
+
+      '<h4 style="font-size:14px;font-weight:800;color:var(--adm-ink);margin:0 0 10px;">Cryptographic Certificates</h4>' +
+      '<div style="display:flex;flex-direction:column;gap:8px;">' +
+        (p.certs.length === 0 ?
+          '<div style="font-size:12px;color:var(--adm-slate);">No certificates issued yet. Doctor must complete all lectures and achieve &ge;70% on each module quiz.</div>' :
+          p.certs.map(function (c) {
+            return '<div style="background:var(--adm-primary-soft);border:1px solid rgba(88,43,232,0.2);border-radius:8px;padding:12px;">' +
+              '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">' +
+                '<strong style="font-size:13px;color:var(--adm-primary);">Course: ' + esc(c.courseId) + '</strong>' +
+                '<span class="adm-chip adm-chip-active">Accredited</span>' +
+              '</div>' +
+              '<div style="font-size:11.5px;color:var(--adm-ink);font-family:monospace;margin-bottom:4px;">Hash: ' + esc(c.code) + '</div>' +
+              '<div style="font-size:10.5px;color:var(--adm-slate);">Issued On: ' + esc(c.issuedOn) + '</div>' +
+            '</div>';
+          }).join('')) +
+      '</div>';
+
+    body.innerHTML = html;
+
+    $$('.adm-drawer-course-header', body).forEach(function (h) {
+      h.onclick = function () {
+        var card = h.closest('.adm-drawer-course-accordion');
+        if (card) card.classList.toggle('is-open');
+      };
+    });
+
+    drawer.classList.add('open');
+    scrim.classList.add('open');
+  }
+
+  function closeDrawer() {
+    var drawer = $('#admDrawer');
+    var scrim = $('#admDrawerScrim');
+    if (drawer) drawer.classList.remove('open');
+    if (scrim) scrim.classList.remove('open');
+  }
+
+  var drawerClose = $('#admDrawerClose');
+  if (drawerClose) drawerClose.onclick = closeDrawer;
+  var drawerScrim = $('#admDrawerScrim');
+  if (drawerScrim) drawerScrim.onclick = closeDrawer;
+
+  function bindInspectButtons() {
+    $$('[data-inspect]').forEach(function (b) {
+      b.onclick = function () { inspectDoctor(b.dataset.inspect); };
+    });
+  }
+
+  /* --------------------------------------------------------------------------
+     VIEW 6: ACCREDITATION RULES & SYSTEM SETTINGS (#settings)
+     -------------------------------------------------------------------------- */
+  function viewSettings() {
+    var s = settings();
+    var html =
+      '<div class="adm-hero">' +
+        '<div>' +
+          '<h1 class="adm-hero-title"><i class="ms" style="color:var(--adm-primary);font-size:30px;">tune</i> Accreditation Parameters & System Rules</h1>' +
+          '<p class="adm-hero-subtitle">Governing clinical accreditation thresholds, anti-skipping gates, and cryptographic certificates.</p>' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="adm-grid-equal">' +
+        '<div class="adm-card">' +
+          '<h3 class="adm-card-title"><i class="ms" style="color:var(--adm-primary);">verified</i> CME Accreditation Rules</h3>' +
+          '<div style="display:flex;flex-direction:column;gap:12px;margin-top:16px;font-size:13px;color:var(--adm-ink);">' +
+            '<div style="display:flex;justify-content:space-between;padding-bottom:8px;border-bottom:1px solid var(--adm-line-light);">' +
+              '<span>Assessment Question Count:</span>' +
+              '<strong>10 MCQs / Attempt</strong>' +
+            '</div>' +
+            '<div style="display:flex;justify-content:space-between;padding-bottom:8px;border-bottom:1px solid var(--adm-line-light);">' +
+              '<span>Countdown Timer:</span>' +
+              '<strong>10 Minutes (Strict)</strong>' +
+            '</div>' +
+            '<div style="display:flex;justify-content:space-between;padding-bottom:8px;border-bottom:1px solid var(--adm-line-light);">' +
+              '<span>Passing Grade:</span>' +
+              '<strong style="color:var(--adm-emerald);">70% (7/10 correct)</strong>' +
+            '</div>' +
+            '<div style="display:flex;justify-content:space-between;padding-bottom:8px;border-bottom:1px solid var(--adm-line-light);">' +
+              '<span>Lecture Watch Gate:</span>' +
+              '<strong style="color:var(--adm-primary);">90% Duration Enforced</strong>' +
+            '</div>' +
+            '<div style="display:flex;justify-content:space-between;">' +
+              '<span>Certificate Verification Hash:</span>' +
+              '<strong style="color:var(--adm-slate);">32-bit FNV-1a Cryptographic</strong>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="adm-card">' +
+          '<h3 class="adm-card-title"><i class="ms" style="color:#ff4760;">monitor_heart</i> Clinical Observational Trial (Arm 2) Rules</h3>' +
+          '<div style="display:flex;flex-direction:column;gap:12px;margin-top:16px;font-size:13px;color:var(--adm-ink);">' +
+            '<div style="display:flex;justify-content:space-between;padding-bottom:8px;border-bottom:1px solid var(--adm-line-light);">' +
+              '<span>Study Type:</span>' +
+              '<strong>Observational Post-Marketing Registry</strong>' +
+            '</div>' +
+            '<div style="display:flex;justify-content:space-between;padding-bottom:8px;border-bottom:1px solid var(--adm-line-light);">' +
+              '<span>Mandatory Follow-up Interval:</span>' +
+              '<strong style="color:#ff4760;">Day-3 Follow-Up Radar</strong>' +
+            '</div>' +
+            '<div style="display:flex;justify-content:space-between;padding-bottom:8px;border-bottom:1px solid var(--adm-line-light);">' +
+              '<span>Study Concluding Endpoint:</span>' +
+              '<strong>Day 7 GI Symptom Resolution</strong>' +
+            '</div>' +
+            '<div style="display:flex;justify-content:space-between;padding-bottom:8px;border-bottom:1px solid var(--adm-line-light);">' +
+              '<span>Target Investigator Sites:</span>' +
+              '<strong>12 Urban Clusters across Pakistan</strong>' +
+            '</div>' +
+            '<div style="display:flex;justify-content:space-between;">' +
+              '<span>Digital E-CRF Standard:</span>' +
+              '<strong style="color:var(--adm-emerald);">Electronic Patient Intake</strong>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="adm-card" style="border:1px dashed var(--adm-rose);margin-top:20px;">' +
+        '<div class="adm-card-head">' +
+          '<div>' +
+            '<h3 class="adm-card-title" style="color:var(--adm-rose);"><i class="ms">restart_alt</i> Reset Demo State</h3>' +
+            '<p class="adm-card-subtitle">Restores the demo seed state (Dr. Ayesha with certified course, Dr. Bilal mid-progress, 12 regional physicians, 48 trial patients).</p>' +
+          '</div>' +
+          '<button type="button" class="adm-btn-action" id="btnResetDemoState" style="color:var(--adm-rose);border-color:var(--adm-rose);">' +
+            'Reset Database State' +
+          '</button>' +
+        '</div>' +
+      '</div>';
+
+    $('#view').innerHTML = html;
+
+    var btnReset = $('#btnResetDemoState');
+    if (btnReset) {
+      btnReset.onclick = function () {
+        openDialog({
+          title: 'Reset Demo State?',
+          body: '<p>This will restore the default seeded progress for all 12 physicians, 48 trial patients, and default courses.</p>',
+          confirmText: 'Reset State',
+          cancelText: 'Cancel',
+          onConfirm: function () {
+            resetDemo();
+            snack('Demo state reset successfully.');
+            render();
+          }
+        });
+      };
+    }
+  }
+
+  /* --------------------------------------------------------------------------
+     Initialization
+     -------------------------------------------------------------------------- */
   window.addEventListener('hashchange', render);
   render();
+
 })();
 </script>
-<script type="text/plain" data-src="header.js"></script>
-<script type="text/plain" data-src="nav.js"></script>
 </body>
 </html>

@@ -84,17 +84,18 @@
           shown.map(function (c, idx) {
             var cDone = RULES.courseComplete(c, p);
             var thumbGradients = [
-              'linear-gradient(135deg, #1d4ed8, #3b82f6)',
+              'linear-gradient(135deg, #582be8, #7c3aed)',
               'linear-gradient(135deg, #059669, #10b981)',
-              'linear-gradient(135deg, #7c3aed, #8b5cf6)',
+              'linear-gradient(135deg, #0284c7, #38bdf8)',
               'linear-gradient(135deg, #ea580c, #f97316)'
             ];
             var grad = thumbGradients[idx % thumbGradients.length];
+            var icon = (c.id === 'c1' ? 'medication' : (c.id === 'c2' ? 'healing' : 'colorize'));
 
             return '<a href="#' + c.id + '" class="edu-card">' +
               '<div class="edu-card-thumb" style="background:' + grad + ';">' +
                 '<span class="edu-card-badge">' + (cDone ? 'COMPLETED' : 'CORE TRACK') + '</span>' +
-                '<i class="ms" style="font-size:48px;color:#fff;opacity:0.9;">cardiology</i>' +
+                '<i class="ms" style="font-size:48px;color:#fff;opacity:0.9;">' + icon + '</i>' +
               '</div>' +
               '<div class="edu-card-body">' +
                 '<div class="edu-card-category">' + esc(c.category) + '</div>' +
