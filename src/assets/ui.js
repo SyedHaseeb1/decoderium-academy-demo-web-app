@@ -90,8 +90,9 @@ function openDialog(opts) {
   overlay.id = 'activeDialogOverlay';
   overlay.className = 'lms-dialog-overlay';
 
+  var extraClass = (opts.wide ? ' adm-dialog-wide' : '') + (opts.dialogClass ? ' ' + opts.dialogClass : '');
   overlay.innerHTML =
-    '<div class="lms-dialog-card animate-scale-up" role="dialog" aria-modal="true">' +
+    '<div class="lms-dialog-card' + extraClass + ' animate-scale-up" role="dialog" aria-modal="true">' +
       '<div class="lms-dialog-header">' +
         '<h3 class="lms-dialog-title">' + esc(title) + '</h3>' +
         '<button type="button" class="lms-dialog-close" id="dlgCloseBtn" aria-label="Close dialog">&times;</button>' +
@@ -104,13 +105,18 @@ function openDialog(opts) {
     '</div>';
 
   document.body.appendChild(overlay);
+  document.body.classList.add('modal-open');
+  document.body.style.overflow = 'hidden';
 
   var doClose = function () { closeDialog(); };
   overlay.querySelector('#dlgCloseBtn').onclick = doClose;
   if (overlay.querySelector('#dlgCancelBtn')) overlay.querySelector('#dlgCancelBtn').onclick = doClose;
   if (overlay.querySelector('#dlgConfirmBtn')) {
     overlay.querySelector('#dlgConfirmBtn').onclick = function () {
-      if (onConfirm) onConfirm();
+      if (onConfirm) {
+        var res = onConfirm();
+        if (res === false) return;
+      }
       doClose();
     };
   }
@@ -123,6 +129,114 @@ function openDialog(opts) {
 function closeDialog() {
   var ex = document.getElementById('activeDialogOverlay');
   if (ex && ex.parentNode) ex.parentNode.removeChild(ex);
+  if (!document.getElementById('activeDialogOverlay') && !document.querySelector('.adm-drawer.open')) {
+    document.body.classList.remove('modal-open');
+    document.body.style.overflow = '';
+  }
+}
+
+/* Unified Form & Field Validation System */
+function validateField(inputEl) {
+  if (!inputEl) return { valid: true };
+
+  // Remove existing validation state
+  inputEl.classList.remove('is-invalid');
+  var parent = inputEl.closest('.adm-form-group') || inputEl.parentElement;
+  if (parent) {
+    var oldErr = parent.querySelector('.adm-field-error');
+    if (oldErr) oldErr.remove();
+  }
+
+  var val = (inputEl.value || '').trim();
+  var isReq = inputEl.hasAttribute('required') || inputEl.getAttribute('data-required') === 'true';
+  var type = (inputEl.getAttribute('type') || '').toLowerCase();
+  var min = inputEl.getAttribute('min');
+  var max = inputEl.getAttribute('max');
+  var minLen = inputEl.getAttribute('minlength');
+  var maxLen = inputEl.getAttribute('maxlength');
+  var fieldLabel = inputEl.getAttribute('data-label') || (parent && parent.querySelector('.adm-label') ? parent.querySelector('.adm-label').textContent.replace(/\*/g, '').trim() : 'This field');
+
+  var errorMsg = '';
+
+  // 1. Required Check
+  if (isReq && !val) {
+    errorMsg = fieldLabel + ' is required.';
+  }
+  // 2. Email Check
+  else if (type === 'email' && val && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+    errorMsg = 'Please enter a valid email address.';
+  }
+  // 3. Number Bounds
+  else if (type === 'number' && val) {
+    var num = Number(val);
+    if (isNaN(num)) {
+      errorMsg = 'Please enter a valid number.';
+    } else if (min !== null && num < Number(min)) {
+      errorMsg = 'Value must be at least ' + min + '.';
+    } else if (max !== null && num > Number(max)) {
+      errorMsg = 'Value must be no more than ' + max + '.';
+    }
+  }
+  // 4. URL Check
+  else if (type === 'url' && val && !/^https?:\/\/.+/i.test(val)) {
+    errorMsg = 'Please enter a valid URL starting with http:// or https://';
+  }
+  // 5. Length Constraints
+  else if (minLen && val.length < parseInt(minLen, 10)) {
+    errorMsg = 'Must be at least ' + minLen + ' characters.';
+  } else if (maxLen && val.length > parseInt(maxLen, 10)) {
+    errorMsg = 'Cannot exceed ' + maxLen + ' characters.';
+  }
+
+  if (errorMsg) {
+    inputEl.classList.add('is-invalid');
+    if (parent) {
+      var errEl = document.createElement('div');
+      errEl.className = 'adm-field-error';
+      errEl.innerHTML = '<i class="ms" style="font-size:14px;">error_outline</i><span>' + esc(errorMsg) + '</span>';
+      parent.appendChild(errEl);
+    }
+
+    var onInput = function () {
+      inputEl.classList.remove('is-invalid');
+      if (parent) {
+        var e = parent.querySelector('.adm-field-error');
+        if (e) e.remove();
+      }
+      inputEl.removeEventListener('input', onInput);
+      inputEl.removeEventListener('change', onInput);
+    };
+    inputEl.addEventListener('input', onInput);
+    inputEl.addEventListener('change', onInput);
+
+    return { valid: false, message: errorMsg };
+  }
+
+  return { valid: true };
+}
+
+function validateForm(container) {
+  var root = container || document;
+  var selector = 'input[required], textarea[required], select[required], [data-required="true"], input[type="email"], input[type="number"], input[type="url"], [minlength], [maxlength]';
+  var fields = [].slice.call(root.querySelectorAll(selector));
+  var firstInvalid = null;
+  var allValid = true;
+
+  fields.forEach(function (field) {
+    if (field.type === 'hidden' || field.disabled || field.offsetParent === null) return;
+    var res = validateField(field);
+    if (!res.valid) {
+      allValid = false;
+      if (!firstInvalid) firstInvalid = field;
+    }
+  });
+
+  if (!allValid && firstInvalid) {
+    try { firstInvalid.focus(); } catch (e) {}
+    snack('Please correct the highlighted fields.');
+  }
+
+  return allValid;
 }
 
 /* Course accent colours (the modern palette) */

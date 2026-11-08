@@ -2005,8 +2005,9 @@ body {
 /* 2. Quick Progress Pill Cards Row */
 .lms-progress-pills-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
   gap: 16px;
+  min-width: 0;
 }
 
 .lms-progress-pill {
@@ -2021,6 +2022,7 @@ body {
   transition: all 0.2s ease;
   position: relative;
   text-decoration: none;
+  min-width: 0;
 }
 
 .lms-progress-pill:hover {

@@ -13,10 +13,19 @@ function buildCourses() {
   var bank = ACADEMY_DATA.questions.bank, size = ACADEMY_DATA.questions.poolSize;
   COURSES = JSON.parse(JSON.stringify(ACADEMY_DATA.courses));
   COURSES.forEach(function (c, ci) {
-    c.accent = ACCENTS[ci % ACCENTS.length];
+    c.accent = c.accent || ACCENTS[ci % ACCENTS.length];
+    c.thumbStyle = c.thumbStyle || (ci === 0 ? 'pcab' : (ci === 1 ? 'clinic' : 'endoscopy'));
+    c.cmeHours = c.cmeHours || (ci === 0 ? 12 : (ci === 1 ? 8 : 16));
+    c.facultyChair = c.facultyChair || (ci === 0 ? 'Prof. Sara Anwar, MD, FRCP' : (ci === 1 ? 'Dr. Tahir Mahmood, FCPS' : 'Dr. Nadia Rehman, MD'));
+    c.materials = c.materials || [];
     c.modules.forEach(function (m) {
       m.courseId = c.id;
-      m.lectures.forEach(function (l) { l.moduleId = m.id; });
+      m.passingScore = m.passingScore || 70;
+      m.timeLimitMinutes = m.timeLimitMinutes || 10;
+      m.lectures.forEach(function (l) {
+        l.moduleId = m.id;
+        l.videoUrl = l.videoUrl || 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+      });
       m.pool = [];
       for (var i = 0; i < size; i++) {
         var q = bank[(m.questionOffset + i) % bank.length];
@@ -133,6 +142,24 @@ function loadState() {
   ST = saved && saved.v === 2 && saved.doctors && saved.doctors.length ? saved : newState();
   if (ST.courses && ST.courses.length && ST.courses[0] && ST.courses[0].title && ST.courses[0].title.indexOf('Acid Peptic') > -1) {
     COURSES = ST.courses;
+    COURSES.forEach(function (c, ci) {
+      c.accent = c.accent || ACCENTS[ci % ACCENTS.length];
+      c.thumbStyle = c.thumbStyle || (ci === 0 ? 'pcab' : (ci === 1 ? 'clinic' : 'endoscopy'));
+      c.cmeHours = c.cmeHours || (ci === 0 ? 12 : (ci === 1 ? 8 : 16));
+      c.facultyChair = c.facultyChair || (ci === 0 ? 'Prof. Sara Anwar, MD, FRCP' : (ci === 1 ? 'Dr. Tahir Mahmood, FCPS' : 'Dr. Nadia Rehman, MD'));
+      c.materials = c.materials || [];
+      if (c.modules) {
+        c.modules.forEach(function (m) {
+          m.passingScore = m.passingScore || 70;
+          m.timeLimitMinutes = m.timeLimitMinutes || 10;
+          if (m.lectures) {
+            m.lectures.forEach(function (l) {
+              l.videoUrl = l.videoUrl || 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+            });
+          }
+        });
+      }
+    });
   } else {
     ST.courses = COURSES;
   }
