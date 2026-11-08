@@ -5,14 +5,14 @@
   var root = document.getElementById('side');
   if (!root) return;
   var s = session(), d = me(), page = document.body.dataset.page;
-  var name = s.name || (d ? d.name : 'Clinician');
+  var name = s.name || (d ? d.name : 'Doctor');
   var firstName = name.replace(/^Dr\.\s*/i, '').split(' ')[0] || 'Doctor';
 
   var navItems = s.role === 'admin' ? [
     { key: 'admin-overview', label: 'Dashboard', href: '../admin/#overview', icon: 'space_dashboard' },
     { key: 'admin-courses', label: 'Courses', href: '../admin/#courses', icon: 'video_library' },
-    { key: 'admin-doctors', label: 'Doctors', href: '../admin/#doctors', icon: 'group' },
-    { key: 'admin-reports', label: 'Reports', href: '../admin/#reports', icon: 'monitoring' },
+    { key: 'admin-doctors', label: 'Doctors', href: '../admin/#users/doctors', icon: 'group' },
+    { key: 'admin-patients', label: 'Patients', href: '../admin/#patients', icon: 'clinical_notes' },
     { key: 'admin-settings', label: 'Settings', href: '../admin/#settings', icon: 'tune' }
   ] : [
     { key: 'home', label: 'Dashboard', href: '../home/', icon: 'space_dashboard' },
@@ -38,8 +38,8 @@
         '<div class="side-brand-title">' +
           '<div class="side-brand-logo"><img src="../assets/decoderium-mark.svg" alt="Decoderium Mark"></div>' +
           '<div class="side-brand-text">' +
-            '<div class="side-brand-name">Decoderium</div>' +
-            '<div class="side-brand-sub">Medical Academy</div>' +
+            '<div class="side-brand-name">GILEAP</div>' +
+            '<div class="side-brand-sub">Clinical Academy</div>' +
           '</div>' +
         '</div>' +
         '<button type="button" class="side-collapse-toggle" id="sideCollapseToggle" aria-label="Collapse sidebar" title="Collapse sidebar">' +
@@ -53,7 +53,7 @@
         '</div>' +
         '<div class="side-user-info">' +
           '<div style="font-size:14px;font-weight:800;color:var(--navy);">Hi ' + esc(firstName) + '</div>' +
-          '<div style="font-size:11px;color:var(--slate);">' + (s.role === 'admin' ? 'Administrator' : 'Physician') + '</div>' +
+          '<div style="font-size:11px;color:var(--slate);">' + (s.role === 'admin' ? 'Administrator' : 'Doctor') + '</div>' +
         '</div>' +
       '</div>' +
 

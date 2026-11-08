@@ -1,4 +1,4 @@
-# STAND-HF Academy: Front-End Handoff to the Blazor / API team
+# GILEAP Academy: Front-End Handoff to the Blazor / API team
 
 This explains what the UI prototype reads today, where that data lives, and what the live system must provide. The prototype is pure HTML, CSS and vanilla JavaScript.
 

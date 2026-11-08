@@ -1,6 +1,6 @@
-# STAND-HF Academy: UI Prototype (agent and developer rules)
+# GILEAP Academy: UI Prototype (agent and developer rules)
 
-This is the clickable prototype we show the client first. The Blazor app (`../StandHF.Academy.*`) follows what the client approves here. It is built the same way as the STAND-HF registry demo (`decoderium-stand-hf-demo-web-app`).
+This is the clickable prototype we show the client first. The Blazor app follows what the client approves here. It is built as the official prototype for the GILEAP Academy & Patients Registry platform.
 
 ## What this folder is
 

@@ -1,20 +1,20 @@
-# Decoderium Academy — Project Progress & Resumption Handover
+# GILEAP Academy & Patients Registry — Project Progress & Resumption Handover
 
-> **Date**: November 7, 2026  
-> **Status**: Active Prototyping & Architecture Alignment  
-> **Server Running**: Port 5200 (`http://localhost:5200/`)  
-> **Active Focus**: Gastroenterology Alignment (Highnoon GILEAP), ASGE GI LEAP Benchmark Parity, and Mobile/Tablet UX.
+> **Date**: November 8, 2026  
+> **Status**: Active Prototyping & Client-Ready Alignment (Verified in Headless Chromium)  
+> **Server Running**: Port 8000 / 5200 (`http://localhost:8000/`)  
+> **Active Focus**: GILEAP Modular Architecture: Tri-Pillar Overview Cockpit, Patient Broadcasts Center, Dedicated Doctors Directory, Bottom-Docked User Management, and Evaluator Course Preview.
 
 ---
 
-## 1. Executive Summary & Brand Transformation
+## 1. Executive Summary & Brand Identity
 
-The project has been transitioned from the old STAND-HF clinical registry aesthetic into **Decoderium Academy** — a modern, world-class Medical LMS designed specifically for non-tech-savvy physicians in Pakistan.
+The platform identity is firmly established as **GILEAP** (`GILEAP Clinical Academy & Patients Registry`):
 
-- **Brand Name**: **Decoderium Academy** (replaces all legacy STAND-HF naming).
-- **Core Visual Theme**: Electric Violet (`#582be8` / `#7c3aed`), soft porcelain background (`#f8f9fd`), pure white elevated cards, and coral/emerald status accents.
-- **Brand Logo Asset**: Created SVG vector logo at [`src/assets/decoderium-logo.svg`](file:///home/syedhaseeaio/Documents/Stand-HF/src/assets/decoderium-logo.svg).
-- **Architecture**: Pure HTML5/CSS3/Vanilla JS (zero npm dependencies, zero build steps, sample data in `src/data/*.json`, local storage state in `src/assets/access.js`).
+- **Flagship Project Name**: **GILEAP** (affirmed across all headers, logins, sidebars, and certification engines).
+- **Core Visual Theme**: Electric Violet (`#582be8` / `#7c3aed`), soft porcelain canvas (`#f8f9fd`), pure white elevated cards, and coral/emerald status accents.
+- **Brand Logo Asset**: Clean vector mark with PMDC accreditation tag at [`src/assets/decoderium-mark.svg`](file:///home/syedhaseeaio/Documents/Stand-HF/src/assets/decoderium-mark.svg).
+- **Core Architecture**: Pure HTML5/CSS3/Vanilla JS (zero npm dependencies, zero build steps, sample data in `src/data/*.json`, state abstraction in `src/assets/access.js`).
 
 ### 1.1 Industry Benchmark Appraisal: ASGE GI LEAP (`org.asge.oasismobile.gileap`)
 
@@ -88,33 +88,24 @@ curl -s -o /dev/null -w "%{http_code}\n" http://localhost:5200/src/login/ http:/
 
 ---
 
-## 5. Live Architecture & Deliverables Update (Course Studio & Executive Dashboard)
+## 5. Live Architecture & Deliverables Update (3-Pillar Master Architecture)
 
-- **Combined Executive Dashboard (`#overview`)**:
-  - Re-architected entry landing with two distinct, high-impact sections: Section 1 (LMS Academy & Doctor Progress) and Section 2 (Patients Records & Clinical Trial Telemetry).
-  - 8 interactive, clickable metric cards with direct deep navigation to respective hubs (`#lms`, `#courses`, `#certificates`, `#users/doctors`, `#users/patients`, `#clinical`, `#regions`).
-- **Sidebar Categorization & Pillar Architecture**:
-  - Clean separation into dedicated functional pillars:
-    * `Executive Overview` (`#overview`): Master consolidated cockpit.
-    * `LMS Academy` (`#lms`): Embedded pillar tabs for Overview & Analytics, Curriculum & Courses (`#courses`), and PMDC Certificates (`#certificates`).
-    * `User Management` (`#users`): Separated sub-views for Doctors Directory (`#users/doctors`) and Patient Cohort Records (`#users/patients`).
-    * `Clinical Trial Radar` (`#clinical`): Patient intake, cohort analysis, triage, and leaflet generation.
-    * `Regional Hub Matrix` (`#regions`): Geospatial medical hub performance across Pakistan.
-    * `System Rules` (`#settings`): Accreditation criteria and evaluation controls.
-- **Sectioned Course Detail (`#courses/:id`)**:
-  - Structured into 3 cleanly partitioned tabs:
-    1. `01 · Lectures & Modules`: Video curriculum timeline, durations, and watch thresholds.
-    2. `02 · Clinical Materials & Guidelines`: Downloadable reference PDFs, clinical algorithms, and drug monographs.
-    3. `03 · Assessment Exam & Question Bank`: 10-question evaluation blueprint with pass rates and clinical rationale keys.
-- **Course Studio Polish (`#courses/new` & `#courses/:id/edit`)**:
-  - Removed all pre-filled dummy input values for new course creation (clean empty fields with clear placeholder hints).
-  - Added dedicated Lecture Video Removal button (`#btnRemoveLecVideo`) to easily delete/clear attached videos.
-  - Implemented Course Thumbnail Studio with 3 operational modes:
-    * 🎨 **AI Canvas Auto-Generator**: Generates high-resolution branded cover art dynamically with customizable palettes and crest emblems.
-    * 📤 **Custom Image Upload**: Drag-and-drop file upload with immediate thumbnail preview.
-    * 📐 **Vector Preset Graphic Selector**: 6 specialized medical iconography themes.
-- **Topbar Streamlining**:
-  - Completely excised redundant `"Live Telemetry: 12 Nodes Online"` pill from the topbar across all devices.
+- **3-Pillar Core Architecture**:
+  - **Pillar 1: LMS Academy (`#lms`)**:
+    - Embedded sub-tabs: Overview & Velocity (`#lms`), Curriculum & Courses (`#courses`), PMDC Certifications (`#certificates`).
+  - **Pillar 2: Patient Registry (`#patients`)**:
+    - Embedded sub-tabs: Patient Cohort Registry (`#patients`), Clinical Trial Radar (`#clinical`), Clinic Leaflet & Standee Hub.
+  - **Pillar 3: Clinical Alerts & Triage Center (`#alerts`)**:
+    - Embedded sub-tabs: Live Triage Queue (`#alerts`), Red-Flag Symptoms (`#alerts/redflags`), PWA & Telemetry Sync (`#alerts/connectivity`), Resolved Endpoints (`#alerts/history`).
+    - Dedicated live triage roster with patient severity badges, clinical trigger explanations, and instant resolution actions.
+    - Real-time notification badge on the sidebar navigation item (`#admNavAlertsBadge`).
+- **Platform Helpers & Administration**:
+  - **Executive Cockpit (`#overview`)**: Consolidated master dashboard with dual LMS and Patient Registry sections and clickable deep telemetry cards.
+  - **User Management (`#users`)**: Segregated tabs for Doctors Directory & PMDC Licensing (`#users/doctors`), Patient Enlistment (`#users/patients`), and Role Permissions (`#settings?tab=permissions`).
+  - **Regional Hub Matrix (`#regions`)**: Geospatial medical center distribution across 12 Pakistan urban clusters.
+  - **Settings & Permissions (`#settings`)**: Accreditation pass gates, 32-bit FNV-1a verification rules, and System Roles & Access Permissions Matrix.
+- **Topbar Segmented 3-Pillar Switcher**:
+  - Replaced legacy dual button with a dedicated 3-way segmented control (`LMS Academy`, `Patient Registry`, `Alerts & Triage`) with brand-tinted active states and responsive icon-only collapsing on smaller displays.
 
 ---
 

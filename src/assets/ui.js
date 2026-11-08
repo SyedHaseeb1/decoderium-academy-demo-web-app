@@ -32,7 +32,7 @@ function snack(msg) {
   snackTimer = setTimeout(function () { el.classList.remove('show'); }, 3200);
 }
 
-/* Modern Sliding Alert Side Cards for Physicians */
+/* Modern Sliding Alert Side Cards for Doctors */
 function sideAlert(title, message, type) {
   type = type || 'info';
   var host = document.getElementById('sideAlertHost');

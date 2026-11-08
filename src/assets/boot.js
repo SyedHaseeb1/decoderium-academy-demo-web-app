@@ -1,4 +1,4 @@
-/* Boot loader (same idea as the STAND-HF registry demo): fetches the data files in data/ first,
+/* Boot loader: fetches the data files in data/ first,
    then runs the page's scripts in document order. Load this file once, before the data-dependent scripts.
    Those are written as placeholders:
      <script type="text/plain" data-src="access.js"></script>   a file in assets/ (path relative to assets/)

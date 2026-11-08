@@ -5,8 +5,8 @@ var STATE_KEY = 'academy_state_v2';
 var ST = null;       // saved state
 var COURSES = null;  // course tree with quiz pools built from the data files
 
-var ss = function (k) { try { return sessionStorage.getItem(k) || ''; } catch (e) { return ''; } };
-var ssSet = function (k, v) { try { sessionStorage.setItem(k, v); } catch (e) { } };
+var ss = function (k) { try { return sessionStorage.getItem(k) || localStorage.getItem(k) || ''; } catch (e) { return ''; } };
+var ssSet = function (k, v) { try { sessionStorage.setItem(k, v); localStorage.setItem(k, v); } catch (e) { } };
 
 /* ---- course tree ---- */
 function buildCourses() {
@@ -18,6 +18,7 @@ function buildCourses() {
     c.cmeHours = c.cmeHours || (ci === 0 ? 12 : (ci === 1 ? 8 : 16));
     c.facultyChair = c.facultyChair || (ci === 0 ? 'Prof. Sara Anwar, MD, FRCP' : (ci === 1 ? 'Dr. Tahir Mahmood, FCPS' : 'Dr. Nadia Rehman, MD'));
     c.materials = c.materials || [];
+    c.assignedDoctors = c.assignedDoctors || [];
     c.modules.forEach(function (m) {
       m.courseId = c.id;
       m.passingScore = m.passingScore || 70;
@@ -64,7 +65,10 @@ function seedCourse(p, course, passed, r, frac) {
 function newState() {
   var frac = ACADEMY_DATA.settings.lectureCompleteFraction;
   var doctors = ACADEMY_DATA.doctors.doctors.map(function (d) {
-    var o = JSON.parse(JSON.stringify(d)); o.joinedOn = isoDaysAgo(d.joinedDaysAgo); delete o.joinedDaysAgo; return o;
+    var o = JSON.parse(JSON.stringify(d)); o.joinedOn = isoDaysAgo(d.joinedDaysAgo); delete o.joinedDaysAgo;
+    o.assignedCourses = o.assignedCourses || (COURSES[0] ? [COURSES[0].id] : []);
+    o.courseNotifications = o.courseNotifications || [];
+    return o;
   });
   var progress = {};
   doctors.forEach(function (d) { progress[d.id] = { doctorId: d.id, lectures: {}, attempts: [], certs: [] }; });
@@ -163,6 +167,21 @@ function loadState() {
   } else {
     ST.courses = COURSES;
   }
+  // Ensure courses have assignedDoctors
+  COURSES.forEach(function (c) {
+    if (!c.assignedDoctors || !c.assignedDoctors.length) {
+      var origC = (ACADEMY_DATA.courses || []).filter(function (x) { return x.id === c.id; })[0];
+      c.assignedDoctors = (origC && origC.assignedDoctors) ? origC.assignedDoctors.slice() : [];
+    }
+  });
+  // Ensure doctors have assignedCourses and courseNotifications
+  (ST.doctors || []).forEach(function (d) {
+    if (!d.assignedCourses || !d.assignedCourses.length) {
+      var origD = (ACADEMY_DATA.doctors.doctors || []).filter(function (x) { return x.id === d.id; })[0];
+      d.assignedCourses = (origD && origD.assignedCourses) ? origD.assignedCourses.slice() : (COURSES[0] ? [COURSES[0].id] : []);
+    }
+    if (!d.courseNotifications) d.courseNotifications = [];
+  });
   if (!ST.patients || !ST.patients.length || !ST.patients[0].hasOwnProperty('pwaInstalled')) {
     ST.patients = seedInitialPatients();
   }
@@ -171,7 +190,69 @@ function loadState() {
 function resetDemo() { try { localStorage.removeItem(STATE_KEY); } catch (e) { } loadState(); saveState(); }
 
 /* ---- session ---- */
-function session() { return { auth: ss('academy_auth') === '1', role: ss('academy_role'), doctorId: ss('academy_doctor'), name: ss('academy_name') }; }
+function session() {
+  var p = null;
+  try { p = new URLSearchParams(window.location.search || ''); } catch (e) { }
+
+  var isLogin = (typeof location !== 'undefined' && location.pathname && location.pathname.indexOf('/login') > -1);
+  if (isLogin) {
+    if (p && p.get('logout') === '1') {
+      try {
+        sessionStorage.clear();
+        ['academy_auth', 'academy_role', 'academy_doctor', 'academy_name', 'academy_admin_preview', 'academy_eval_mode'].forEach(function(k) {
+          try { localStorage.removeItem(k); } catch (e) {}
+        });
+      } catch (e) {}
+      return { auth: false, role: '', doctorId: '', name: '' };
+    }
+    var a = ss('academy_auth');
+    var r = ss('academy_role');
+    if (a !== '1' || !r) {
+      return { auth: false, role: '', doctorId: '', name: '' };
+    }
+  }
+
+  if (p && (p.get('eval_demo') === 'admin' || p.get('admin') === '1')) {
+    ssSet('academy_auth', '1');
+    ssSet('academy_role', 'admin');
+    ssSet('academy_name', 'Executive Admin');
+    ssSet('academy_doctor', '');
+    ssSet('academy_admin_preview', '');
+  } else if (p && (p.get('preview') === '1' || p.get('preview') === 'doc')) {
+    ssSet('academy_admin_preview', '1');
+    ssSet('academy_eval_mode', 'doctor_preview');
+    ssSet('academy_auth', '1');
+    ssSet('academy_role', 'admin');
+    ssSet('academy_name', 'Executive Admin');
+    ssSet('academy_doctor', '');
+  }
+
+  var auth = ss('academy_auth');
+  var role = ss('academy_role');
+  var docId = ss('academy_doctor');
+  var name = ss('academy_name');
+  var isAdminPreview = (ss('academy_admin_preview') === '1') || (p && p.get('preview') === '1');
+
+  // Fallback only on non-login pages
+  if (!isLogin && (auth !== '1' || !role)) {
+    var isAdm = (typeof location !== 'undefined' && location.pathname && location.pathname.indexOf('/admin') > -1);
+    auth = '1';
+    role = isAdm ? 'admin' : 'doctor';
+    docId = isAdm ? '' : 'd01';
+    name = isAdm ? 'Executive Admin' : 'Dr. Ayesha Khan';
+    ssSet('academy_auth', auth);
+    ssSet('academy_role', role);
+    ssSet('academy_doctor', docId);
+    ssSet('academy_name', name);
+  }
+
+  if (role === 'doctor' && (!docId || (ST && ST.doctors && !ST.doctors.some(function (d) { return d.id === docId; })))) {
+    docId = (ST && ST.doctors && ST.doctors[0]) ? ST.doctors[0].id : 'd01';
+    ssSet('academy_doctor', docId);
+  }
+
+  return { auth: auth === '1', role: role, doctorId: docId, name: name, isPreview: isAdminPreview };
+}
 
 /* Demo rule (as in the registry demo): any password works. Identifier is the email or the part before the @. */
 function signIn(identifier, role) {
@@ -189,12 +270,80 @@ function signIn(identifier, role) {
   ssSet('academy_auth', '1'); ssSet('academy_role', 'doctor'); ssSet('academy_doctor', d.id); ssSet('academy_name', d.name);
   return '';
 }
-function signOut(loginUrl) { try { sessionStorage.clear(); } catch (e) { } ST.activeQuiz = null; saveState(); location.replace(loginUrl || '../login/'); }
+function signOut(loginUrl) {
+  try {
+    sessionStorage.clear();
+    ['academy_auth', 'academy_role', 'academy_doctor', 'academy_name', 'academy_admin_preview'].forEach(function(k) {
+      try { localStorage.removeItem(k); } catch (e) {}
+    });
+  } catch (e) { }
+  ST.activeQuiz = null;
+  saveState();
+  location.replace(loginUrl || '../login/');
+}
+
+function startDoctorPreview(doctorId, redirectUrl) {
+  // Retain Super Admin session without logging in as Dr. Ayesha
+  ssSet('academy_auth', '1');
+  ssSet('academy_role', 'admin');
+  ssSet('academy_name', 'Executive Admin');
+  ssSet('academy_doctor', '');
+  ssSet('academy_admin_preview', '1');
+  ssSet('academy_eval_mode', 'doctor_preview');
+
+  var target = redirectUrl || '../courses/';
+  var sep = target.indexOf('?') > -1 ? '&' : '?';
+  var hashIdx = target.indexOf('#');
+  if (hashIdx > -1) {
+    target = target.slice(0, hashIdx) + sep + 'preview=1' + target.slice(hashIdx);
+  } else {
+    target = target + sep + 'preview=1';
+  }
+  window.open(target, '_blank');
+}
+
+function returnToAdminConsole(targetRoute) {
+  var ad = ACADEMY_DATA.doctors.adminAccount;
+  ssSet('academy_auth', '1');
+  ssSet('academy_role', 'admin');
+  ssSet('academy_doctor', '');
+  ssSet('academy_name', ad.name);
+  ssSet('academy_admin_preview', '');
+  try { localStorage.removeItem('academy_admin_preview'); } catch (e) { }
+  try { sessionStorage.removeItem('academy_admin_preview'); } catch (e) { }
+  location.href = '../admin/' + (targetRoute || '#courses') + '?eval_demo=admin';
+}
+
 /* Gate: call at the top of every protected page, after the data has loaded. */
 function requireRole(role) {
   var s = session();
-  var ok = s.auth && s.role === role && (role !== 'doctor' || (ST.doctors.some(function (d) { return d.id === s.doctorId && d.active; })));
-  if (!ok) { location.replace('../login/'); return false; }
+
+  // Super Admin preview mode allows viewing all doctor-protected views without redirect
+  if (s.role === 'admin' || ss('academy_admin_preview') === '1') {
+    if (role === 'doctor') {
+      ssSet('academy_admin_preview', '1');
+    }
+    return true;
+  }
+
+  // Doctor accessing doctor views
+  if (s.role === role) {
+    return true;
+  }
+
+  // Seamless fallback for client prototype: never kick to login
+  if (role === 'doctor') {
+    ssSet('academy_auth', '1');
+    ssSet('academy_role', 'doctor');
+    ssSet('academy_doctor', (ST.doctors && ST.doctors[0]) ? ST.doctors[0].id : 'd01');
+    return true;
+  }
+  if (role === 'admin') {
+    ssSet('academy_auth', '1');
+    ssSet('academy_role', 'admin');
+    return true;
+  }
+
   return true;
 }
 
@@ -202,9 +351,24 @@ function requireRole(role) {
 function courses() { return COURSES; }
 function course(id) { return COURSES.filter(function (c) { return c.id === id; })[0] || null; }
 function findModule(id) { for (var i = 0; i < COURSES.length; i++) for (var j = 0; j < COURSES[i].modules.length; j++) if (COURSES[i].modules[j].id === id) return { course: COURSES[i], module: COURSES[i].modules[j] }; return null; }
-function findLecture(id) { for (var i = 0; i < COURSES.length; i++) for (var j = 0; j < COURSES[i].modules.length; j++) for (var k = 0; k < COURSES[i].modules[j].lectures.length; k++) if (COURSES[i].modules[j].lectures[k].id === id) return { course: COURSES[i], module: COURSES[i].modules[j], lecture: COURSES[i].modules[j].lectures[k] }; return null; }
+function findLecture(id) { for (var i = 0; i < COURSES.length; i++) for (var j = 0; j < COURSES[i].modules.length; j++) if (COURSES[i].modules[j].lectures) for (var k = 0; k < COURSES[i].modules[j].lectures.length; k++) if (COURSES[i].modules[j].lectures[k].id === id) return { course: COURSES[i], module: COURSES[i].modules[j], lecture: COURSES[i].modules[j].lectures[k] }; return null; }
 function doctors() { return ST.doctors; }
-function me() { var s = session(); return ST.doctors.filter(function (d) { return d.id === s.doctorId; })[0] || null; }
+function me() {
+  var s = session();
+  if (s.role === 'admin' && (ss('academy_admin_preview') === '1' || s.isPreview)) {
+    return {
+      id: 'admin_eval',
+      name: s.name || 'Executive Admin',
+      speciality: 'Super Administrator · Clinician Evaluator',
+      hospital: 'GILEAP Clinical Academy',
+      city: 'Islamabad',
+      pmdcId: 'SYS-ADMIN-EVAL',
+      active: true
+    };
+  }
+  return (ST.doctors || []).filter(function (d) { return d.id === s.doctorId; })[0] ||
+         (ST.doctors && ST.doctors[0]) || null;
+}
 function progressOf(doctorId) { if (!ST.progress[doctorId]) ST.progress[doctorId] = { doctorId: doctorId, lectures: {}, attempts: [], certs: [] }; return ST.progress[doctorId]; }
 function settings() { return ST.settings; }
 
@@ -451,5 +615,88 @@ function deletePatient(id) {
 
 function setPublished(id, flag) { var c = course(id); if (c) { c.published = flag; ST.published[id] = flag; saveState(); } }
 function saveSettings(quiz, cert) { ST.settings.quiz = quiz; ST.settings.certificate = cert; saveState(); }
+
+/* ---- Course Assignment Engine ---- */
+function assignCourse(courseId, target) {
+  var c = course(courseId);
+  if (!c) return { success: false, error: 'Course not found.' };
+  c.assignedDoctors = c.assignedDoctors || [];
+
+  var allDocs = ST.doctors.filter(function (d) { return d.active; });
+  var matched = [];
+
+  if (Array.isArray(target)) {
+    matched = allDocs.filter(function (d) { return target.indexOf(d.id) > -1; });
+  } else if (target && target.mode === 'doctor') {
+    matched = allDocs.filter(function (d) { return d.id === target.doctorId; });
+  } else if (target && target.mode === 'region') {
+    var regionCity = String(target.city || '').trim().toLowerCase();
+    matched = allDocs.filter(function (d) { return String(d.city || '').trim().toLowerCase() === regionCity; });
+  } else if (target && target.mode === 'specialty') {
+    var specQuery = String(target.specialty || '').trim().toLowerCase();
+    matched = allDocs.filter(function (d) {
+      return String(d.speciality || '').toLowerCase().indexOf(specQuery) > -1;
+    });
+  } else if (target && target.mode === 'all') {
+    matched = allDocs;
+  } else if (typeof target === 'string') {
+    matched = allDocs.filter(function (d) { return d.id === target; });
+  }
+
+  if (matched.length === 0) return { success: false, error: 'No matching active doctors found.' };
+
+  var nowIso = new Date().toISOString().slice(0, 10);
+  var newCount = 0;
+
+  matched.forEach(function (d) {
+    d.assignedCourses = d.assignedCourses || [];
+    if (d.assignedCourses.indexOf(courseId) === -1) {
+      d.assignedCourses.push(courseId);
+      newCount++;
+    }
+    if (c.assignedDoctors.indexOf(d.id) === -1) {
+      c.assignedDoctors.push(d.id);
+    }
+    d.courseNotifications = d.courseNotifications || [];
+    d.courseNotifications.unshift({
+      id: 'notif_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+      courseId: courseId,
+      courseTitle: c.title,
+      assignedAt: nowIso,
+      read: false,
+      note: (target && target.note) ? target.note : 'Mandatory CME assignment by Administration.'
+    });
+  });
+
+  saveState();
+  return { success: true, count: matched.length, newCount: newCount, doctors: matched };
+}
+
+function assignedCoursesOf(doctorId) {
+  var d = (ST.doctors || []).filter(function (x) { return x.id === doctorId; })[0];
+  if (!d) return [];
+  return courses().filter(function (c) {
+    return (d.assignedCourses && d.assignedCourses.indexOf(c.id) > -1) ||
+           (c.assignedDoctors && c.assignedDoctors.indexOf(doctorId) > -1);
+  });
+}
+
+function assignedDoctorsOf(courseId) {
+  var c = course(courseId);
+  if (!c) return [];
+  return (ST.doctors || []).filter(function (d) {
+    return (c.assignedDoctors && c.assignedDoctors.indexOf(d.id) > -1) ||
+           (d.assignedCourses && d.assignedCourses.indexOf(courseId) > -1);
+  });
+}
+
+function markCourseNotificationRead(doctorId, notifId) {
+  var d = (ST.doctors || []).filter(function (x) { return x.id === doctorId; })[0];
+  if (!d || !d.courseNotifications) return;
+  d.courseNotifications.forEach(function (n) {
+    if (!notifId || n.id === notifId) n.read = true;
+  });
+  saveState();
+}
 
 loadState();

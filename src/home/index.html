@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Decoderium Academy · Personal Learning Dashboard</title>
+  <title>GILEAP Academy · Personal Learning Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#ff4760">
   <link rel="icon" type="image/svg+xml" href="../assets/decoderium-mark.svg">
@@ -35,6 +35,16 @@
   var pc = activeCourse ? RULES.percent(activeCourse, p) : 0;
   var step = activeCourse ? nextStep(activeCourse, p) : null;
 
+  var assignedList = (d && d.assignedCourses) ? d.assignedCourses : [];
+  var myAssignedCourses = courses().filter(function (c) {
+    return (assignedList.indexOf(c.id) > -1) || (c.assignedDoctors && c.assignedDoctors.indexOf(d.id) > -1);
+  });
+  if (myAssignedCourses.length === 0 && pub.length > 0) {
+    myAssignedCourses = pub.slice(0, 3);
+  }
+
+  var unreadNotifs = (d && d.courseNotifications) ? d.courseNotifications.filter(function (n) { return !n.read; }) : [];
+
   var doctorName = d ? d.name : 'Dr. Ayesha Khan';
   var pmdcId = d ? d.pmdcId : '48291-P';
   var speciality = d ? d.speciality : 'Consultant Cardiologist';
@@ -58,7 +68,7 @@
           '</svg>' +
           '<div>' +
             '<span class="lms-hero-badge"><i class="ms" style="font-size:14px;">school</i> ONLINE COURSE</span>' +
-            '<h1 class="lms-hero-title">Sharpen Your Clinical Skills with Guideline-Directed Heart Failure Courses</h1>' +
+            '<h1 class="lms-hero-title">Sharpen Your Clinical Skills with Accredited Gastroenterology Courses</h1>' +
           '</div>' +
           '<div>' +
             '<a href="' + (step ? step.href : '../courses/') + '" class="lms-hero-btn">' +
@@ -99,81 +109,52 @@
         /* 4. Continue Watching Section (.lms-continue-card) */
         '<div>' +
           '<div class="lms-section-header">' +
-            '<h2 class="lms-section-title">Continue Watching</h2>' +
+            '<h2 class="lms-section-title">Continue Watching & Assigned Watchlist</h2>' +
             '<div class="lms-carousel-nav">' +
               '<button type="button" class="lms-carousel-btn" aria-label="Previous card"><i class="ms">chevron_left</i></button>' +
               '<button type="button" class="lms-carousel-btn" aria-label="Next card"><i class="ms">chevron_right</i></button>' +
             '</div>' +
           '</div>' +
           '<div class="lms-continue-grid">' +
-            /* Card 1 */
-            '<a href="../lecture/?id=c1-m1-l1" class="lms-continue-card">' +
-              '<div class="lms-card-thumb-wrap">' +
-                '<div class="lms-card-thumb-gradient" style="background: radial-gradient(circle at 70% 30%, #3b82f6 0%, #1e1b4b 75%);">' +
-                  '<svg viewBox="0 0 100 40" style="position:absolute;width:80%;opacity:0.25;stroke:#60a5fa;fill:none;stroke-width:2;" aria-hidden="true"><path d="M0 20 L30 20 L35 5 L42 35 L48 10 L54 26 L60 20 L100 20"/></svg>' +
-                  '<div class="lms-thumb-play"><i class="ms" style="font-size:24px;">play_arrow</i></div>' +
-                '</div>' +
-                '<button type="button" class="lms-thumb-top-action" title="Save to watchlist" onclick="event.preventDefault(); var i = this.querySelector(\'i\'); i.textContent = i.textContent === \'favorite\' ? \'favorite_border\' : \'favorite\';"><i class="ms">favorite_border</i></button>' +
-                '<span class="lms-thumb-duration">9:00 min</span>' +
-              '</div>' +
-              '<div class="lms-card-content">' +
-                '<span class="lms-card-pill-tag tag-mint">HFrEF DIAGNOSIS</span>' +
-                '<h3 class="lms-card-title">What is HFrEF? Definitions and Clinical Burden</h3>' +
-                '<div class="lms-card-instructor-row">' +
-                  '<div class="lms-instructor-avatar" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8);">SA</div>' +
-                  '<div>' +
-                    '<div class="lms-instructor-name">Prof. Sara Anwar</div>' +
-                    '<div class="lms-instructor-sub">Lead Heart Failure Faculty</div>' +
-                  '</div>' +
-                '</div>' +
-              '</div>' +
-            '</a>' +
+            myAssignedCourses.map(function (c, cIdx) {
+              var cPct = RULES.percent(c, p);
+              var isAssigned = (assignedList.indexOf(c.id) > -1) || (c.assignedDoctors && c.assignedDoctors.indexOf(d.id) > -1);
+              var cStep = nextStep(c, p);
+              var href = cStep ? cStep.href : ('../courses/#' + c.id);
+              var colors = [
+                { grad: 'radial-gradient(circle at 70% 30%, #3b82f6 0%, #1e1b4b 75%)', stroke: '#60a5fa', tag: 'tag-mint', avatarBg: 'linear-gradient(135deg,#3b82f6,#1d4ed8)' },
+                { grad: 'radial-gradient(circle at 70% 30%, #8b5cf6 0%, #1e1b4b 75%)', stroke: '#c084fc', tag: 'tag-violet', avatarBg: 'linear-gradient(135deg,#8b5cf6,#6d28d9)' },
+                { grad: 'radial-gradient(circle at 70% 30%, #ec4899 0%, #1e1b4b 75%)', stroke: '#f472b6', tag: 'tag-rose', avatarBg: 'linear-gradient(135deg,#ec4899,#be185d)' }
+              ];
+              var col = colors[cIdx % colors.length];
+              var firstLec = (c.modules[0] && c.modules[0].lectures[0]) ? c.modules[0].lectures[0] : null;
+              var dur = firstLec ? fmtDur(firstLec.seconds) : '10:00 min';
 
-            /* Card 2 */
-            '<a href="../lecture/?id=c1-m2-l1" class="lms-continue-card">' +
-              '<div class="lms-card-thumb-wrap">' +
-                '<div class="lms-card-thumb-gradient" style="background: radial-gradient(circle at 70% 30%, #8b5cf6 0%, #1e1b4b 75%);">' +
-                  '<svg viewBox="0 0 100 40" style="position:absolute;width:80%;opacity:0.25;stroke:#c084fc;fill:none;stroke-width:2;" aria-hidden="true"><path d="M0 20 L25 20 L30 8 L36 32 L44 14 L50 24 L56 20 L100 20"/></svg>' +
-                  '<div class="lms-thumb-play"><i class="ms" style="font-size:24px;">play_arrow</i></div>' +
+              return '<a href="' + href + '" class="lms-continue-card">' +
+                '<div class="lms-card-thumb-wrap">' +
+                  '<div class="lms-card-thumb-gradient" style="background:' + col.grad + ';">' +
+                    '<svg viewBox="0 0 100 40" style="position:absolute;width:80%;opacity:0.25;stroke:' + col.stroke + ';fill:none;stroke-width:2;" aria-hidden="true"><path d="M0 20 L30 20 L35 5 L42 35 L48 10 L54 26 L60 20 L100 20"/></svg>' +
+                    '<div class="lms-thumb-play"><i class="ms" style="font-size:24px;">play_arrow</i></div>' +
+                  '</div>' +
+                  '<button type="button" class="lms-thumb-top-action" title="Save to watchlist" onclick="event.preventDefault(); var i = this.querySelector(\'i\'); i.textContent = i.textContent === \'favorite\' ? \'favorite_border\' : \'favorite\';"><i class="ms">favorite_border</i></button>' +
+                  '<span class="lms-thumb-duration">' + dur + ' · ' + cPct + '%</span>' +
                 '</div>' +
-                '<button type="button" class="lms-thumb-top-action" title="Save to watchlist" onclick="event.preventDefault(); var i = this.querySelector(\'i\'); i.textContent = i.textContent === \'favorite\' ? \'favorite_border\' : \'favorite\';"><i class="ms">favorite_border</i></button>' +
-                '<span class="lms-thumb-duration">11:00 min</span>' +
-              '</div>' +
-              '<div class="lms-card-content">' +
-                '<span class="lms-card-pill-tag tag-violet">GDMT PILLARS</span>' +
-                '<h3 class="lms-card-title">ARNI and the Move Beyond ACE-I and ARB</h3>' +
-                '<div class="lms-card-instructor-row">' +
-                  '<div class="lms-instructor-avatar" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9);">TM</div>' +
-                  '<div>' +
-                    '<div class="lms-instructor-name">Dr. Tahir Mahmood</div>' +
-                    '<div class="lms-instructor-sub">Gastroenterology Lead</div>' +
+                '<div class="lms-card-content">' +
+                  '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">' +
+                    '<span class="lms-card-pill-tag ' + col.tag + '">' + esc(c.category ? c.category.toUpperCase() : 'CME ACCREDITED') + '</span>' +
+                    (isAssigned ? '<span style="font-size:10px;font-weight:800;color:var(--primary);background:#ede9fe;padding:2px 8px;border-radius:9999px;border:1px solid rgba(88,43,232,0.25);">ASSIGNED</span>' : '') +
+                  '</div>' +
+                  '<h3 class="lms-card-title">' + esc(c.title) + '</h3>' +
+                  '<div class="lms-card-instructor-row">' +
+                    '<div class="lms-instructor-avatar" style="background:' + col.avatarBg + ';">' + initials(c.facultyChair || 'Faculty') + '</div>' +
+                    '<div>' +
+                      '<div class="lms-instructor-name">' + esc(c.facultyChair || 'Faculty Mentor') + '</div>' +
+                      '<div class="lms-instructor-sub">' + (cPct > 0 ? (cPct + '% velocity complete') : 'Ready to start') + '</div>' +
+                    '</div>' +
                   '</div>' +
                 '</div>' +
-              '</div>' +
-            '</a>' +
-
-            /* Card 3 */
-            '<a href="../lecture/?id=c1-m2-l3" class="lms-continue-card">' +
-              '<div class="lms-card-thumb-wrap">' +
-                '<div class="lms-card-thumb-gradient" style="background: radial-gradient(circle at 70% 30%, #ec4899 0%, #1e1b4b 75%);">' +
-                  '<svg viewBox="0 0 100 40" style="position:absolute;width:80%;opacity:0.25;stroke:#f472b6;fill:none;stroke-width:2;" aria-hidden="true"><path d="M0 20 L28 20 L33 6 L40 34 L46 12 L52 25 L58 20 L100 20"/></svg>' +
-                  '<div class="lms-thumb-play"><i class="ms" style="font-size:24px;">play_arrow</i></div>' +
-                '</div>' +
-                '<button type="button" class="lms-thumb-top-action" title="Save to watchlist" onclick="event.preventDefault(); var i = this.querySelector(\'i\'); i.textContent = i.textContent === \'favorite\' ? \'favorite_border\' : \'favorite\';"><i class="ms">favorite_border</i></button>' +
-                '<span class="lms-thumb-duration">10:30 min</span>' +
-              '</div>' +
-              '<div class="lms-card-content">' +
-                '<span class="lms-card-pill-tag tag-rose">PHARMACOTHERAPY</span>' +
-                '<h3 class="lms-card-title">MRAs and SGLT2 Inhibitors: Clinical Rules</h3>' +
-                '<div class="lms-card-instructor-row">' +
-                  '<div class="lms-instructor-avatar" style="background:linear-gradient(135deg,#ec4899,#be185d);">SA</div>' +
-                  '<div>' +
-                    '<div class="lms-instructor-name">Prof. Sara Anwar</div>' +
-                    '<div class="lms-instructor-sub">Lead Heart Failure Faculty</div>' +
-                  '</div>' +
-                '</div>' +
-              '</div>' +
-            '</a>' +
+              '</a>';
+            }).join('') +
           '</div>' +
         '</div>' +
 
@@ -206,7 +187,7 @@
                       '</div>' +
                     '</td>' +
                     '<td><span class="lms-table-badge">FOUNDATION</span></td>' +
-                    '<td><strong style="color:var(--navy);">Understanding HFrEF Definitions & Clinical Burden</strong></td>' +
+                    '<td><strong style="color:var(--navy);">Acid Peptic Disease Pathophysiology & Burden</strong></td>' +
                     '<td style="text-align:right;"><a href="../lecture/?id=c1-m1-l1" class="lms-btn-action">Show Details</a></td>' +
                   '</tr>' +
                   '<tr>' +
@@ -219,8 +200,8 @@
                         '</div>' +
                       '</div>' +
                     '</td>' +
-                    '<td><span class="lms-table-badge">GDMT PILLARS</span></td>' +
-                    '<td><strong style="color:var(--navy);">ARNI and the Move Beyond ACE-I and ARB</strong></td>' +
+                    '<td><span class="lms-table-badge">P-CAB THERAPY</span></td>' +
+                    '<td><strong style="color:var(--navy);">Vonoprazan vs PPI: Mechanisms & Clinical Trials</strong></td>' +
                     '<td style="text-align:right;"><a href="../lecture/?id=c1-m2-l1" class="lms-btn-action">Show Details</a></td>' +
                   '</tr>' +
                   '<tr>' +
@@ -233,8 +214,8 @@
                         '</div>' +
                       '</div>' +
                     '</td>' +
-                    '<td><span class="lms-table-badge">TITRATION</span></td>' +
-                    '<td><strong style="color:var(--navy);">Starting and Up-Titrating Quadruple Therapy Safely</strong></td>' +
+                    '<td><span class="lms-table-badge">H. PYLORI</span></td>' +
+                    '<td><strong style="color:var(--navy);">Quadruple Eradication & Refractory APD</strong></td>' +
                     '<td style="text-align:right;"><a href="../lecture/?id=c1-m3-l1" class="lms-btn-action">Show Details</a></td>' +
                   '</tr>' +
                 '</tbody>' +
@@ -247,7 +228,7 @@
       /* ==========================================
          RIGHT RAIL (.lms-right-rail)
          ========================================== */
-      '<aside class="lms-right-rail" aria-label="Physician activity rail">' +
+      '<aside class="lms-right-rail" aria-label="Doctor activity rail">' +
         /* 1. Doctor Profile Summary */
         '<div>' +
           '<div class="lms-rail-top-bar" style="margin-bottom:14px;">' +
@@ -370,7 +351,7 @@
               '<div class="lms-mentor-avatar" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8);">AK</div>' +
               '<div class="lms-mentor-info">' +
                 '<div class="lms-mentor-name">Prof. Dr. Ayesha Khan</div>' +
-                '<div class="lms-mentor-sub">Lead Heart Failure Faculty</div>' +
+                '<div class="lms-mentor-sub">Lead Gastroenterology Faculty</div>' +
               '</div>' +
               '<button type="button" class="lms-btn-follow" onclick="this.classList.toggle(\'following\'); var f = this.classList.contains(\'following\'); this.textContent = f ? \'Following\' : \'Follow\'; if (f && typeof sideAlert === \'function\') sideAlert(\'Faculty Followed\', \'You will receive immediate alerts when new clinical modules are published.\', \'info\');">Follow</button>' +
             '</div>' +
@@ -388,7 +369,7 @@
               '<div class="lms-mentor-avatar" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9);">UT</div>' +
               '<div class="lms-mentor-info">' +
                 '<div class="lms-mentor-name">Prof. Usman Tariq</div>' +
-                '<div class="lms-mentor-sub">Echocardiography Chair</div>' +
+                '<div class="lms-mentor-sub">Endoscopy & Imaging Chair</div>' +
               '</div>' +
               '<button type="button" class="lms-btn-follow" onclick="this.classList.toggle(\'following\'); var f = this.classList.contains(\'following\'); this.textContent = f ? \'Following\' : \'Follow\'; if (f && typeof sideAlert === \'function\') sideAlert(\'Faculty Followed\', \'You will receive immediate alerts when new clinical modules are published.\', \'info\');">Follow</button>' +
             '</div>' +
@@ -397,7 +378,7 @@
               '<div class="lms-mentor-avatar" style="background:linear-gradient(135deg,#ec4899,#be185d);">FN</div>' +
               '<div class="lms-mentor-info">' +
                 '<div class="lms-mentor-name">Dr. Fatima Noor</div>' +
-                '<div class="lms-mentor-sub">Biomarkers Lead</div>' +
+                '<div class="lms-mentor-sub">H. pylori & Diagnostics Lead</div>' +
               '</div>' +
               '<button type="button" class="lms-btn-follow" onclick="this.classList.toggle(\'following\'); var f = this.classList.contains(\'following\'); this.textContent = f ? \'Following\' : \'Follow\'; if (f && typeof sideAlert === \'function\') sideAlert(\'Faculty Followed\', \'You will receive immediate alerts when new clinical modules are published.\', \'info\');">Follow</button>' +
             '</div>' +
@@ -406,7 +387,7 @@
               '<div class="lms-mentor-avatar" style="background:linear-gradient(135deg,#f59e0b,#d97706);">TM</div>' +
               '<div class="lms-mentor-info">' +
                 '<div class="lms-mentor-name">Dr. Tahir Mahmood</div>' +
-                '<div class="lms-mentor-sub">GDMT & Electrophysiology</div>' +
+                '<div class="lms-mentor-sub">P-CAB & Acid Suppression Lead</div>' +
               '</div>' +
               '<button type="button" class="lms-btn-follow" onclick="this.classList.toggle(\'following\'); var f = this.classList.contains(\'following\'); this.textContent = f ? \'Following\' : \'Follow\'; if (f && typeof sideAlert === \'function\') sideAlert(\'Faculty Followed\', \'You will receive immediate alerts when new clinical modules are published.\', \'info\');">Follow</button>' +
             '</div>' +
@@ -449,10 +430,10 @@
     };
   }
 
-  /* Trigger physician welcome alert card */
+  /* Trigger doctor welcome alert card */
   setTimeout(function () {
     if (typeof sideAlert === 'function') {
-      sideAlert('Welcome, ' + doctorName, 'PMDC accreditation verified for 2026. Quadruple GDMT modules ready.', 'pmdc');
+      sideAlert('Welcome, ' + doctorName, 'PMDC accreditation verified for 2026. Gastroenterology curriculum modules ready.', 'pmdc');
     }
   }, 800);
 })();

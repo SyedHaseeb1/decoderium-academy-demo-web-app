@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Decoderium Academy · Sign In</title>
+  <title>GILEAP · Executive Clinical Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#582be8">
   <link rel="icon" type="image/svg+xml" href="../assets/decoderium-logo.svg">
@@ -69,13 +69,34 @@
     }
 
     /* Ambient Corner Glows */
+    .login-backdrop {
+      position: fixed;
+      inset: -20px;
+      background-image: url('../assets/login-bg.webp');
+      background-size: cover;
+      background-position: center 35%;
+      filter: blur(12px) brightness(0.97) saturate(1.08);
+      transform: scale(1.05);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .login-backdrop-overlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 20% 25%, rgba(246, 248, 252, 0.80) 0%, rgba(238, 242, 255, 0.86) 60%, rgba(224, 231, 255, 0.90) 100%);
+      backdrop-filter: blur(4px);
+      pointer-events: none;
+      z-index: 1;
+    }
+
     .dec-ambient-glow {
       position: fixed;
       width: 600px;
       height: 600px;
       border-radius: 50%;
       pointer-events: none;
-      z-index: 0;
+      z-index: 1;
     }
     .glow-tl {
       top: -200px;
@@ -576,6 +597,8 @@
 </head>
 <body class="decoderium-theme-login">
 
+<div class="login-backdrop" aria-hidden="true"></div>
+<div class="login-backdrop-overlay" aria-hidden="true"></div>
 <div class="dec-ambient-glow glow-tl"></div>
 <div class="dec-ambient-glow glow-br"></div>
 
@@ -588,8 +611,8 @@
     <!-- Brand Header Row -->
     <div class="brand-row">
       <img src="../assets/decoderium-mark.svg" alt="Decoderium Logo" class="brand-logo-img">
-      <div class="brand-title-text">Decoderium Academy</div>
-      <span class="brand-pill-tag">LMS</span>
+      <div class="brand-title-text">GILEAP Clinical Academy</div>
+      <span class="brand-pill-tag">GILEAP</span>
     </div>
 
     <!-- 3-Role Elevated Segmented Switcher with Sliding Glider Indicator -->
@@ -601,11 +624,11 @@
       </button>
       <button type="button" class="role-pill-btn" id="tabRoleAdmin" role="tab" aria-selected="false">
         <i class="ms" style="font-size:16px;">corporate_fare</i>
-        <span>Admin</span>
+        <span>Clinical Admin</span>
       </button>
       <button type="button" class="role-pill-btn" id="tabRoleSuperAdmin" role="tab" aria-selected="false">
         <i class="ms" style="font-size:16px;">admin_panel_settings</i>
-        <span>Super Admin</span>
+        <span>Principal Investigator</span>
       </button>
     </div>
 
@@ -613,16 +636,16 @@
     <div class="login-error-notice" id="errNotice" role="alert"></div>
 
     <!-- Title & Description -->
-    <h1 class="welcome-title" id="formHeadingTitle">Welcome Back!!</h1>
-    <p class="welcome-desc" id="formHeadingDesc">Please select your portal to continue medical certification.</p>
+    <h1 class="welcome-title" id="formHeadingTitle">Doctor Portal</h1>
+    <p class="welcome-desc" id="formHeadingDesc">Access accredited gastroenterology masterclasses, PMDC certification, and patients registry.</p>
 
     <!-- Sign In Form -->
     <form id="formSignIn" onsubmit="return false;">
       <div class="field-group">
-        <label class="field-label" id="labelUsername" for="loginUser">Email or PMDC ID</label>
+        <label class="field-label" id="labelUsername" for="loginUser">Email or PMDC Licensure ID</label>
         <div class="pill-input-wrap">
           <i class="ms pill-input-icon">mail_outline</i>
-          <input type="text" id="loginUser" class="pill-input" placeholder="e.g. ayesha.khan" value="ayesha.khan" required autocomplete="username">
+          <input type="text" id="loginUser" class="pill-input" placeholder="e.g. ayesha.khan or doctor@hospital.org" value="ayesha.khan" required autocomplete="username">
         </div>
       </div>
 
@@ -641,7 +664,7 @@
       </div>
 
       <button type="submit" class="login-pill-submit" id="btnSubmitLogin">
-        <span id="btnSubmitText">Login to Doctor Portal</span>
+        <span id="btnSubmitText">Authenticate Doctor Portal</span>
       </button>
     </form>
 
@@ -686,8 +709,10 @@
 <script type="text/plain">
 (function () {
   /* Already signed in check */
+  var p = null;
+  try { p = new URLSearchParams(window.location.search || ''); } catch (e) { }
   var s = session();
-  if (s.auth && s.role) {
+  if (p && p.get('auto') === '1' && s.auth && s.role) {
     location.replace(s.role === 'admin' ? '../admin/' : '../home/');
     return;
   }
@@ -722,35 +747,35 @@
       tabDoc.className = 'role-pill-btn active';
       tabDoc.setAttribute('aria-selected', 'true');
       if (glider) glider.style.transform = 'translateX(0%)';
-      headingTitle.textContent = 'Welcome Back!!';
-      headingDesc.textContent = 'Access your CME courses, clinical video modules, and certificates.';
-      labelUser.textContent = 'Email or PMDC ID';
+      headingTitle.textContent = 'Doctor Portal';
+      headingDesc.textContent = 'Access accredited gastroenterology masterclasses, PMDC certification, and patients registry.';
+      labelUser.textContent = 'Email or PMDC Licensure ID';
       inputUser.placeholder = 'e.g. ayesha.khan or doctor@hospital.org';
       inputUser.value = 'ayesha.khan';
       inputPass.value = 'demo';
-      btnText.textContent = 'Login to Doctor Portal';
+      btnText.textContent = 'Authenticate Doctor Portal';
     } else if (mode === 'admin') {
       tabAdm.className = 'role-pill-btn active';
       tabAdm.setAttribute('aria-selected', 'true');
       if (glider) glider.style.transform = 'translateX(100%)';
-      headingTitle.textContent = 'Welcome Admin!!';
-      headingDesc.textContent = 'Manage hospital cohorts, course assignments, and doctor progress.';
-      labelUser.textContent = 'Admin Email';
+      headingTitle.textContent = 'Clinical Administration Portal';
+      headingDesc.textContent = 'Hospital cluster management, doctor credentials, and clinical study adherence.';
+      labelUser.textContent = 'Administrative Email';
       inputUser.placeholder = 'e.g. admin@academy.example';
       inputUser.value = 'admin@academy.example';
       inputPass.value = 'demo';
-      btnText.textContent = 'Login as Admin';
+      btnText.textContent = 'Authenticate Administration Portal';
     } else if (mode === 'superadmin') {
       tabSuper.className = 'role-pill-btn active';
       tabSuper.setAttribute('aria-selected', 'true');
       if (glider) glider.style.transform = 'translateX(200%)';
-      headingTitle.textContent = 'Welcome Super Admin!!';
-      headingDesc.textContent = 'Full system administration, curriculum authoring, and analytics.';
-      labelUser.textContent = 'Super Administrator ID';
+      headingTitle.textContent = 'Principal Investigator & Governance';
+      headingDesc.textContent = 'System-wide clinical trial governance, protocol configuration, and audit trails.';
+      labelUser.textContent = 'Principal Investigator ID';
       inputUser.placeholder = 'e.g. admin';
       inputUser.value = 'admin';
       inputPass.value = 'demo';
-      btnText.textContent = 'Login as Super Admin';
+      btnText.textContent = 'Authenticate Governance Portal';
     }
   }
 

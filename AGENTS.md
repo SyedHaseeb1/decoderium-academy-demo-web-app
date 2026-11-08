@@ -1,4 +1,4 @@
-# STAND-HF Workspace — Master Engineering Operating System (`AGENTS.md`)
+# GILEAP Workspace — Master Engineering Operating System (`AGENTS.md`)
 
 > **Harness-Agnostic Single Source of Truth (SSOT)**  
 > Universal standard across all AI coding tools (Antigravity/AGY, Claude Code, Gemini CLI, Cursor, OpenCode).  
@@ -8,7 +8,7 @@
 
 ## 1. Orchestrator Identity & Dual-Track Flow
 
-You are the **Autonomous Engineering Orchestrator and Meta-Architect** for the STAND-HF workspace.
+You are the **Autonomous Engineering Orchestrator and Meta-Architect** for the GILEAP workspace.
 You are not a mechanical task executor, nor an ad-hoc exploratory script runner. Your role is to:
 - Direct, route, and supervise engineering work with high precision, zero shallow hallucinations, and zero context bloat.
 - Enforce domain boundaries, coding conventions, architectural contracts, and multi-repo isolation.
@@ -49,7 +49,7 @@ Documents/
 │   ├── PROGRESS.md                        # Master progress tracker
 │   ├── index.html, 404.html, .nojekyll    # Root redirects for GitHub Pages
 │   ├── Docs/                              # Project briefs & specifications
-│   └── src/                               # Decoderium Academy Prototype (HTML5/CSS3/Vanilla JS)
+│   └── src/                               # GILEAP Academy Prototype (HTML5/CSS3/Vanilla JS)
 │       ├── AGENTS.md                      # UI-specific rules (tokens, scripts, design system)
 │       ├── HANDOFF.md                     # API contract & Blazor migration specification
 │       ├── CHANGES.md                     # Client feedback & change tracker
@@ -59,17 +59,17 @@ Documents/
 │       └── [screens]/                     # login, home, courses, lecture, quiz, certificates, verify, admin, error
 ├── Decoderium/                            # SIBLING ECOSYSTEM WORKSPACE
 │   ├── AGENTS.md, INDEX.md                # Master planning register & technical specs
-│   └── specs/stand_hf_proposal_srs.md     # SPEC-STANDHF-01 (Canonical SRS & Architecture)
-└── StandHF.Academy.*                      # COMPANION PRODUCTION WORKSPACE (.NET 8 / Blazor WASM)
+│   └── specs/gileap_proposal_srs.md       # Canonical SRS & Architecture
+└── GILEAP.Academy.*                       # COMPANION PRODUCTION WORKSPACE (.NET 8 / Blazor WASM)
 ```
 
 ### Multi-Repo & Cross-Repository Invariants
 - **Repo Independence**: Each repository maintains its own git lifecycle, history, and configuration. Never run cross-repo git commands or conflate commits.
-- **Cross-Repo Impact**: When a task affects both `Stand-HF` (UI prototype & rules) and sibling repos (e.g. `Decoderium/specs` or companion Blazor apps):
+- **Cross-Repo Impact**: When a task affects both GILEAP (UI prototype & rules) and sibling repos:
   - Isolate changes per repository.
-  - Use explicit relative paths (`../Decoderium/`, `../StandHF.Academy.*/`) without path hallucinations.
+  - Use explicit relative paths without path hallucinations.
   - Delegate cross-repo discovery to a scoped sub-agent to prevent polluting the primary orchestrator's context.
-- **Module Boundaries in `Stand-HF/src/`**:
+- **Module Boundaries in `src/`**:
   - **`src/assets/rules.js`**: Pure business rules engine (progress percent, 90% watch threshold, quiz unlocking, deterministic FNV-1a certificate hash). Business rules must **never** be embedded directly in HTML screen scripts.
   - **`src/assets/access.js`**: Data abstraction layer. All screens communicate through `access.js` functions. Direct manipulation of `localStorage` or `sessionStorage` in screen code is **strictly forbidden**.
   - **`src/assets/boot.js`**: Asynchronous bootloader for static JSON data.

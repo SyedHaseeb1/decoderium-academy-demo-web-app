@@ -14,7 +14,7 @@
 
   <rect x="28" y="24" width="36" height="36" rx="10" fill="#582be8"/>
   <path d="M38 42 L44 32 L48 44 L54 42" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="76" y="48" class="font" font-size="18" font-weight="700" fill="#0f172a">STAND-HF</text>
+  <text x="76" y="48" class="font" font-size="18" font-weight="700" fill="#0f172a">GILEAP</text>
 
   <rect x="16" y="96" width="228" height="44" rx="12" fill="transparent"/>
   <text x="56" y="123" class="font" font-size="14" font-weight="600" fill="#64748b">Home Hub</text>
@@ -67,7 +67,7 @@
 
   <!-- Main Left Card: 90% Watch Threshold Tracker & Module Table -->
   <rect x="292" y="230" width="760" height="630" rx="20" fill="#ffffff" stroke="#e8ecf4" stroke-width="1.5"/>
-  <text x="324" y="268" class="font" font-size="18" font-weight="800" fill="#0f172a">STAND-HF Protocol Watch Compliance Matrix</text>
+  <text x="324" y="268" class="font" font-size="18" font-weight="800" fill="#0f172a">GILEAP Protocol Watch Compliance Matrix</text>
   <text x="324" y="292" class="font" font-size="13" font-weight="500" fill="#64748b">Every physician must watch $\ge$90% of each lecture video before quiz unlocking and CME certification.</text>
 
   <!-- Table Header -->
@@ -92,7 +92,7 @@
   <!-- Row 2 -->
   <line x1="324" y1="436" x2="1020" y2="436" stroke="#e8ecf4"/>
   <text x="340" y="466" class="font" font-size="14" font-weight="700" fill="#0f172a">Module 02: In-Hospital Worsening Protocol</text>
-  <text x="340" y="484" class="font" font-size="12" font-weight="500" fill="#64748b">STAND-HF IV Diuretic titration · 5 Lectures</text>
+  <text x="340" y="484" class="font" font-size="12" font-weight="500" fill="#64748b">GILEAP IV Diuretic titration · 5 Lectures</text>
   <rect x="610" y="460" width="100" height="8" rx="4" fill="#eef2f9"/>
   <rect x="610" y="460" width="91" height="8" rx="4" fill="#10b981"/>
   <text x="610" y="484" class="font" font-size="12" font-weight="700" fill="#10b981">91.5%</text>
@@ -127,7 +127,7 @@
 
   <!-- Rule Engine Footer Note -->
   <rect x="324" y="670" width="696" height="50" rx="10" fill="#f5f3ff" stroke="#ddd6fe" stroke-width="1"/>
-  <text x="340" y="700" class="font" font-size="12" font-weight="600" fill="#582be8">⚖ STAND-HF Rule: RULES.isQuizUnlocked() requires watchPercent >= 90.0% for every enrolled lecture.</text>
+  <text x="340" y="700" class="font" font-size="12" font-weight="600" fill="#582be8">⚖ GILEAP Rule: RULES.isQuizUnlocked() requires watchPercent >= 90.0% for every enrolled lecture.</text>
 
   <!-- Right Side: Circular Gauge & CME Certificate Status -->
   <rect x="1076" y="230" width="324" height="630" rx="20" fill="#ffffff" stroke="#e8ecf4" stroke-width="1.5"/>
@@ -157,7 +157,7 @@
   <rect x="1104" y="644" width="268" height="60" rx="12" fill="#f8f9fd" stroke="#e8ecf4" stroke-width="1"/>
   <circle cx="1124" cy="674" r="6" fill="#ff4760"/>
   <text x="1140" y="670" class="font" font-size="13" font-weight="700" fill="#0f172a">Target Certificate</text>
-  <text x="1140" y="688" class="font" font-size="12" font-weight="500" fill="#64748b">STAND-HF Cert #SHF-8492</text>
+  <text x="1140" y="688" class="font" font-size="12" font-weight="500" fill="#64748b">GILEAP Cert #SHF-8492</text>
 
   <rect x="1104" y="730" width="268" height="48" rx="12" fill="#582be8"/>
   <text x="1238" y="759" class="font" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">Generate CME Report ↓</text>

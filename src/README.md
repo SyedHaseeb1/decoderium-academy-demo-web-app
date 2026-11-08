@@ -1,4 +1,4 @@
-# STAND-HF Academy: UI prototype
+# GILEAP Academy: UI prototype
 
 A clickable prototype of the online course platform for doctors. Sample data only: nothing is sent anywhere.
 

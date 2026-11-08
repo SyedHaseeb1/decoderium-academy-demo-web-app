@@ -1,18 +1,18 @@
-# Decoderium Academy: Project Proposal & Technical Specification
+# GILEAP Academy & Patients Registry: Project Proposal & Technical Specification
 ## Medical Doctor Learning Management System (LMS) & PMDC Certification Platform
 
 > **Document Version**: 1.0.0  
-> **Date**: 2026-11-06  
-> **Project Code**: `STAND-HF-ACADEMY` / `DECODERIUM-ACADEMY`  
-> **Ecosystem**: Education & Certification Companion to **Standhf.pk** (Heart Failure Clinical Registry)  
-> **Target Framework**: ASP.NET Core 8 Web API + Blazor WebAssembly (`StandHF.Academy.*`)  
-> **Reference Prototype**: Grounded in `ui-prototype/` (HTML5, CSS3, Vanilla JS, Pure Business Rules Engine)
+> **Date**: 2026-11-08  
+> **Project Code**: `GILEAP-ACADEMY`  
+> **Ecosystem**: Education & Certification Companion to **GILEAP Patients Registry**  
+> **Target Framework**: ASP.NET Core 8 Web API + Blazor WebAssembly (`GILEAP.Academy.*`)  
+> **Reference Prototype**: Grounded in `src/` (HTML5, CSS3, Vanilla JS, Pure Business Rules Engine)
 
 ---
 
 ## Executive Summary
 
-**Decoderium Academy** is an accredited online medical education, continuing medical education (CME), and clinical certification platform developed specifically for physicians, cardiologists, and healthcare professionals within Pakistan and the broader cardiology community. Designed as the educational companion to the **Standhf.pk Heart Failure Clinical Registry**, the platform equips clinicians with guideline-directed medical therapy (GDMT) training, enforces strict video lecture completion thresholds, conducts server-timed randomized clinical evaluations, and awards cryptographically verifiable PMDC-linked certificates.
+**GILEAP Academy** is an accredited online medical education, continuing medical education (CME), and clinical certification platform developed specifically for physicians, gastroenterologists, and healthcare professionals within Pakistan. Designed as the educational companion to the **GILEAP Patients Registry**, the platform equips doctors with acid suppression therapy training, enforces strict video lecture completion thresholds, conducts server-timed randomized clinical evaluations, and awards cryptographically verifiable PMDC-linked certificates.
 
 This proposal outlines the functional specifications, modular screen breakdown, role-based access rules, and business constraints governing the platform.
 
@@ -21,7 +21,7 @@ This proposal outlines the functional specifications, modular screen breakdown, 
 ## Technical & Architectural Foundation
 
 1. **Clean Architecture & Separation of Concerns**:
-   - **Frontend Presentation Layer**: Interactive Blazor WebAssembly client mirroring the verified vanilla UI prototype (`ui-prototype/`), retaining the STAND-HF design system tokens (`var(--primary)` `#C90085`, `var(--card)`, `var(--ink)`, `var(--line)`).
+   - **Frontend Presentation Layer**: Interactive Blazor WebAssembly client mirroring the verified vanilla UI prototype (`src/`), retaining the GILEAP design system tokens (`var(--primary)` `#582be8`, `var(--card)`, `var(--ink)`, `var(--line)`).
    - **Shared Domain Rules (`StandHF.Academy.Shared/Rules`)**: Direct C# mirror of `ui-prototype/assets/rules.js` to guarantee identical business logic across client and server.
    - **Backend Application & Infrastructure**: ASP.NET Core 8 Web API backed by Entity Framework Core, SQL Server / PostgreSQL, and Redis cache.
 2. **Deterministic Cryptographic Verification**:
@@ -171,19 +171,19 @@ Comprehensive administrative command center providing doctor identity management
 
 ---
 
-### Module 8: Clinical Registry Bridge (Standhf.pk)
+### Module 8: Clinical Patients Registry Bridge
 
 #### 1-Liner Core Summary
-Seamless cross-ecosystem navigation connecting the educational academy with the active STAND-HF Heart Failure Clinical Registry.
+Seamless cross-ecosystem navigation connecting the educational academy with the active GILEAP Patients Registry.
 
 #### Component & Screen Breakdown
 
 | Component / Screen | Description | Target Role | Key Rule / Constraint |
 | :--- | :--- | :--- | :--- |
-| **Ecosystem App Switcher** | Global top-bar switcher widget allowing clinicians to toggle between Decoderium Academy and the Standhf.pk Registry. | Doctor, Administrator | Preserves active user session across platform navigation; consistent top-bar styling across both products. |
-| **Single Sign-On (SSO) & Identity Sync** | Federated identity bridge linking clinician profiles and PMDC IDs between the Academy and Clinical Registry databases. | Doctor | Authenticated Registry investigators access Academy with single credentials; eliminates redundant onboarding friction. |
-| **Clinical Competency Linking** | Cross-platform verification linking Academy course certifications to Clinical Registry investigator privileges. | Doctor, Administrator | Registry can query Academy verification endpoint (`/api/certificates/{code}`) to verify GDMT training before authorising trial case logging. |
-| **Shared Design System & Brand Identity** | Harmonized UI tokens (`assets/base.css`, `#C90085` magenta brand color, Roboto typography, $44\text{px}$ touch targets). | All Users | Absolute visual coherence across the entire STAND-HF / Decoderium digital health ecosystem. |
+| **Ecosystem App Switcher** | Global top-bar switcher widget allowing doctors to toggle between GILEAP Academy and the Patients Registry. | Doctor, Administrator | Preserves active user session across platform navigation; consistent top-bar styling across both products. |
+| **Single Sign-On (SSO) & Identity Sync** | Federated identity bridge linking doctor profiles and PMDC IDs between the Academy and Clinical Registry databases. | Doctor | Authenticated Registry investigators access Academy with single credentials; eliminates redundant onboarding friction. |
+| **Clinical Competency Linking** | Cross-platform verification linking Academy course certifications to Clinical Registry investigator privileges. | Doctor, Administrator | Registry can query Academy verification endpoint (`/api/certificates/{code}`) to verify training before authorising trial case logging. |
+| **Shared Design System & Brand Identity** | Harmonized UI tokens (`assets/base.css`, `#582be8` electric violet brand color, Roboto typography, $44\text{px}$ touch targets). | All Users | Absolute visual coherence across the entire GILEAP digital health ecosystem. |
 
 ---
 
@@ -251,7 +251,7 @@ flowchart LR
 
 1. **Phase 1: Foundation & Identity (Weeks 1–3)**:
    - Database schema setup, PMDC validation service, ASP.NET Core 8 Web API scaffolding.
-   - Doctor and Administrator role-segregated authentication, JWT cookie handlers, Blazor UI shell with STAND-HF design tokens.
+   - Doctor and Administrator role-segregated authentication, JWT cookie handlers, Blazor UI shell with GILEAP design tokens.
 2. **Phase 2: Curriculum & Video Learning Engine (Weeks 4–6)**:
    - Course catalog, module stepper state machine, and lecture content delivery.
    - Video player integration with anti-scrubbing controls and 90% watch threshold telemetry logging.

@@ -56,7 +56,7 @@ svg_login = '''<svg width="1440" height="900" viewBox="0 0 1440 900" fill="none"
   <!-- Logo -->
   <rect x="64" y="18" width="36" height="36" rx="10" fill="#582be8"/>
   <path d="M74 36 L80 26 L84 38 L90 36" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="112" y="42" class="font" font-size="19" font-weight="700" fill="#0f172a">STAND-HF <tspan fill="#582be8">Academy</tspan></text>
+  <text x="112" y="42" class="font" font-size="19" font-weight="700" fill="#0f172a">GILEAP <tspan fill="#582be8">Academy</tspan></text>
   <rect x="290" y="24" width="138" height="24" rx="12" fill="#f5f3ff"/>
   <text x="302" y="40" class="font" font-size="11" font-weight="600" fill="#582be8">CLINICAL STUDY PORTAL</text>
 
@@ -95,7 +95,7 @@ svg_login = '''<svg width="1440" height="900" viewBox="0 0 1440 900" fill="none"
   <!-- Form Field 2: Hospital Center -->
   <text x="464" y="482" class="font" font-size="13" font-weight="700" fill="#0f172a">Study Center / Hospital Affiliation</text>
   <rect x="464" y="494" width="512" height="48" rx="12" fill="#ffffff" stroke="#e8ecf4" stroke-width="1.5"/>
-  <text x="484" y="524" class="font" font-size="14" font-weight="500" fill="#0f172a">NICVD Karachi — Center #01 (STAND-HF Lead)</text>
+  <text x="484" y="524" class="font" font-size="14" font-weight="500" fill="#0f172a">NICVD Karachi — Center #01 (GILEAP Lead)</text>
   <path d="M944 515 L952 525 L960 515" stroke="#64748b" stroke-width="2" stroke-linecap="round"/>
 
   <!-- Form Field 3: Access PIN -->
@@ -109,7 +109,7 @@ svg_login = '''<svg width="1440" height="900" viewBox="0 0 1440 900" fill="none"
   <text x="720" y="692" class="font" font-size="16" font-weight="700" fill="#ffffff" text-anchor="middle">Enter Learning Portal →</text>
 
   <!-- Security Footer -->
-  <text x="720" y="748" class="font" font-size="12" font-weight="500" fill="#64748b" text-anchor="middle">🔒 End-to-End Encrypted Session · STAND-HF Protocol Registry #NCT0529841</text>
+  <text x="720" y="748" class="font" font-size="12" font-weight="500" fill="#64748b" text-anchor="middle">🔒 End-to-End Encrypted Session · GILEAP Protocol Registry #NCT0529841</text>
   <rect x="520" y="765" width="400" height="2" fill="#e8ecf4"/>
 </svg>'''
 
@@ -131,7 +131,7 @@ svg_home = '''<svg width="1440" height="900" viewBox="0 0 1440 900" fill="none" 
   <!-- Sidebar Brand -->
   <rect x="28" y="24" width="36" height="36" rx="10" fill="#582be8"/>
   <path d="M38 42 L44 32 L48 44 L54 42" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="76" y="48" class="font" font-size="18" font-weight="700" fill="#0f172a">STAND-HF</text>
+  <text x="76" y="48" class="font" font-size="18" font-weight="700" fill="#0f172a">GILEAP</text>
 
   <!-- Nav Items -->
   <!-- Active: Home -->
@@ -177,7 +177,7 @@ svg_home = '''<svg width="1440" height="900" viewBox="0 0 1440 900" fill="none" 
   <rect x="292" y="96" width="1108" height="150" rx="20" fill="#ffffff" stroke="#e8ecf4" stroke-width="1.5"/>
   <rect x="292" y="96" width="1108" height="6" fill="#582be8" rx="3"/>
   <text x="328" y="146" class="font" font-size="24" font-weight="800" fill="#0f172a">Welcome back, Dr. Sarah Khan 👋</text>
-  <text x="328" y="176" class="font" font-size="14" font-weight="500" fill="#64748b">You have completed 12.0 of 15.0 required CME units for the STAND-HF Acute Protocol Accreditation.</text>
+  <text x="328" y="176" class="font" font-size="14" font-weight="500" fill="#64748b">You have completed 12.0 of 15.0 required CME units for the GILEAP Acute Protocol Accreditation.</text>
 
   <rect x="328" y="196" width="220" height="32" rx="8" fill="#ecfdf5"/>
   <text x="342" y="217" class="font" font-size="12" font-weight="700" fill="#065f46">✓ PMDC Accreditation On-Track</text>
@@ -234,7 +234,7 @@ svg_home = '''<svg width="1440" height="900" viewBox="0 0 1440 900" fill="none" 
   <rect x="688" y="602" width="80" height="24" rx="6" fill="#fff1f3"/>
   <text x="698" y="618" class="font" font-size="11" font-weight="700" fill="#ff4760">TRIALS</text>
   <text x="688" y="652" class="font" font-size="16" font-weight="800" fill="#0f172a">In-Hospital Protocol Execution</text>
-  <text x="688" y="678" class="font" font-size="12" font-weight="500" fill="#64748b">STAND-HF randomisation, inclusion/exclusion, and safety reporting.</text>
+  <text x="688" y="678" class="font" font-size="12" font-weight="500" fill="#64748b">GILEAP randomisation, inclusion/exclusion, and safety reporting.</text>
   <text x="688" y="740" class="font" font-size="12" font-weight="600" fill="#0f172a">Credits: 4.0 CME · 6 Lectures</text>
   <rect x="688" y="760" width="314" height="8" rx="4" fill="#eef2f9"/>
   <rect x="688" y="760" width="180" height="8" rx="4" fill="#582be8"/>
@@ -268,7 +268,7 @@ svg_dashboard = '''<svg width="1440" height="900" viewBox="0 0 1440 900" fill="n
 
   <rect x="28" y="24" width="36" height="36" rx="10" fill="#582be8"/>
   <path d="M38 42 L44 32 L48 44 L54 42" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="76" y="48" class="font" font-size="18" font-weight="700" fill="#0f172a">STAND-HF</text>
+  <text x="76" y="48" class="font" font-size="18" font-weight="700" fill="#0f172a">GILEAP</text>
 
   <rect x="16" y="96" width="228" height="44" rx="12" fill="transparent"/>
   <text x="56" y="123" class="font" font-size="14" font-weight="600" fill="#64748b">Home Hub</text>
@@ -321,7 +321,7 @@ svg_dashboard = '''<svg width="1440" height="900" viewBox="0 0 1440 900" fill="n
 
   <!-- Main Left Card: 90% Watch Threshold Tracker & Module Table -->
   <rect x="292" y="230" width="760" height="630" rx="20" fill="#ffffff" stroke="#e8ecf4" stroke-width="1.5"/>
-  <text x="324" y="268" class="font" font-size="18" font-weight="800" fill="#0f172a">STAND-HF Protocol Watch Compliance Matrix</text>
+  <text x="324" y="268" class="font" font-size="18" font-weight="800" fill="#0f172a">GILEAP Protocol Watch Compliance Matrix</text>
   <text x="324" y="292" class="font" font-size="13" font-weight="500" fill="#64748b">Every physician must watch $\ge$90% of each lecture video before quiz unlocking and CME certification.</text>
 
   <!-- Table Header -->
@@ -346,7 +346,7 @@ svg_dashboard = '''<svg width="1440" height="900" viewBox="0 0 1440 900" fill="n
   <!-- Row 2 -->
   <line x1="324" y1="436" x2="1020" y2="436" stroke="#e8ecf4"/>
   <text x="340" y="466" class="font" font-size="14" font-weight="700" fill="#0f172a">Module 02: In-Hospital Worsening Protocol</text>
-  <text x="340" y="484" class="font" font-size="12" font-weight="500" fill="#64748b">STAND-HF IV Diuretic titration · 5 Lectures</text>
+  <text x="340" y="484" class="font" font-size="12" font-weight="500" fill="#64748b">GILEAP IV Diuretic titration · 5 Lectures</text>
   <rect x="610" y="460" width="100" height="8" rx="4" fill="#eef2f9"/>
   <rect x="610" y="460" width="91" height="8" rx="4" fill="#10b981"/>
   <text x="610" y="484" class="font" font-size="12" font-weight="700" fill="#10b981">91.5%</text>
@@ -381,7 +381,7 @@ svg_dashboard = '''<svg width="1440" height="900" viewBox="0 0 1440 900" fill="n
 
   <!-- Rule Engine Footer Note -->
   <rect x="324" y="670" width="696" height="50" rx="10" fill="#f5f3ff" stroke="#ddd6fe" stroke-width="1"/>
-  <text x="340" y="700" class="font" font-size="12" font-weight="600" fill="#582be8">⚖ STAND-HF Rule: RULES.isQuizUnlocked() requires watchPercent >= 90.0% for every enrolled lecture.</text>
+  <text x="340" y="700" class="font" font-size="12" font-weight="600" fill="#582be8">⚖ GILEAP Rule: RULES.isQuizUnlocked() requires watchPercent >= 90.0% for every enrolled lecture.</text>
 
   <!-- Right Side: Circular Gauge & CME Certificate Status -->
   <rect x="1076" y="230" width="324" height="630" rx="20" fill="#ffffff" stroke="#e8ecf4" stroke-width="1.5"/>
@@ -411,7 +411,7 @@ svg_dashboard = '''<svg width="1440" height="900" viewBox="0 0 1440 900" fill="n
   <rect x="1104" y="644" width="268" height="60" rx="12" fill="#f8f9fd" stroke="#e8ecf4" stroke-width="1"/>
   <circle cx="1124" cy="674" r="6" fill="#ff4760"/>
   <text x="1140" y="670" class="font" font-size="13" font-weight="700" fill="#0f172a">Target Certificate</text>
-  <text x="1140" y="688" class="font" font-size="12" font-weight="500" fill="#64748b">STAND-HF Cert #SHF-8492</text>
+  <text x="1140" y="688" class="font" font-size="12" font-weight="500" fill="#64748b">GILEAP Cert #SHF-8492</text>
 
   <rect x="1104" y="730" width="268" height="48" rx="12" fill="#582be8"/>
   <text x="1238" y="759" class="font" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">Generate CME Report ↓</text>
@@ -434,7 +434,7 @@ svg_courses = '''<svg width="1440" height="900" viewBox="0 0 1440 900" fill="non
 
   <rect x="28" y="24" width="36" height="36" rx="10" fill="#582be8"/>
   <path d="M38 42 L44 32 L48 44 L54 42" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="76" y="48" class="font" font-size="18" font-weight="700" fill="#0f172a">STAND-HF</text>
+  <text x="76" y="48" class="font" font-size="18" font-weight="700" fill="#0f172a">GILEAP</text>
 
   <rect x="16" y="96" width="228" height="44" rx="12" fill="transparent"/>
   <text x="56" y="123" class="font" font-size="14" font-weight="600" fill="#64748b">Home Hub</text>
@@ -528,7 +528,7 @@ svg_courses = '''<svg width="1440" height="900" viewBox="0 0 1440 900" fill="non
     <!-- Course Info -->
     <rect x="324" y="20" width="50" height="50" rx="12" fill="#fff1f3"/>
     <text x="349" y="50" class="font" font-size="18" font-weight="800" fill="#ff4760" text-anchor="middle">02</text>
-    <text x="390" y="42" class="font" font-size="15" font-weight="700" fill="#0f172a">STAND-HF IV Diuretic Protocols &amp; Natriuresis Guided Care</text>
+    <text x="390" y="42" class="font" font-size="15" font-weight="700" fill="#0f172a">GILEAP IV Diuretic Protocols &amp; Natriuresis Guided Care</text>
     <text x="390" y="62" class="font" font-size="12" font-weight="500" fill="#64748b">Code: SHF-MED-102 · 5 Lectures · 2 hr 10 min duration</text>
 
     <!-- Faculty -->

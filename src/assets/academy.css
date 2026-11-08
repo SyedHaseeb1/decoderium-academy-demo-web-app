@@ -1,7 +1,7 @@
 /* ==========================================================================
    DECODERIUM ACADEMY — UNIFIED MASTER DESIGN SYSTEM
    One cohesive, production-grade UI theme across all screens & components.
-   Optimized for Desktop, Tablet, and Mobile-First physician learning.
+   Optimized for Desktop, Tablet, and Mobile-First doctor learning.
    ========================================================================== */
 
 :root {
@@ -521,6 +521,51 @@ body {
   font-size: 18px;
 }
 
+/* --------------------------------------------------------------------------
+   Modern Breadcrumbs Navigation (.crumbs)
+   -------------------------------------------------------------------------- */
+.crumbs {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 6px 14px;
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.crumbs a {
+  color: var(--slate);
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.15s ease;
+}
+
+.crumbs a:hover {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.crumbs i.ms {
+  font-size: 15px;
+  color: #94a3b8;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  user-select: none;
+}
+
+.crumbs span {
+  color: var(--navy);
+  font-weight: 800;
+}
+
 /* Category & Status Tags */
 .ui-badge-pill {
   display: inline-flex;
@@ -866,7 +911,7 @@ body {
 
 /* ==========================================================================
    5. MOBILE & TABLET VIDEO PLAYER OPTIMIZATIONS
-   Physician video player with responsive touch controls, speed toggle,
+   Doctor video player with responsive touch controls, speed toggle,
    and 90% watch gate visual threshold
    ========================================================================== */
 .player-container {

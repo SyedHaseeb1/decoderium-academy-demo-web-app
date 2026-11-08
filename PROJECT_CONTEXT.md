@@ -1,20 +1,19 @@
-# Decoderium Academy (STAND-HF) — Project Context & Architecture Reference
+# GILEAP Academy & Patients Registry — Project Context & Architecture Reference
 
 > **Document Status**: Grounded Architecture Reference  
-> **Last Verified**: 2026-11-07  
-> **Scope**: Decoderium Academy UI Prototype & Core Domain Rules Engine
+> **Last Verified**: 2026-11-08  
+> **Scope**: GILEAP Academy UI Prototype & Core Domain Rules Engine
 
 ---
 
 ## 1. Project Overview & Clinical Domain
 
-- **Project Identity**: **Decoderium Academy & Observational Trial Platform** (Decoderium Technologies).
-- **Domain Specialization**: **Gastroenterology** (Distinct from StandHF.pk which represents the flagship cardiology clinical registry).
+- **Project Identity**: **GILEAP** (Gastroenterology Learning, Evidence & Accreditation Platform).
+- **Domain Specialization**: **Gastroenterology** (P-CAB, PPI acid suppression, APD, GERD).
 - **Two Core Strategic Objectives**:
-  1. **Arm 1 (Educational Portal / LMS)**: Connect unreached and untapped clinicians and customers through a convenient, high-credibility web-based CME-accredited Certificate course.
-  2. **Arm 2 (Digital Observational Clinical Trial & Patient Data Collection)**: Conduct an observational clinical trial addressing the core bottleneck of physical paper data collection and missed follow-up visits. Arm 2 replaces paper case report forms with a digital pipeline that gathers clinical data digitally and establishes direct digital connectivity with patients to reliably secure longitudinal follow-up data.
-- **Extraction Parity**: Arm 2 shares similar architectural principles with the patient data extraction mechanics pioneered in the cardiology registry, tailored specifically for gastroenterology cohorts.
-- **Repository Scope**: This repository hosts the approved UI prototype and domain rules engine for Decoderium Academy (Arm 1) and its integration boundaries with Arm 2, serving as the live behavioral specification for the companion production .NET 8 / Blazor WASM applications (`StandHF.Academy.*`).
+  1. **Arm 1 (Educational Portal / LMS)**: Connect gastroenterologists, doctors, and healthcare professionals through accredited CME courses, 90% watch velocity gating, randomized MCQ assessments, and PMDC-compliant cryptographic certification.
+  2. **Arm 2 (Patients Registry & Clinical Follow-up)**: Digital observational clinical trial replacing physical paper data collection with digital E-CRF intake, Day-3 triage alerts, and Day-7 recovery endpoints across 12 Pakistan regional hospital clusters.
+- **Repository Scope**: This repository hosts the approved UI prototype and domain rules engine for GILEAP (Arm 1 LMS & Arm 2 Patients Registry).
 
 ---
 
@@ -74,10 +73,9 @@ Stand-HF/
     │   ├── views.js                   # Reusable HTML view renderers (cards, crumbs, nextStep)
     │   ├── header.js                  # Global responsive header & profile drawer
     │   ├── nav.js                     # Global responsive navigation menu
-    │   ├── base.css                   # STAND-HF Registry design system styles
-    │   ├── academy.css                # Decoderium Academy layout, theme & component styling
-    │   ├── decoderium-logo.svg        # Brand vector logo asset
-    │   ├── STAND-HF-logo.svg          # Companion registry brand asset
+    │   ├── base.css                   # Core design system tokens and reset styles
+    │   ├── academy.css                # GILEAP Academy layout, theme & component styling
+    │   ├── decoderium-mark.svg        # Clean vector brand mark
     │   └── fonts/                     # Self-hosted Roboto and Material Symbols fonts
     └── data/
         ├── README.md                  # Data schema documentation
@@ -243,5 +241,5 @@ console.log('RULES module valid. Sample cert:', RULES.certCode('d1', 'c1', '2026
 | Codebase moved from `ui-prototype/` to `src/` | **Confirmed Fact** | Git commit `436fd27` and root `index.html` redirection |
 | Data resides in static JSON loaded via `boot.js` | **Confirmed Fact** | `src/assets/boot.js`, `src/data/*.json` |
 | Rules in `rules.js` match Blazor `Rules.cs` contract | **Confirmed Fact** | `src/HANDOFF.md`, `src/assets/rules.js` |
-| Blazor codebase (`StandHF.Academy.*`) exists in external repo | **Confirmed Fact** | Referenced in `CHANGES.md` and `HANDOFF.md`, not present in current workspace directory |
+| Companion Blazor production codebase exists in external repository | **Confirmed Fact** | Referenced in `CHANGES.md` and `HANDOFF.md`, not present in current workspace directory |
 | Git repository initialized and tracking `origin/master` | **Confirmed Fact** | `git status` shows branch master up to date |

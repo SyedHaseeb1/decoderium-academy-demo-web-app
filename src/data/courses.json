@@ -8,6 +8,7 @@
       "category": "Gastroenterology",
       "level": "Foundation",
       "published": true,
+      "assignedDoctors": ["d01", "d02", "d03", "d04", "d05", "d06", "d07", "d08", "d09", "d10", "d11", "d12"],
       "modules": [
         {
           "id": "c1-m1",
@@ -181,11 +182,12 @@
       "category": "Primary care",
       "level": "Foundation",
       "published": true,
+      "assignedDoctors": ["d01", "d02", "d04", "d08", "d09"],
       "modules": [
         {
           "id": "c2-m1",
           "number": 1,
-          "title": "Dyspepsia Triage & Alarm Features",
+          "title": "Dyspepsia Safety Check & Alarm Features",
           "summary": "Differentiating organic disease from functional dyspepsia and identifying urgent referral red flags.",
           "questionOffset": 3,
           "lectures": [
@@ -310,7 +312,8 @@
       "description": "Specialist-level masterclass in advanced interventional endoscopy: acute upper GI bleeding control, mucosal resection (EMR), dysplastic Barrett's ablation, and stricture management.",
       "category": "Gastroenterology",
       "level": "Advanced",
-      "published": true,
+      "published": false,
+      "assignedDoctors": ["d01", "d03", "d06", "d10"],
       "modules": [
         {
           "id": "c3-m1",

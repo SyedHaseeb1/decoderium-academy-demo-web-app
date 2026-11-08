@@ -32,12 +32,12 @@ Historically, medical education and clinical disease registries exist in disconn
 ```
 
 The system serves a dual mission:
-1. **Educate & Certify (Arm 1 — Decoderium Academy)**: Up-skill cardiologists, internal medicine specialists, and general physicians on international Guideline-Directed Medical Therapy (GDMT) and diagnostic protocols.
-2. **Capture Real-World Evidence (Arm 2 — `Standhf.pk` / Clinical Registry)**: The patient registry developed by Abrar that onboards heart failure patients to monitor treatment patterns, echocardiographic parameters, biomarker trajectories, and clinical outcomes across tertiary hospitals in Pakistan.
+1. **Educate & Certify (Arm 1 — GILEAP Academy)**: Up-skill gastroenterologists, physicians, and medical practitioners on international acid suppression protocols, P-CAB therapeutics, and APD management.
+2. **Capture Real-World Evidence (Arm 2 — GILEAP Patients Registry)**: The observational patient registry that onboards patients to monitor treatment patterns, symptom trajectories, Day-3 triage checkups, and Day-7 clinical outcomes across hospital clusters in Pakistan.
 
 ---
 
-## 2. Deep Dive: Arm 1 — STAND-HF Academy (LMS & Certification)
+## 2. Deep Dive: Arm 1 — GILEAP Academy (LMS & Certification)
 
 Arm 1 is an accredited **Continuing Medical Education (CME)** and certification platform with a strict **Mastery-Gated Progression Model**.
 
@@ -61,7 +61,7 @@ Each course is modeled as a 3-tier tree:
 $$\text{Course} \longrightarrow \text{Modules} \longrightarrow \text{2–3 Video Lectures per Module} \longrightarrow \text{Timed Module Quiz}$$
 
 ```
-Course: STAND-HF Guidelines on Heart Failure Management
+Course: GILEAP Guidelines on Acid Peptic Disease Management
 │
 ├── Module 1: Diagnostic Workup & Biomarkers
 │     ├── Lecture 1: Clinical Presentation & Framingham Criteria (14 min)
@@ -196,7 +196,7 @@ The user has explicitly directed a visual overhaul:
      $$\text{Elevation 3} = \texttt{0 10px 15px -3px rgba(0,0,0,0.04), 0 4px 6px -4px rgba(0,0,0,0.04)}$$
    - Glowing accent active states: `box-shadow: 0 0 25px rgba(201, 0, 133, 0.20)`.
 3. **Clinical Color Palette**:
-   - **Primary Brand Accent**: Vibrant Magenta (`#C90085`, `var(--primary)`) symbolizing cardiovascular pulse and STAND-HF brand identity.
+   - **Primary Brand Accent**: Electric Violet (`#582be8`, `var(--primary)`) symbolizing clinical excellence and GILEAP brand identity.
    - **Deep Surface Navy**: Clinical midnight slate (`#0F172A`) for sidebars, top headers, and hero banners.
    - **Surface Base**: Clean off-white slate (`#F8FAFC`).
    - **Card Surface**: Pure crisp white (`#FFFFFF`).
@@ -208,7 +208,7 @@ The user has explicitly directed a visual overhaul:
    - Module unlock transition animation (lock icon smoothly resolving to unlocked state).
 5. **Ecosystem Navigation Switcher**:
    - Unified top/sidebar pill switcher allowing doctors to seamlessly toggle between:
-     $$\mathbf{[ \text{ STAND-HF Academy (LMS) } ]} \longleftrightarrow \mathbf{[ \text{ STAND-HF Registry (Patients) } ]}$$
+     $$\mathbf{[ \text{ GILEAP Academy (LMS) } ]} \longleftrightarrow \mathbf{[ \text{ GILEAP Patients Registry } ]}$$
 
 ---
 

@@ -40,7 +40,7 @@ The project is dedicated to **Decoderium Academy & Observational Trial Platform*
 ## 3. UI Component System & Utilities
 
 All components load independently and adhere strictly to the shared design system in [`src/assets/academy.css`](file:///home/syedhaseeaio/Documents/Stand-HF/src/assets/academy.css):
-- **Top Header (`src/assets/header.js`)**: Independent component with Decoderium branding, live search pill, notification bell triggering clinical PMDC alerts, and doctor profile menu.
+- **Top Header (`src/assets/header.js`)**: Independent component with GILEAP branding, live search pill, notification bell triggering clinical PMDC alerts, and doctor profile menu.
 - **Navigation (`src/assets/nav.js`)**: Desktop sidebar + mobile sticky bottom navigation bar (`.mobile-bottom-nav`) with touch targets $\ge 48\text{px}$.
 - **Clinical Alerts (`src/assets/ui.js`)**: `sideAlert(title, message, type)` creates sliding notifications in the top-right corner.
 - **Interactive Modals (`src/assets/ui.js`)**: `openDialog(options)` and `closeDialog()` provide accessible clinical modals.

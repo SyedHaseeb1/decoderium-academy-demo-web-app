@@ -1,6 +1,6 @@
-# STAND-HF Academy — Mutually Matched UI Prototype Suite
+# GILEAP Academy — Mutually Matched UI Prototype Suite
 
-This directory contains a unified, production-grade visual design set for the **STAND-HF Decoderium Academy**. Every screen adheres to a cohesive design system (clean cards, porcelain `#f8f9fd` surfaces, electric violet `#582be8` primary branding, coral `#ff4760` status accents, and emerald `#10b981` compliance highlights).
+This directory contains a unified, production-grade visual design set for the **GILEAP Academy**. Every screen adheres to a cohesive design system (clean cards, porcelain `#f8f9fd` surfaces, electric violet `#582be8` primary branding, coral `#ff4760` status accents, and emerald `#10b981` compliance highlights).
 
 ---
 
@@ -45,7 +45,7 @@ This directory contains a unified, production-grade visual design set for the **
 ---
 
 ### 3. `03_dashboard_screen.png` (CME & 90% Watch Threshold Compliance)
-- **Role**: Real-time compliance monitoring enforcing STAND-HF study invariants (`rules.js`).
+- **Role**: Real-time compliance monitoring enforcing GILEAP study invariants (`rules.js`).
 - **Key Elements**:
   - **Top 4 KPI Strip**: Total Watch Time (14h 25m), Mandatory Threshold (90.0%), Actual Watch Completion (92.4% — Compliant), Quiz Pass Ratio (3/4).
   - **Watch Compliance Matrix**: Detailed table tracking individual protocol watch percentages against the strict 90% rule, distinguishing between unlocked, passed, and locked modules.

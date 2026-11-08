@@ -5,25 +5,37 @@
   var host = document.getElementById('app-header');
   if (!host) return;
   var s = session(), d = me();
-  var isAdmin = s.role === 'admin';
-  var name = s.name || (d ? d.name : 'Physician');
+  var isPreview = s.role === 'admin' || ss('academy_admin_preview') === '1';
+  var name = s.name || (d ? d.name : 'Doctor');
 
   host.className = 'app-header';
+  var adminBanner = isPreview ?
+    '<div class="admin-preview-pill" style="background:linear-gradient(135deg, #582be8, #4318d1);color:#fff;padding:8px 24px;display:flex;align-items:center;justify-content:space-between;font-size:12.5px;font-weight:700;box-shadow:0 2px 10px rgba(88,43,232,0.2);position:relative;z-index:1001;">' +
+      '<div style="display:flex;align-items:center;gap:8px;">' +
+        '<i class="ms" style="font-size:17px;color:#a5b4fc;">visibility</i>' +
+        '<span>Clinician Preview Mode &mdash; Super Admin Evaluating Course Experience</span>' +
+      '</div>' +
+      '<a href="javascript:void(0)" onclick="returnToAdminConsole(\'#courses\')" style="color:#ffffff;background:rgba(255,255,255,0.22);padding:4px 14px;border-radius:9999px;text-decoration:none;font-size:11.5px;font-weight:800;display:inline-flex;align-items:center;gap:6px;transition:background 0.2s ease;cursor:pointer;">' +
+        '<i class="ms" style="font-size:14px;">arrow_back</i> Return to Admin Console' +
+      '</a>' +
+    '</div>' : '';
+
   host.innerHTML =
+    adminBanner +
     '<header class="topbar">' +
       '<div style="display:flex;align-items:center;gap:16px;">' +
         '<button type="button" class="btn" id="mobileMenuBtn" style="display:none;width:40px;height:40px;border-radius:10px;padding:0;align-items:center;justify-content:center;border:1px solid var(--line);background:#fff;" aria-label="Toggle menu">' +
           '<i class="ms">menu</i>' +
         '</button>' +
         '<div>' +
-          '<div style="font-size:17px;font-weight:800;color:var(--navy);letter-spacing:-0.3px;">Decoderium</div>' +
-          '<div style="font-size:11px;color:var(--slate);font-weight:600;">Medical Education</div>' +
+          '<div style="font-size:17px;font-weight:800;color:var(--navy);letter-spacing:-0.3px;">GILEAP</div>' +
+          '<div style="font-size:11px;color:var(--slate);font-weight:600;">Clinical Academy</div>' +
         '</div>' +
       '</div>' +
 
       '<div class="search-pill-box">' +
         '<i class="ms">search</i>' +
-        '<input type="text" placeholder="Search heart failure modules, GDMT..." aria-label="Search curriculum">' +
+        '<input type="text" placeholder="Search gastroenterology modules, GERD, P-CAB..." aria-label="Search curriculum">' +
       '</div>' +
 
       '<div style="display:flex;align-items:center;gap:12px;">' +
@@ -49,7 +61,7 @@
               '<div style="width:40px;height:40px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;">' + esc(initials(name)) + '</div>' +
               '<div>' +
                 '<strong style="font-size:13.5px;color:var(--navy);display:block;">' + esc(name) + '</strong>' +
-                '<small style="font-size:11.5px;color:var(--slate);">' + (isAdmin ? 'Administrator' : esc(d ? d.speciality : 'Physician')) + '</small>' +
+                '<small style="font-size:11.5px;color:var(--slate);">' + (isAdmin ? 'Administrator' : esc(d ? d.speciality : 'Doctor')) + '</small>' +
               '</div>' +
             '</div>' +
             (d ?
@@ -72,12 +84,12 @@
   var alertBtn = document.getElementById('headerAlertBtn');
   if (alertBtn) {
     alertBtn.onclick = function () {
-      sideAlert('PMDC License #48291-P Active', 'Your medical license is accredited for 2026 heart failure CME requirements.', 'pmdc');
+      sideAlert('PMDC License #48291-P Active', 'Your medical license is accredited for 2026 gastroenterology CME requirements.', 'pmdc');
       setTimeout(function () {
         sideAlert('Lecture Watch Threshold Reached', 'Module 1 (90% watch time) passed. Module Quiz is unlocked!', 'success');
       }, 350);
       setTimeout(function () {
-        sideAlert('Guideline Consensus Updated', 'Quadruple GDMT therapy protocol published by Faculty.', 'cme');
+        sideAlert('Guideline Consensus Updated', 'Acid Peptic Disease & P-CAB clinical protocol published by Faculty.', 'cme');
       }, 700);
     };
   }
@@ -100,7 +112,7 @@
       if (typeof openDialog === 'function') {
         openDialog({
           title: 'Reset Demo Data?',
-          body: '<p style="margin:0 0 10px;">This will reset all course progression, quiz attempts, and certificates back to the default physician state.</p><p style="margin:0;font-size:12px;color:var(--slate);">Do you wish to proceed?</p>',
+          body: '<p style="margin:0 0 10px;">This will reset all course progression, quiz attempts, and certificates back to the default doctor state.</p><p style="margin:0;font-size:12px;color:var(--slate);">Do you wish to proceed?</p>',
           confirmText: 'Reset Now',
           cancelText: 'Cancel',
           onConfirm: function () {

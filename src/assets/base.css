@@ -1,7 +1,7 @@
-/* STAND-HF design system: shared by the sign-in page, investigator dashboard and E-CRF screens */
+/* GILEAP design system: shared by the sign-in page, investigator dashboard and E-CRF screens */
 
 :root {
-  /* Logo palette (STAND-HF logo): permanent default */
+  /* Logo palette (GILEAP logo): permanent default */
   --bg: #eceef1;
   --card: #ffffff;
   --soft: #f4f5f7;
@@ -3324,7 +3324,7 @@ td label.ck {
   font-weight: 400;
 }
 
-/* Combobox & Custom Dropdowns (STAND-HF Unified Dropdown System) */
+/* Combobox & Custom Dropdowns (GILEAP Unified Dropdown System) */
 .cb {
   position: relative;
   width: 100%;
@@ -4474,7 +4474,7 @@ label.check-row:has(input:focus-visible) {
   border-radius: 999px;
 }
 
-/* Universal Form Dropdowns (STAND-HF Design System) */
+/* Universal Form Dropdowns (GILEAP Design System) */
 select,
 label select,
 .field select,

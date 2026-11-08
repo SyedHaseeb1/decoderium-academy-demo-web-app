@@ -1,6 +1,6 @@
-# STAND-HF Decoderium Academy — Prototyping Asset Inventory
+# GILEAP Academy — Prototyping Asset Inventory
 
-This directory maintains visual design references, layout mockups, and UI benchmarks utilized during the prototyping and architectural phases of **STAND-HF Decoderium Academy**.
+This directory maintains visual design references, layout mockups, and UI benchmarks utilized during the prototyping and architectural phases of **GILEAP Academy**.
 
 ---
 
