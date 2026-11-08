@@ -1165,7 +1165,28 @@
     viewEl.className = 'adm-viewport adm-view-enter' + ((sec === 'lms' || sec === 'courses' || sec === 'certificates') ? ' adm-mode-lms' : ((sec === 'clinical' || sec === 'patients' || sec === 'notifications') ? ' adm-mode-clinical' : ''));
 
     var routeMap = {
-      overview: viewOverviewDashboard,
+      overview: function () {
+        if (parts[1] === 'neo' || hashQuery.indexOf('tab=neo') !== -1 || hashQuery.indexOf('neo=1') !== -1) {
+          activeOverviewTab = 'neo';
+        } else if (parts[1] === 'lms' || hashQuery.indexOf('tab=lms') !== -1) {
+          activeOverviewTab = 'lms';
+        } else if (parts[1] === 'patients' || hashQuery.indexOf('tab=patients') !== -1) {
+          activeOverviewTab = 'patients';
+        } else if (parts[1] === 'alerts' || hashQuery.indexOf('tab=alerts') !== -1) {
+          activeOverviewTab = 'alerts';
+        } else if (parts[1] === 'regions' || hashQuery.indexOf('tab=regions') !== -1) {
+          activeOverviewTab = 'regions';
+        }
+        viewOverviewDashboard();
+      },
+      performance: function () {
+        activeOverviewTab = 'neo';
+        viewOverviewDashboard();
+      },
+      studio: function () {
+        activeOverviewTab = 'neo';
+        viewOverviewDashboard();
+      },
       lms: viewLmsDashboard,
       courses: function () {
         if (parts[1] === 'new') return viewCourseStudio(null);
@@ -1297,6 +1318,292 @@
       '</div>';
   }
 
+  function renderNeoPerformanceDashboard() {
+    var actDocs = (doctors() || []).filter(function (d) { return d.active; });
+    var pubCourses = (courses() || []).filter(function (c) { return c.published; });
+    var allCourses = courses() || [];
+    var pts = patients() || [];
+
+    var topDocs = (doctors() || []).slice(0, 3);
+    var starRatings = ['★★★★★', '★★★★★', '★★★★☆'];
+    var reviewCounts = ['481 CME score', '412 CME score', '388 CME score'];
+
+    return '<div class="neo-dash-container">' +
+      '<!-- 1. Top Neo Header Card with Salutation & Fast Actions -->' +
+      '<div class="neo-dash-head">' +
+        '<div>' +
+          '<div style="font-size:24px;font-weight:900;color:var(--adm-ink);letter-spacing:-0.5px;display:flex;align-items:center;gap:10px;">' +
+            'Hello Executive Admin <span style="font-size:24px;">👋</span>' +
+          '</div>' +
+          '<div style="font-size:13px;color:var(--adm-slate);margin-top:4px;">' +
+            'Hospital Admin & Academic Clinical Governance · Real-Time Intelligence Telemetry' +
+          '</div>' +
+        '</div>' +
+        '<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">' +
+          '<div style="position:relative;background:#f8fafc;border:1px solid var(--adm-line);border-radius:9999px;padding:6px 16px;display:flex;align-items:center;gap:8px;">' +
+            '<i class="ms" style="font-size:16px;color:var(--adm-slate);">search</i>' +
+            '<input type="text" placeholder="Search analytics..." style="border:none;background:transparent;outline:none;font-size:12.5px;color:var(--adm-ink);width:160px;">' +
+          '</div>' +
+          '<div style="display:flex;gap:8px;">' +
+            '<button type="button" class="adm-btn-outline" style="border-radius:50%;width:38px;height:38px;padding:0;display:flex;align-items:center;justify-content:center;" title="System Mail"><i class="ms" style="font-size:18px;">mail</i></button>' +
+            '<button type="button" class="adm-btn-outline" style="border-radius:50%;width:38px;height:38px;padding:0;display:flex;align-items:center;justify-content:center;position:relative;" title="Notifications"><i class="ms" style="font-size:18px;">notifications</i><span style="position:absolute;top:7px;right:7px;width:7px;height:7px;border-radius:50%;background:#ef4444;"></span></button>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+
+      '<!-- 2. Row 1: 2x2 Pastel Metrics + Dual Wave Spline Chart -->' +
+      '<div class="neo-grid-row">' +
+        '<!-- Left: 2x2 Soft Pastel Metric Cards -->' +
+        '<div class="neo-metric-2x2">' +
+          '<div class="neo-metric-tile neo-tile-periwinkle">' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+              '<div class="neo-tile-icon-box" style="color:#582be8;"><i class="ms" style="font-size:22px;">event_available</i></div>' +
+              '<span class="adm-chip adm-chip-violet" style="font-size:10.5px;padding:2px 8px;">Active Hubs</span>' +
+            '</div>' +
+            '<div>' +
+              '<div class="neo-tile-label">Enrolled Physicians</div>' +
+              '<div class="neo-tile-val">' + actDocs.length + '</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="neo-metric-tile neo-tile-cyan">' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+              '<div class="neo-tile-icon-box" style="color:#0284c7;"><i class="ms" style="font-size:22px;">military_tech</i></div>' +
+              '<span class="adm-chip adm-chip-cyan" style="font-size:10.5px;padding:2px 8px;">Accredited</span>' +
+            '</div>' +
+            '<div>' +
+              '<div class="neo-tile-label">Accredited CME Hours</div>' +
+              '<div class="neo-tile-val">36.0 hrs</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="neo-metric-tile neo-tile-lilac">' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+              '<div class="neo-tile-icon-box" style="color:#db2777;"><i class="ms" style="font-size:22px;">personal_injury</i></div>' +
+              '<span class="adm-chip adm-chip-danger" style="font-size:10.5px;padding:2px 8px;">Arm 2 E-CRF</span>' +
+            '</div>' +
+            '<div>' +
+              '<div class="neo-tile-label">Total Trial Patients</div>' +
+              '<div class="neo-tile-val">' + pts.length + ' Pts</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="neo-metric-tile neo-tile-mint">' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+              '<div class="neo-tile-icon-box" style="color:#059669;"><i class="ms" style="font-size:22px;">healing</i></div>' +
+              '<span class="adm-chip adm-chip-active" style="font-size:10.5px;padding:2px 8px;">Day-7 Resolved</span>' +
+            '</div>' +
+            '<div>' +
+              '<div class="neo-tile-label">Clinical Recovery</div>' +
+              '<div class="neo-tile-val">87.5%</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+
+        '<!-- Right: Dual Wave Spline Chart Card -->' +
+        '<div class="neo-card">' +
+          '<div class="neo-card-head">' +
+            '<h3 class="neo-card-title">Symptom Recovery vs Adherence</h3>' +
+            '<div style="display:flex;align-items:center;gap:12px;">' +
+              '<div style="display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;color:var(--adm-slate);">' +
+                '<span style="width:8px;height:8px;border-radius:50%;background:#38bdf8;"></span> Adherence' +
+              '</div>' +
+              '<div style="display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;color:var(--adm-slate);">' +
+                '<span style="width:8px;height:8px;border-radius:50%;background:#4338ca;"></span> Recovered' +
+              '</div>' +
+              '<span class="neo-pill-filter">Weekly <i class="ms" style="font-size:14px;">expand_more</i></span>' +
+            '</div>' +
+          '</div>' +
+          '<div style="width:100%;height:180px;position:relative;">' +
+            '<svg viewBox="0 0 600 180" style="width:100%;height:100%;overflow:visible;">' +
+              '<!-- Horizontal grid guides -->' +
+              '<line x1="20" y1="35" x2="580" y2="35" stroke="#f1f5f9" stroke-width="1"/>' +
+              '<line x1="20" y1="85" x2="580" y2="85" stroke="#f1f5f9" stroke-width="1"/>' +
+              '<line x1="20" y1="135" x2="580" y2="135" stroke="#f1f5f9" stroke-width="1"/>' +
+              '<!-- Vertical peak guide -->' +
+              '<line x1="410" y1="28" x2="410" y2="155" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="3,3"/>' +
+              '<!-- Cyan Wave: Adherence -->' +
+              '<path d="M 20,110 C 80,70 130,135 190,95 C 250,55 310,125 370,85 C 430,45 490,115 580,65" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>' +
+              '<!-- Deep Indigo Wave: Clinical Recovery -->' +
+              '<path d="M 20,130 C 80,125 130,75 190,105 C 250,135 310,55 370,105 C 410,135 410,32 460,55 C 510,85 550,65 580,85" fill="none" stroke="#4338ca" stroke-width="3" stroke-linecap="round"/>' +
+              '<!-- Peak Point Tooltip -->' +
+              '<circle cx="410" cy="35" r="5" fill="#4338ca" stroke="#ffffff" stroke-width="2.5"/>' +
+              '<rect x="360" y="8" width="100" height="22" rx="11" fill="#ffffff" stroke="#e2e8f0" filter="drop-shadow(0 2px 5px rgba(0,0,0,0.06))"/>' +
+              '<text x="410" y="23" font-size="10.5" font-weight="800" fill="#4338ca" text-anchor="middle">Recovered: 42 Pts</text>' +
+              '<!-- X-Axis Days -->' +
+              '<text x="25" y="172" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="middle">Sun</text>' +
+              '<text x="115" y="172" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="middle">Mon</text>' +
+              '<text x="205" y="172" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="middle">Tue</text>' +
+              '<text x="295" y="172" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="middle">Wed</text>' +
+              '<text x="385" y="172" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="middle">Thu</text>' +
+              '<text x="475" y="172" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="middle">Fri</text>' +
+              '<text x="565" y="172" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="middle">Sat</text>' +
+            '</svg>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+
+      '<!-- 3. Row 2: Donut Breakdown + Visitors CME Spline Area -->' +
+      '<div class="neo-grid-row">' +
+        '<!-- Left: Multi-Segment Donut Card -->' +
+        '<div class="neo-card">' +
+          '<div class="neo-card-head">' +
+            '<h3 class="neo-card-title">Patients Follow-up (%)</h3>' +
+            '<span class="neo-pill-filter">Monthly <i class="ms" style="font-size:14px;">expand_more</i></span>' +
+          '</div>' +
+          '<div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:8px 0;">' +
+            '<div>' +
+              '<div style="font-size:11.5px;color:var(--adm-slate);font-weight:600;">Total Patient Cohort</div>' +
+              '<div style="font-size:24px;font-weight:900;color:var(--adm-ink);margin:4px 0;">48 Patients</div>' +
+              '<div style="font-size:11px;color:var(--adm-emerald);font-weight:700;">87.5% Resolution Rate</div>' +
+            '</div>' +
+
+            '<div style="width:130px;height:130px;position:relative;">' +
+              '<svg viewBox="0 0 140 140" style="width:100%;height:100%;transform:rotate(-90deg);">' +
+                '<circle cx="70" cy="70" r="48" fill="none" stroke="#f1f5f9" stroke-width="16"/>' +
+                '<!-- Deep Blue Segment (60%): Day-7 Resolved -->' +
+                '<circle cx="70" cy="70" r="48" fill="none" stroke="#2563eb" stroke-width="16" stroke-dasharray="181 301.6" stroke-dashoffset="0"/>' +
+                '<!-- Cyan Segment (25%): Day-3 Pending -->' +
+                '<circle cx="70" cy="70" r="48" fill="none" stroke="#06b6d4" stroke-width="16" stroke-dasharray="75.4 301.6" stroke-dashoffset="-181"/>' +
+                '<!-- Magenta Segment (15%): Maintenance -->' +
+                '<circle cx="70" cy="70" r="48" fill="none" stroke="#ec4899" stroke-width="16" stroke-dasharray="45.2 301.6" stroke-dashoffset="-256.4"/>' +
+              '</svg>' +
+              '<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;">' +
+                '<span style="font-size:9.5px;font-weight:700;color:#64748b;text-transform:uppercase;">Recovery</span>' +
+                '<span style="font-size:16px;font-weight:900;color:#0f172a;">87.5%</span>' +
+              '</div>' +
+            '</div>' +
+
+            '<div style="display:flex;flex-direction:column;gap:8px;font-size:11.5px;color:var(--adm-ink);">' +
+              '<div style="display:flex;align-items:center;gap:6px;">' +
+                '<span style="width:10px;height:10px;border-radius:3px;background:#06b6d4;"></span>' +
+                '<span style="color:var(--adm-slate);">Day-3 Pending:</span> <strong>12</strong>' +
+              '</div>' +
+              '<div style="display:flex;align-items:center;gap:6px;">' +
+                '<span style="width:10px;height:10px;border-radius:3px;background:#2563eb;"></span>' +
+                '<span style="color:var(--adm-slate);">Day-7 Resolved:</span> <strong>28</strong>' +
+              '</div>' +
+              '<div style="display:flex;align-items:center;gap:6px;">' +
+                '<span style="width:10px;height:10px;border-radius:3px;background:#ec4899;"></span>' +
+                '<span style="color:var(--adm-slate);">Maintenance:</span> <strong>8</strong>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+
+        '<!-- Right: CME Learning Velocity Area Spline Card -->' +
+        '<div class="neo-card">' +
+          '<div class="neo-card-head">' +
+            '<h3 class="neo-card-title">CME Learning Velocity & Lecture Streams</h3>' +
+            '<span class="neo-pill-filter">Monthly <i class="ms" style="font-size:14px;">expand_more</i></span>' +
+          '</div>' +
+          '<div style="width:100%;height:180px;position:relative;">' +
+            '<svg viewBox="0 0 600 180" style="width:100%;height:100%;overflow:visible;">' +
+              '<defs>' +
+                '<linearGradient id="cmeAreaGrad" x1="0" y1="0" x2="0" y2="1">' +
+                  '<stop offset="0%" stop-color="#3b82f6" stop-opacity="0.25"/>' +
+                  '<stop offset="100%" stop-color="#3b82f6" stop-opacity="0.0"/>' +
+                '</linearGradient>' +
+              '</defs>' +
+              '<!-- Horizontal guides -->' +
+              '<line x1="20" y1="35" x2="580" y2="35" stroke="#f1f5f9" stroke-width="1"/>' +
+              '<line x1="20" y1="85" x2="580" y2="85" stroke="#f1f5f9" stroke-width="1"/>' +
+              '<line x1="20" y1="135" x2="580" y2="135" stroke="#f1f5f9" stroke-width="1"/>' +
+              '<!-- Vertical Peak Guide -->' +
+              '<line x1="380" y1="45" x2="380" y2="155" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="3,3"/>' +
+              '<!-- Spline Area Fill -->' +
+              '<path d="M 20,140 C 90,130 150,150 210,110 C 270,70 320,120 380,45 C 440,95 500,120 580,110 L 580,155 L 20,155 Z" fill="url(#cmeAreaGrad)"/>' +
+              '<!-- Spline Stroke -->' +
+              '<path d="M 20,140 C 90,130 150,150 210,110 C 270,70 320,120 380,45 C 440,95 500,120 580,110" fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round"/>' +
+              '<!-- Peak Marker Tooltip -->' +
+              '<circle cx="380" cy="45" r="5" fill="#2563eb" stroke="#ffffff" stroke-width="2.5"/>' +
+              '<rect x="325" y="16" width="110" height="22" rx="11" fill="#ffffff" stroke="#e2e8f0" filter="drop-shadow(0 2px 5px rgba(0,0,0,0.06))"/>' +
+              '<text x="380" y="31" font-size="10.5" font-weight="800" fill="#2563eb" text-anchor="middle">Week 4: 92% ↗ 1</text>' +
+              '<!-- X-Axis Months -->' +
+              '<text x="25" y="172" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="middle">Jan</text>' +
+              '<text x="115" y="172" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="middle">Feb</text>' +
+              '<text x="205" y="172" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="middle">Mar</text>' +
+              '<text x="295" y="172" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="middle">Apr</text>' +
+              '<text x="385" y="172" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="middle">May</text>' +
+              '<text x="475" y="172" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="middle">Jun</text>' +
+              '<text x="565" y="172" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="middle">Jul</text>' +
+            '</svg>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+
+      '<!-- 4. Row 3: Protocol Adherence + Top Clinicians -->' +
+      '<div class="neo-grid-row">' +
+        '<!-- Left: Protocol Compliance Progress -->' +
+        '<div class="neo-card">' +
+          '<div class="neo-card-head">' +
+            '<h3 class="neo-card-title">Clinical Protocol Adherence</h3>' +
+            '<span class="neo-pill-filter">2026 <i class="ms" style="font-size:14px;">expand_more</i></span>' +
+          '</div>' +
+          '<div style="display:flex;flex-direction:column;gap:14px;">' +
+            '<div>' +
+              '<div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--adm-ink);margin-bottom:6px;">' +
+                '<span>Protocol Exit & Resolution</span>' +
+                '<span style="color:#059669;">94%</span>' +
+              '</div>' +
+              '<div class="adm-progress-bar-bg" style="height:8px;border-radius:9999px;"><div class="adm-progress-bar-fill" style="width:94%;background:#059669;border-radius:9999px;"></div></div>' +
+            '</div>' +
+            '<div>' +
+              '<div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--adm-ink);margin-bottom:6px;">' +
+                '<span>Electronic CRF Completeness</span>' +
+                '<span style="color:#0284c7;">91%</span>' +
+              '</div>' +
+              '<div class="adm-progress-bar-bg" style="height:8px;border-radius:9999px;"><div class="adm-progress-bar-fill" style="width:91%;background:#0284c7;border-radius:9999px;"></div></div>' +
+            '</div>' +
+            '<div>' +
+              '<div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--adm-ink);margin-bottom:6px;">' +
+                '<span>PWA Push Notification Reach</span>' +
+                '<span style="color:#582be8;">96.8%</span>' +
+              '</div>' +
+              '<div class="adm-progress-bar-bg" style="height:8px;border-radius:9999px;"><div class="adm-progress-bar-fill" style="width:96.8%;background:#582be8;border-radius:9999px;"></div></div>' +
+            '</div>' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px dashed var(--adm-line);font-size:11.5px;color:var(--adm-slate);">' +
+              '<span><i class="ms" style="font-size:13px;color:#059669;vertical-align:middle;">verified</i> Tamper-evident FNV-1a Hash</span>' +
+              '<span><strong>100%</strong> Audit Clear</span>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+
+        '<!-- Right: Top Clinician Investigators (Best Doctors) -->' +
+        '<div class="neo-card">' +
+          '<div class="neo-card-head">' +
+            '<h3 class="neo-card-title">Top Clinician Investigators</h3>' +
+            '<a href="#doctors" style="font-size:12px;font-weight:800;color:var(--adm-primary);text-decoration:none;display:inline-flex;align-items:center;gap:4px;">' +
+              'See all <i class="ms" style="font-size:14px;">arrow_outward</i>' +
+            '</a>' +
+          '</div>' +
+          '<div style="display:flex;flex-direction:column;gap:12px;">' +
+            topDocs.map(function (doc, idx) {
+              return '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;background:#f8fafc;border-radius:14px;border:1px solid var(--adm-line);">' +
+                '<div style="display:flex;align-items:center;gap:10px;">' +
+                  '<div style="width:28px;height:28px;border-radius:50%;background:#2563eb;color:#ffffff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;">' +
+                    (idx + 1) +
+                  '</div>' +
+                  '<div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg, #ede9fe, #ddd6fe);color:#582be8;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;">' +
+                    esc(initials(doc.name)) +
+                  '</div>' +
+                  '<div>' +
+                    '<div style="font-size:13px;font-weight:800;color:var(--adm-ink);">' + esc(doc.name) + '</div>' +
+                    '<div style="font-size:11px;color:var(--adm-slate);">' + esc(doc.speciality) + ' &middot; ' + esc(doc.city) + '</div>' +
+                    '<div style="font-size:11px;color:#f59e0b;font-weight:700;margin-top:2px;">' + starRatings[idx] + ' <span style="color:var(--adm-slate);font-weight:500;">' + reviewCounts[idx] + '</span></div>' +
+                  '</div>' +
+                '</div>' +
+                '<button type="button" class="adm-btn-outline" style="border-radius:10px;font-size:11.5px;padding:5px 14px;background:#ffffff;" onclick="location.hash=\'#doctors\';">' +
+                  'View' +
+                '</button>' +
+              '</div>';
+            }).join('') +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
   function viewOverviewDashboard() {
     var actDocs = doctors().filter(function (d) { return d.active; });
     var pubCourses = courses().filter(function (c) { return c.published; });
@@ -1344,6 +1651,7 @@
         '<button type="button" class="adm-detail-tab-btn ' + (activeOverviewTab === 'patients' ? 'active' : '') + '" data-ov-tab="patients"><i class="ms">clinical_notes</i> 2. Patients Clinical Registry</button>' +
         '<button type="button" class="adm-detail-tab-btn ' + (activeOverviewTab === 'alerts' ? 'active' : '') + '" data-ov-tab="alerts"><i class="ms">notifications_active</i> 3. Patient Alerts & Broadcasts</button>' +
         '<button type="button" class="adm-detail-tab-btn ' + (activeOverviewTab === 'regions' ? 'active' : '') + '" data-ov-tab="regions"><i class="ms">public</i> 4. Regional Matrix</button>' +
+        '<button type="button" class="adm-detail-tab-btn ' + (activeOverviewTab === 'neo' ? 'active' : '') + '" data-ov-tab="neo"><i class="ms">insights</i> 5. Performance Studio (New UI)</button>' +
       '</div>' +
 
       '<!-- SECTION 1: LMS ACADEMY & CME EDUCATION -->' +
@@ -1699,6 +2007,11 @@
           '</div>' +
         '</div>' +
         renderRegionalMatrixContent() +
+      '</div>' +
+
+      '<!-- SECTION 5: NEO-CLINICAL PERFORMANCE STUDIO (NEW UI) -->' +
+      '<div class="adm-section" id="ovSecNeo" style="margin-bottom:32px;display:' + (activeOverviewTab === 'neo' ? 'block' : 'none') + ';">' +
+        renderNeoPerformanceDashboard() +
       '</div>';
 
     $('#view').innerHTML = html;
@@ -1718,10 +2031,12 @@
         var sPts = $('#ovSecPatients');
         var sAlr = $('#ovSecAlerts');
         var sReg = $('#ovSecRegions');
+        var sNeo = $('#ovSecNeo');
         if (sLms) sLms.style.display = (t === 'all' || t === 'lms') ? 'block' : 'none';
         if (sPts) sPts.style.display = (t === 'all' || t === 'patients') ? 'block' : 'none';
         if (sAlr) sAlr.style.display = (t === 'all' || t === 'alerts') ? 'block' : 'none';
         if (sReg) sReg.style.display = (t === 'all' || t === 'regions') ? 'block' : 'none';
+        if (sNeo) sNeo.style.display = (t === 'neo') ? 'block' : 'none';
       };
     });
   }

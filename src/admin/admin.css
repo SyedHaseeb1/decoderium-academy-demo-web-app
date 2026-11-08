@@ -4294,3 +4294,139 @@ body:has(.adm-drawer.open) {
     box-sizing: border-box !important;
   }
 }
+
+/* ==========================================================================
+   NEO-CLINICAL PERFORMANCE STUDIO (REFERENCE MOCKUP AESTHETIC)
+   ========================================================================== */
+.neo-dash-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.neo-dash-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  background: #ffffff;
+  padding: 24px 28px;
+  border-radius: 24px;
+  border: 1px solid var(--adm-line);
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
+}
+
+.neo-grid-row {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  gap: 24px;
+}
+
+@media (max-width: 1100px) {
+  .neo-grid-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.neo-card {
+  background: #ffffff;
+  border-radius: 24px;
+  border: 1px solid var(--adm-line);
+  padding: 24px 26px;
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.03);
+  display: flex;
+  flex-direction: column;
+}
+
+.neo-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.neo-card-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--adm-ink);
+  margin: 0;
+}
+
+.neo-pill-filter {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--adm-slate);
+  background: #f8fafc;
+  border: 1px solid var(--adm-line);
+  border-radius: 9999px;
+  padding: 4px 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+/* 2x2 Pastel Metrics Grid */
+.neo-metric-2x2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  height: 100%;
+}
+
+.neo-metric-tile {
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 144px;
+  transition: transform 0.2s ease;
+}
+.neo-metric-tile:hover {
+  transform: translateY(-2px);
+}
+
+.neo-tile-periwinkle {
+  background: #f0f2fe;
+  border: 1px solid #e0e7ff;
+}
+.neo-tile-cyan {
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+}
+.neo-tile-lilac {
+  background: #fdf2f8;
+  border: 1px solid #fbcfe8;
+}
+.neo-tile-mint {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+}
+
+.neo-tile-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+}
+
+.neo-tile-label {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--adm-slate);
+  margin-top: 10px;
+}
+
+.neo-tile-val {
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--adm-ink);
+  letter-spacing: -0.5px;
+  margin-top: 2px;
+}

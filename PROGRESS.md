@@ -1,9 +1,9 @@
 # GILEAP Academy & Patients Registry — Project Progress & Resumption Handover
 
-> **Date**: November 8, 2026  
+> **Date**: November 9, 2026  
 > **Status**: Active Prototyping & Client-Ready Alignment (Verified in Headless Chromium)  
 > **Server Running**: Port 8000 / 5200 (`http://localhost:8000/`)  
-> **Active Focus**: GILEAP Modular Architecture: Tri-Pillar Overview Cockpit, Patient Broadcasts Center, Dedicated Doctors Directory, Bottom-Docked User Management, and Evaluator Course Preview.
+> **Active Focus**: Unified Pill Dock Tab Architecture, Eradication of "Roster" Nomenclature, Copyable & Regeneratable Temporary Keys with Post-Creation Invite Modal, IP Address Purge from Audit, and Overview Regional Matrix Tab.
 
 ---
 
