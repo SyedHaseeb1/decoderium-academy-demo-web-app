@@ -949,6 +949,10 @@
               var pR = m.parentElement.closest('[style*="grid"]');
               if (pR) pR.style.zIndex = '';
             }
+            var pDlgB = m.closest('.lms-dialog-body');
+            if (pDlgB) pDlgB.classList.remove('dropdown-active');
+            var pDlgC = m.closest('.lms-dialog-card');
+            if (pDlgC) pDlgC.classList.remove('dropdown-active');
           }
         });
 
@@ -957,12 +961,17 @@
         btn.classList.toggle('is-open', nextState);
         dd.classList.toggle('is-open', nextState);
 
+        var dlgBody = dd.closest('.lms-dialog-body');
+        var dlgCard = dd.closest('.lms-dialog-card');
+
         if (nextState) {
-          dd.style.zIndex = '99999';
+          dd.style.zIndex = '100000';
           var pGrp = dd.closest('.adm-form-group');
-          if (pGrp) pGrp.style.zIndex = '99999';
+          if (pGrp) pGrp.style.zIndex = '100000';
           var pRow = dd.closest('[style*="grid"]');
-          if (pRow) pRow.style.zIndex = '99999';
+          if (pRow) pRow.style.zIndex = '100000';
+          if (dlgBody) dlgBody.classList.add('dropdown-active');
+          if (dlgCard) dlgCard.classList.add('dropdown-active');
 
           // Smart auto-flip if near bottom of screen
           var rect = btn.getBoundingClientRect();
@@ -985,6 +994,8 @@
           if (pGrp) pGrp.style.zIndex = '';
           var pRow = dd.closest('[style*="grid"]');
           if (pRow) pRow.style.zIndex = '';
+          if (dlgBody) dlgBody.classList.remove('dropdown-active');
+          if (dlgCard) dlgCard.classList.remove('dropdown-active');
         }
       };
 
@@ -1036,6 +1047,11 @@
           var pRow = dd.closest('[style*="grid"]');
           if (pRow) pRow.style.zIndex = '';
 
+          var dlgB = dd.closest('.lms-dialog-body');
+          if (dlgB) dlgB.classList.remove('dropdown-active');
+          var dlgC = dd.closest('.lms-dialog-card');
+          if (dlgC) dlgC.classList.remove('dropdown-active');
+
           var evt = new Event('change', { bubbles: true });
           hiddenInput.dispatchEvent(evt);
         };
@@ -1058,6 +1074,9 @@
           var pR = m.parentElement.closest('[style*="grid"]');
           if (pR) pR.style.zIndex = '';
         }
+      });
+      document.querySelectorAll('.lms-dialog-body.dropdown-active, .lms-dialog-card.dropdown-active').forEach(function (el) {
+        el.classList.remove('dropdown-active');
       });
     }
   });
@@ -2826,9 +2845,8 @@
                   '</div>' +
                 '</div>' +
                 '<div class="adm-course-card-actions" onclick="event.stopPropagation();">' +
-                  '<a href="#courses/' + c.id + '" class="adm-btn-action" style="flex:1;background:var(--adm-primary-soft);color:var(--adm-primary);border-color:var(--adm-ring);font-weight:800;text-align:center;">Inspect Syllabus &rarr;</a>' +
-                  '<button type="button" class="adm-btn-action" onclick="openAssignCourseModal(\'' + c.id + '\', null);" style="flex:1;background:#7c3aed;color:#ffffff;border-color:#7c3aed;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:4px;" title="Assign ' + esc(c.title) + ' to doctor, zone, or specialty">' +
-                    '<i class="ms" style="font-size:13px;">school</i> Assign To...' +
+                  '<button type="button" class="adm-btn-action" onclick="openAssignCourseModal(\'' + c.id + '\', null);" style="width:100%;background:#7c3aed;color:#ffffff;border-color:#7c3aed;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 12px;border-radius:8px;" title="Assign ' + esc(c.title) + ' to doctor, zone, or specialty">' +
+                    '<i class="ms" style="font-size:15px;">school</i> Assign Course' +
                   '</button>' +
                 '</div>' +
               '</div>' +
@@ -4450,11 +4468,14 @@
           '</div>' +
           '<div class="adm-form-group">' +
             '<label class="adm-label">Province / Geographical Region</label>' +
-            '<select class="adm-select" id="inpZoneRegion">' +
-              ['Punjab', 'Sindh', 'Khyber Pakhtunkhwa', 'Federal Capital', 'Balochistan', 'South Punjab'].map(function (r) {
-                return '<option value="' + r + '"' + (z.region === r ? ' selected' : '') + '>' + r + '</option>';
-              }).join('') +
-            '</select>' +
+            renderSearchableDropdown({
+              id: 'inpZoneRegion',
+              options: ['Punjab', 'Sindh', 'Khyber Pakhtunkhwa', 'Federal Capital', 'Balochistan', 'South Punjab'].map(function (r) {
+                return { value: r, label: r };
+              }),
+              value: z.region || 'Punjab',
+              label: 'Region'
+            }) +
           '</div>' +
         '</div>' +
         '<div class="adm-form-group">' +
@@ -4507,6 +4528,10 @@
         viewZonesDashboard();
       }
     });
+
+    setTimeout(function () {
+      initSearchableDropdowns($('#activeDialogOverlay'));
+    }, 40);
   }
 
   function openEditZoneModal(id) {
@@ -4698,28 +4723,54 @@
     var specialties = [];
     allDocs.forEach(function (d) { if (d.speciality && specialties.indexOf(d.speciality) === -1) specialties.push(d.speciality); });
 
+    var courseOptions = allCoursesList.map(function (c) {
+      return { value: c.id, label: c.title + ' (' + (c.cmeHours || 12) + ' CME Hours · ' + c.modules.length + ' Modules)' };
+    });
+
+    var docOptions = allDocs.map(function (d) {
+      return { value: d.id, label: d.name + ' (' + d.pmdcId + ' · ' + d.hospital + ')' };
+    });
+
+    var zoneOptions = zList.map(function (z) {
+      return { value: z.id, label: z.name + ' (' + z.leadHospital + ')' };
+    });
+
+    var specialtyOptions = [{ value: 'all', label: 'All Doctors (' + allDocs.length + ' Total)' }].concat(
+      specialties.map(function (s) {
+        var count = allDocs.filter(function (d) { return d.speciality === s; }).length;
+        return { value: s, label: s + ' (' + count + ' Doctors)' };
+      })
+    );
+
     var body =
       '<div style="display:flex;flex-direction:column;gap:16px;">' +
         '<div class="adm-form-group">' +
           '<label class="adm-label">Select Accredited Masterclass / Course <span style="color:#ef4444;">*</span></label>' +
-          '<select class="adm-select" id="selAssignCourse" style="font-weight:700;">' +
-            allCoursesList.map(function (c) {
-              return '<option value="' + c.id + '"' + (c.id === activeCourseId ? ' selected' : '') + '>' + esc(c.title) + ' (' + (c.cmeHours || 12) + ' CME Hours &middot; ' + c.modules.length + ' Modules)</option>';
-            }).join('') +
-          '</select>' +
+          renderSearchableDropdown({
+            id: 'selAssignCourse',
+            options: courseOptions,
+            value: activeCourseId,
+            label: 'Select Masterclass'
+          }) +
         '</div>' +
 
         '<div class="adm-form-group">' +
           '<label class="adm-label">Assignment Target Scope</label>' +
-          '<div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:10px;margin-top:6px;">' +
-            '<label style="display:flex;align-items:center;gap:8px;background:#f8fafc;padding:10px;border-radius:10px;cursor:pointer;border:1.5px solid #cbd5e1;font-weight:700;font-size:12.5px;">' +
-              '<input type="radio" name="rdAssignTarget" value="doctor" checked style="accent-color:#0284c7;"> Single Doctor' +
+          '<div class="adm-radio-card-group" style="margin-top:6px;">' +
+            '<label class="adm-radio-card">' +
+              '<input type="radio" name="rdAssignTarget" value="doctor" checked>' +
+              '<span class="adm-radio-indicator"></span>' +
+              '<span class="adm-radio-text"><i class="ms" style="font-size:15px;">person</i> Single Doctor</span>' +
             '</label>' +
-            '<label style="display:flex;align-items:center;gap:8px;background:#f8fafc;padding:10px;border-radius:10px;cursor:pointer;border:1.5px solid #cbd5e1;font-weight:700;font-size:12.5px;">' +
-              '<input type="radio" name="rdAssignTarget" value="zone"' + (preTargetId && preTargetId.indexOf('z-') === 0 ? ' checked' : '') + ' style="accent-color:#0284c7;"> Entire Zone' +
+            '<label class="adm-radio-card">' +
+              '<input type="radio" name="rdAssignTarget" value="zone"' + (preTargetId && preTargetId.indexOf('z-') === 0 ? ' checked' : '') + '>' +
+              '<span class="adm-radio-indicator"></span>' +
+              '<span class="adm-radio-text"><i class="ms" style="font-size:15px;">map</i> Entire Zone</span>' +
             '</label>' +
-            '<label style="display:flex;align-items:center;gap:8px;background:#f8fafc;padding:10px;border-radius:10px;cursor:pointer;border:1.5px solid #cbd5e1;font-weight:700;font-size:12.5px;">' +
-              '<input type="radio" name="rdAssignTarget" value="specialty" style="accent-color:#0284c7;"> Specialty Group' +
+            '<label class="adm-radio-card">' +
+              '<input type="radio" name="rdAssignTarget" value="specialty">' +
+              '<span class="adm-radio-indicator"></span>' +
+              '<span class="adm-radio-text"><i class="ms" style="font-size:15px;">medical_services</i> Specialty</span>' +
             '</label>' +
           '</div>' +
         '</div>' +
@@ -4727,34 +4778,35 @@
         '<!-- Target Selector Panes -->' +
         '<div id="paneTargetDoctor" class="adm-form-group">' +
           '<label class="adm-label">Select Physician / Investigator</label>' +
-          '<select class="adm-select" id="selTargetDoctor">' +
-            allDocs.map(function (d) {
-              return '<option value="' + d.id + '"' + (d.id === preTargetId ? ' selected' : '') + '>' + esc(d.name) + ' (' + esc(d.pmdcId) + ' &middot; ' + esc(d.hospital) + ')</option>';
-            }).join('') +
-          '</select>' +
+          renderSearchableDropdown({
+            id: 'selTargetDoctor',
+            options: docOptions,
+            value: preTargetId || (allDocs[0] ? allDocs[0].id : ''),
+            label: 'Search Doctor'
+          }) +
         '</div>' +
 
         '<div id="paneTargetZone" class="adm-form-group" style="display:none;">' +
           '<label class="adm-label">Select Study Zone (Assigns to all doctors in zone)</label>' +
-          '<select class="adm-select" id="selTargetZone">' +
-            zList.map(function (z) {
-              return '<option value="' + z.id + '"' + (z.id === preTargetId ? ' selected' : '') + '>' + esc(z.name) + ' (' + esc(z.leadHospital) + ')</option>';
-            }).join('') +
-          '</select>' +
+          renderSearchableDropdown({
+            id: 'selTargetZone',
+            options: zoneOptions,
+            value: (preTargetId && preTargetId.indexOf('z-') === 0) ? preTargetId : (zList[0] ? zList[0].id : ''),
+            label: 'Search Zone'
+          }) +
         '</div>' +
 
         '<div id="paneTargetSpecialty" class="adm-form-group" style="display:none;">' +
           '<label class="adm-label">Select Clinical Specialty Group</label>' +
-          '<select class="adm-select" id="selTargetSpecialty">' +
-            '<option value="all">All Doctors (' + allDocs.length + ' Total)</option>' +
-            specialties.map(function (s) {
-              var count = allDocs.filter(function (d) { return d.speciality === s; }).length;
-              return '<option value="' + esc(s) + '">' + esc(s) + ' (' + count + ' Doctors)</option>';
-            }).join('') +
-          '</select>' +
+          renderSearchableDropdown({
+            id: 'selTargetSpecialty',
+            options: specialtyOptions,
+            value: 'all',
+            label: 'Search Specialty'
+          }) +
         '</div>' +
 
-        '<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:12px;font-size:12px;color:#1e40af;display:flex;align-items:center;gap:8px;">' +
+        '<div style="background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:10px;padding:12px;font-size:12px;color:#1e40af;display:flex;align-items:center;gap:8px;">' +
           '<i class="ms" style="font-size:18px;">info</i>' +
           '<span>Enrolled doctors will receive an immediate LMS notification, syllabus unlock, and PMDC accreditation tracking milestone.</span>' +
         '</div>' +
@@ -4803,8 +4855,9 @@
       }
     });
 
-    // Wire radio tab toggles
+    // Initialize searchable dropdowns & wire radio tab toggles inside modal
     setTimeout(function () {
+      initSearchableDropdowns($('#activeDialogOverlay'));
       var rds = document.querySelectorAll('input[name="rdAssignTarget"]');
       var pDoc = $('#paneTargetDoctor');
       var pZone = $('#paneTargetZone');
@@ -6490,9 +6543,8 @@
               '</div>' +
               '<div class="adm-course-card-actions" onclick="event.stopPropagation();">' +
                 '<div style="display:flex;gap:6px;width:100%;margin-bottom:8px;">' +
-                  '<a href="#courses/' + c.id + '" class="adm-btn-action" style="flex:1;background:var(--adm-primary-soft);color:var(--adm-primary);border-color:var(--adm-ring);font-weight:800;text-align:center;">Inspect Modules &rarr;</a>' +
-                  '<button type="button" class="adm-btn-action" onclick="openAssignCourseModal(\'' + c.id + '\', null);" style="flex:1;background:#7c3aed;color:#ffffff;border-color:#7c3aed;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:4px;" title="Assign ' + esc(c.title) + ' to doctors, zones, or specialty">' +
-                    '<i class="ms" style="font-size:13px;">school</i> Assign Course' +
+                  '<button type="button" class="adm-btn-action" onclick="openAssignCourseModal(\'' + c.id + '\', null);" style="width:100%;background:#7c3aed;color:#ffffff;border-color:#7c3aed;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 12px;border-radius:8px;" title="Assign ' + esc(c.title) + ' to doctors, zones, or specialty">' +
+                    '<i class="ms" style="font-size:15px;">school</i> Assign Course' +
                   '</button>' +
                 '</div>' +
                 '<div style="display:flex;gap:6px;width:100%;justify-content:flex-end;">' +
@@ -6919,6 +6971,22 @@
         '</div>' +
       '</div>' +
 
+      '<!-- Quick Action Toolbar at Top of Certificate Modal -->' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;background:#f8fafc;padding:10px 16px;border-radius:10px;border:1.5px solid #cbd5e1;flex-wrap:wrap;gap:10px;">' +
+        '<div style="display:flex;align-items:center;gap:8px;">' +
+          '<span style="font-size:12px;color:var(--adm-slate);">Certificate Ledger Code:</span>' +
+          '<strong style="font-family:monospace;font-size:13px;color:var(--adm-ink);background:#ffffff;padding:3px 8px;border-radius:6px;border:1px solid #cbd5e1;">' + esc(cert.code) + '</strong>' +
+          '<button type="button" class="adm-btn-action" id="btnCopyCertHashInModal" style="gap:4px;font-size:11.5px;padding:4px 10px;">' +
+            '<i class="ms" style="font-size:14px;">content_copy</i> Copy Hash' +
+          '</button>' +
+        '</div>' +
+        '<div style="display:flex;gap:8px;">' +
+          '<button type="button" class="adm-btn-primary" id="btnExportCertPdfTop" style="background:#2563eb;border-color:#2563eb;font-size:12px;padding:7px 16px;border-radius:8px;font-weight:700;display:inline-flex;align-items:center;gap:6px;box-shadow:0 2px 6px rgba(37,99,235,0.25);">' +
+            '<i class="ms" style="font-size:16px;">print</i> Print / Export PDF' +
+          '</button>' +
+        '</div>' +
+      '</div>' +
+
       '<!-- High-Fidelity Printable Certificate Canvas -->' +
       '<div id="printableCertContainer" style="background:#ffffff;border:3px double #1e1b4b;border-radius:16px;padding:36px 32px;text-align:center;box-shadow:0 8px 30px -4px rgba(15,23,42,0.12);position:relative;margin-bottom:18px;">' +
         '<div style="font-size:12px;font-weight:800;color:#582be8;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;">' +
@@ -6985,8 +7053,12 @@
       title: 'Official Medical Accreditation Certificate (' + esc(cert.code) + ')',
       body: body,
       wide: true,
-      confirmText: '',
-      cancelText: 'Close Certificate'
+      confirmText: 'Print / Export PDF',
+      cancelText: 'Close Certificate',
+      onConfirm: function () {
+        printCertificateDocument(cert.code);
+        return false;
+      }
     });
 
     setTimeout(function () {
@@ -7000,12 +7072,15 @@
         };
       }
 
+      var handlePrint = function () {
+        printCertificateDocument(cert.code);
+      };
+
       var btnExport = $('#btnExportCertPdfModal');
-      if (btnExport) {
-        btnExport.onclick = function () {
-          printCertificateDocument(cert.code);
-        };
-      }
+      if (btnExport) btnExport.onclick = handlePrint;
+
+      var btnExportTop = $('#btnExportCertPdfTop');
+      if (btnExportTop) btnExportTop.onclick = handlePrint;
     }, 50);
   }
 
@@ -9347,12 +9422,17 @@
             '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">' +
               '<div class="adm-form-group">' +
                 '<label class="adm-label">Type</label>' +
-                '<select class="adm-input" id="selDiaMatType">' +
-                  '<option value="Clinical Guideline">Clinical Guideline</option>' +
-                  '<option value="Slide Deck">Slide Deck</option>' +
-                  '<option value="Clinical Protocol">Clinical Protocol</option>' +
-                  '<option value="Prescribing Monograph">Prescribing Monograph</option>' +
-                '</select>' +
+                renderSearchableDropdown({
+                  id: 'selDiaMatType',
+                  options: [
+                    { value: 'Clinical Guideline', label: 'Clinical Guideline' },
+                    { value: 'Slide Deck', label: 'Slide Deck' },
+                    { value: 'Clinical Protocol', label: 'Clinical Protocol' },
+                    { value: 'Prescribing Monograph', label: 'Prescribing Monograph' }
+                  ],
+                  value: 'Clinical Guideline',
+                  label: 'Asset Type'
+                }) +
               '</div>' +
               '<div class="adm-form-group">' +
                 '<label class="adm-label">Document / URL</label>' +
@@ -9380,6 +9460,9 @@
             viewCourseDetail(c.id, 'tab=materials');
           }
         });
+        setTimeout(function () {
+          initSearchableDropdowns($('#activeDialogOverlay'));
+        }, 40);
       };
     }
 
@@ -10301,6 +10384,16 @@
       { value: 'Quetta', label: 'Quetta (Balochistan)' }
     ];
 
+    var zoneList = (typeof zones === 'function' ? zones() : []).map(function(z) {
+      return { value: z.id, label: z.name + ' (' + z.region + ')' };
+    });
+
+    var initialCourseList = [{ value: '', label: '-- No initial course assignment --' }].concat(
+      courses().filter(function(c){ return c.published; }).map(function(c){
+        return { value: c.id, label: c.title + ' (' + (c.cmeHours || 12) + ' CME Hours)' };
+      })
+    );
+
     var body =
       '<div style="display:flex;flex-direction:column;gap:12px;">' +
         '<div class="adm-form-group">' +
@@ -10322,11 +10415,12 @@
         '</div>' +
         '<div class="adm-form-group">' +
           '<label class="adm-label">Assigned Clinical Study Zone <span style="color:#ef4444;">*</span></label>' +
-          '<select class="adm-select" id="inpDocZone" style="width:100%;font-weight:700;">' +
-            (typeof zones === "function" ? zones() : []).map(function(z) {
-              return '<option value="' + z.id + '">' + esc(z.name) + ' (' + esc(z.region) + ')</option>';
-            }).join('') +
-          '</select>' +
+          renderSearchableDropdown({
+            id: 'inpDocZone',
+            options: zoneList,
+            value: zoneList[0] ? zoneList[0].value : '',
+            label: 'Study Zone'
+          }) +
         '</div>' +
         '<div class="adm-form-group">' +
           '<label class="adm-label">Hospital / Healthcare Facility</label>' +
@@ -10358,12 +10452,12 @@
         '</div>' +
         '<div class="adm-form-group">' +
           '<label class="adm-label">Initial Assigned Course (Optional)</label>' +
-          '<select class="adm-select" id="inpDocInitialCourse" style="width:100%;font-weight:700;">' +
-            '<option value="">-- No initial course assignment --</option>' +
-            courses().filter(function(c){ return c.published; }).map(function(c){
-              return '<option value="' + c.id + '">' + esc(c.title) + ' (' + (c.cmeHours || 12) + ' CME Hours)</option>';
-            }).join('') +
-          '</select>' +
+          renderSearchableDropdown({
+            id: 'inpDocInitialCourse',
+            options: initialCourseList,
+            value: '',
+            label: 'Initial Course'
+          }) +
         '</div>' +
         '<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px 14px;font-size:12px;color:#166534;display:flex;align-items:center;gap:8px;">' +
           '<i class="ms" style="font-size:18px;">mail</i>' +
@@ -10548,7 +10642,10 @@
                 '<span class="adm-chip adm-chip-active">Accredited</span>' +
               '</div>' +
               '<div style="font-size:11.5px;color:var(--adm-ink);font-family:monospace;margin-bottom:4px;">Hash: ' + esc(c.code) + '</div>' +
-              '<div style="font-size:10.5px;color:var(--adm-slate);">Issued On: ' + esc(c.issuedOn) + '</div>' +
+              '<div style="font-size:10.5px;color:var(--adm-slate);margin-bottom:8px;">Issued On: ' + esc(c.issuedOn) + '</div>' +
+              '<button type="button" class="adm-btn-action" onclick="openCertificateDetailModal(\'' + esc(c.code) + '\');" style="width:100%;justify-content:center;gap:6px;font-weight:700;color:var(--adm-primary);border-color:rgba(124,58,237,0.3);background:#ffffff;">' +
+                '<i class="ms" style="font-size:14px;color:var(--adm-primary);">verified</i> Verify &amp; Export PDF' +
+              '</button>' +
             '</div>';
           }).join('')) +
       '</div>';
@@ -10666,19 +10763,39 @@
           '</div>' +
         '</div>' +
         '<div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:16px;margin-top:16px;">' +
-          '<div style="background:#f8fafc;padding:14px;border-radius:12px;border:1px solid #e2e8f0;">' +
-            '<div style="font-size:12.5px;font-weight:800;color:var(--adm-ink);margin-bottom:8px;">Default Patient Registry Layout</div>' +
-            '<div class="adm-view-toggle">' +
-              '<button type="button" class="adm-view-toggle-btn ' + (patientViewMode === 'split' ? 'active' : '') + '" onclick="patientViewMode=\'split\';try{localStorage.setItem(\'adm_patient_view_mode\',\'split\');}catch(e){}viewSettings();snack(\'Default Patient View set to Split View\');"><i class="ms" style="font-size:14px;">view_sidebar</i> Split View</button>' +
-              '<button type="button" class="adm-view-toggle-btn ' + (patientViewMode === 'table' ? 'active' : '') + '" onclick="patientViewMode=\'table\';try{localStorage.setItem(\'adm_patient_view_mode\',\'table\');}catch(e){}viewSettings();snack(\'Default Patient View set to List / Table\');"><i class="ms" style="font-size:14px;">table_rows</i> List / Table</button>' +
-              '<button type="button" class="adm-view-toggle-btn ' + (patientViewMode === 'grid' ? 'active' : '') + '" onclick="patientViewMode=\'grid\';try{localStorage.setItem(\'adm_patient_view_mode\',\'grid\');}catch(e){}viewSettings();snack(\'Default Patient View set to Grid Cards\');"><i class="ms" style="font-size:14px;">grid_view</i> Grid Cards</button>' +
+          '<div style="background:#f8fafc;padding:16px;border-radius:12px;border:1.5px solid #cbd5e1;">' +
+            '<div style="font-size:13px;font-weight:800;color:var(--adm-ink);margin-bottom:12px;display:flex;align-items:center;gap:6px;"><i class="ms" style="color:var(--adm-primary);font-size:16px;">personal_injury</i> Default Patient Registry Layout</div>' +
+            '<div class="adm-radio-card-group">' +
+              '<label class="adm-radio-card">' +
+                '<input type="radio" name="setPatientView" value="split"' + (patientViewMode === 'split' ? ' checked' : '') + ' onchange="setGlobalPatientViewMode(\'split\');">' +
+                '<span class="adm-radio-indicator"></span>' +
+                '<span class="adm-radio-text"><i class="ms" style="font-size:15px;">view_sidebar</i> Split View</span>' +
+              '</label>' +
+              '<label class="adm-radio-card">' +
+                '<input type="radio" name="setPatientView" value="table"' + (patientViewMode === 'table' ? ' checked' : '') + ' onchange="setGlobalPatientViewMode(\'table\');">' +
+                '<span class="adm-radio-indicator"></span>' +
+                '<span class="adm-radio-text"><i class="ms" style="font-size:15px;">table_rows</i> List / Table</span>' +
+              '</label>' +
+              '<label class="adm-radio-card">' +
+                '<input type="radio" name="setPatientView" value="grid"' + (patientViewMode === 'grid' ? ' checked' : '') + ' onchange="setGlobalPatientViewMode(\'grid\');">' +
+                '<span class="adm-radio-indicator"></span>' +
+                '<span class="adm-radio-text"><i class="ms" style="font-size:15px;">grid_view</i> Grid Cards</span>' +
+              '</label>' +
             '</div>' +
           '</div>' +
-          '<div style="background:#f8fafc;padding:14px;border-radius:12px;border:1px solid #e2e8f0;">' +
-            '<div style="font-size:12.5px;font-weight:800;color:var(--adm-ink);margin-bottom:8px;">Default Doctors Directory Layout</div>' +
-            '<div class="adm-view-toggle">' +
-              '<button type="button" class="adm-view-toggle-btn ' + (docViewMode === 'split' ? 'active' : '') + '" onclick="docViewMode=\'split\';try{localStorage.setItem(\'adm_doc_view_mode\',\'split\');}catch(e){}viewSettings();snack(\'Default Doctor View set to Split View\');"><i class="ms" style="font-size:14px;">view_sidebar</i> Split View</button>' +
-              '<button type="button" class="adm-view-toggle-btn ' + (docViewMode === 'table' ? 'active' : '') + '" onclick="docViewMode=\'table\';try{localStorage.setItem(\'adm_doc_view_mode\',\'table\');}catch(e){}viewSettings();snack(\'Default Doctor View set to List / Table\');"><i class="ms" style="font-size:14px;">table_rows</i> List / Table</button>' +
+          '<div style="background:#f8fafc;padding:16px;border-radius:12px;border:1.5px solid #cbd5e1;">' +
+            '<div style="font-size:13px;font-weight:800;color:var(--adm-ink);margin-bottom:12px;display:flex;align-items:center;gap:6px;"><i class="ms" style="color:var(--adm-primary);font-size:16px;">medical_services</i> Default Doctors Directory Layout</div>' +
+            '<div class="adm-radio-card-group">' +
+              '<label class="adm-radio-card">' +
+                '<input type="radio" name="setDocView" value="split"' + (docViewMode === 'split' ? ' checked' : '') + ' onchange="setGlobalDocViewMode(\'split\');">' +
+                '<span class="adm-radio-indicator"></span>' +
+                '<span class="adm-radio-text"><i class="ms" style="font-size:15px;">view_sidebar</i> Split View</span>' +
+              '</label>' +
+              '<label class="adm-radio-card">' +
+                '<input type="radio" name="setDocView" value="table"' + (docViewMode === 'table' ? ' checked' : '') + ' onchange="setGlobalDocViewMode(\'table\');">' +
+                '<span class="adm-radio-indicator"></span>' +
+                '<span class="adm-radio-text"><i class="ms" style="font-size:15px;">table_rows</i> List / Table</span>' +
+              '</label>' +
             '</div>' +
           '</div>' +
         '</div>' +
@@ -10720,6 +10837,24 @@
      Global Window Bridge for Inline HTML Action Handlers
      Exposes dialog, modal & simulation workflows to window for infallible inline onclick execution
      -------------------------------------------------------------------------- */
+  window.setGlobalPatientViewMode = function (mode) {
+    patientViewMode = mode;
+    try { localStorage.setItem('adm_patient_view_mode', mode); } catch (e) {}
+    snack('Default Patient Registry Layout set to ' + (mode === 'split' ? 'Split View' : mode === 'table' ? 'List / Table' : 'Grid Cards'));
+    document.querySelectorAll('input[name="setPatientView"]').forEach(function (r) {
+      r.checked = (r.value === mode);
+    });
+  };
+
+  window.setGlobalDocViewMode = function (mode) {
+    docViewMode = mode;
+    try { localStorage.setItem('adm_doc_view_mode', mode); } catch (e) {}
+    snack('Default Doctors Directory Layout set to ' + (mode === 'split' ? 'Split View' : 'List / Table'));
+    document.querySelectorAll('input[name="setDocView"]').forEach(function (r) {
+      r.checked = (r.value === mode);
+    });
+  };
+
   window.openCreateCourseDialog = openCreateCourseDialog;
   window.openCreateCourseModal = (typeof openCreateCourseModal === 'function') ? openCreateCourseModal : openCreateCourseDialog;
   window.launchLiveDoctorView = launchLiveDoctorView;
