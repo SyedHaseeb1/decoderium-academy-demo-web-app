@@ -1458,6 +1458,40 @@
       '     =========================================================================== -->' +
       '<div id="ovCombinedSummary" style="display:' + (activeOverviewTab === 'all' ? 'block' : 'none') + ';">' +
 
+        '<!-- 0. Executive Welcome & Clinical Intelligence Header -->' +
+        '<div class="adm-overview-greeting" style="background:#ffffff;border-radius:var(--adm-radius-lg, 16px);padding:20px 24px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;box-shadow:0 4px 20px -2px rgba(15,23,42,0.06);border:1px solid rgba(226,232,240,0.9);">' +
+          '<div style="display:flex;align-items:center;gap:16px;">' +
+            '<div style="width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg, #582be8 0%, #7c3aed 100%);color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 6px 16px rgba(88,43,232,0.28);flex-shrink:0;">' +
+              '<i class="ms">dashboard</i>' +
+            '</div>' +
+            '<div>' +
+              '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">' +
+                '<h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0;letter-spacing:-0.4px;">' +
+                  'Welcome back, Executive Administrator <span style="font-size:18px;">👋</span>' +
+                '</h2>' +
+                '<span class="adm-chip adm-chip-emerald" style="font-weight:700;font-size:11px;padding:3px 10px;">' +
+                  '<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#10b981;margin-right:5px;box-shadow:0 0 0 2px rgba(16,185,129,0.3);"></span> PMDC Sync Online' +
+                '</span>' +
+              '</div>' +
+              '<p style="font-size:12.5px;color:#64748b;margin:4px 0 0;line-height:1.4;">' +
+                'GILEAP clinical trials &amp; accredited CME academy operating across 12 regional hospital study centers in Pakistan.' +
+              '</p>' +
+            '</div>' +
+          '</div>' +
+          '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">' +
+            '<div style="background:#f8fafc;border:1px solid #e2e8f0;padding:8px 14px;border-radius:10px;font-size:12px;color:#0f172a;font-weight:700;display:flex;align-items:center;gap:8px;">' +
+              '<i class="ms" style="color:#582be8;font-size:16px;">event</i>' +
+              '<span>' + new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' }) + '</span>' +
+            '</div>' +
+            '<button type="button" class="adm-btn-primary" onclick="openCreateCourseDialog();" style="background:#582be8;border-color:#582be8;font-size:12px;padding:8px 16px;border-radius:10px;font-weight:700;display:inline-flex;align-items:center;gap:6px;box-shadow:0 4px 12px rgba(88,43,232,0.25);cursor:pointer;">' +
+              '<i class="ms" style="font-size:15px;">add_circle</i> + Create Course' +
+            '</button>' +
+            '<button type="button" class="adm-btn-outline" onclick="openRegisterPatientDialog();" style="font-size:12px;padding:8px 16px;border-radius:10px;font-weight:700;display:inline-flex;align-items:center;gap:6px;cursor:pointer;">' +
+              '<i class="ms" style="font-size:15px;">person_add</i> + Enroll Patient' +
+            '</button>' +
+          '</div>' +
+        '</div>' +
+
         '<!-- 1. Master KPI Deck: 4 High-Impact Stat Cards -->' +
         '<div class="neo-kpi-4col" style="margin-bottom:24px;">' +
           '<div class="neo-kpi-card-rich" onclick="location.hash=\'#doctors\';" title="Open Doctors Directory">' +
@@ -1550,6 +1584,19 @@
                 '<div style="font-size:9.5px;color:#2563eb;font-weight:700;">Enforced</div>' +
               '</div>' +
             '</div>' +
+            '<div style="margin:10px 0 12px;background:#f8fafc;padding:10px 14px;border-radius:10px;border:1px solid #f1f5f9;">' +
+              '<div style="display:flex;justify-content:space-between;font-size:11.5px;color:#475569;margin-bottom:6px;">' +
+                '<span><i class="ms" style="font-size:13px;color:#7c3aed;vertical-align:-2px;">speed</i> <strong>90% Watch Velocity Telemetry Gate</strong></span>' +
+                '<strong style="color:#7c3aed;">84.6% Avg</strong>' +
+              '</div>' +
+              '<div style="height:8px;background:#e2e8f0;border-radius:999px;overflow:hidden;position:relative;">' +
+                '<div style="width:84.6%;height:100%;background:linear-gradient(90deg, #7c3aed 0%, #a855f7 100%);border-radius:999px;"></div>' +
+                '<div style="position:absolute;left:90%;top:0;bottom:0;width:2px;background:#ef4444;" title="90% Accreditation Gate"></div>' +
+              '</div>' +
+              '<div style="display:flex;justify-content:space-between;font-size:10px;color:#94a3b8;margin-top:4px;">' +
+                '<span>0%</span><span>Current: 84.6%</span><span style="color:#ef4444;font-weight:700;">90% Mandatory Gate</span><span>100%</span>' +
+              '</div>' +
+            '</div>' +
             '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#faf5ff;border-radius:10px;font-size:11.5px;color:#6b21a8;">' +
               '<span><i class="ms" style="font-size:13px;vertical-align:-2px;color:#7c3aed;">star</i> <strong>Top Doctor:</strong> Dr. Ayesha Khan (SIMS Lahore · 481 CME score)</span>' +
               '<span class="adm-chip adm-chip-violet" style="font-size:10px;">5 Modules Certified</span>' +
@@ -1588,6 +1635,19 @@
                 '<div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;">Acid Break</div>' +
                 '<div style="font-size:18px;font-weight:900;color:#059669;margin-top:2px;">0.0%</div>' +
                 '<div style="font-size:9.5px;color:#059669;font-weight:700;">Arm 2 Zero Break</div>' +
+              '</div>' +
+            '</div>' +
+            '<div style="margin:10px 0 12px;background:#f0f9ff;padding:10px 14px;border-radius:10px;border:1px solid #e0f2fe;">' +
+              '<div style="display:flex;justify-content:space-between;font-size:11.5px;color:#0369a1;margin-bottom:6px;">' +
+                '<span><i class="ms" style="font-size:13px;color:#0284c7;vertical-align:-2px;">compare_arrows</i> <strong>Arm 2 P-CAB Tegoprazan vs Arm 1 PPI Healing</strong></span>' +
+                '<strong style="color:#059669;">+25.0% Superiority</strong>' +
+              '</div>' +
+              '<div style="display:flex;gap:4px;height:8px;border-radius:999px;overflow:hidden;">' +
+                '<div style="width:62.5%;height:100%;background:#94a3b8;border-radius:999px 0 0 999px;" title="Arm 1 PPI 62.5% Healing"></div>' +
+                '<div style="width:25%;height:100%;background:linear-gradient(90deg, #10b981, #059669);border-radius:0 999px 999px 0;" title="+25% P-CAB Gain (87.5% Total)"></div>' +
+              '</div>' +
+              '<div style="display:flex;justify-content:space-between;font-size:10px;color:#64748b;margin-top:4px;">' +
+                '<span>Arm 1 PPI: 62.5%</span><span style="color:#059669;font-weight:700;">Arm 2 Tegoprazan: 87.5% Mucosal Healing</span>' +
               '</div>' +
             '</div>' +
             '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#f0f9ff;border-radius:10px;font-size:11.5px;color:#0369a1;">' +
@@ -1630,6 +1690,18 @@
                 '<div style="font-size:9.5px;color:#7c3aed;font-weight:700;">Benchmark &ge;85%</div>' +
               '</div>' +
             '</div>' +
+            '<div style="margin:10px 0 12px;background:#fff1f2;padding:10px 14px;border-radius:10px;border:1px solid #ffe4e6;">' +
+              '<div style="display:flex;justify-content:space-between;font-size:11.5px;color:#9f1239;margin-bottom:6px;">' +
+                '<span><i class="ms" style="font-size:13px;color:#e11d48;vertical-align:-2px;">cell_tower</i> <strong>Omnichannel PWA Delivery &amp; Read Rate</strong></span>' +
+                '<strong style="color:#e11d48;">96.8% Success</strong>' +
+              '</div>' +
+              '<div style="height:8px;background:#fecdd3;border-radius:999px;overflow:hidden;">' +
+                '<div style="width:96.8%;height:100%;background:linear-gradient(90deg, #e11d48, #f43f5e);border-radius:999px;"></div>' +
+              '</div>' +
+              '<div style="display:flex;justify-content:space-between;font-size:10px;color:#881337;margin-top:4px;">' +
+                '<span>213 Dispatched</span><span style="color:#059669;font-weight:700;">206 Confirmed Delivered</span><span>96.8% Rate</span>' +
+              '</div>' +
+            '</div>' +
             '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#fff1f2;border-radius:10px;font-size:11.5px;color:#9f1239;">' +
               '<span><i class="ms" style="font-size:13px;vertical-align:-2px;color:#e11d48;">sensors</i> <strong>Telemetry:</strong> PT-41822-01 completed APD reel (Just now)</span>' +
               '<span class="adm-chip adm-chip-active" style="font-size:10px;">Sync OK</span>' +
@@ -1668,6 +1740,22 @@
                 '<div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;">Hash Audit</div>' +
                 '<div style="font-size:18px;font-weight:900;color:#059669;margin-top:2px;">0 Anom</div>' +
                 '<div style="font-size:9.5px;color:#059669;font-weight:700;">Zero Collisions</div>' +
+              '</div>' +
+            '</div>' +
+            '<div style="margin:10px 0 12px;background:#f0fdf4;padding:10px 14px;border-radius:10px;border:1px solid #dcfce7;">' +
+              '<div style="display:flex;justify-content:space-between;font-size:11.5px;color:#166534;margin-bottom:6px;">' +
+                '<span><i class="ms" style="font-size:13px;color:#16a34a;vertical-align:-2px;">hub</i> <strong>12 Study Centers Active Across 5 Provinces</strong></span>' +
+                '<strong style="color:#16a34a;">100% Verified</strong>' +
+              '</div>' +
+              '<div style="display:flex;gap:3px;height:8px;border-radius:999px;overflow:hidden;">' +
+                '<div style="flex:4;background:#10b981;" title="Punjab (4 Hubs)"></div>' +
+                '<div style="flex:3;background:#38bdf8;" title="Sindh (3 Hubs)"></div>' +
+                '<div style="flex:2;background:#818cf8;" title="KPK (2 Hubs)"></div>' +
+                '<div style="flex:2;background:#f59e0b;" title="Balochistan (2 Hubs)"></div>' +
+                '<div style="flex:1;background:#a855f7;" title="Federal Capital (1 Hub)"></div>' +
+              '</div>' +
+              '<div style="display:flex;justify-content:space-between;font-size:10px;color:#15803d;margin-top:4px;">' +
+                '<span>Punjab (4)</span><span>Sindh (3)</span><span>KPK (2)</span><span>Balochistan (2)</span><span>Islamabad (1)</span>' +
               '</div>' +
             '</div>' +
             '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#ecfdf5;border-radius:10px;font-size:11.5px;color:#065f46;">' +
