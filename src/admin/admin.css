@@ -265,7 +265,9 @@ body.admin-body {
   transition: transform 0.28s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.2s ease, width 0.3s ease;
 }
 
-.adm-nav-item {
+.adm-nav-item,
+.adm-nav-item:focus,
+.adm-nav-item:focus-visible {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -283,6 +285,10 @@ body.admin-body {
   white-space: nowrap;
   overflow: hidden;
   box-sizing: border-box;
+  outline: none !important;
+  outline-color: transparent !important;
+  box-shadow: none !important;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .adm-nav-item:hover {
@@ -1458,9 +1464,17 @@ body.admin-body {
    ========================================================================== */
 .adm-grid-2col {
   display: grid;
-  grid-template-columns: 1.6fr 1.2fr;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
   gap: 20px;
   margin-bottom: 24px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.adm-grid-2col > * {
+  min-width: 0 !important;
+  max-width: 100% !important;
 }
 
 .adm-grid-equal {
@@ -2346,6 +2360,7 @@ body.admin-body {
 .lms-dialog-card:has(.adm-search-dropdown.is-open) .lms-dialog-footer *,
 .lms-dialog-card.dropdown-active .lms-dialog-footer * {
   z-index: 1 !important;
+  position: relative !important;
 }
 
 .adm-search-dropdown.is-open {
@@ -2362,9 +2377,16 @@ body.admin-body {
   border: 1.5px solid #cbd5e1 !important;
   border-radius: var(--adm-radius-md) !important;
   box-shadow: 0 20px 48px -4px rgba(11, 23, 39, 0.24), 0 8px 20px rgba(11, 23, 39, 0.12) !important;
-  z-index: 100000 !important;
+  z-index: 1000000 !important;
   display: none;
   max-height: 260px !important;
+}
+
+/* Toast Notifications: Always float above dialog backdrops & modals */
+.snack,
+#snack {
+  z-index: 9999999 !important;
+}
   overflow-y: auto !important;
   overflow: hidden;
   animation: admFadeSlideUp 0.15s ease forwards;
@@ -2478,9 +2500,9 @@ body:has(.adm-drawer.open) {
 }
 
 .adm-search-dropdown-menu.open-upwards {
-  top: auto;
-  bottom: calc(100% + 4px);
-  box-shadow: 0 -20px 48px -4px rgba(11, 23, 39, 0.24), 0 -8px 20px rgba(11, 23, 39, 0.12);
+  top: auto !important;
+  bottom: calc(100% + 4px) !important;
+  box-shadow: 0 -20px 48px -4px rgba(11, 23, 39, 0.24), 0 -8px 20px rgba(11, 23, 39, 0.12) !important;
 }
 
 /* Ensure modal dialog cards stay pinned on screen without scrolling the background page */
@@ -3031,18 +3053,22 @@ body:has(.adm-drawer.open) {
 .adm-list-header-search {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   background: #f8fafc;
   border: 1.5px solid #cbd5e1;
   border-radius: 9999px !important;
-  padding: 0 18px;
-  height: 44px;
-  width: 380px;
+  padding: 0 11px;
+  height: 42px;
+  width: 42px; /* Collapsed pill by default */
+  min-width: 42px;
   max-width: 100%;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  transition: width 0.28s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease, padding 0.2s ease;
   box-sizing: border-box;
   animation: none !important;
+  cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .adm-list-header-search:hover {
@@ -3051,11 +3077,15 @@ body:has(.adm-drawer.open) {
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
 }
 
-.adm-list-header-search:focus-within {
+.adm-list-header-search.is-expanded,
+.adm-list-header-search:focus-within,
+.adm-list-header-search:has(input:not(:placeholder-shown)) {
+  width: 360px;
+  background: #ffffff;
   border-color: #2563eb;
   box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.18), 0 2px 8px rgba(37, 99, 235, 0.08);
-  background: #ffffff;
-  width: 380px;
+  padding: 0 16px;
+  cursor: default;
 }
 
 .adm-list-header-search i {
@@ -3066,10 +3096,17 @@ body:has(.adm-drawer.open) {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   user-select: none;
   pointer-events: none;
+  transition: color 0.2s ease;
+}
+
+.adm-list-header-search.is-expanded i,
+.adm-list-header-search:focus-within i,
+.adm-list-header-search:has(input:not(:placeholder-shown)) i {
+  color: #2563eb;
 }
 
 .adm-list-header-search input,
@@ -3079,19 +3116,29 @@ body:has(.adm-drawer.open) {
   background: transparent !important;
   outline: none !important;
   font-family: inherit !important;
-  font-size: 13.5px !important;
+  font-size: 13px !important;
   font-weight: 500 !important;
   color: var(--adm-ink) !important;
   flex: 1 1 auto !important;
   width: 100% !important;
   min-width: 0 !important;
-  height: 36px !important;
+  height: 38px !important;
   margin: 0 !important;
-  padding: 0 2px 0 0 !important;
-  line-height: 36px !important;
+  padding: 0 !important;
+  line-height: 38px !important;
   box-shadow: none !important;
   -webkit-appearance: none !important;
   appearance: none !important;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease 0.04s;
+}
+
+.adm-list-header-search.is-expanded input,
+.adm-list-header-search:focus-within input,
+.adm-list-header-search:has(input:not(:placeholder-shown)) input {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .adm-list-header-search input::placeholder {
@@ -3102,7 +3149,7 @@ body:has(.adm-drawer.open) {
 }
 
 @media (max-width: 640px) {
-  .adm-list-header-search,
+  .adm-list-header-search.is-expanded,
   .adm-list-header-search:focus-within {
     width: 100%;
     min-width: 0;
@@ -3118,10 +3165,17 @@ body:has(.adm-drawer.open) {
   display: none;
   box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
   animation: admFadeSlideUp 0.2s ease forwards;
+  position: relative !important;
+  z-index: 40 !important;
 }
 
 .adm-collapsible-search-wrap.is-open {
   display: block;
+}
+
+.adm-collapsible-search-wrap:has(.adm-search-dropdown.is-open),
+.adm-collapsible-search-wrap:has(.adm-search-dropdown-btn.is-open) {
+  z-index: 100 !important;
 }
 
 .adm-collapsible-search-grid {
@@ -3397,6 +3451,18 @@ body:has(.adm-drawer.open) {
    ========================================================================== */
 .adm-studio-card {
   padding: 28px 32px;
+  background: #ffffff !important;
+  border: 1.5px solid var(--adm-line, #cbd5e1) !important;
+  border-radius: var(--adm-radius-lg, 18px) !important;
+  box-shadow: none !important;
+  box-sizing: border-box !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+.adm-studio-card div[style*="box-shadow"],
+.adm-studio-card .adm-card {
+  box-shadow: none !important;
 }
 
 .adm-dropzone {
@@ -4251,19 +4317,24 @@ body:has(.adm-drawer.open) {
   font-weight: 500;
   background: #f8fafc;
   color: var(--adm-ink);
-  outline: none;
+  outline: none !important;
+  outline-color: transparent !important;
   box-sizing: border-box;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  -webkit-tap-highlight-color: transparent !important;
 }
 .adm-master-search-input:hover {
   border-color: #94a3b8 !important;
   background: #ffffff !important;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08) !important;
 }
-.adm-master-search-input:focus {
+.adm-master-search-input:focus,
+.adm-master-search-input:focus-visible {
   border-color: #2563eb !important;
   background: #ffffff !important;
+  outline: none !important;
+  outline-color: transparent !important;
   box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.18), 0 2px 8px rgba(37, 99, 235, 0.08) !important;
 }
 
@@ -5017,7 +5088,8 @@ body:has(.adm-drawer.open) {
 .adm-sliding-tab-item,
 .adm-detail-tab-btn,
 .adm-pillar-tab,
-.adm-view-toggle-btn {
+.adm-view-toggle-btn,
+.adm-wizard-step {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -5031,7 +5103,7 @@ body:has(.adm-drawer.open) {
   font-weight: 600 !important;
   cursor: pointer !important;
   text-decoration: none !important;
-  transition: all 0.2s ease !important;
+  transition: all 0.28s cubic-bezier(0.25, 1, 0.5, 1) !important;
   white-space: nowrap !important;
   box-sizing: border-box !important;
   flex-shrink: 0 !important;
@@ -5050,12 +5122,25 @@ body:has(.adm-drawer.open) {
 .adm-sliding-tab-item.active,
 .adm-detail-tab-btn.active,
 .adm-pillar-tab.active,
-.adm-view-toggle-btn.active {
+.adm-view-toggle-btn.active,
+.adm-wizard-step.active {
   background: #2563eb !important;
   color: #ffffff !important;
   box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35) !important;
   font-weight: 700 !important;
   border-radius: 9999px !important;
+  transition: all 0.28s cubic-bezier(0.25, 1, 0.5, 1) !important;
+}
+
+/* Ensure tabs fill unified container symmetrically with no awkward empty voids */
+.adm-uni-tabs .adm-uni-tab-btn,
+.adm-detail-tabs-bar .adm-detail-tab-btn {
+  flex: 1 1 0px !important;
+  min-width: 0 !important;
+}
+
+.adm-tab-text-short {
+  display: none;
 }
 
 .adm-uni-tab-btn.active *,
@@ -5203,6 +5288,25 @@ body:has(.adm-drawer.open) {
 }
 
 @media (max-width: 768px) {
+  .adm-tab-text-full {
+    display: none !important;
+  }
+  .adm-tab-text-short {
+    display: inline !important;
+  }
+  #courseDetailNavRail .adm-chip {
+    display: none !important;
+  }
+  #courseDetailNavRail .adm-uni-tab-btn {
+    flex: 1 1 0px !important;
+    min-width: 0 !important;
+    padding: 6px 6px !important;
+    font-size: 11px !important;
+    gap: 3px !important;
+  }
+  #courseDetailNavRail .adm-uni-tab-btn i {
+    font-size: 14px !important;
+  }
   .adm-uni-tabs,
   .adm-sliding-tabs-track,
   .adm-detail-tabs-bar,
@@ -5685,7 +5789,6 @@ body:has(.adm-drawer.open) {
 .adm-city-card,
 .adm-triage-card-item,
 .adm-course-progress-row,
-.adm-studio-card,
 .adm-module-box,
 .adm-lecture-card,
 .adm-material-item {
