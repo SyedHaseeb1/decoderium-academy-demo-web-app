@@ -542,7 +542,7 @@
     var certCount = Object.keys(ST.progress || {}).reduce(function (n, k) {
       return n + ((ST.progress[k] && ST.progress[k].certs) ? ST.progress[k].certs.length : 0);
     }, 0);
-    return '<div style="margin-bottom:22px;">' +
+    return '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:22px;">' +
       '<div class="adm-uni-tabs" role="tablist" aria-label="LMS Academy Tabs">' +
         '<a href="#lms" class="adm-uni-tab-btn ' + (activeTab === 'overview' ? 'active' : '') + '">' +
           '<i class="ms">space_dashboard</i> Overview' +
@@ -556,6 +556,9 @@
           '<span class="adm-chip ' + (activeTab === 'certificates' ? 'adm-chip-active' : '') + '">' + certCount + ' Issued</span>' +
         '</a>' +
       '</div>' +
+      '<button type="button" class="adm-btn-primary" onclick="openCreateCourseDialog();" style="background:#582be8;border-color:#582be8;font-size:12.5px;padding:8px 18px;border-radius:999px;font-weight:700;display:inline-flex;align-items:center;gap:6px;box-shadow:0 4px 14px rgba(88,43,232,0.28);cursor:pointer;" title="Author and publish a new accredited course">' +
+        '<i class="ms" style="font-size:16px;">add_circle</i> + Create New Course' +
+      '</button>' +
     '</div>';
   }
 
@@ -2695,7 +2698,12 @@
             '<h3 class="adm-section-title" style="display:inline;">Active Learning Curriculum Shelf</h3>' +
             '<p class="adm-section-desc">Accredited clinical courses currently enrolled across 12 Pakistan regional hubs.</p>' +
           '</div>' +
-          '<a href="#courses" class="adm-btn-outline" style="font-size:12px;padding:6px 14px;">View All Courses (' + courses().length + ') &rarr;</a>' +
+          '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">' +
+            '<button type="button" class="adm-btn-primary" onclick="openCreateCourseDialog();" style="background:#582be8;border-color:#582be8;font-size:12px;padding:6px 14px;border-radius:8px;font-weight:700;display:inline-flex;align-items:center;gap:6px;box-shadow:0 4px 12px rgba(88,43,232,0.25);cursor:pointer;">' +
+              '<i class="ms" style="font-size:15px;">add_circle</i> + Create New Course' +
+            '</button>' +
+            '<a href="#courses" class="adm-btn-outline" style="font-size:12px;padding:6px 14px;">View All Courses (' + courses().length + ') &rarr;</a>' +
+          '</div>' +
         '</div>' +
 
         '<div class="adm-course-grid">' +
