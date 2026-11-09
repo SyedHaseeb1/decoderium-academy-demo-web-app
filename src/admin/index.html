@@ -970,8 +970,15 @@
           if (pGrp) pGrp.style.zIndex = '100000';
           var pRow = dd.closest('[style*="grid"]');
           if (pRow) pRow.style.zIndex = '100000';
-          if (dlgBody) dlgBody.classList.add('dropdown-active');
-          if (dlgCard) dlgCard.classList.add('dropdown-active');
+          if (dlgBody) {
+            dlgBody.classList.add('dropdown-active');
+            dlgBody.style.zIndex = '50';
+          }
+          if (dlgCard) {
+            dlgCard.classList.add('dropdown-active');
+            var dlgFooter = dlgCard.querySelector('.lms-dialog-footer');
+            if (dlgFooter) dlgFooter.style.zIndex = '1';
+          }
 
           // Smart auto-flip if near bottom of screen
           var rect = btn.getBoundingClientRect();
@@ -994,8 +1001,15 @@
           if (pGrp) pGrp.style.zIndex = '';
           var pRow = dd.closest('[style*="grid"]');
           if (pRow) pRow.style.zIndex = '';
-          if (dlgBody) dlgBody.classList.remove('dropdown-active');
-          if (dlgCard) dlgCard.classList.remove('dropdown-active');
+          if (dlgBody) {
+            dlgBody.classList.remove('dropdown-active');
+            dlgBody.style.zIndex = '';
+          }
+          if (dlgCard) {
+            dlgCard.classList.remove('dropdown-active');
+            var dlgFooter = dlgCard.querySelector('.lms-dialog-footer');
+            if (dlgFooter) dlgFooter.style.zIndex = '';
+          }
         }
       };
 
@@ -1048,9 +1062,16 @@
           if (pRow) pRow.style.zIndex = '';
 
           var dlgB = dd.closest('.lms-dialog-body');
-          if (dlgB) dlgB.classList.remove('dropdown-active');
+          if (dlgB) {
+            dlgB.classList.remove('dropdown-active');
+            dlgB.style.zIndex = '';
+          }
           var dlgC = dd.closest('.lms-dialog-card');
-          if (dlgC) dlgC.classList.remove('dropdown-active');
+          if (dlgC) {
+            dlgC.classList.remove('dropdown-active');
+            var dlgF = dlgC.querySelector('.lms-dialog-footer');
+            if (dlgF) dlgF.style.zIndex = '';
+          }
 
           var evt = new Event('change', { bubbles: true });
           hiddenInput.dispatchEvent(evt);
@@ -3348,9 +3369,9 @@
       return renderEmptyState('No Patient Records Found', 'No patients matched your active search query or indication filters.', 'Reset Filters');
     }
     return '<div style="background:#ffffff;border-radius:12px;padding:12px 16px;margin-bottom:14px;box-shadow:0 4px 16px -2px rgba(15,23,42,0.06);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;border:1px solid #e2e8f0;">' +
-      '<div style="display:flex;align-items:center;gap:10px;flex:1;max-width:400px;background:#f8fafc;border:1.5px solid #cbd5e1;padding:6px 12px;border-radius:8px;">' +
-        '<i class="ms" style="color:#64748b;font-size:16px;">search</i>' +
-        '<input type="text" id="inpPatientGridSearch" placeholder="Search cohort by patient code, doctor, hospital..." value="' + esc(patientFilters.q) + '" style="border:none;background:transparent;outline:none;font-size:12.5px;width:100%;color:#0f172a;font-weight:600;">' +
+      '<div class="adm-list-header-search" style="flex:1;max-width:440px;">' +
+        '<i class="ms">search</i>' +
+        '<input type="text" id="inpPatientGridSearch" placeholder="Search cohort by patient code, doctor, hospital..." value="' + esc(patientFilters.q) + '" autocomplete="off">' +
       '</div>' +
       '<div style="font-size:12px;color:#64748b;font-weight:700;">Showing <strong>' + filteredPatients.length + '</strong> Clinical Records</div>' +
     '</div>' +
@@ -3493,9 +3514,9 @@
     }
     return '<div class="adm-card" style="padding:16px 20px;border-radius:16px;background:#ffffff;margin-bottom:24px;box-shadow:0 10px 30px -4px rgba(15,23,42,0.08);border:1px solid #e2e8f0;">' +
       '<div style="background:#ffffff;border-radius:12px;padding:12px 16px;margin-bottom:14px;box-shadow:0 2px 10px -2px rgba(15,23,42,0.04);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;border:1px solid #e2e8f0;">' +
-        '<div style="display:flex;align-items:center;gap:10px;flex:1;max-width:420px;background:#f8fafc;border:1.5px solid #cbd5e1;padding:6px 12px;border-radius:8px;">' +
-          '<i class="ms" style="color:#64748b;font-size:16px;">search</i>' +
-          '<input type="text" id="inpPatientTableSearch" placeholder="Search cohort by patient code, doctor, hospital..." value="' + esc(patientFilters.q) + '" style="border:none;background:transparent;outline:none;font-size:12.5px;width:100%;color:#0f172a;font-weight:600;">' +
+        '<div class="adm-list-header-search" style="flex:1;max-width:440px;">' +
+          '<i class="ms">search</i>' +
+          '<input type="text" id="inpPatientTableSearch" placeholder="Search cohort by patient code, doctor, hospital..." value="' + esc(patientFilters.q) + '" autocomplete="off">' +
         '</div>' +
         '<div style="font-size:12px;color:#64748b;font-weight:700;">Showing <strong>' + filteredPatients.length + '</strong> Clinical Records</div>' +
       '</div>' +
@@ -4924,9 +4945,9 @@
 
     return '<div class="adm-card" style="padding:16px 20px;border-radius:16px;background:#ffffff;margin-bottom:24px;box-shadow:0 10px 30px -4px rgba(15,23,42,0.08);border:1px solid #e2e8f0;">' +
       '<div style="background:#ffffff;border-radius:12px;padding:12px 16px;margin-bottom:14px;box-shadow:0 2px 10px -2px rgba(15,23,42,0.04);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;border:1px solid #e2e8f0;">' +
-        '<div style="display:flex;align-items:center;gap:10px;flex:1;max-width:420px;background:#f8fafc;border:1.5px solid #cbd5e1;padding:6px 12px;border-radius:8px;">' +
-          '<i class="ms" style="color:#64748b;font-size:16px;">search</i>' +
-          '<input type="text" id="inpDocTableSearch" placeholder="Search doctor by name, PMDC, city, hospital..." value="' + esc(docFilterState.q) + '" style="border:none;background:transparent;outline:none;font-size:12.5px;width:100%;color:#0f172a;font-weight:600;">' +
+        '<div class="adm-list-header-search" style="flex:1;max-width:440px;">' +
+          '<i class="ms">search</i>' +
+          '<input type="text" id="inpDocTableSearch" placeholder="Search doctor by name, PMDC, city, hospital..." value="' + esc(docFilterState.q) + '" autocomplete="off">' +
         '</div>' +
         '<div style="font-size:12px;color:#64748b;font-weight:700;">Showing <strong>' + filtered.length + '</strong> Doctors</div>' +
       '</div>' +
@@ -7643,7 +7664,7 @@
             '</div>' +
 
             '<!-- DISTINCT ACTIVE MODULE STAGE CONTAINER -->' +
-            '<div class="adm-card" style="padding:26px;border-radius:20px;background:#ffffff;box-shadow:0 12px 32px -4px rgba(15,23,42,0.12),0 4px 12px -2px rgba(15,23,42,0.08);border:none;margin-bottom:24px;">' +
+            '<div style="padding:22px;border-radius:16px;background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:24px;">' +
               '<div class="neo-card-head" style="margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #f1f5f9;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">' +
                 '<div>' +
                   '<span class="adm-chip adm-chip-violet" style="font-weight:700;">ACTIVE MODULE ' + (currentModIdx + 1) + ' OF ' + studioCourse.modules.length + '</span>' +
@@ -10844,6 +10865,9 @@
     document.querySelectorAll('input[name="setPatientView"]').forEach(function (r) {
       r.checked = (r.value === mode);
     });
+    if (window.location.hash.indexOf('#patients') === 0 && typeof renderRoute === 'function') {
+      renderRoute('#patients');
+    }
   };
 
   window.setGlobalDocViewMode = function (mode) {
@@ -10853,6 +10877,9 @@
     document.querySelectorAll('input[name="setDocView"]').forEach(function (r) {
       r.checked = (r.value === mode);
     });
+    if (window.location.hash.indexOf('#doctors') === 0 && typeof renderRoute === 'function') {
+      renderRoute('#doctors');
+    }
   };
 
   window.openCreateCourseDialog = openCreateCourseDialog;
