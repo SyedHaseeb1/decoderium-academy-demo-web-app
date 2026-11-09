@@ -793,23 +793,33 @@ function assignCourse(courseId, target) {
     matched = allDocs.filter(function (d) { return d.id === target.doctorId; });
   } else if (target && (target.mode === 'zone' || target.mode === 'region')) {
     var zoneVal = String(target.zoneId || target.zone || target.city || '').trim().toLowerCase();
+    var zObj = (typeof zone === 'function' ? zone(target.zoneId) : null);
+    var zCities = (zObj && zObj.cities) ? (Array.isArray(zObj.cities) ? zObj.cities : String(zObj.cities).split(',')).map(function (x) { return String(x).trim().toLowerCase(); }) : [];
     matched = allDocs.filter(function (d) {
+      var dCity = String(d.city || '').trim().toLowerCase();
+      var dHosp = String(d.hospital || '').toLowerCase();
       return (d.zoneId && String(d.zoneId).toLowerCase() === zoneVal) ||
              (d.zone && String(d.zone).toLowerCase().indexOf(zoneVal) > -1) ||
-             (d.city && String(d.city).trim().toLowerCase() === zoneVal);
+             (dCity && (dCity === zoneVal || zCities.indexOf(dCity) > -1)) ||
+             (zObj && zObj.leadHospital && dHosp.indexOf(String(zObj.leadHospital).toLowerCase()) > -1) ||
+             (zObj && zObj.name && String(d.zone || '').toLowerCase().indexOf(String(zObj.name).toLowerCase()) > -1);
     });
   } else if (target && target.mode === 'specialty') {
     var specQuery = String(target.specialty || '').trim().toLowerCase();
-    matched = allDocs.filter(function (d) {
-      return String(d.speciality || '').toLowerCase().indexOf(specQuery) > -1;
-    });
+    if (specQuery === 'all' || !specQuery) {
+      matched = allDocs;
+    } else {
+      matched = allDocs.filter(function (d) {
+        return String(d.speciality || '').toLowerCase().indexOf(specQuery) > -1;
+      });
+    }
   } else if (target && target.mode === 'all') {
     matched = allDocs;
   } else if (typeof target === 'string') {
     matched = allDocs.filter(function (d) { return d.id === target; });
   }
 
-  if (matched.length === 0) return { success: false, error: 'No matching active doctors found.' };
+  if (matched.length === 0) return { success: false, error: 'No matching active doctors found for the selected scope.' };
 
   var nowIso = new Date().toISOString().slice(0, 10);
   var newCount = 0;
@@ -822,6 +832,11 @@ function assignCourse(courseId, target) {
     }
     if (c.assignedDoctors.indexOf(d.id) === -1) {
       c.assignedDoctors.push(d.id);
+    }
+    var prog = progressOf(d.id);
+    prog.assignedCourses = prog.assignedCourses || [];
+    if (prog.assignedCourses.indexOf(courseId) === -1) {
+      prog.assignedCourses.push(courseId);
     }
     d.courseNotifications = d.courseNotifications || [];
     d.courseNotifications.unshift({

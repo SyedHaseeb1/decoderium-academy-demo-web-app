@@ -4616,11 +4616,19 @@
         }
 
         var assigned = assignCourse(cId, targetPayload);
+        if (!assigned || !assigned.success) {
+          snack('⚠️ Assignment notice: ' + (assigned ? assigned.error : 'Could not assign course.'));
+          return false;
+        }
         var docCount = (assigned && typeof assigned.count === 'number') ? assigned.count : ((assigned && assigned.doctors) ? assigned.doctors.length : 1);
-        snack('✓ Course successfully assigned to ' + docCount + ' doctor(s) in ' + targetLabel + '!');
+        snack('✓ Masterclass assigned to ' + docCount + ' doctor(s) in ' + targetLabel + '!');
         if (location.hash.indexOf('#doctors') > -1) viewDoctorList();
         else if (location.hash.indexOf('#zones') > -1) viewZonesDashboard();
-        else if (location.hash.indexOf('#courses') > -1) viewCourseList();
+        else if (location.hash.indexOf('#courses/') > -1) {
+          var activeCid = location.hash.split('#courses/')[1].split('?')[0];
+          viewCourseDetail(activeCid);
+        } else if (location.hash.indexOf('#courses') > -1) viewCourseList();
+        else if (location.hash.indexOf('#lms') > -1) viewLmsDashboard();
       }
     });
 
