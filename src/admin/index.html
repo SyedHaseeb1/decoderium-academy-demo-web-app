@@ -3729,9 +3729,6 @@
           '<h1 class="adm-hero-title"><i class="ms" style="color:#e11d48;font-size:30px;">notifications_active</i> Patient Broadcasts & Notification Center</h1>' +
           '<p class="adm-hero-subtitle">Broadcast video guidance reels, automated post-treatment checkups, adherence alerts, and monitor real-time PWA push delivery across all 48 trial patients.</p>' +
         '</div>' +
-        '<div class="adm-hero-actions">' +
-          '<button type="button" class="adm-btn-primary" id="btnCreateBroadcast" style="background:#e11d48;border-color:#e11d48;"><i class="ms">campaign</i> + Create New Broadcast</button>' +
-        '</div>' +
       '</div>' +
 
       '<!-- Broadcast Performance Telemetry Shelf -->' +
@@ -3777,104 +3774,43 @@
         '</div>' +
       '</div>' +
 
-      '<!-- Scrollable Vertical Pillar Chart: Broadcast Campaign Performance by Template -->' +
-      '<div class="adm-card" style="box-shadow:0 8px 24px -2px rgba(15,23,42,0.08), 0 2px 6px -1px rgba(15,23,42,0.04);border:none;margin-bottom:24px;">' +
-        '<div class="adm-card-head" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">' +
+      '<!-- Section 1: Standardized Clinical Broadcast Campaigns & Protocol Library -->' +
+      '<div class="adm-section" style="margin-bottom:28px;">' +
+        '<div class="adm-section-head" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:18px;">' +
           '<div>' +
-            '<h3 class="adm-card-title" style="font-size:16px;font-weight:800;color:var(--adm-ink);display:flex;align-items:center;gap:8px;">' +
-              '<i class="ms" style="color:#e11d48;font-size:20px;">insights</i> Broadcast Campaign Performance by Template' +
-            '</h3>' +
-            '<p style="font-size:12px;color:var(--adm-slate);margin:2px 0 0;">Open, delivery, and video completion rate across clinical message templates (Scroll horizontally for full data)</p>' +
+            '<h3 class="adm-section-title" style="margin:0;font-size:18px;font-weight:800;color:#0f172a;"><i class="ms" style="color:#e11d48;margin-right:8px;vertical-align:-2px;font-size:22px;">campaign</i> Clinical Broadcast Campaigns &amp; Protocol Library</h3>' +
+            '<p class="adm-section-desc" style="margin:4px 0 0;">Standardized clinical message protocols with attached procedural video reels, targeted cohorts, and automated delivery telemetry.</p>' +
           '</div>' +
-          '<span class="adm-chip adm-chip-cyan" style="font-size:11px;">8 Clinical Templates Active</span>' +
+          '<button type="button" class="adm-btn-primary" id="btnCreateBroadcast" style="background:#e11d48;border-color:#e11d48;font-weight:700;display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:10px;box-shadow:0 4px 14px rgba(225,29,72,0.25);">' +
+            '<i class="ms" style="font-size:16px;">add</i> + Create New Broadcast' +
+          '</button>' +
         '</div>' +
-        '<div class="neo-vbar-container">' +
-          '<div class="neo-vbar-stage" style="height:210px;">' +
-            '<div class="neo-vbar-gate-line" style="bottom:150px;border-top-color:rgba(225,29,72,0.45);">' +
-              '<span class="neo-vbar-gate-label" style="color:#e11d48;background:#fff1f2;border-color:rgba(225,29,72,0.3);"><i class="ms" style="font-size:12px;">speed</i> 85% Benchmark Gate</span>' +
-            '</div>' +
-            '<div class="neo-vbar-scroll-track" style="gap:18px;padding:48px 16px 8px;">' +
-              '<div class="neo-vbar-col" onclick=\"openNotificationComposerModal(&apos;tmpl-1&apos;);\" title="Click to launch Day-3 Checkup" style="cursor:pointer;">' +
-                '<div class="neo-vbar-tooltip"><strong>Day-3 Video Checkup</strong><span>89% Watched · 98% Delivered</span></div>' +
-                '<div class="neo-vbar-badge" style="color:#e11d48;">89%</div>' +
-                '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-rose" style="height:89%;"></div></div>' +
-                '<div class="neo-vbar-label"><strong>Day-3</strong><span>Video Reel</span></div>' +
-              '</div>' +
-              '<div class="neo-vbar-col" onclick=\"openNotificationComposerModal(&apos;tmpl-2&apos;);\" title="Click to launch GERD-Q Survey" style="cursor:pointer;">' +
-                '<div class="neo-vbar-tooltip"><strong>Day-7 GERD-Q</strong><span>85% Completed · 95% Delivered</span></div>' +
-                '<div class="neo-vbar-badge" style="color:var(--adm-cyan);">85%</div>' +
-                '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-cyan" style="height:85%;"></div></div>' +
-                '<div class="neo-vbar-label"><strong>GERD-Q</strong><span>Survey</span></div>' +
-              '</div>' +
-              '<div class="neo-vbar-col" onclick=\"openNotificationComposerModal(&apos;tmpl-3&apos;);\" title="Click to launch Medication Reminder" style="cursor:pointer;">' +
-                '<div class="neo-vbar-tooltip"><strong>Medication Adherence</strong><span>93% Acknowledged · Daily Push</span></div>' +
-                '<div class="neo-vbar-badge" style="color:var(--adm-emerald);">93%</div>' +
-                '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-emerald" style="height:93%;"></div></div>' +
-                '<div class="neo-vbar-label"><strong>Daily Meds</strong><span>Adherence</span></div>' +
-              '</div>' +
-              '<div class="neo-vbar-col" onclick=\"openNotificationComposerModal(&apos;tmpl-4&apos;);\" title="Click to launch Diet Reel" style="cursor:pointer;">' +
-                '<div class="neo-vbar-tooltip"><strong>Diet & Lifestyle</strong><span>78% Watched · 30s Reel</span></div>' +
-                '<div class="neo-vbar-badge" style="color:var(--adm-primary);">78%</div>' +
-                '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-violet" style="height:78%;"></div></div>' +
-                '<div class="neo-vbar-label"><strong>Diet</strong><span>Guidance</span></div>' +
-              '</div>' +
-              '<div class="neo-vbar-col" onclick="openNotificationComposerModal(null);" title="Click to launch Lifestyle Push" style="cursor:pointer;">' +
-                '<div class="neo-vbar-tooltip"><strong>Lifestyle & Sleep</strong><span>82% Watched · Evening Push</span></div>' +
-                '<div class="neo-vbar-badge" style="color:#2563eb;">82%</div>' +
-                '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-blue" style="height:82%;"></div></div>' +
-                '<div class="neo-vbar-label"><strong>Sleep</strong><span>Posture</span></div>' +
-              '</div>' +
-              '<div class="neo-vbar-col" onclick="openNotificationComposerModal(null);" title="Click to launch Reflux Checklist" style="cursor:pointer;">' +
-                '<div class="neo-vbar-tooltip"><strong>Trigger Checklist</strong><span>91% Completed · Clinical Leaflet</span></div>' +
-                '<div class="neo-vbar-badge" style="color:var(--adm-emerald);">91%</div>' +
-                '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-emerald" style="height:91%;"></div></div>' +
-                '<div class="neo-vbar-label"><strong>Triggers</strong><span>Checklist</span></div>' +
-              '</div>' +
-              '<div class="neo-vbar-col" onclick="openNotificationComposerModal(null);" title="Click to launch Post-Trial Exit" style="cursor:pointer;">' +
-                '<div class="neo-vbar-tooltip"><strong>Post-Trial Exit</strong><span>74% Response · 14-Day Endpoint</span></div>' +
-                '<div class="neo-vbar-badge" style="color:#e11d48;">74%</div>' +
-                '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-rose" style="height:74%;"></div></div>' +
-                '<div class="neo-vbar-label"><strong>Exit</strong><span>Evaluation</span></div>' +
-              '</div>' +
-              '<div class="neo-vbar-col" onclick="openNotificationComposerModal(null);" title="Click to launch Follow-up Alert" style="cursor:pointer;">' +
-                '<div class="neo-vbar-tooltip"><strong>Doctor Follow-up</strong><span>96% Confirmed · SMS + Push</span></div>' +
-                '<div class="neo-vbar-badge" style="color:var(--adm-emerald);">96%</div>' +
-                '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-emerald" style="height:96%;"></div></div>' +
-                '<div class="neo-vbar-label"><strong>Consult</strong><span>Booking</span></div>' +
-              '</div>' +
-            '</div>' +
-          '</div>' +
-        '</div>' +
-      '</div>' +
 
-        '<div class="adm-section-head">' +
-          '<div>' +
-            '<h3 class="adm-section-title"><i class="ms" style="color:var(--adm-primary);margin-right:6px;">folder_special</i> Clinical Broadcast Templates & Campaign Library</h3>' +
-            '<p class="adm-section-desc">Standardized clinical communication templates with attached procedural videos, target criteria, and historical open/watch analytics.</p>' +
-          '</div>' +
-        '</div>' +
-        '<div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:16px;">' +
+        '<div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:18px;">' +
           broadcastTemplates.map(function (tmpl) {
-            return '<div class="adm-card" style="padding:16px;display:flex;flex-direction:column;justify-content:space-between;border-top:3px solid var(--adm-primary);">' +
+            return '<div class="adm-card" style="padding:18px;border-radius:16px;display:flex;flex-direction:column;justify-content:space-between;border:1px solid #e2e8f0;background:#ffffff;box-shadow:0 4px 16px -2px rgba(15,23,42,0.06);transition:transform 0.15s ease, box-shadow 0.15s ease;">' +
               '<div>' +
-                '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:8px;">' +
-                  '<span class="adm-chip adm-chip-cyan" style="font-size:10.5px;">' + esc(tmpl.category) + '</span>' +
-                  (tmpl.videoUrl ? '<span class="adm-chip adm-chip-violet" style="font-size:10px;"><i class="ms" style="font-size:11px;">videocam</i> Video Attached</span>' : '<span style="font-size:10px;color:var(--adm-slate);">Text / SMS</span>') +
+                '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px;">' +
+                  '<span class="adm-chip adm-chip-cyan" style="font-size:10px;font-weight:800;letter-spacing:0.5px;text-transform:uppercase;">' + esc(tmpl.category) + '</span>' +
+                  (tmpl.videoUrl ? '<span class="adm-chip adm-chip-violet" style="font-size:10.5px;font-weight:700;"><i class="ms" style="font-size:12px;vertical-align:-2px;">smart_display</i> Video Attached</span>' : '<span style="font-size:10.5px;color:#64748b;font-weight:600;"><i class="ms" style="font-size:11px;vertical-align:-1px;">chat</i> Web Push</span>') +
                 '</div>' +
-                '<strong style="font-size:13.5px;color:var(--adm-ink);line-height:1.4;display:block;margin-bottom:6px;">' + esc(tmpl.title) + '</strong>' +
-                '<p style="font-size:12px;color:var(--adm-slate);line-height:1.5;margin:0 0 12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">' + esc(tmpl.message) + '</p>' +
-                '<div style="font-size:11px;color:var(--adm-slate);margin-bottom:12px;background:var(--adm-canvas);padding:6px 10px;border-radius:6px;border:1px solid var(--adm-line);">' +
-                  'Target: <strong>' + esc(tmpl.audience) + '</strong>' +
+                '<h4 style="font-size:15px;font-weight:800;color:#0f172a;line-height:1.4;margin:0 0 8px;">' + esc(tmpl.title) + '</h4>' +
+                '<p style="font-size:12.5px;color:#475569;line-height:1.55;margin:0 0 14px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">' + esc(tmpl.message) + '</p>' +
+                '<div style="display:flex;align-items:center;gap:6px;font-size:11.5px;color:#0284c7;background:#f0f9ff;padding:6px 10px;border-radius:8px;margin-bottom:14px;font-weight:600;">' +
+                  '<i class="ms" style="font-size:14px;">groups</i> Target: <strong>' + esc(tmpl.audience) + '</strong>' +
                 '</div>' +
               '</div>' +
               '<div>' +
-                '<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--adm-slate);padding:8px 0;border-top:1px dashed var(--adm-line);border-bottom:1px dashed var(--adm-line);margin-bottom:12px;">' +
-                  '<span>Sent: <strong>' + tmpl.sentCount + '</strong></span>' +
-                  '<span>Delivered: <strong style="color:var(--adm-emerald);">' + tmpl.deliveredRate + '</strong></span>' +
-                  '<span>Watched: <strong style="color:var(--adm-primary);">' + tmpl.openedRate + '</strong></span>' +
+                '<div style="background:#f8fafc;border-radius:10px;padding:10px 12px;margin-bottom:14px;border:1px solid #f1f5f9;">' +
+                  '<div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px;">' +
+                    '<span>Dispatched: ' + tmpl.sentCount + '</span>' +
+                    '<span style="color:#059669;">Delivered: ' + tmpl.deliveredRate + '</span>' +
+                    '<span style="color:#7c3aed;">Watched: ' + tmpl.openedRate + '</span>' +
+                  '</div>' +
+                  '<div class="adm-progress-bar-bg" style="height:5px;"><div class="adm-progress-bar-fill" style="width:' + (parseInt(tmpl.deliveredRate) || 90) + '%;background:linear-gradient(90deg, #38bdf8, #059669);"></div></div>' +
                 '</div>' +
-                '<button type="button" class="adm-btn-primary" data-dispatch-template="' + tmpl.id + '" style="width:100%;font-size:12px;padding:6px 12px;gap:6px;justify-content:center;">' +
-                  '<i class="ms" style="font-size:14px;">send</i> Dispatch Template' +
+                '<button type="button" class="adm-btn-primary" data-dispatch-template="' + tmpl.id + '" style="width:100%;font-size:12px;padding:8px 14px;gap:6px;justify-content:center;background:#e11d48;border-color:#e11d48;font-weight:700;border-radius:8px;">' +
+                  '<i class="ms" style="font-size:15px;">send</i> Dispatch to Cohort' +
                 '</button>' +
               '</div>' +
             '</div>';
