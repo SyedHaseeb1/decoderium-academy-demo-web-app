@@ -2694,7 +2694,7 @@
           pubCourses.map(function (c, cidx) {
             var avg = progList.length ? Math.round(progList.reduce(function (n, p) { return n + RULES.percent(c, p); }, 0) / progList.length) : 0;
             var mentor = facultyMentors[cidx % facultyMentors.length];
-            return '<div class="adm-course-card">' +
+            return '<div class="adm-course-card" onclick="location.hash=\'#courses/' + c.id + '\';" style="cursor:pointer;" title="Click to inspect ' + esc(c.title) + ' syllabus">' +
               '<div class="adm-course-thumb">' +
                 courseThumbSvg(c, false) +
                 '<div class="adm-thumb-badge-top">' +
@@ -2725,9 +2725,11 @@
                     '<div style="font-size:10.5px;color:var(--adm-slate);">' + esc(mentor.spec) + '</div>' +
                   '</div>' +
                 '</div>' +
-                '<div class="adm-course-card-actions">' +
-                  '<a href="#courses/' + c.id + '" class="adm-btn-action" style="background:var(--adm-primary-soft);color:var(--adm-primary);border-color:var(--adm-ring);font-weight:800;">Inspect Syllabus &rarr;</a>' +
-                  '<a href="#courses/' + c.id + '" class="adm-btn-action" style="font-size:12px;">Preview Video</a>' +
+                '<div class="adm-course-card-actions" onclick="event.stopPropagation();">' +
+                  '<a href="#courses/' + c.id + '" class="adm-btn-action" style="flex:1;background:var(--adm-primary-soft);color:var(--adm-primary);border-color:var(--adm-ring);font-weight:800;text-align:center;">Inspect Syllabus &rarr;</a>' +
+                  '<button type="button" class="adm-btn-action" onclick="openAssignCourseModal(\'' + c.id + '\', null);" style="flex:1;background:#7c3aed;color:#ffffff;border-color:#7c3aed;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:4px;" title="Assign ' + esc(c.title) + ' to doctor, zone, or specialty">' +
+                    '<i class="ms" style="font-size:13px;">school</i> Assign To...' +
+                  '</button>' +
                 '</div>' +
               '</div>' +
             '</div>';
