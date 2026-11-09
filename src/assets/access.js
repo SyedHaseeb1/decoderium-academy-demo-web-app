@@ -62,12 +62,96 @@ function seedCourse(p, course, passed, r, frac) {
   if (RULES.courseComplete(course, p)) seedCert(p, course, between(r, 1, 20));
 }
 
+function getZoneForCity(city) {
+  var c = String(city || '').toLowerCase().trim();
+  if (c.indexOf('islamabad') > -1 || c.indexOf('rawalpindi') > -1 || c.indexOf('peshawar') > -1) return 'z-north';
+  if (c.indexOf('lahore') > -1 || c.indexOf('faisalabad') > -1 || c.indexOf('gujranwala') > -1 || c.indexOf('sialkot') > -1) return 'z-central';
+  if (c.indexOf('karachi') > -1 || c.indexOf('hyderabad') > -1) return 'z-south';
+  if (c.indexOf('quetta') > -1) return 'z-west';
+  if (c.indexOf('multan') > -1 || c.indexOf('bahawalpur') > -1) return 'z-south-punjab';
+  return 'z-central';
+}
+
+function seedInitialZones() {
+  return [
+    {
+      id: 'z-north',
+      name: 'North Zone - Islamabad & KPK',
+      code: 'ZONE-NORTH',
+      region: 'North',
+      leadHospital: 'Federal General Hospital',
+      cities: ['Islamabad', 'Rawalpindi', 'Peshawar'],
+      coordinator: 'Dr. Ayesha Khan',
+      coordinatorEmail: 'ayesha.khan@example.com',
+      targetEnrollment: 60,
+      activeStatus: 'active',
+      description: 'Capital territory, Potohar plateau, and Khyber Pakhtunkhwa clinical network.'
+    },
+    {
+      id: 'z-central',
+      name: 'Central Zone - Lahore & Punjab Hubs',
+      code: 'ZONE-CENTRAL',
+      region: 'Central',
+      leadHospital: 'Lahore Medical Centre',
+      cities: ['Lahore', 'Faisalabad', 'Gujranwala', 'Sialkot'],
+      coordinator: 'Dr. Bilal Ahmed',
+      coordinatorEmail: 'bilal.ahmed@example.com',
+      targetEnrollment: 100,
+      activeStatus: 'active',
+      description: 'Central Punjab high-density tertiary gastro & endoscopy research clusters.'
+    },
+    {
+      id: 'z-south',
+      name: 'South Zone - Karachi & Sindh',
+      code: 'ZONE-SOUTH',
+      region: 'South',
+      leadHospital: 'Karachi Heart Clinic & Civil Hospital',
+      cities: ['Karachi', 'Hyderabad'],
+      coordinator: 'Dr. Hina Siddiqui',
+      coordinatorEmail: 'hina.siddiqui@example.com',
+      targetEnrollment: 80,
+      activeStatus: 'active',
+      description: 'Metropolitan Karachi and Lower Sindh multi-centre trial network.'
+    },
+    {
+      id: 'z-west',
+      name: 'West Zone - Quetta & Balochistan',
+      code: 'ZONE-WEST',
+      region: 'West',
+      leadHospital: 'Civil Hospital Quetta',
+      cities: ['Quetta'],
+      coordinator: 'Dr. Rabia Noor',
+      coordinatorEmail: 'rabia.noor@example.com',
+      targetEnrollment: 30,
+      activeStatus: 'active',
+      description: 'Western provincial healthcare facilities and regional tertiary referral centers.'
+    },
+    {
+      id: 'z-south-punjab',
+      name: 'South Punjab Zone - Multan & Bahawalpur',
+      code: 'ZONE-SPUNJAB',
+      region: 'South Punjab',
+      leadHospital: 'Malik Family Clinic & Victoria Hospital',
+      cities: ['Multan', 'Bahawalpur'],
+      coordinator: 'Dr. Sana Malik',
+      coordinatorEmail: 'sana.malik@example.com',
+      targetEnrollment: 45,
+      activeStatus: 'active',
+      description: 'Southern agricultural belt and specialized APD patient cohorts.'
+    }
+  ];
+}
+
 function newState() {
   var frac = ACADEMY_DATA.settings.lectureCompleteFraction;
+  var initialZones = seedInitialZones();
   var doctors = ACADEMY_DATA.doctors.doctors.map(function (d) {
     var o = JSON.parse(JSON.stringify(d)); o.joinedOn = isoDaysAgo(d.joinedDaysAgo); delete o.joinedDaysAgo;
     o.assignedCourses = o.assignedCourses || (COURSES[0] ? [COURSES[0].id] : []);
     o.courseNotifications = o.courseNotifications || [];
+    o.zoneId = getZoneForCity(o.city);
+    var zObj = initialZones.filter(function (z) { return z.id === o.zoneId; })[0];
+    o.zone = zObj ? zObj.name : 'Central Zone - Lahore & Punjab Hubs';
     return o;
   });
   var progress = {};
@@ -93,7 +177,7 @@ function newState() {
     if (between(r, 0, 3) > 0) seedCourse(progress[d.id], c2, between(r, 0, 4), r, frac);
   });
   var s = ACADEMY_DATA.settings;
-  return { v: 2, doctors: doctors, progress: progress, published: {}, settings: { quiz: JSON.parse(JSON.stringify(s.quiz)), certificate: JSON.parse(JSON.stringify(s.certificate)) }, activeQuiz: null, courses: COURSES, patients: seedInitialPatients() };
+  return { v: 2, doctors: doctors, progress: progress, published: {}, settings: { quiz: JSON.parse(JSON.stringify(s.quiz)), certificate: JSON.parse(JSON.stringify(s.certificate)) }, activeQuiz: null, courses: COURSES, patients: seedInitialPatients(), zones: initialZones };
 }
 
 function seedInitialPatients() {
@@ -185,6 +269,16 @@ function loadState() {
   if (!ST.patients || !ST.patients.length || !ST.patients[0].hasOwnProperty('pwaInstalled')) {
     ST.patients = seedInitialPatients();
   }
+  if (!ST.zones || !ST.zones.length) {
+    ST.zones = seedInitialZones();
+  }
+  (ST.doctors || []).forEach(function (d) {
+    if (!d.zoneId) {
+      d.zoneId = getZoneForCity(d.city);
+    }
+    var zObj = (ST.zones || []).filter(function (z) { return z.id === d.zoneId; })[0];
+    d.zone = zObj ? zObj.name : (d.zone || 'Central Zone - Lahore & Punjab Hubs');
+  });
   applyPublished();
 }
 function resetDemo() { try { localStorage.removeItem(STATE_KEY); } catch (e) { } loadState(); saveState(); }
@@ -283,21 +377,21 @@ function signOut(loginUrl) {
 }
 
 function startDoctorPreview(doctorId, redirectUrl) {
-  // Retain Super Admin session without logging in as Dr. Ayesha
+  // Retain Super Admin session in sandboxed read-only preview without touching doctor accounts
   ssSet('academy_auth', '1');
   ssSet('academy_role', 'admin');
   ssSet('academy_name', 'Executive Admin');
   ssSet('academy_doctor', '');
   ssSet('academy_admin_preview', '1');
-  ssSet('academy_eval_mode', 'doctor_preview');
+  ssSet('academy_eval_mode', 'sandbox_preview');
 
-  var target = redirectUrl || '../courses/';
+  var target = redirectUrl || '../lecture/?mode=sandbox_preview';
   var sep = target.indexOf('?') > -1 ? '&' : '?';
   var hashIdx = target.indexOf('#');
   if (hashIdx > -1) {
-    target = target.slice(0, hashIdx) + sep + 'preview=1' + target.slice(hashIdx);
+    target = target.slice(0, hashIdx) + sep + 'mode=sandbox_preview' + target.slice(hashIdx);
   } else {
-    target = target + sep + 'preview=1';
+    target = target + sep + 'mode=sandbox_preview';
   }
   window.open(target, '_blank');
 }
@@ -309,6 +403,7 @@ function returnToAdminConsole(targetRoute) {
   ssSet('academy_doctor', '');
   ssSet('academy_name', ad.name);
   ssSet('academy_admin_preview', '');
+  ssSet('academy_eval_mode', '');
   try { localStorage.removeItem('academy_admin_preview'); } catch (e) { }
   try { sessionStorage.removeItem('academy_admin_preview'); } catch (e) { }
   location.href = '../admin/' + (targetRoute || '#courses') + '?eval_demo=admin';
@@ -425,6 +520,9 @@ function addDoctor(d) {
   if (ST.doctors.some(function (x) { return x.email.toLowerCase() === d.email.toLowerCase(); })) return 'A doctor with this email already exists.';
   if (ST.doctors.some(function (x) { return x.pmdcId.toLowerCase() === d.pmdcId.toLowerCase(); })) return 'A doctor with this PMDC ID already exists.';
   d.id = 'd' + (ST.doctors.length + 1) + Math.random().toString(36).slice(2, 5); d.active = true; d.joinedOn = isoDaysAgo(0);
+  if (!d.zoneId) d.zoneId = getZoneForCity(d.city);
+  var zObj = (ST.zones || []).filter(function (z) { return z.id === d.zoneId; })[0];
+  if (!d.zone) d.zone = zObj ? zObj.name : 'Central Zone - Lahore & Punjab Hubs';
   ST.doctors.push(d); progressOf(d.id); saveState();
   return '';
 }
@@ -433,6 +531,10 @@ function updateDoctor(id, updates) {
   var d = ST.doctors.filter(function (x) { return x.id === id; })[0];
   if (!d) return 'Doctor not found.';
   Object.keys(updates || {}).forEach(function (k) { d[k] = updates[k]; });
+  if (updates.zoneId && !updates.zone) {
+    var zObj = (ST.zones || []).filter(function (z) { return z.id === updates.zoneId; })[0];
+    if (zObj) d.zone = zObj.name;
+  }
   saveState();
   return '';
 }
@@ -613,6 +715,56 @@ function deletePatient(id) {
   return false;
 }
 
+/* ---- Regional Clinical Trial Zones ---- */
+function zones() {
+  if (!ST.zones || !ST.zones.length) {
+    ST.zones = seedInitialZones();
+    try { saveState(); } catch (e) { }
+  }
+  return ST.zones || [];
+}
+function zone(id) { return (ST.zones || []).filter(function (z) { return z.id === id; })[0] || null; }
+function addZone(z) {
+  if (!z.id) z.id = 'z-' + (z.code ? z.code.toLowerCase().replace(/[^a-z0-9]/g, '-') : Date.now());
+  if ((ST.zones || []).some(function (x) { return x.id === z.id || x.name.toLowerCase() === z.name.toLowerCase(); })) {
+    return 'A zone with this name or code already exists.';
+  }
+  z.targetEnrollment = parseInt(z.targetEnrollment, 10) || 50;
+  z.activeStatus = z.activeStatus || 'active';
+  if (typeof z.cities === 'string') {
+    z.cities = z.cities.split(',').map(function (s) { return s.trim(); }).filter(Boolean);
+  }
+  ST.zones = ST.zones || [];
+  ST.zones.push(z);
+  saveState();
+  return null;
+}
+function updateZone(id, updates) {
+  var z = (ST.zones || []).filter(function (x) { return x.id === id; })[0];
+  if (!z) return 'Zone not found.';
+  if (typeof updates.cities === 'string') {
+    updates.cities = updates.cities.split(',').map(function (s) { return s.trim(); }).filter(Boolean);
+  }
+  if (updates.targetEnrollment) {
+    updates.targetEnrollment = parseInt(updates.targetEnrollment, 10) || z.targetEnrollment;
+  }
+  Object.keys(updates || {}).forEach(function (k) { z[k] = updates[k]; });
+  saveState();
+  return null;
+}
+function deleteZone(id) {
+  var idx = -1;
+  for (var i = 0; i < (ST.zones || []).length; i++) {
+    if (ST.zones[i].id === id) { idx = i; break; }
+  }
+  if (idx > -1) {
+    ST.zones.splice(idx, 1);
+    saveState();
+    return true;
+  }
+  return false;
+}
+
 function setPublished(id, flag) { var c = course(id); if (c) { c.published = flag; ST.published[id] = flag; saveState(); } }
 function saveSettings(quiz, cert) { ST.settings.quiz = quiz; ST.settings.certificate = cert; saveState(); }
 
@@ -629,9 +781,13 @@ function assignCourse(courseId, target) {
     matched = allDocs.filter(function (d) { return target.indexOf(d.id) > -1; });
   } else if (target && target.mode === 'doctor') {
     matched = allDocs.filter(function (d) { return d.id === target.doctorId; });
-  } else if (target && target.mode === 'region') {
-    var regionCity = String(target.city || '').trim().toLowerCase();
-    matched = allDocs.filter(function (d) { return String(d.city || '').trim().toLowerCase() === regionCity; });
+  } else if (target && (target.mode === 'zone' || target.mode === 'region')) {
+    var zoneVal = String(target.zoneId || target.zone || target.city || '').trim().toLowerCase();
+    matched = allDocs.filter(function (d) {
+      return (d.zoneId && String(d.zoneId).toLowerCase() === zoneVal) ||
+             (d.zone && String(d.zone).toLowerCase().indexOf(zoneVal) > -1) ||
+             (d.city && String(d.city).trim().toLowerCase() === zoneVal);
+    });
   } else if (target && target.mode === 'specialty') {
     var specQuery = String(target.specialty || '').trim().toLowerCase();
     matched = allDocs.filter(function (d) {

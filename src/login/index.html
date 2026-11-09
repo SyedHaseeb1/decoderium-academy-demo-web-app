@@ -209,6 +209,8 @@
       background: transparent !important;
       border: none;
       padding: 10px 12px;
+      min-height: 44px;
+      box-sizing: border-box;
       border-radius: 9999px;
       font-size: 13.5px;
       font-weight: 600;
@@ -354,7 +356,7 @@
 
     .password-eye-btn {
       position: absolute;
-      right: 14px;
+      right: 10px;
       top: 50%;
       transform: translateY(-50%);
       background: none;
@@ -364,7 +366,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 6px;
+      padding: 0;
+      min-width: 44px;
+      min-height: 44px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
       transition: color 0.15s ease, background-color 0.15s ease;
     }
@@ -388,6 +394,9 @@
       color: var(--dec-slate);
       text-decoration: none;
       transition: color 0.2s ease;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
     }
 
     .forgot-link:hover {
@@ -467,12 +476,15 @@
       background: #ffffff !important;
       color: var(--dec-ink) !important;
       border-radius: 9999px;
-      padding: 7px 15px;
-      font-size: 12px;
+      padding: 8px 16px;
+      min-height: 44px;
+      box-sizing: border-box;
+      font-size: 12.5px;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
       white-space: nowrap !important;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
@@ -590,6 +602,55 @@
         text-align: center;
       }
       .brand-row {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body.decoderium-theme-login {
+        padding: 12px 10px !important;
+      }
+      .login-card-shell {
+        border-radius: 16px;
+      }
+      .login-form-col {
+        padding: 16px 14px 22px;
+      }
+      .login-art-col {
+        padding: 14px 14px 6px;
+      }
+      .art-svg-img {
+        max-width: 170px;
+        max-height: 140px;
+      }
+      .brand-title-text {
+        font-size: 16px;
+      }
+      .role-segmented-box {
+        padding: 3px;
+        margin-bottom: 16px;
+      }
+      .role-pill-btn {
+        padding: 8px 4px;
+        font-size: 11.5px;
+        gap: 3px;
+      }
+      .role-pill-btn .ms {
+        font-size: 14px;
+      }
+      .welcome-title {
+        font-size: 21px;
+      }
+      .welcome-desc {
+        font-size: 12.5px;
+      }
+      .evaluator-pills-row {
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .eval-pill {
+        flex: 1 1 100%;
+        min-height: 44px;
         justify-content: center;
       }
     }

@@ -187,8 +187,10 @@ body {
 }
 
 .side-collapse-toggle {
-  width: 32px;
-  height: 32px;
+  min-width: 44px;
+  min-height: 44px;
+  width: 44px;
+  height: 44px;
   border-radius: 8px;
   border: 1px solid var(--line);
   background: #fff;
@@ -246,11 +248,19 @@ body {
   gap: 4px;
   transition: padding 0.2s ease;
 }
-.side-floating-nav .nav {
+.side-floating-nav .nav,
+.side .nav,
+.side.open .nav,
+.app.collapsed .side .nav,
+a.nav {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 14px;
+  padding: 11px 14px !important;
+  min-height: 44px !important;
+  max-height: none !important;
+  height: auto !important;
+  box-sizing: border-box !important;
   border-radius: var(--radius-md);
   font-size: 13px;
   font-weight: 600;
@@ -305,12 +315,14 @@ body {
   background: #fff;
   border: 1px solid var(--line);
   border-radius: var(--radius-pill);
-  font-size: 12px;
-  padding: 8px;
+  font-size: 12.5px;
+  padding: 10px 16px;
+  min-height: 44px;
+  box-sizing: border-box;
   font-weight: 700;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   color: var(--slate);
   cursor: pointer;
   transition: all 0.2s ease;
@@ -1138,8 +1150,8 @@ body {
 }
 
 .qdot-modern {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--line);
   background: #ffffff;
@@ -1150,8 +1162,9 @@ body {
   align-items: center;
   justify-content: center;
   transition: all 0.15s ease;
-  min-width: 40px;
-  min-height: 40px;
+  min-width: 44px;
+  min-height: 44px;
+  box-sizing: border-box;
 }
 
 .qdot-modern:hover {
@@ -1384,9 +1397,11 @@ body {
   right: 0;
   background: #ffffff;
   border-top: 1px solid var(--line);
-  padding: 8px 16px env(safe-area-inset-bottom, 8px);
+  padding: 6px 12px max(8px, env(safe-area-inset-bottom, 8px));
+  min-height: 56px;
+  box-sizing: border-box;
   z-index: 999;
-  box-shadow: 0 -4px 16px rgba(16, 24, 40, 0.06);
+  box-shadow: 0 -4px 20px rgba(16, 24, 40, 0.08);
   justify-content: space-around;
   align-items: center;
 }
@@ -1395,7 +1410,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
+  justify-content: center;
+  gap: 2px;
   color: var(--slate);
   text-decoration: none;
   font-size: 11px;
@@ -1404,6 +1420,8 @@ body {
   border-radius: var(--radius-sm);
   transition: all 0.15s ease;
   min-width: 54px;
+  min-height: 44px;
+  box-sizing: border-box;
 }
 
 .mobile-nav-link .ms {
@@ -1421,7 +1439,8 @@ body {
   inset: 0;
   background: rgba(17, 24, 39, 0.5);
   backdrop-filter: blur(4px);
-  z-index: 95;
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 998;
   transition: opacity 0.3s ease;
 }
 
@@ -2165,9 +2184,17 @@ body {
   background: transparent;
   border: none;
   cursor: pointer;
-  padding: 4px;
+  padding: 0;
+  min-width: 44px;
+  min-height: 44px;
   display: grid;
   place-items: center;
+  border-radius: 50%;
+  transition: background 0.15s ease;
+}
+
+.lms-pill-more:hover {
+  background: rgba(0, 0, 0, 0.05);
 }
 
 /* 3. Continue Watching Section & Cards (.lms-continue-card) */
@@ -2191,8 +2218,10 @@ body {
 }
 
 .lms-carousel-btn {
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   border-radius: 50%;
   border: 1px solid var(--line);
   background: var(--surface);
@@ -2277,10 +2306,12 @@ body {
 
 .lms-thumb-top-action {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 28px;
-  height: 28px;
+  top: 8px;
+  right: 8px;
+  min-width: 44px;
+  min-height: 44px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: rgba(15, 23, 42, 0.45);
   backdrop-filter: blur(6px);
@@ -2289,9 +2320,10 @@ body {
   border: none;
   display: grid;
   place-items: center;
-  font-size: 15px;
+  font-size: 20px;
   cursor: pointer;
   transition: all 0.15s ease;
+  z-index: 2;
 }
 
 .lms-thumb-top-action:hover {
@@ -3000,14 +3032,17 @@ body {
 .btn-premium-pill {
   background: var(--primary);
   color: #ffffff;
-  padding: 8px 18px;
+  padding: 10px 20px;
+  min-height: 44px;
+  box-sizing: border-box;
   border-radius: var(--radius-pill);
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 700;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
+  gap: 8px;
   box-shadow: 0 4px 12px var(--primary-glow);
   border: none;
   cursor: pointer;
@@ -3061,14 +3096,18 @@ body {
     left: 0 !important;
     top: 0 !important;
     bottom: 0 !important;
+    width: 280px !important;
+    max-width: 85vw !important;
     transform: translateX(-100%);
     box-shadow: var(--shadow-lg);
+    z-index: 1000 !important;
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
   }
   .side.open {
     transform: translateX(0) !important;
   }
   .main {
-    padding: 20px 24px 88px !important;
+    padding: 20px 20px calc(80px + env(safe-area-inset-bottom, 16px)) !important;
   }
   .mobile-bottom-nav {
     display: flex !important;
@@ -3110,7 +3149,7 @@ body {
     gap: 16px !important;
   }
   .lms-hero-banner {
-    padding: 26px 20px !important;
+    padding: 24px 18px !important;
   }
   .lms-hero-title {
     font-size: 20px !important;
@@ -3122,7 +3161,7 @@ body {
     grid-column: span 1 !important;
   }
   .main {
-    padding: 16px 14px 88px !important;
+    padding: 16px 14px calc(80px + env(safe-area-inset-bottom, 16px)) !important;
   }
   .topbar {
     flex-wrap: wrap;
@@ -3141,6 +3180,233 @@ body {
   }
   .player-big-btn .ms {
     font-size: 30px;
+  }
+  .edu-segment-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .edu-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    max-width: 100%;
+  }
+  .edu-tab {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    white-space: nowrap;
+  }
+  .edu-active-filters-bar {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .edu-pill-list {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .lms-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 6px;
+  }
+  .lms-table {
+    min-width: 580px;
+  }
+  .lms-table th,
+  .lms-table td {
+    padding: 10px 10px;
+    font-size: 12.5px;
+    white-space: nowrap;
+  }
+  .lms-table td:first-child {
+    white-space: normal;
+  }
+  .lms-btn-action {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 640px) {
+  .player-controls-bar {
+    flex-wrap: wrap;
+    gap: 8px 10px;
+    padding: 10px 12px;
+  }
+  .player-timeline-bar {
+    order: -1;
+    width: 100%;
+    flex: 1 1 100%;
+    margin-bottom: 4px;
+  }
+  .player-timer-lbl {
+    font-size: 11px;
+    margin-right: auto;
+  }
+  .player-ctl-btn {
+    min-width: 44px;
+    min-height: 44px;
+    width: 44px;
+    height: 44px;
+  }
+  .quiz-container-card {
+    padding: 22px 18px !important;
+    border-radius: var(--radius-md) !important;
+  }
+  .qdot-modern {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .opt-modern {
+    min-height: 48px;
+    padding: 12px 16px;
+  }
+  .cert-frame-modern {
+    padding: 30px 18px !important;
+    border-radius: var(--radius-md) !important;
+  }
+  .cert-main-heading {
+    font-size: 24px !important;
+    line-height: 1.25;
+    margin-bottom: 12px !important;
+  }
+  .cert-doctor-name {
+    font-size: 22px !important;
+    padding: 0 16px 4px !important;
+  }
+  .cert-meta-grid {
+    gap: 16px 20px !important;
+    margin: 20px 0 !important;
+  }
+  .cert-hash-pill {
+    font-size: 11px !important;
+    max-width: 100%;
+    word-break: break-all;
+  }
+  .verify-canvas-card {
+    padding: 28px 18px !important;
+    border-radius: var(--radius-lg) !important;
+  }
+  .verify-search-box {
+    flex-direction: column;
+    border-radius: var(--radius-lg);
+    padding: 12px;
+    gap: 10px;
+  }
+  .verify-search-box input {
+    width: 100%;
+    min-height: 44px;
+    text-align: center;
+    font-size: 14px;
+    padding: 8px 12px;
+    box-sizing: border-box;
+  }
+  .verify-search-box .btn-premium-pill {
+    width: 100%;
+    min-height: 44px;
+    justify-content: center;
+  }
+  .main {
+    padding: 14px 12px calc(80px + env(safe-area-inset-bottom, 16px)) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .lms-hero-banner {
+    padding: 20px 16px !important;
+    border-radius: var(--radius-md) !important;
+  }
+  .lms-hero-title {
+    font-size: 17px !important;
+    line-height: 1.35;
+  }
+  .lms-hero-btn {
+    min-height: 44px;
+    padding: 10px 18px;
+    font-size: 13px;
+  }
+  .lms-section-header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .lms-section-title {
+    font-size: 16px !important;
+  }
+  .lms-card-thumb-wrap {
+    height: 160px;
+  }
+  .lms-table-card {
+    padding: 14px 12px;
+    border-radius: var(--radius-md);
+  }
+  .accordion-header {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px 14px !important;
+  }
+  .lecture-mobile-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 6px;
+  }
+  .lecture-m-tab {
+    min-height: 44px;
+    padding: 8px 14px;
+    font-size: 12px;
+    white-space: nowrap;
+    flex: 1 0 auto;
+  }
+  .side-alert-container {
+    top: 12px;
+    right: 12px;
+    left: 12px;
+    width: auto;
+    max-width: none;
+  }
+  .lms-dialog-card {
+    width: 96vw !important;
+    max-width: 96vw !important;
+    border-radius: var(--radius-md);
+  }
+  .lms-dialog-header {
+    padding: 14px 16px !important;
+  }
+  .lms-dialog-body {
+    padding: 14px 16px !important;
+    font-size: 13px;
+  }
+  .lms-dialog-footer {
+    padding: 12px 16px !important;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .lms-dialog-footer button {
+    flex: 1 1 100%;
+    min-height: 44px;
+  }
+  .cert-main-heading {
+    font-size: 20px !important;
+  }
+  .cert-doctor-name {
+    font-size: 19px !important;
+  }
+  .cert-sign-line {
+    width: 180px;
   }
 }
 

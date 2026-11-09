@@ -119,8 +119,8 @@
           }).join('') +
         '</div>' +
 
-        '<div style="display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding-top:20px;">' +
-          '<button class="btn" id="prev" type="button" style="border-radius:var(--radius-pill);padding:8px 18px;border:1px solid var(--line);"' + (idx === 0 ? ' disabled' : '') + '><i class="ms">chevron_left</i> Previous</button>' +
+        '<div style="display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding-top:20px;flex-wrap:wrap;gap:10px;">' +
+          '<button class="btn" id="prev" type="button" style="border-radius:var(--radius-pill);padding:10px 20px;min-height:44px;font-weight:700;border:1px solid var(--line);display:inline-flex;align-items:center;gap:6px;"' + (idx === 0 ? ' disabled' : '') + '><i class="ms">chevron_left</i> Previous</button>' +
           (idx < qs.length - 1 ?
             '<button class="btn-premium-pill" id="next" type="button">Next Question <i class="ms">chevron_right</i></button>' :
             '<button class="btn-premium-pill" id="fin" type="button" style="background:#059669!important;">Finish & Review</button>') +
@@ -129,7 +129,7 @@
 
       /* Question Navigation Dot Matrix */
       '<div class="quiz-container-card">' +
-        '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">' +
+        '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:6px;">' +
           '<span style="font-size:13px;font-weight:800;color:var(--navy);">Question Matrix (' + answered + ' of ' + qs.length + ' answered)</span>' +
           '<span style="font-size:12px;color:var(--slate);">Click any number to jump</span>' +
         '</div>' +
@@ -145,12 +145,12 @@
             '<div style="font-size:13.5px;font-weight:700;color:#92400e;margin-bottom:10px;">' +
               (answered === qs.length ? 'Ready to submit your examination?' : (qs.length - answered) + ' question(s) are unanswered and will be marked as incorrect. Submit anyway?') +
             '</div>' +
-            '<div style="display:flex;gap:12px;">' +
+            '<div style="display:flex;gap:12px;flex-wrap:wrap;">' +
               '<button class="btn-premium-pill" id="sub" type="button" style="background:#059669!important;">Confirm Submit</button>' +
-              '<button class="btn" id="keep" type="button" style="border-radius:var(--radius-pill);border:1px solid var(--line);">Keep Working</button>' +
+              '<button class="btn" id="keep" type="button" style="border-radius:var(--radius-pill);border:1px solid var(--line);min-height:44px;padding:10px 20px;font-weight:700;background:#fff;cursor:pointer;">Keep Working</button>' +
             '</div>' +
           '</div>' :
-          '<div><button class="btn" id="ask" type="button" style="border-radius:var(--radius-pill);border:1px solid var(--line);font-size:13px;font-weight:700;">Submit Quiz</button></div>') +
+          '<div><button class="btn" id="ask" type="button" style="border-radius:var(--radius-pill);border:1px solid var(--line);font-size:13px;font-weight:700;min-height:44px;padding:10px 24px;background:#fff;cursor:pointer;">Submit Quiz</button></div>') +
       '</div>'
     );
 

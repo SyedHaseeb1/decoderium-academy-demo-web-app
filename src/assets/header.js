@@ -10,22 +10,22 @@
 
   host.className = 'app-header';
   var adminBanner = isPreview ?
-    '<div class="admin-preview-pill" style="background:linear-gradient(135deg, #582be8, #4318d1);color:#fff;padding:8px 24px;display:flex;align-items:center;justify-content:space-between;font-size:12.5px;font-weight:700;box-shadow:0 2px 10px rgba(88,43,232,0.2);position:relative;z-index:1001;">' +
+    '<div class="admin-preview-pill" style="background:linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);color:#fff;padding:8px 24px;display:flex;align-items:center;justify-content:space-between;font-size:12.5px;font-weight:700;box-shadow:0 2px 10px rgba(0,0,0,0.18);position:relative;z-index:1001;">' +
       '<div style="display:flex;align-items:center;gap:8px;">' +
-        '<i class="ms" style="font-size:17px;color:#a5b4fc;">visibility</i>' +
-        '<span>Clinician Preview Mode &mdash; Super Admin Evaluating Course Experience</span>' +
+        '<i class="ms" style="font-size:18px;color:#818cf8;">visibility</i>' +
+        '<span>Sandboxed Course Preview &middot; Read-Only Learner View</span>' +
       '</div>' +
-      '<a href="javascript:void(0)" onclick="returnToAdminConsole(\'#courses\')" style="color:#ffffff;background:rgba(255,255,255,0.22);padding:4px 14px;border-radius:9999px;text-decoration:none;font-size:11.5px;font-weight:800;display:inline-flex;align-items:center;gap:6px;transition:background 0.2s ease;cursor:pointer;">' +
-        '<i class="ms" style="font-size:14px;">arrow_back</i> Return to Admin Console' +
+      '<a href="javascript:void(0)" onclick="returnToAdminConsole(\'#courses\')" style="color:#ffffff;background:rgba(255,255,255,0.2);padding:4px 14px;border-radius:9999px;text-decoration:none;font-size:11.5px;font-weight:800;display:inline-flex;align-items:center;gap:6px;transition:background 0.2s ease;cursor:pointer;">' +
+        '<i class="ms" style="font-size:14px;">arrow_back</i> Exit Preview / Back to Admin' +
       '</a>' +
     '</div>' : '';
 
   host.innerHTML =
     adminBanner +
     '<header class="topbar">' +
-      '<div style="display:flex;align-items:center;gap:16px;">' +
-        '<button type="button" class="btn" id="mobileMenuBtn" style="display:none;width:40px;height:40px;border-radius:10px;padding:0;align-items:center;justify-content:center;border:1px solid var(--line);background:#fff;" aria-label="Toggle menu">' +
-          '<i class="ms">menu</i>' +
+      '<div style="display:flex;align-items:center;gap:12px;">' +
+        '<button type="button" class="btn" id="mobileMenuBtn" style="display:none;min-width:44px;min-height:44px;width:44px;height:44px;border-radius:10px;padding:0;align-items:center;justify-content:center;border:1px solid var(--line);background:#fff;cursor:pointer;" aria-label="Toggle menu">' +
+          '<i class="ms" style="font-size:22px;">menu</i>' +
         '</button>' +
         '<div>' +
           '<div style="font-size:17px;font-weight:800;color:var(--navy);letter-spacing:-0.3px;">GILEAP</div>' +
@@ -38,25 +38,25 @@
         '<input type="text" placeholder="Search gastroenterology modules, GERD, P-CAB..." aria-label="Search curriculum">' +
       '</div>' +
 
-      '<div style="display:flex;align-items:center;gap:12px;">' +
-        '<button type="button" class="btn" id="headerAlertBtn" style="position:relative;width:40px;height:40px;border-radius:50%;padding:0;align-items:center;justify-content:center;border:1px solid var(--line);background:#fff;cursor:pointer;" title="Clinical & PMDC Alerts" aria-label="Notifications">' +
+      '<div style="display:flex;align-items:center;gap:10px;">' +
+        '<button type="button" class="btn" id="headerAlertBtn" style="position:relative;min-width:44px;min-height:44px;width:44px;height:44px;border-radius:50%;padding:0;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--line);background:#fff;cursor:pointer;" title="Clinical & PMDC Alerts" aria-label="Notifications">' +
           '<i class="ms" style="font-size:20px;color:var(--slate);">notifications_none</i>' +
-          '<span style="position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:#ef4444;box-shadow:0 0 0 2px #fff;"></span>' +
+          '<span style="position:absolute;top:8px;right:8px;width:8px;height:8px;border-radius:50%;background:#ef4444;box-shadow:0 0 0 2px #fff;"></span>' +
         '</button>' +
 
-        '<a href="../courses/" class="btn-pill-dark" style="font-size:12px;padding:7px 16px;">' +
+        '<a href="../courses/" class="btn-pill-dark" style="font-size:12px;padding:8px 16px;min-height:44px;display:inline-flex;align-items:center;gap:6px;box-sizing:border-box;">' +
           '<i class="ms" style="font-size:16px;color:#f59e0b;">military_tech</i>' +
           '<span>12 CME Hours</span>' +
         '</a>' +
 
         '<div class="profile-wrap" style="position:relative;">' +
-          '<button type="button" id="profBtn" style="border:none;background:transparent;cursor:pointer;padding:2px;" aria-label="Doctor profile">' +
-            '<div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#ff4760,#e60057);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;box-shadow:var(--shadow-sm);">' +
+          '<button type="button" id="profBtn" style="border:none;background:transparent;cursor:pointer;padding:0;min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;" aria-label="Doctor profile">' +
+            '<div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#ff4760,#e60057);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;box-shadow:var(--shadow-sm);">' +
               esc(initials(name)) +
             '</div>' +
           '</button>' +
 
-          '<div class="profile-panel" id="profPanel" role="dialog" aria-label="Profile panel" hidden style="position:absolute;right:0;top:48px;width:260px;background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);padding:18px;box-shadow:var(--shadow-lg);z-index:1000;">' +
+          '<div class="profile-panel" id="profPanel" role="dialog" aria-label="Profile panel" hidden style="position:absolute;right:0;top:52px;width:260px;background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);padding:18px;box-shadow:var(--shadow-lg);z-index:1000;">' +
             '<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--line);">' +
               '<div style="width:40px;height:40px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;">' + esc(initials(name)) + '</div>' +
               '<div>' +
@@ -69,10 +69,10 @@
                 '<div>PMDC ID: <strong style="color:var(--navy);">' + esc(d.pmdcId) + '</strong></div>' +
                 '<div>Hospital: <strong style="color:var(--navy);">' + esc(d.hospital) + '</strong></div>' +
               '</div>' : '') +
-            '<button type="button" class="btn" id="bReset" style="width:100%;justify-content:center;margin-bottom:8px;font-size:12px;padding:8px;border-radius:var(--radius-pill);border:1px solid var(--line);">' +
+            '<button type="button" class="btn" id="bReset" style="width:100%;justify-content:center;margin-bottom:8px;font-size:12px;padding:10px;min-height:44px;border-radius:var(--radius-pill);border:1px solid var(--line);">' +
               '<i class="ms" style="font-size:16px;">restart_alt</i> Reset demo data' +
             '</button>' +
-            '<button type="button" class="btn-pill-primary" id="bOut" style="width:100%;padding:8px;font-size:12px;">' +
+            '<button type="button" class="btn-pill-primary" id="bOut" style="width:100%;padding:10px;min-height:44px;font-size:12px;justify-content:center;">' +
               '<i class="ms" style="font-size:16px;">logout</i> Sign out' +
             '</button>' +
           '</div>' +

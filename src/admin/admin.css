@@ -29,14 +29,14 @@
   --adm-ink: #0b1727;
   --adm-slate: #64748b;
   --adm-slate-light: #94a3b8;
-  --adm-canvas: #edf2f7;
+  --adm-canvas: #eaeff5;
   --adm-card: #ffffff;
-  --adm-line: #cbd5e1;
-  --adm-line-light: #e2e8f0;
+  --adm-line: #f1f5f9;
+  --adm-line-light: #f8fafc;
   --adm-ring: rgba(88, 43, 232, 0.16);
-  --adm-shadow-sm: 0 2px 8px rgba(11, 23, 39, 0.04);
-  --adm-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
-  --adm-shadow-hover: 0 10px 28px -4px rgba(15, 23, 42, 0.1), 0 4px 10px -2px rgba(15, 23, 42, 0.04);
+  --adm-shadow-sm: 0 2px 8px rgba(11, 23, 39, 0.03);
+  --adm-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+  --adm-shadow-hover: 0 10px 28px -4px rgba(15, 23, 42, 0.08), 0 4px 10px -2px rgba(15, 23, 42, 0.03);
   --adm-shadow-float: 0 14px 34px -8px rgba(88, 43, 232, 0.22), 0 6px 14px rgba(11, 23, 39, 0.08);
   --adm-radius-sm: 12px;
   --adm-radius-md: 20px;
@@ -98,6 +98,8 @@ body.admin-body {
   min-height: 100vh;
   position: relative;
   z-index: 1;
+  max-width: 100vw;
+  box-sizing: border-box;
 }
 
 /* --------------------------------------------------------------------------
@@ -108,17 +110,21 @@ body.admin-body {
   flex-shrink: 0;
   background: #ffffff;
   border-right: 1px solid var(--adm-line);
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  bottom: 0;
   height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 20px 16px;
   box-sizing: border-box;
   transition: width 0.32s cubic-bezier(0.4, 0, 0.2, 1), padding 0.32s ease;
-  z-index: 50;
+  z-index: 100 !important;
   box-shadow: 2px 0 16px rgba(11, 23, 39, 0.03);
+  overflow: visible !important;
 }
 
 .adm-sidebar.collapsed {
@@ -141,8 +147,8 @@ body.admin-body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(88, 43, 232, 0.16);
-  z-index: 60;
+  box-shadow: 0 4px 14px rgba(88, 43, 232, 0.22), 0 2px 6px rgba(15, 23, 42, 0.08);
+  z-index: 200 !important;
   transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s, box-shadow 0.2s;
 }
 
@@ -232,6 +238,10 @@ body.admin-body {
   gap: 6px;
   margin-top: 18px;
   position: relative;
+  max-height: calc(100vh - 190px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
 }
 
 /* Animated Sliding Active Selector Pill */
@@ -259,7 +269,8 @@ body.admin-body {
   display: flex;
   align-items: center;
   gap: 10px;
-  height: 42px;
+  height: 44px;
+  min-height: 44px;
   padding: 0 12px;
   border-radius: var(--adm-radius-md);
   text-decoration: none;
@@ -454,6 +465,12 @@ body.admin-body {
   flex-direction: column;
   min-width: 0;
   position: relative;
+  margin-left: var(--sidebar-w);
+  transition: margin-left 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.adm-sidebar.collapsed ~ .adm-main-wrap {
+  margin-left: var(--sidebar-w-collapsed);
 }
 
 /* --------------------------------------------------------------------------
@@ -672,8 +689,10 @@ body.admin-body {
 }
 
 .adm-icon-btn {
-  width: 38px;
-  height: 38px;
+  min-width: 44px;
+  min-height: 44px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   border: 1px solid var(--adm-line);
   background: #ffffff;
@@ -863,10 +882,12 @@ body.admin-body {
 }
 
 .adm-profile-pill {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 2px;
+  min-width: 44px;
+  min-height: 44px;
   background: transparent;
   border: none;
   border-radius: 50%;
@@ -1135,6 +1156,8 @@ body.admin-body {
   max-width: 100%;
   width: 100%;
   margin: 0;
+  min-width: 0;
+  overflow-x: hidden;
   box-sizing: border-box;
 }
 
@@ -1209,6 +1232,7 @@ body.admin-body {
   white-space: nowrap !important;
   border-radius: var(--adm-radius-pill) !important;
   box-sizing: border-box !important;
+  min-height: 44px !important;
   transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease !important;
 }
 
@@ -1437,11 +1461,11 @@ body.admin-body {
 }
 
 .adm-card {
-  background: #ffffff;
-  border: 1.5px solid var(--adm-line);
-  border-radius: var(--adm-radius-lg);
+  background: #ffffff !important;
+  border: none !important;
+  border-radius: 20px;
   padding: 24px;
-  box-shadow: var(--adm-shadow);
+  box-shadow: 0 12px 32px -4px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.08) !important;
   position: relative;
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
@@ -2001,34 +2025,47 @@ body.admin-body {
   flex-wrap: wrap;
 }
 
-/* View Switcher Toggle */
+/* View Switcher Toggle (Uni Tabs System) */
 .adm-view-toggle {
   display: inline-flex;
-  background: var(--adm-line-light);
-  border-radius: var(--adm-radius-pill);
-  padding: 2px;
-  border: 1px solid var(--adm-line);
+  align-items: center;
+  gap: 4px;
+  background: #ffffff;
+  padding: 4px;
+  border-radius: 9999px;
+  border: none !important;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.04) !important;
+  box-sizing: border-box;
 }
 
 .adm-view-toggle-btn {
   border: none;
   background: transparent;
-  padding: 5px 12px;
-  border-radius: var(--adm-radius-pill);
+  padding: 7px 14px;
+  border-radius: 9999px;
   cursor: pointer;
-  color: var(--adm-slate);
-  display: flex;
+  color: #475569;
+  display: inline-flex;
   align-items: center;
-  gap: 4px;
-  font-size: 11.5px;
+  gap: 6px;
+  font-size: 12px;
   font-weight: 700;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
 }
-
+.adm-view-toggle-btn:hover {
+  background: #f1f5f9;
+  color: var(--adm-ink);
+}
 .adm-view-toggle-btn.active {
-  background: #ffffff;
-  color: var(--adm-primary);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  background: linear-gradient(135deg, #582be8 0%, #7c3aed 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(88, 43, 232, 0.3) !important;
+  font-weight: 800;
+  border: none !important;
+}
+.adm-view-toggle-btn.active i.ms {
+  color: #ffffff !important;
 }
 
 /* Modules, Lectures, and Question Bank UX */
@@ -2124,26 +2161,26 @@ body.admin-body {
   height: 42px;
   min-height: 42px;
   line-height: 40px;
-  padding: 0 16px;
+  padding: 0 14px;
   font-size: 13.5px;
   font-weight: 500;
-  color: var(--adm-ink);
-  background: #f8fafc;
-  border: 1.5px solid var(--adm-line);
-  border-radius: var(--adm-radius-pill);
+  color: #0f172a !important;
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  border-radius: 10px !important;
   box-sizing: border-box;
   outline: none;
   font-family: inherit;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
 .adm-textarea {
-  border-radius: var(--adm-radius-md);
+  border-radius: 10px !important;
   min-height: 84px;
   height: auto;
   line-height: 1.5;
-  padding: 12px 16px;
+  padding: 12px 14px;
   resize: vertical;
 }
 
@@ -2152,9 +2189,9 @@ body.admin-body {
 .adm-textarea:hover,
 .adm-search-input:hover,
 .adm-search-dropdown-btn:hover {
-  border-color: #a78bfa;
-  background: #ffffff;
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.08);
+  border-color: #94a3b8 !important;
+  background: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.08);
 }
 
 .adm-input:focus,
@@ -2162,8 +2199,8 @@ body.admin-body {
 .adm-textarea:focus,
 .adm-search-input:focus,
 .adm-search-dropdown-btn.is-open {
-  border-color: var(--adm-primary) !important;
-  box-shadow: 0 0 0 4px var(--adm-ring), 0 2px 8px rgba(88, 43, 232, 0.08) !important;
+  border-color: #6366f1 !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18), 0 2px 8px rgba(99, 102, 241, 0.08) !important;
   background: #ffffff !important;
   outline: none !important;
 }
@@ -2479,9 +2516,9 @@ body:has(.adm-drawer.open) {
 }
 
 .adm-section.adm-section-tinted {
-  background: #f1f5f9;
-  border: 1.5px solid #cbd5e1;
-  box-shadow: 0 4px 18px -2px rgba(15, 23, 42, 0.05);
+  background: #f8fafc;
+  border: 1px solid var(--adm-line);
+  box-shadow: 0 4px 18px -2px rgba(15, 23, 42, 0.04);
 }
 
 .adm-section.adm-section-clinical {
@@ -2841,13 +2878,13 @@ body:has(.adm-drawer.open) {
 .adm-pwa-badge.status-scheduled {
   background: #f8fafc !important;
   color: #334155 !important;
-  border: 1.5px solid #cbd5e1 !important;
+  border: 1px solid var(--adm-line) !important;
   font-weight: 800 !important;
 }
 
 .adm-qr-leaflet-box {
   background: #ffffff;
-  border: 2px solid var(--adm-ink);
+  border: 1px solid var(--adm-line);
   border-radius: 14px;
   padding: 16px;
   display: flex;
@@ -2866,7 +2903,7 @@ body:has(.adm-drawer.open) {
   background: var(--adm-canvas);
   padding: 6px 14px;
   border-radius: 8px;
-  border: 1.5px dashed var(--adm-line);
+  border: 1px dashed #cbd5e1;
 }
 
 /* ==========================================================================
@@ -2877,7 +2914,7 @@ body:has(.adm-drawer.open) {
   align-items: center;
   gap: 10px;
   background: #ffffff;
-  border: 1.5px solid #cbd5e1;
+  border: 1px solid #e2e8f0;
   border-radius: var(--adm-radius-pill);
   padding: 0 16px;
   height: 40px;
@@ -2954,12 +2991,12 @@ body:has(.adm-drawer.open) {
 
 .adm-collapsible-search-wrap {
   background: #ffffff;
-  border: 1.5px solid #cbd5e1;
+  border: 1px solid var(--adm-line);
   border-radius: var(--adm-radius-md);
   padding: 16px 18px;
   margin-bottom: 16px;
   display: none;
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
   animation: admFadeSlideUp 0.2s ease forwards;
 }
 
@@ -2991,7 +3028,7 @@ body:has(.adm-drawer.open) {
   padding: 48px 24px;
   text-align: center;
   background: #ffffff;
-  border: 1.5px dashed #cbd5e1;
+  border: 1.5px dashed #e2e8f0;
   border-radius: var(--adm-radius-lg);
   margin: 12px 0;
 }
@@ -3040,7 +3077,7 @@ body:has(.adm-drawer.open) {
 }
 
 .adm-drawer-course-accordion:hover {
-  border-color: #cbd5e1;
+  border-color: #e2e8f0;
 }
 
 .adm-drawer-course-header {
@@ -3235,10 +3272,10 @@ body:has(.adm-drawer.open) {
 }
 
 .adm-dropzone {
-  border: 2px dashed var(--adm-line);
-  background: #f8fafc;
-  border-radius: var(--adm-radius-md);
-  padding: 22px 20px;
+  border: 2px dashed #818cf8 !important;
+  background: rgba(99, 102, 241, 0.04) !important;
+  border-radius: 14px !important;
+  padding: 28px !important;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -3251,8 +3288,9 @@ body:has(.adm-drawer.open) {
 
 .adm-dropzone:hover,
 .adm-dropzone.dragover {
-  border-color: var(--adm-primary);
-  background: rgba(88, 43, 232, 0.04);
+  border-color: #6366f1 !important;
+  background: rgba(99, 102, 241, 0.08) !important;
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.12);
 }
 
 .adm-dropzone-icon {
@@ -3347,8 +3385,10 @@ body:has(.adm-drawer.open) {
   display: none;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
+  min-width: 44px;
+  min-height: 44px;
+  width: 44px;
+  height: 44px;
   background: #ffffff;
   border: 1px solid var(--adm-line);
   border-radius: var(--adm-radius-sm);
@@ -3398,6 +3438,9 @@ body:has(.adm-drawer.open) {
 }
 
 @media (max-width: 1024px) {
+  .adm-main-wrap {
+    margin-left: 0 !important;
+  }
   .adm-side-toggle-btn,
   #admSideToggle,
   #sideCollapseToggle {
@@ -3655,44 +3698,52 @@ body:has(.adm-drawer.open) {
    PILLAR TABS, EXECUTIVE DASHBOARD & THUMBNAIL STUDIO ENHANCEMENTS
    ========================================================================== */
 .adm-pillar-tabs {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
-  overflow-x: auto;
+  gap: 4px;
+  background: #ffffff;
   padding: 4px;
-  background: #f8fafc;
-  border-radius: var(--adm-radius-pill);
-  border: 1px solid var(--adm-line-light);
+  border-radius: 9999px;
+  border: none !important;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.04) !important;
   width: fit-content;
   max-width: 100%;
+  box-sizing: border-box;
 }
 
 .adm-pillar-tab {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 18px;
-  border-radius: var(--adm-radius-pill);
-  font-size: 13px;
+  gap: 6px;
+  padding: 7px 14px;
+  box-sizing: border-box;
+  border-radius: 9999px;
+  font-size: 12px;
   font-weight: 700;
-  color: var(--adm-slate);
+  color: #475569;
   text-decoration: none;
   cursor: pointer;
   border: none;
   background: transparent;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap;
 }
 
 .adm-pillar-tab:hover {
   color: var(--adm-ink);
-  background: rgba(15, 23, 42, 0.05);
+  background: #f1f5f9;
 }
 
 .adm-pillar-tab.active {
-  background: var(--adm-primary) !important;
+  background: linear-gradient(135deg, #582be8 0%, #7c3aed 100%) !important;
   color: #ffffff !important;
-  box-shadow: 0 2px 10px rgba(88, 43, 232, 0.28);
+  box-shadow: 0 4px 14px rgba(88, 43, 232, 0.3) !important;
+  font-weight: 800;
+  border: none !important;
+}
+
+.adm-pillar-tab.active i.ms {
+  color: #ffffff !important;
 }
 
 .adm-pillar-tab.active .adm-chip {
@@ -4079,25 +4130,33 @@ body:has(.adm-drawer.open) {
   flex: 1;
   display: flex;
   flex-direction: column;
+  gap: 8px;
+  padding: 8px 10px;
 }
 
 .adm-master-item {
-  padding: 12px 14px;
-  border-bottom: 1px solid var(--adm-line-light);
+  padding: 13px 15px;
+  border: 1px solid var(--adm-line);
+  border-radius: 14px;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.22s ease, background-color 0.18s ease;
   display: flex;
   flex-direction: column;
   gap: 6px;
   background: #ffffff;
-  border-left: 3px solid transparent;
+  box-sizing: border-box;
 }
 .adm-master-item:hover {
   background: #f8fafc;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  border-color: rgba(88, 43, 232, 0.18);
 }
 .adm-master-item.active {
-  background: var(--adm-primary-soft);
-  border-left-color: var(--adm-primary);
+  background: #f5f3ff;
+  border: 1.5px solid var(--adm-primary);
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(88, 43, 232, 0.12);
 }
 
 .adm-detail-pane {
@@ -4123,41 +4182,56 @@ body:has(.adm-drawer.open) {
 }
 
 .adm-detail-tabs-bar {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   padding: 4px;
-  background: #f1f5f9;
+  background: #ffffff;
   border-radius: var(--adm-radius-pill);
-  border: 1px solid var(--adm-line);
+  border: none;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
   max-width: 100%;
-  overflow-x: auto;
-  margin-bottom: 20px;
+  width: fit-content;
+  box-sizing: border-box;
+  overflow: visible;
+  user-select: none;
+  margin-bottom: 22px;
 }
 
 .adm-detail-tab-btn {
+  position: relative;
+  z-index: 2;
+  flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 18px;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 14px;
   border-radius: var(--adm-radius-pill);
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 700;
   border: none;
   background: transparent;
-  color: var(--adm-slate);
+  color: #475569;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap;
+  text-decoration: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .adm-detail-tab-btn:hover {
   color: var(--adm-ink);
-  background: rgba(255, 255, 255, 0.7);
+  background: #f1f5f9;
 }
 .adm-detail-tab-btn.active {
   color: #ffffff !important;
-  background: var(--adm-primary) !important;
-  box-shadow: 0 2px 10px rgba(88, 43, 232, 0.28);
+  background: linear-gradient(135deg, #582be8 0%, #7c3aed 100%) !important;
+  border-color: transparent !important;
+  box-shadow: 0 4px 14px rgba(88, 43, 232, 0.3) !important;
+  font-weight: 800;
+}
+.adm-detail-tab-btn.active i.ms {
+  color: #ffffff !important;
 }
 
 .adm-detail-panel {
@@ -4177,14 +4251,15 @@ body:has(.adm-drawer.open) {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 64px;
+  min-height: 58px;
   background: #ffffff;
   border-top: 1px solid var(--adm-line);
   box-shadow: 0 -4px 16px rgba(11, 23, 39, 0.08);
   z-index: 999;
   justify-content: space-around;
   align-items: center;
-  padding: 0 4px;
+  padding: 4px 4px max(6px, env(safe-area-inset-bottom, 6px));
+  box-sizing: border-box;
 }
 
 .adm-mobile-nav-btn {
@@ -4193,7 +4268,8 @@ body:has(.adm-drawer.open) {
   align-items: center;
   justify-content: center;
   flex: 1;
-  height: 100%;
+  min-height: 44px;
+  min-width: 44px;
   color: var(--adm-slate);
   text-decoration: none;
   font-size: 10.5px;
@@ -4204,6 +4280,7 @@ body:has(.adm-drawer.open) {
   background: transparent;
   cursor: pointer;
   transition: color 0.15s ease;
+  box-sizing: border-box;
 }
 
 .adm-mobile-nav-btn.active {
@@ -4233,10 +4310,26 @@ body:has(.adm-drawer.open) {
 }
 
 @media (max-width: 1024px) {
-  .adm-sidebar,
-  .adm-side,
   .adm-side-toggle-btn {
     display: none !important;
+  }
+  .adm-side,
+  .adm-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 280px !important;
+    max-width: 85vw !important;
+    transform: translateX(-100%) !important;
+    box-shadow: 10px 0 30px rgba(11, 23, 39, 0.22) !important;
+    z-index: 1400 !important;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    display: flex !important;
+  }
+  .adm-side.mobile-open,
+  .adm-sidebar.mobile-open {
+    transform: translateX(0) !important;
   }
   .adm-main-wrap,
   .adm-main {
@@ -4302,6 +4395,10 @@ body:has(.adm-drawer.open) {
   display: flex;
   flex-direction: column;
   gap: 24px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .neo-dash-head {
@@ -4310,33 +4407,44 @@ body:has(.adm-drawer.open) {
   align-items: center;
   flex-wrap: wrap;
   gap: 16px;
-  background: #ffffff;
+  background: #ffffff !important;
   padding: 24px 28px;
   border-radius: 24px;
-  border: 1px solid var(--adm-line);
-  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
+  border: none !important;
+  box-shadow: 0 12px 32px -4px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.08) !important;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .neo-grid-row {
   display: grid;
-  grid-template-columns: 1fr 1.35fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
   gap: 24px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 @media (max-width: 1100px) {
   .neo-grid-row {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
 .neo-card {
-  background: #ffffff;
-  border-radius: 24px;
-  border: 1px solid var(--adm-line);
+  background: #ffffff !important;
+  border-radius: 20px;
+  border: none !important;
   padding: 24px 26px;
-  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.03);
+  box-shadow: 0 12px 32px -4px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.08) !important;
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: visible !important;
+  position: relative;
 }
 
 .neo-card-head {
@@ -4344,6 +4452,10 @@ body:has(.adm-drawer.open) {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 18px;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .neo-card-title {
@@ -4429,4 +4541,872 @@ body:has(.adm-drawer.open) {
   color: var(--adm-ink);
   letter-spacing: -0.5px;
   margin-top: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   NEO-CLINICAL PERFORMANCE STUDIO EXTENSIONS (MULTI-MODULE COLLECTIVE)
+   -------------------------------------------------------------------------- */
+.neo-metric-6col {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+}
+@media (max-width: 1400px) {
+  .neo-metric-6col {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 800px) {
+  .neo-metric-6col {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 540px) {
+  .neo-metric-6col {
+    grid-template-columns: 1fr;
+  }
+}
+
+.neo-tile-peach {
+  background: #fffbeb;
+  border: 1px solid #fef3c7;
+}
+.neo-tile-lavender {
+  background: #f5f3ff;
+  border: 1px solid #ede9fe;
+}
+.neo-tile-rose {
+  background: #fff1f2;
+  border: 1px solid #ffe4e6;
+}
+.neo-tile-emerald {
+  background: #ecfdf5;
+  border: 1px solid #d1fae5;
+}
+
+/* Quick Action Launcher Dock */
+.neo-quick-dock {
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid var(--adm-line);
+  padding: 14px 20px;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.neo-quick-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.neo-quick-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 12.5px;
+  font-weight: 700;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+.neo-quick-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+}
+.neo-btn-lavender {
+  background: #f5f3ff;
+  color: #582be8;
+  border-color: #ddd6fe;
+}
+.neo-btn-cyan {
+  background: #f0f9ff;
+  color: #0284c7;
+  border-color: #bae6fd;
+}
+.neo-btn-rose {
+  background: #fff1f2;
+  color: #e11d48;
+  border-color: #fecdd3;
+}
+.neo-btn-mint {
+  background: #f0fdf4;
+  color: #059669;
+  border-color: #bbf7d0;
+}
+.neo-btn-amber {
+  background: #fffbeb;
+  color: #d97706;
+  border-color: #fef3c7;
+}
+
+/* Live Telemetry Pulse Indicator */
+.neo-pulse-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  animation: neoPulse 2s infinite;
+  display: inline-block;
+}
+@keyframes neoPulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+/* Neo Section Category Header */
+.neo-section-divider {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 4px;
+  margin-bottom: 2px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.neo-section-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.18rem;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: var(--adm-ink);
+  background: transparent;
+  padding: 0;
+  border: none;
+  max-width: 100%;
+  box-sizing: border-box;
+  white-space: normal;
+  line-height: 1.35;
+}
+.neo-section-badge i.ms {
+  font-size: 20px !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: #f1f5f9;
+  flex-shrink: 0;
+}
+
+/* Neo Clean Data Table */
+.neo-table-wrap {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 18px;
+  border: none;
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.04);
+  background: #ffffff;
+}
+.neo-table {
+  width: 100%;
+  min-width: 580px;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  text-align: left;
+}
+.neo-table th {
+  background: #f8fafc;
+  color: var(--adm-slate);
+  font-weight: 700;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--adm-line);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.neo-table td {
+  padding: 13px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  color: var(--adm-ink);
+  vertical-align: middle;
+}
+.neo-table tr:last-child td {
+  border-bottom: none;
+}
+.neo-table tr:hover td {
+  background: #fafbfc;
+}
+
+/* Neo Real-Time Telemetry Feed Items */
+.neo-feed-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 14px;
+  background: #f8fafc;
+  border-radius: 14px;
+  border: 1px solid var(--adm-line);
+  transition: all 0.15s ease;
+}
+.neo-feed-item:hover {
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+}
+
+/* ==========================================================================
+   CANONICAL UNIFIED TABS COMPONENT (UNI TABS SYSTEM)
+   Single CSS standard across all views (#overview, #courses, #users, #doctors)
+   Zero white-on-white text, vibrant gradient active pill, borderless elevated dock
+   ========================================================================== */
+.adm-uni-tabs,
+.adm-sliding-tabs-track,
+.adm-detail-tabs-bar,
+.adm-pillar-tabs,
+.adm-view-toggle {
+  display: inline-flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 4px !important;
+  background: #ffffff !important;
+  border-radius: 999px !important;
+  padding: 4px !important;
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.06) !important;
+  width: fit-content !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+  border: none !important;
+  user-select: none !important;
+}
+
+.adm-sliding-tabs-compact {
+  width: auto;
+  min-width: 150px;
+}
+
+.adm-sliding-pill-bg {
+  display: none !important; /* Eradicate detached gliders causing white-out text */
+}
+
+.adm-uni-tab-btn,
+.adm-sliding-tab-item,
+.adm-detail-tab-btn,
+.adm-pillar-tab,
+.adm-view-toggle-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  padding: 7px 16px !important;
+  border-radius: 999px !important;
+  border: none !important;
+  background: transparent !important;
+  color: #475569 !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease !important;
+  white-space: nowrap !important;
+  box-sizing: border-box !important;
+}
+
+.adm-uni-tab-btn:hover,
+.adm-sliding-tab-item:hover,
+.adm-detail-tab-btn:hover,
+.adm-pillar-tab:hover,
+.adm-view-toggle-btn:hover {
+  color: #0f172a !important;
+  background: #f1f5f9 !important;
+}
+
+.adm-uni-tab-btn.active,
+.adm-sliding-tab-item.active,
+.adm-detail-tab-btn.active,
+.adm-pillar-tab.active,
+.adm-view-toggle-btn.active {
+  background: #0284c7 !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 10px rgba(2, 132, 199, 0.35) !important;
+  font-weight: 700 !important;
+  border-radius: 9999px !important;
+}
+
+.adm-uni-tab-btn.active *,
+.adm-sliding-tab-item.active *,
+.adm-detail-tab-btn.active *,
+.adm-pillar-tab.active *,
+.adm-view-toggle-btn.active * {
+  color: #ffffff !important;
+}
+
+.adm-uni-tab-btn .badge,
+.adm-sliding-tab-item .adm-chip,
+.adm-detail-tab-btn .adm-chip,
+.adm-pillar-tab .adm-chip {
+  background: rgba(15, 23, 42, 0.06);
+  color: #64748b;
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 11px;
+}
+
+.adm-uni-tab-btn.active .badge,
+.adm-sliding-tab-item.active .adm-chip,
+.adm-detail-tab-btn.active .adm-chip,
+.adm-pillar-tab.active .adm-chip {
+  background: rgba(255, 255, 255, 0.22) !important;
+  color: #ffffff !important;
+}
+
+/* ==========================================================================
+   RESPONSIVE UNI TABS (TABLET & MOBILE)
+   Ensure tabs scale down gracefully, fit screens without clipping, and scroll cleanly
+   ========================================================================== */
+@media (max-width: 1280px) {
+  .adm-uni-tabs,
+  .adm-sliding-tabs-track,
+  .adm-detail-tabs-bar,
+  .adm-pillar-tabs,
+  .adm-view-toggle {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 16px !important;
+    overflow: visible !important;
+  }
+  .adm-uni-tab-btn,
+  .adm-sliding-tab-item,
+  .adm-detail-tab-btn,
+  .adm-pillar-tab,
+  .adm-view-toggle-btn {
+    padding: 6px 12px !important;
+    font-size: 12px !important;
+    gap: 4px !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .adm-uni-tabs,
+  .adm-sliding-tabs-track,
+  .adm-detail-tabs-bar,
+  .adm-pillar-tabs,
+  .adm-view-toggle {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+    padding: 4px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 14px !important;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+  }
+  .adm-uni-tab-btn,
+  .adm-sliding-tab-item,
+  .adm-detail-tab-btn,
+  .adm-pillar-tab,
+  .adm-view-toggle-btn {
+    padding: 5px 10px !important;
+    font-size: 11.5px !important;
+    gap: 4px !important;
+    flex: 1 1 auto !important;
+    justify-content: center !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+  }
+  .adm-uni-tab-btn .badge,
+  .adm-uni-tab-btn .adm-chip,
+  .adm-sliding-tab-item .adm-chip,
+  .adm-detail-tab-btn .adm-chip,
+  .adm-pillar-tab .adm-chip {
+    font-size: 10px !important;
+    padding: 1.5px 6px !important;
+  }
+  .adm-uni-tab-btn .ms,
+  .adm-sliding-tab-item .ms,
+  .adm-detail-tab-btn .ms,
+  .adm-pillar-tab .ms,
+  .adm-view-toggle-btn .ms {
+    font-size: 15px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .adm-uni-tabs,
+  .adm-sliding-tabs-track,
+  .adm-detail-tabs-bar,
+  .adm-pillar-tabs,
+  .adm-view-toggle {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+    padding: 3px !important;
+    border-radius: 12px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+  }
+  .adm-uni-tab-btn,
+  .adm-sliding-tab-item,
+  .adm-detail-tab-btn,
+  .adm-pillar-tab,
+  .adm-view-toggle-btn {
+    padding: 4px 8px !important;
+    font-size: 10.5px !important;
+    gap: 3px !important;
+    flex: 1 1 calc(50% - 6px) !important;
+    min-width: 130px !important;
+    justify-content: center !important;
+    text-align: center !important;
+    border-radius: 8px !important;
+    white-space: nowrap !important;
+  }
+  .adm-uni-tab-btn .badge,
+  .adm-uni-tab-btn .adm-chip,
+  .adm-sliding-tab-item .adm-chip,
+  .adm-detail-tab-btn .adm-chip,
+  .adm-pillar-tab .adm-chip {
+    font-size: 9px !important;
+    padding: 1px 5px !important;
+    border-radius: 6px !important;
+  }
+  .adm-uni-tab-btn .ms,
+  .adm-sliding-tab-item .ms,
+  .adm-detail-tab-btn .ms,
+  .adm-pillar-tab .ms,
+  .adm-view-toggle-btn .ms {
+    font-size: 13.5px !important;
+  }
+}
+
+/* ==========================================================================
+   SECTION SEPARATION: DEDICATED MODULE CONTAINERS (MODULES 1 TO 5)
+   Crisp Pure White elevated surfaces on muted cool-slate canvas (#eaeff5)
+   ========================================================================== */
+.neo-module-block,
+.neo-mod-1,
+.neo-mod-2,
+.neo-mod-3,
+.neo-mod-4,
+.neo-mod-5 {
+  border-radius: 20px;
+  padding: 24px 26px;
+  margin-bottom: 28px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  position: relative;
+  background: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 12px 32px -4px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.08) !important;
+  overflow: visible !important;
+}
+
+/* ==========================================================================
+   GRAPH HOVER & RICH VISUALS (INTERACTIVE CROSSHAIRS & TOOLTIPS)
+   ========================================================================== */
+.cme-spline-container,
+.gerd-spline-container {
+  width: 100%;
+  max-width: 100%;
+  height: 180px;
+  position: relative;
+  overflow: visible;
+  cursor: crosshair;
+}
+
+.svg-crosshair {
+  pointer-events: none;
+  transition: transform 0.12s cubic-bezier(0.2, 0.8, 0.4, 1), x1 0.12s ease, x2 0.12s ease;
+}
+
+.svg-hover-dot {
+  pointer-events: none;
+  transition: cx 0.12s cubic-bezier(0.2, 0.8, 0.4, 1), cy 0.12s cubic-bezier(0.2, 0.8, 0.4, 1);
+}
+
+.svg-hover-tooltip {
+  pointer-events: none;
+  transition: transform 0.12s cubic-bezier(0.2, 0.8, 0.4, 1);
+}
+
+.neo-donut-slice {
+  cursor: pointer;
+  transition: stroke-width 0.2s ease, opacity 0.2s ease, filter 0.2s ease;
+}
+.neo-donut-slice:hover {
+  stroke-width: 20 !important;
+  opacity: 0.95;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.15));
+}
+
+@media (max-width: 768px) {
+  .neo-module-block {
+    padding: 16px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+  .neo-dash-container {
+    gap: 16px;
+  }
+  .neo-dash-head {
+    padding: 16px;
+    border-radius: 18px;
+  }
+  .neo-card {
+    padding: 16px;
+    border-radius: 18px;
+  }
+  .neo-section-divider {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    margin-bottom: 0;
+  }
+  .neo-metric-2x2 {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .neo-metric-tile {
+    padding: 16px;
+    min-height: 120px;
+  }
+  .neo-quick-dock {
+    padding: 14px 16px;
+    border-radius: 16px;
+  }
+  .neo-quick-actions {
+    width: 100%;
+  }
+  .neo-quick-btn {
+    flex: 1 1 calc(50% - 6px);
+    justify-content: center;
+  }
+}
+
+/* ==========================================================================
+   CANVAS PLAIN SECTIONS (ZERO GIANT ENCLOSING CARDS)
+   ========================================================================== */
+.adm-section-plain {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  margin-bottom: 28px;
+}
+
+/* ==========================================================================
+   UNIFIED CANONICAL HOVER MICRO-INTERACTIONS ACROSS ENTIRE ADMIN SYSTEM
+   Only clickable/interactive elements elevate on hover. Static cards remain calm.
+   ========================================================================== */
+
+/* Static Containers & Display Cards (Zero Hover Jump / Elevation) */
+.neo-module-block,
+.neo-card,
+.adm-card,
+.neo-quick-dock,
+.adm-city-card {
+  transform: none !important;
+}
+.neo-module-block:hover,
+.neo-card:hover,
+.adm-card:hover,
+.neo-quick-dock:hover,
+.adm-city-card:hover {
+  transform: none !important;
+}
+
+/* Clickable Interactive Cards & Tiles (Unified Subtle Hover) */
+.neo-metric-tile,
+.adm-click-card,
+.neo-feed-item,
+.adm-master-item {
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.22s ease !important;
+  cursor: pointer !important;
+}
+
+.neo-metric-tile:hover,
+.adm-click-card:hover,
+.neo-feed-item:hover,
+.adm-master-item:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06) !important;
+  border-color: rgba(88, 43, 232, 0.18) !important;
+}
+
+/* Unified Button Hover */
+.adm-btn-primary,
+.adm-btn-outline,
+.adm-btn-hero-outline,
+.lms-hero-btn,
+.adm-btn-action,
+.neo-quick-btn,
+.adm-icon-btn {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.adm-btn-primary:hover,
+.adm-btn-outline:hover,
+.adm-btn-hero-outline:hover,
+.lms-hero-btn:hover,
+.adm-btn-action:hover,
+.neo-quick-btn:hover,
+.adm-icon-btn:hover {
+  transform: translateY(-1.5px) !important;
+  box-shadow: 0 4px 12px rgba(88, 43, 232, 0.15) !important;
+}
+
+/* ==========================================================================
+   VERTICAL MODULE WATCH VELOCITY PILLAR CHART (SCROLLABLE WITH 90% GATE)
+   ========================================================================== */
+.neo-vbar-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+  width: 100%;
+}
+
+.neo-vbar-stage {
+  position: relative;
+  height: 200px;
+  width: 100%;
+  padding-top: 24px;
+  box-sizing: border-box;
+}
+
+/* 90% Gate Reference Line */
+.neo-vbar-gate-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 146px; /* Exactly at 90% of the 120px bar pillar (38px bottom + 108px) */
+  height: 1px;
+  border-top: 1.5px dashed rgba(16, 185, 129, 0.55);
+  display: flex;
+  justify-content: flex-end;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.neo-vbar-gate-label {
+  position: absolute;
+  right: 6px;
+  top: -18px;
+  font-size: 10px;
+  font-weight: 800;
+  color: #059669;
+  background: rgba(236, 253, 245, 0.96);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  padding: 1px 8px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 1px 3px rgba(16, 185, 129, 0.1);
+}
+
+.neo-vbar-scroll-track {
+  display: flex;
+  align-items: flex-end;
+  gap: 18px;
+  overflow-x: auto;
+  overflow-y: visible;
+  padding: 48px 16px 8px;
+  margin-top: -38px;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+  z-index: 3;
+}
+
+.neo-vbar-scroll-track::-webkit-scrollbar {
+  height: 5px;
+}
+.neo-vbar-scroll-track::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+.neo-vbar-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 72px;
+  flex: 0 0 72px; /* Intelligent spacing: never over-stretch, never tight */
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.neo-vbar-col:hover {
+  transform: translateY(-2px);
+}
+
+.neo-vbar-badge {
+  font-size: 11px;
+  font-weight: 800;
+  margin-bottom: 6px;
+  white-space: nowrap;
+}
+
+.neo-vbar-track {
+  width: 22px;
+  height: 120px;
+  background: #f1f5f9;
+  border-radius: 9999px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.neo-vbar-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  border-radius: 9999px;
+  transition: height 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.neo-vbar-fill.fill-emerald {
+  background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.35);
+}
+.neo-vbar-fill.fill-blue {
+  background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.35);
+}
+.neo-vbar-fill.fill-cyan {
+  background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%);
+  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.35);
+}
+.neo-vbar-fill.fill-violet {
+  background: linear-gradient(180deg, #8b5cf6 0%, #582be8 100%);
+  box-shadow: 0 2px 6px rgba(88, 43, 232, 0.35);
+}
+.neo-vbar-fill.fill-rose {
+  background: linear-gradient(180deg, #fb7185 0%, #e11d48 100%);
+  box-shadow: 0 2px 6px rgba(225, 29, 72, 0.35);
+}
+
+.neo-vbar-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 8px;
+  text-align: center;
+}
+.neo-vbar-label strong {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--adm-ink);
+}
+.neo-vbar-label span {
+  font-size: 10px;
+  color: var(--adm-slate);
+  white-space: nowrap;
+  max-width: 58px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Anchored CSS Tooltip for Vertical Pillar Bar — ALWAYS Centered Directly Above Bar */
+.neo-vbar-tooltip {
+  position: absolute;
+  top: -46px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0b1727;
+  color: #ffffff;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  line-height: 1.35;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.16s ease, transform 0.16s ease;
+  z-index: 999;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+.neo-vbar-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: #0b1727 transparent transparent transparent;
+}
+.neo-vbar-col:hover .neo-vbar-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-2px);
+}
+
+
+
+/* ==========================================================================
+   GLOBAL DARK ELEVATION SYSTEM (ZERO 1PX CARD BORDERS, HIGH-CONTRAST SURFACES)
+   ========================================================================== */
+.neo-card,
+.adm-card,
+.adm-patient-card,
+.adm-kpi-card,
+.adm-city-card,
+.adm-triage-card-item,
+.adm-course-progress-row,
+.adm-studio-card,
+.adm-module-box,
+.adm-wizard-panel,
+.adm-lecture-card,
+.adm-material-item {
+  border: none !important;
+  background: #ffffff !important;
+  box-shadow: 0 10px 30px -4px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.08) !important;
+}
+
+/* Ensure Dropzones and Nested Form Controls Have Definite Boundaries */
+.adm-dropzone {
+  border: 2px dashed #94a3b8 !important;
+  background: #f8fafc !important;
+}
+.adm-dropzone:hover,
+.adm-dropzone.dragover {
+  border-color: #0284c7 !important;
+  background: #f0f9ff !important;
+}
+
+/* Crisp Input Visibility on Elevated Surfaces */
+.adm-input,
+.adm-select,
+.adm-textarea {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+}
+.adm-input:focus,
+.adm-select:focus,
+.adm-textarea:focus {
+  border-color: #0284c7 !important;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.18), 0 2px 8px rgba(2, 132, 199, 0.08) !important;
 }

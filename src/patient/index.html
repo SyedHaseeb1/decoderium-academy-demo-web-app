@@ -76,8 +76,10 @@
       background: #f8fafc;
       border: 1.5px solid var(--pwa-line);
       border-radius: 12px;
-      width: 38px;
-      height: 38px;
+      min-width: 44px;
+      min-height: 44px;
+      width: 44px;
+      height: 44px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -113,13 +115,15 @@
       border: 1px solid rgba(88, 43, 232, 0.25);
       color: var(--pwa-primary);
       border-radius: 9999px;
-      padding: 4px 10px;
-      font-size: 11px;
+      padding: 6px 14px;
+      min-height: 44px;
+      box-sizing: border-box;
+      font-size: 11.5px;
       font-weight: 800;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
       cursor: pointer;
       white-space: nowrap;
     }
@@ -278,8 +282,12 @@
       background: #f1f5f9;
       border: 1px solid var(--pwa-line);
       border-radius: 9999px;
-      padding: 4px 10px;
-      font-size: 11px;
+      padding: 8px 14px;
+      min-height: 44px;
+      box-sizing: border-box;
+      display: inline-flex;
+      align-items: center;
+      font-size: 12px;
       font-weight: 700;
       color: var(--pwa-slate);
       cursor: pointer;
@@ -801,6 +809,18 @@
       .pwa-notif-icon-wrap { width: 38px; height: 38px; }
       .pwa-notif-meta-row { flex-direction: column; align-items: flex-start; gap: 8px; }
       .pwa-notif-action-btn { width: 100%; justify-content: center; }
+    }
+
+    @media (max-width: 480px) {
+      .pwa-header { padding: 8px 12px; }
+      .pwa-brand span { font-size: 13.5px; }
+      .pwa-card { padding: 16px 12px; border-radius: 14px; }
+      .pwa-step-box { padding: 6px 2px; }
+      .pwa-step-title { font-size: 8.5px; }
+      .pwa-demo-chips { gap: 4px; }
+      .pwa-demo-chip { flex: 1 1 calc(50% - 4px); justify-content: center; text-align: center; font-size: 11px; }
+      .pwa-gerdq-btns { grid-template-columns: repeat(2, 1fr); }
+      .pwa-gerdq-opt { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
     }
   </style>
 </head>

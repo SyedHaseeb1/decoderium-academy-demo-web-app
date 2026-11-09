@@ -100,7 +100,7 @@ curl -s -o /dev/null -w "%{http_code}\n" http://localhost:5200/src/login/ http:/
     - Dedicated live triage roster with patient severity badges, clinical trigger explanations, and instant resolution actions.
     - Real-time notification badge on the sidebar navigation item (`#admNavAlertsBadge`).
 - **Platform Helpers & Administration**:
-  - **Executive Cockpit (`#overview`)**: Consolidated master dashboard with dual LMS and Patient Registry sections and clickable deep telemetry cards.
+  - **Executive Dashboard (`#overview`)**: Consolidated master dashboard with dual LMS and Patient Registry sections and clickable deep telemetry cards.
   - **User Management (`#users`)**: Segregated tabs for Doctors Directory & PMDC Licensing (`#users/doctors`), Patient Enlistment (`#users/patients`), and Role Permissions (`#settings?tab=permissions`).
   - **Regional Hub Matrix (`#regions`)**: Geospatial medical center distribution across 12 Pakistan urban clusters.
   - **Settings & Permissions (`#settings`)**: Accreditation pass gates, 32-bit FNV-1a verification rules, and System Roles & Access Permissions Matrix.
