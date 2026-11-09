@@ -3473,21 +3473,22 @@
     if (filteredPatients.length === 0) {
       return renderEmptyState('No Patient Records Found', 'No patients matched your active search query or indication filters.', 'Reset Filters');
     }
-    return '<div style="background:#ffffff;border-radius:12px;padding:12px 16px;margin-bottom:14px;box-shadow:0 4px 16px -2px rgba(15,23,42,0.06);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;border:1px solid #e2e8f0;">' +
-      '<div style="display:flex;align-items:center;gap:10px;flex:1;max-width:400px;background:#f8fafc;border:1.5px solid #cbd5e1;padding:6px 12px;border-radius:8px;">' +
-        '<i class="ms" style="color:#64748b;font-size:16px;">search</i>' +
-        '<input type="text" id="inpPatientTableSearch" placeholder="Search cohort by patient code, doctor, hospital..." value="' + esc(patientFilters.q) + '" style="border:none;background:transparent;outline:none;font-size:12.5px;width:100%;color:#0f172a;font-weight:600;">' +
+    return '<div class="adm-card" style="padding:16px 20px;border-radius:16px;background:#ffffff;margin-bottom:24px;box-shadow:0 10px 30px -4px rgba(15,23,42,0.08);border:1px solid #e2e8f0;">' +
+      '<div style="background:#ffffff;border-radius:12px;padding:12px 16px;margin-bottom:14px;box-shadow:0 2px 10px -2px rgba(15,23,42,0.04);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;border:1px solid #e2e8f0;">' +
+        '<div style="display:flex;align-items:center;gap:10px;flex:1;max-width:420px;background:#f8fafc;border:1.5px solid #cbd5e1;padding:6px 12px;border-radius:8px;">' +
+          '<i class="ms" style="color:#64748b;font-size:16px;">search</i>' +
+          '<input type="text" id="inpPatientTableSearch" placeholder="Search cohort by patient code, doctor, hospital..." value="' + esc(patientFilters.q) + '" style="border:none;background:transparent;outline:none;font-size:12.5px;width:100%;color:#0f172a;font-weight:600;">' +
+        '</div>' +
+        '<div style="font-size:12px;color:#64748b;font-weight:700;">Showing <strong>' + filteredPatients.length + '</strong> Clinical Records</div>' +
       '</div>' +
-      '<div style="font-size:12px;color:#64748b;font-weight:700;">Showing <strong>' + filteredPatients.length + '</strong> Clinical Records</div>' +
-    '</div>' +
-    '<div class="adm-table-wrap">' +
-      '<table class="adm-table">' +
-        '<thead>' +
-          '<tr>' +
-            '<th>Patient Code</th>' +
-            '<th>Demographics & Indication</th>' +
-            '<th>Attending Doctor</th>' +
-            '<th>Baseline / Day-3</th>' +
+      '<div class="adm-table-wrap">' +
+        '<table class="adm-table">' +
+          '<thead>' +
+            '<tr>' +
+              '<th>Patient Code</th>' +
+              '<th>Demographics & Indication</th>' +
+              '<th>Attending Doctor</th>' +
+              '<th>Baseline / Day-3</th>' +
             '<th>Day-7 GERD-Q</th>' +
             '<th>PWA Mobile App</th>' +
             '<th>Push Alerts</th>' +
@@ -3541,7 +3542,8 @@
           }).join('') +
         '</tbody>' +
       '</table>' +
-    '</div>';
+    '</div>' +
+  '</div>';
   }
 
   function bindPatientCohortTableEvents(container) {
@@ -4867,14 +4869,15 @@
     var allCoursesList = courses() || [];
     var c1 = allCoursesList[0];
 
-    return '<div style="background:#ffffff;border-radius:12px;padding:12px 16px;margin-bottom:14px;box-shadow:0 4px 16px -2px rgba(15,23,42,0.06);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;border:1px solid #e2e8f0;">' +
-      '<div style="display:flex;align-items:center;gap:10px;flex:1;max-width:400px;background:#f8fafc;border:1.5px solid #cbd5e1;padding:6px 12px;border-radius:8px;">' +
-        '<i class="ms" style="color:#64748b;font-size:16px;">search</i>' +
-        '<input type="text" id="inpDocTableSearch" placeholder="Search doctor by name, PMDC, city, hospital..." value="' + esc(docFilterState.q) + '" style="border:none;background:transparent;outline:none;font-size:12.5px;width:100%;color:#0f172a;font-weight:600;">' +
+    return '<div class="adm-card" style="padding:16px 20px;border-radius:16px;background:#ffffff;margin-bottom:24px;box-shadow:0 10px 30px -4px rgba(15,23,42,0.08);border:1px solid #e2e8f0;">' +
+      '<div style="background:#ffffff;border-radius:12px;padding:12px 16px;margin-bottom:14px;box-shadow:0 2px 10px -2px rgba(15,23,42,0.04);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;border:1px solid #e2e8f0;">' +
+        '<div style="display:flex;align-items:center;gap:10px;flex:1;max-width:420px;background:#f8fafc;border:1.5px solid #cbd5e1;padding:6px 12px;border-radius:8px;">' +
+          '<i class="ms" style="color:#64748b;font-size:16px;">search</i>' +
+          '<input type="text" id="inpDocTableSearch" placeholder="Search doctor by name, PMDC, city, hospital..." value="' + esc(docFilterState.q) + '" style="border:none;background:transparent;outline:none;font-size:12.5px;width:100%;color:#0f172a;font-weight:600;">' +
+        '</div>' +
+        '<div style="font-size:12px;color:#64748b;font-weight:700;">Showing <strong>' + filtered.length + '</strong> Doctors</div>' +
       '</div>' +
-      '<div style="font-size:12px;color:#64748b;font-weight:700;">Showing <strong>' + filtered.length + '</strong> Doctors</div>' +
-    '</div>' +
-    '<div class="adm-table-wrap">' +
+      '<div class="adm-table-wrap">' +
       '<table class="adm-table">' +
         '<thead>' +
           '<tr>' +
@@ -4952,7 +4955,8 @@
           }).join('') +
         '</tbody>' +
       '</table>' +
-    '</div>';
+    '</div>' +
+  '</div>';
   }
 
   function bindDoctorTableEvents(container) {
@@ -8740,60 +8744,193 @@
     }).length;
     var compliancePct = Math.round((completedDocsCount / Math.max(1, assignedDocs.length)) * 100);
 
-    var html =
-      crumbs([{ label: 'Courses', href: '#courses' }, { label: c.title }]) +
-      '<!-- Course Header Hero Card -->' +
-      '<div class="adm-card" style="margin-bottom:20px;overflow:hidden;padding:0;">' +
-        '<div style="height:180px;position:relative;">' +
-          courseThumbSvg(c, false) +
-          '<div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(11,23,39,0.88), transparent);display:flex;align-items:flex-end;padding:24px;">' +
+    var allCourseLectures = [];
+    (c.modules || []).forEach(function (m) {
+      (m.lectures || []).forEach(function (l) {
+        allCourseLectures.push({ lecture: l, module: m });
+      });
+    });
+    var simCurItem = allCourseLectures[0] || null;
+    var simPct = 35;
+    var simIsPlaying = false;
+    var simInterval = null;
+
+    function buildSimRailHtml(item, pct, isPlaying) {
+      var l = item ? item.lecture : null;
+      var m = item ? item.module : null;
+      var title = l ? esc(l.title) : 'Course Overview Video';
+      var speaker = l ? esc(l.presenter) : 'Faculty Lead';
+      var sec = l ? l.seconds : 540;
+      var curSec = Math.round((pct / 100) * sec);
+      var isUnlocked = pct >= 90;
+
+      return '<div class="adm-card" style="padding:18px;border-radius:18px;box-shadow:0 12px 32px -4px rgba(15,23,42,0.12);background:#ffffff;">' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid #f1f5f9;">' +
+          '<div style="display:flex;align-items:center;gap:8px;">' +
+            '<div style="width:32px;height:32px;border-radius:8px;background:rgba(37,99,235,0.12);color:#2563eb;display:flex;align-items:center;justify-content:center;">' +
+              '<i class="ms" style="font-size:18px;">preview</i>' +
+            '</div>' +
             '<div>' +
-              '<span class="adm-thumb-chip" style="margin-bottom:6px;"><i class="ms" style="font-size:12px;">school</i> ' + esc(c.category + ' · ' + c.level) + '</span>' +
-              '<div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">' +
-                '<h1 style="color:#ffffff;font-size:24px;font-weight:900;margin:0;">' + esc(c.title) + '</h1>' +
-                (c.published ? '<span class="adm-chip adm-chip-active">Published</span>' : '<span class="adm-chip adm-chip-warn">Draft</span>') +
-              '</div>' +
-              '<div style="color:rgba(255,255,255,0.85);font-size:13px;">' + esc(c.subtitle || '') + '</div>' +
+              '<div style="font-size:13px;font-weight:800;color:var(--adm-ink);">Simulated Doctor View</div>' +
+              '<div style="font-size:10.5px;color:var(--adm-slate);">Live Learner Experience</div>' +
+            '</div>' +
+          '</div>' +
+          '<span class="adm-chip" style="background:#ecfdf5;color:#065f46;border-color:#a7f3d0;font-size:10.5px;font-weight:800;">' +
+            '<i class="ms" style="font-size:12px;">visibility</i> Doctor View' +
+          '</span>' +
+        '</div>' +
+
+        '<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:8px 12px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;font-size:11.5px;">' +
+          '<div style="display:flex;align-items:center;gap:8px;">' +
+            '<div style="width:24px;height:24px;border-radius:50%;background:#2563eb;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;">AK</div>' +
+            '<div>' +
+              '<strong style="color:var(--adm-ink);">Dr. Ayesha Khan</strong>' +
+              '<span style="color:var(--adm-slate);"> · SIMS Lahore</span>' +
+            '</div>' +
+          '</div>' +
+          '<span style="font-family:monospace;font-size:10px;color:#2563eb;font-weight:700;">PMDC: 41822-P</span>' +
+        '</div>' +
+
+        '<div class="adm-sim-player-frame">' +
+          '<div class="adm-sim-screen">' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;position:relative;z-index:2;">' +
+              '<span style="font-size:10px;font-weight:800;background:rgba(0,0,0,0.65);color:#38bdf8;padding:2px 8px;border-radius:999px;display:inline-flex;align-items:center;gap:4px;">' +
+                '<i class="ms" style="font-size:12px;">lock</i> 90% Anti-Skip Gate' +
+              '</span>' +
+              '<span style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.85);background:rgba(0,0,0,0.55);padding:2px 8px;border-radius:4px;" id="simModBadge">' +
+                (m ? ('Module ' + m.number) : 'Module 1') +
+              '</span>' +
+            '</div>' +
+
+            '<div class="adm-sim-play-center" id="btnSimTogglePlay">' +
+              '<i class="ms" style="font-size:26px;" id="simPlayIcon">' + (isPlaying ? 'pause' : 'play_arrow') + '</i>' +
+            '</div>' +
+
+            '<div style="position:relative;z-index:2;background:linear-gradient(to top, rgba(0,0,0,0.88), transparent);margin:-12px;padding:12px 12px 8px;">' +
+              '<div style="font-size:12px;font-weight:800;color:#ffffff;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" id="simCurrentLecTitle">' + title + '</div>' +
+              '<div style="font-size:10.5px;color:#94a3b8;" id="simCurrentLecSpeaker">Speaker: ' + speaker + '</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="adm-sim-controls">' +
+            '<div class="adm-sim-timeline" id="simTimelineTrack" title="Anti-skipping active: 90% threshold required">' +
+              '<div class="adm-sim-gate-marker" title="90% Accreditation Gate"></div>' +
+              '<div class="adm-sim-timeline-fill' + (isUnlocked ? ' threshold-reached' : '') + '" id="simTimelineFill" style="width:' + pct + '%;"></div>' +
+            '</div>' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;font-size:10.5px;color:#94a3b8;">' +
+              '<span id="simTimeDisplay">' + fmtClock(curSec) + ' / ' + fmtClock(sec) + '</span>' +
+              '<span id="simPctDisplay" style="font-weight:800;color:' + (isUnlocked ? '#10b981' : '#fbbf24') + ';">' +
+                (isUnlocked ? '✓ 90% Threshold Met' : (pct + '% Watched (Gated)')) +
+              '</span>' +
             '</div>' +
           '</div>' +
         '</div>' +
-        '<div style="padding:16px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;background:#ffffff;">' +
-          '<div style="display:flex;gap:18px;font-size:13px;color:var(--adm-slate);flex-wrap:wrap;">' +
+
+        '<div style="margin:12px 0;">' +
+          '<button type="button" class="adm-sim-btn adm-sim-btn-primary" id="btnSimCompleteWatch" style="width:100%;justify-content:center;padding:8px 12px;">' +
+            '<i class="ms" style="font-size:15px;">speed</i> Test 90% Watch Completion Simulation' +
+          '</button>' +
+        '</div>' +
+
+        '<div style="margin-top:14px;">' +
+          '<div style="font-size:11.5px;font-weight:800;color:var(--adm-ink);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;display:flex;justify-content:space-between;">' +
+            '<span>Curriculum Playlist</span>' +
+            '<span style="color:var(--adm-slate);font-weight:600;">' + allCourseLectures.length + ' Lectures</span>' +
+          '</div>' +
+          '<div style="display:flex;flex-direction:column;gap:6px;max-height:220px;overflow-y:auto;padding-right:2px;" id="simLecturePlaylist">' +
+            allCourseLectures.map(function (item, idx) {
+              var lec = item.lecture;
+              var isCur = (l && l.id === lec.id);
+              return '<div class="adm-sim-lec-item' + (isCur ? ' active' : '') + '" data-sim-lec-id="' + lec.id + '">' +
+                '<div style="display:flex;align-items:center;gap:8px;min-width:0;">' +
+                  '<i class="ms" style="font-size:16px;color:' + (isCur ? '#2563eb' : '#64748b') + ';">' + (isCur ? 'play_circle' : 'movie') + '</i>' +
+                  '<div style="min-width:0;">' +
+                    '<div style="font-weight:700;color:var(--adm-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:210px;">' + (idx + 1) + '. ' + esc(lec.title) + '</div>' +
+                    '<div style="font-size:10.5px;color:var(--adm-slate);">' + esc(lec.presenter) + '</div>' +
+                  '</div>' +
+                '</div>' +
+                '<span style="font-size:10.5px;font-family:monospace;color:var(--adm-slate);flex-shrink:0;">' + fmtClock(lec.seconds) + '</span>' +
+              '</div>';
+            }).join('') +
+          '</div>' +
+        '</div>' +
+
+        '<div style="margin-top:14px;padding-top:12px;border-top:1px solid #f1f5f9;display:flex;flex-direction:column;gap:6px;">' +
+          '<button type="button" class="adm-sim-btn" id="btnSimLaunchQuiz" style="width:100%;justify-content:center;' + (isUnlocked ? 'border-color:#10b981;color:#065f46;background:#ecfdf5;' : '') + '">' +
+            '<i class="ms" style="font-size:15px;' + (isUnlocked ? 'color:#10b981;' : '') + '">quiz</i> ' + (isUnlocked ? 'Launch Unlocked Quiz (40 MCQs)' : 'Simulate Quiz (Locked until 90%)') +
+          '</button>' +
+          '<button type="button" class="adm-sim-btn" id="btnSimLaunchCert" style="width:100%;justify-content:center;">' +
+            '<i class="ms" style="font-size:15px;color:#7c3aed;">workspace_premium</i> View Conferred PMDC Certificate' +
+          '</button>' +
+        '</div>' +
+      '</div>';
+    }
+
+    var html =
+      crumbs([{ label: 'Courses', href: '#courses' }, { label: c.title }]) +
+      '<!-- Modern Executive Course Header Hero Card -->' +
+      '<div class="adm-card" style="margin-bottom:22px;border-radius:18px;overflow:hidden;box-shadow:0 12px 32px -4px rgba(15,23,42,0.12);border:none;">' +
+        '<div style="background:linear-gradient(135deg, #0b1727 0%, #172554 45%, #0f172a 100%);padding:24px 28px;color:#ffffff;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;position:relative;">' +
+          '<div style="display:flex;align-items:center;gap:20px;flex:1;min-width:320px;">' +
+            '<!-- Crisp 16:9 Thumbnail Badge -->' +
+            '<div style="width:140px;height:90px;border-radius:12px;border:2px solid rgba(255,255,255,0.22);overflow:hidden;flex-shrink:0;box-shadow:0 6px 18px rgba(0,0,0,0.35);background:#0f172a;">' +
+              courseThumbSvg(c, false) +
+            '</div>' +
+            '<div>' +
+              '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap;">' +
+                '<span class="adm-thumb-chip" style="margin:0;"><i class="ms" style="font-size:12px;">school</i> ' + esc(c.category + ' · ' + c.level) + '</span>' +
+                (c.published ? '<span class="adm-chip" style="background:#10b981;color:#ffffff;font-size:10.5px;font-weight:800;">✓ Published &amp; Enforced</span>' : '<span class="adm-chip adm-chip-warn" style="font-size:10.5px;">Draft Mode</span>') +
+                '<span class="adm-chip" style="background:rgba(255,255,255,0.18);color:#ffffff;border:1px solid rgba(255,255,255,0.25);font-size:10.5px;font-weight:800;"><i class="ms" style="font-size:12px;">speed</i> 90% Watch Gate Active</span>' +
+              '</div>' +
+              '<h1 style="color:#ffffff;font-size:24px;font-weight:900;margin:0 0 4px;letter-spacing:-0.5px;">' + esc(c.title) + '</h1>' +
+              '<div style="color:#94a3b8;font-size:13px;line-height:1.4;">' + esc(c.subtitle || '') + '</div>' +
+            '</div>' +
+          '</div>' +
+          '<!-- Clean Actions: Removed View as Doctor, Retained Assign Course & Settings -->' +
+          '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">' +
+            '<button type="button" class="adm-btn-primary" id="btnAssignCourseInDetail" style="background:#059669;border-color:#059669;gap:6px;padding:9px 18px;font-size:13px;font-weight:700;box-shadow:0 4px 14px rgba(5,150,105,0.3);" onclick="openAssignCourseModal(\'' + c.id + '\')"><i class="ms">person_add</i> Assign Course</button>' +
+            '<a href="#courses/' + c.id + '/edit" class="adm-btn-outline" style="background:rgba(255,255,255,0.1);color:#ffffff;border-color:rgba(255,255,255,0.25);gap:6px;padding:9px 16px;font-size:13px;font-weight:700;text-decoration:none;"><i class="ms">tune</i> Course Studio &amp; Settings</a>' +
+          '</div>' +
+        '</div>' +
+        '<!-- Metrics Bar -->' +
+        '<div style="padding:14px 28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;background:#ffffff;border-top:1px solid #f1f5f9;">' +
+          '<div style="display:flex;gap:20px;font-size:13px;color:var(--adm-slate);flex-wrap:wrap;">' +
             '<span><i class="ms" style="font-size:16px;vertical-align:middle;color:var(--adm-primary);">layers</i> <strong>' + c.modules.length + '</strong> Modules</span>' +
             '<span><i class="ms" style="font-size:16px;vertical-align:middle;color:var(--adm-cyan);">videocam</i> <strong>' + RULES.lectureCount(c) + '</strong> Lectures</span>' +
             '<span><i class="ms" style="font-size:16px;vertical-align:middle;color:var(--adm-emerald);">schedule</i> <strong>' + fmtDur(RULES.totalSeconds(c)) + '</strong> Duration</span>' +
             '<span><i class="ms" style="font-size:16px;vertical-align:middle;color:var(--adm-rose);">workspace_premium</i> <strong>' + (c.cmeHours || 12) + '</strong> CME Hours</span>' +
+            '<span><i class="ms" style="font-size:16px;vertical-align:middle;color:#8b5cf6;">groups</i> <strong>' + assignedDocs.length + '</strong> Doctors Assigned (' + compliancePct + '% Certified)</span>' +
           '</div>' +
-          '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
-            '<button type="button" class="adm-btn-primary" style="background:#582be8;border-color:#582be8;gap:6px;cursor:pointer;" onclick="launchLiveDoctorView(\'' + c.id + '\', \'d01\')" title="Open live course in active Doctor Portal"><i class="ms">visibility</i> View as Doctor</button>' +
-            '<button type="button" class="adm-btn-outline" style="gap:6px;cursor:pointer;" onclick="openCourseDoctorPreviewModal(\'' + c.id + '\', \'d01\')" title="Open in-admin interactive simulation modal"><i class="ms">preview</i> Quick Simulation</button>' +
-            '<button type="button" class="adm-btn-primary" id="btnAssignCourseInDetail" style="background:#059669;border-color:#059669;gap:6px;" onclick="openAssignCourseModal(\'' + c.id + '\')"><i class="ms">person_add</i> Assign Course</button>' +
-            '<a href="#courses/' + c.id + '/edit" class="adm-btn-outline" style="gap:6px;"><i class="ms">tune</i> Course Studio &amp; Settings</a>' +
+          '<div style="font-size:12px;color:var(--adm-slate);font-weight:600;">' +
+            '<i class="ms" style="font-size:14px;vertical-align:middle;color:#10b981;">check_circle</i> PMDC Category-1 Accreditation Compliant' +
           '</div>' +
         '</div>' +
       '</div>' +
 
-      '<!-- 4-Tab Segmented Navigation Rail (Lectures, Materials, Exam, Assigned) -->' +
-      '<div style="margin-bottom:22px;">' +
-        '<div class="adm-uni-tabs" id="courseDetailNavRail" role="tablist">' +
-          '<button type="button" class="adm-uni-tab-btn ' + (activeDetailTab === 'lectures' ? 'active' : '') + '" data-cd-tab="lectures">' +
-            '<i class="ms">video_library</i> 01 · Lectures & Modules ' +
-            '<span class="adm-chip ' + (activeDetailTab === 'lectures' ? 'adm-chip-active' : '') + '">' + c.modules.length + ' Modules · ' + RULES.lectureCount(c) + ' Lectures</span>' +
-          '</button>' +
-          '<button type="button" class="adm-uni-tab-btn ' + (activeDetailTab === 'materials' ? 'active' : '') + '" data-cd-tab="materials">' +
-            '<i class="ms">description</i> 02 · Clinical Materials & Guidelines ' +
-            '<span class="adm-chip ' + (activeDetailTab === 'materials' ? 'adm-chip-active' : '') + '">' + c.materials.length + ' Documents</span>' +
-          '</button>' +
-          '<button type="button" class="adm-uni-tab-btn ' + (activeDetailTab === 'exam' ? 'active' : '') + '" data-cd-tab="exam">' +
-            '<i class="ms">quiz</i> 03 · Assessment Exam & Question Bank ' +
-            '<span class="adm-chip ' + (activeDetailTab === 'exam' ? 'adm-chip-active' : '') + '">' + totalQuestions + ' MCQs</span>' +
-          '</button>' +
-          '<button type="button" class="adm-uni-tab-btn ' + (activeDetailTab === 'assigned' ? 'active' : '') + '" data-cd-tab="assigned">' +
-            '<i class="ms">groups</i> 04 · Assigned Doctors & Compliance ' +
-            '<span class="adm-chip ' + (activeDetailTab === 'assigned' ? 'adm-chip-active' : '') + '">' + assignedDocs.length + ' Doctors</span>' +
-          '</button>' +
-        '</div>' +
-      '</div>' +
+      '<div class="adm-course-studio-grid">' +
+        '<!-- LEFT COLUMN: The 4 Curriculum Tabs & Module Editor -->' +
+        '<div class="adm-course-studio-main">' +
+          '<!-- 4-Tab Segmented Navigation Rail (Theme Blue & Zero White-on-White) -->' +
+          '<div style="margin-bottom:20px;">' +
+            '<div class="adm-uni-tabs" id="courseDetailNavRail" role="tablist">' +
+              '<button type="button" class="adm-uni-tab-btn ' + (activeDetailTab === 'lectures' ? 'active' : '') + '" data-cd-tab="lectures">' +
+                '<i class="ms">video_library</i> 01 · Lectures &amp; Modules ' +
+                '<span class="adm-chip">' + c.modules.length + ' Modules · ' + RULES.lectureCount(c) + ' Lectures</span>' +
+              '</button>' +
+              '<button type="button" class="adm-uni-tab-btn ' + (activeDetailTab === 'materials' ? 'active' : '') + '" data-cd-tab="materials">' +
+                '<i class="ms">description</i> 02 · Clinical Materials &amp; Guidelines ' +
+                '<span class="adm-chip">' + c.materials.length + ' Documents</span>' +
+              '</button>' +
+              '<button type="button" class="adm-uni-tab-btn ' + (activeDetailTab === 'exam' ? 'active' : '') + '" data-cd-tab="exam">' +
+                '<i class="ms">quiz</i> 03 · Assessment Exam &amp; Question Bank ' +
+                '<span class="adm-chip">' + totalQuestions + ' MCQs</span>' +
+              '</button>' +
+              '<button type="button" class="adm-uni-tab-btn ' + (activeDetailTab === 'assigned' ? 'active' : '') + '" data-cd-tab="assigned">' +
+                '<i class="ms">groups</i> 04 · Assigned Doctors &amp; Compliance ' +
+                '<span class="adm-chip">' + assignedDocs.length + ' Doctors</span>' +
+              '</button>' +
+            '</div>' +
+          '</div>' +
 
       '<!-- TAB PANEL 1: LECTURES & MODULES -->' +
       '<div id="cdPanelLectures" style="' + (activeDetailTab === 'lectures' ? '' : 'display:none;') + '">' +
@@ -9048,20 +9185,24 @@
             '</table>' +
           '</div>' +
         '</div>' +
-      '</div>';
+      '</div>' +
+    '</div>' +
+    '<!-- RIGHT COLUMN: RIGHT SIDE SIMULATED LEARNER VIEW -->' +
+    '<div class="adm-course-sim-rail" id="courseSimRail">' +
+      buildSimRailHtml(simCurItem, simPct, simIsPlaying) +
+    '</div>' +
+  '</div>';
 
     $('#view').innerHTML = html;
 
-    // Tab Navigation Logic
-    $$('#courseDetailNavRail .adm-uni-tab-btn, #courseDetailNavRail .adm-pillar-tab').forEach(function (btn) {
+    // Tab Navigation Logic (Theme Blue & Clean Chip Contrast)
+    $$('#courseDetailNavRail .adm-uni-tab-btn').forEach(function (btn) {
       btn.onclick = function () {
         var t = btn.dataset.cdTab;
         activeDetailTab = t;
-        $$('#courseDetailNavRail .adm-uni-tab-btn, #courseDetailNavRail .adm-pillar-tab').forEach(function (b) {
+        $$('#courseDetailNavRail .adm-uni-tab-btn').forEach(function (b) {
           var isT = (b.dataset.cdTab === t);
           b.classList.toggle('active', isT);
-          var ch = b.querySelector('.adm-chip');
-          if (ch) ch.classList.toggle('adm-chip-active', isT);
         });
         var pLec = $('#cdPanelLectures'); if (pLec) pLec.style.display = (t === 'lectures' ? '' : 'none');
         var pMat = $('#cdPanelMaterials'); if (pMat) pMat.style.display = (t === 'materials' ? '' : 'none');
@@ -9069,6 +9210,123 @@
         var pAss = $('#cdPanelAssigned'); if (pAss) pAss.style.display = (t === 'assigned' ? '' : 'none');
       };
     });
+
+    // Right-Side Simulation Reactive Logic
+    function updateSimDisplay() {
+      var l = simCurItem ? simCurItem.lecture : null;
+      var sec = l ? l.seconds : 540;
+      var curSec = Math.round((simPct / 100) * sec);
+      var isUnlocked = simPct >= 90;
+
+      var fillEl = $('#simTimelineFill');
+      if (fillEl) {
+        fillEl.style.width = simPct + '%';
+        fillEl.classList.toggle('threshold-reached', isUnlocked);
+      }
+      var timeEl = $('#simTimeDisplay');
+      if (timeEl) timeEl.textContent = fmtClock(curSec) + ' / ' + fmtClock(sec);
+      var pctEl = $('#simPctDisplay');
+      if (pctEl) {
+        pctEl.textContent = isUnlocked ? '✓ 90% Threshold Met' : (simPct + '% Watched (Gated)');
+        pctEl.style.color = isUnlocked ? '#10b981' : '#fbbf24';
+      }
+      var quizBtn = $('#btnSimLaunchQuiz');
+      if (quizBtn) {
+        quizBtn.innerHTML = '<i class="ms" style="font-size:15px;' + (isUnlocked ? 'color:#10b981;' : '') + '">quiz</i> ' + (isUnlocked ? 'Launch Unlocked Quiz (40 MCQs)' : 'Simulate Quiz (Locked until 90%)');
+        if (isUnlocked) {
+          quizBtn.style.borderColor = '#10b981';
+          quizBtn.style.color = '#065f46';
+          quizBtn.style.background = '#ecfdf5';
+        }
+      }
+    }
+
+    var btnPlay = $('#btnSimTogglePlay');
+    if (btnPlay) {
+      btnPlay.onclick = function () {
+        simIsPlaying = !simIsPlaying;
+        var iconEl = $('#simPlayIcon');
+        if (iconEl) iconEl.textContent = simIsPlaying ? 'pause' : 'play_arrow';
+        if (simIsPlaying) {
+          simInterval = setInterval(function () {
+            if (simPct < 100) {
+              simPct += 1;
+              updateSimDisplay();
+              if (simPct === 90) {
+                snack('✓ 90% watch velocity threshold reached! Assessment exam unlocked.');
+              }
+            } else {
+              simIsPlaying = false;
+              clearInterval(simInterval);
+              if (iconEl) iconEl.textContent = 'play_arrow';
+            }
+          }, 350);
+        } else {
+          clearInterval(simInterval);
+        }
+      };
+    }
+
+    var btnFast = $('#btnSimCompleteWatch');
+    if (btnFast) {
+      btnFast.onclick = function () {
+        simPct = 92;
+        updateSimDisplay();
+        snack('✓ Simulated 90% watch threshold reached for Dr. Ayesha Khan! Module Quiz unlocked.');
+      };
+    }
+
+    function selectSimLecture(lecId) {
+      var matched = allCourseLectures.filter(function (x) { return x.lecture.id === lecId; })[0];
+      if (matched) {
+        simCurItem = matched;
+        simPct = 25;
+        if (simInterval) clearInterval(simInterval);
+        simIsPlaying = false;
+        var iconEl = $('#simPlayIcon'); if (iconEl) iconEl.textContent = 'play_arrow';
+        var tEl = $('#simCurrentLecTitle'); if (tEl) tEl.textContent = matched.lecture.title;
+        var sEl = $('#simCurrentLecSpeaker'); if (sEl) sEl.textContent = 'Speaker: ' + matched.lecture.presenter;
+        var mEl = $('#simModBadge'); if (mEl) mEl.textContent = 'Module ' + matched.module.number;
+        $$('#simLecturePlaylist .adm-sim-lec-item').forEach(function (el) {
+          el.classList.toggle('active', el.dataset.simLecId === lecId);
+        });
+        updateSimDisplay();
+        snack('Now simulating: ' + matched.lecture.title);
+      }
+    }
+
+    $$('#simLecturePlaylist [data-sim-lec-id]').forEach(function (el) {
+      el.onclick = function () {
+        selectSimLecture(el.dataset.simLecId);
+      };
+    });
+
+    $$('[data-edit-lec]').forEach(function (btn) {
+      var card = btn.closest('.adm-lecture-card');
+      if (card) {
+        card.style.cursor = 'pointer';
+        card.title = 'Click to simulate this lecture in right view';
+        card.onclick = function (e) {
+          if (!e.target.closest('button')) {
+            selectSimLecture(btn.dataset.editLec);
+          }
+        };
+      }
+    });
+
+    var btnSimQuiz = $('#btnSimLaunchQuiz');
+    if (btnSimQuiz) {
+      btnSimQuiz.onclick = function () {
+        openCourseDoctorPreviewModal(c.id, 'd01');
+      };
+    }
+
+    var btnSimCert = $('#btnSimLaunchCert');
+    if (btnSimCert) {
+      btnSimCert.onclick = function () {
+        openCertificateDetailModal('SHA-2026-6V5JBU');
+      };
+    }
 
     var btnEditCur = $('#btnEditCurCourse');
     if (btnEditCur) btnEditCur.onclick = function () { openEditCourseDialog(c.id); };
