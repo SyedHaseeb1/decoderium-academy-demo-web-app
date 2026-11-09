@@ -4171,10 +4171,6 @@
           '<h1 class="adm-hero-title"><i class="ms" style="color:#0284c7;font-size:32px;">map</i> Clinical Trial Study Zones & Regional Hubs</h1>' +
           '<p class="adm-hero-subtitle">Hierarchical operational governance: define geographical trial zones, assign lead hospitals, link investigators, and assign accredited masterclasses by zone or clinical specialty.</p>' +
         '</div>' +
-        '<div class="adm-hero-actions">' +
-          '<button type="button" class="adm-btn-outline" onclick="openAssignCourseModal(null, null);" style="gap:6px;"><i class="ms">school</i> Assign Course to Zone</button>' +
-          '<button type="button" class="adm-btn-primary" onclick="openCreateZoneModal(null);" style="gap:6px;background:#0284c7;border-color:#0284c7;box-shadow:0 4px 14px rgba(2,132,199,0.3);"><i class="ms">add_location_alt</i> + Create New Zone</button>' +
-        '</div>' +
       '</div>' +
 
       '<div class="adm-kpi-grid" style="margin-bottom:24px;">' +
@@ -4225,8 +4221,9 @@
             '<h3 style="font-size:18px;font-weight:800;color:#0f172a;margin:0;"><i class="ms" style="color:#0284c7;vertical-align:-2px;margin-right:6px;">share_location</i> Clinical Trial Study Zones & Hub Directory</h3>' +
             '<p style="margin:4px 0 0;font-size:12.5px;color:#64748b;">Hierarchical relationship: Zone &rarr; Lead Hospital &rarr; Assigned Doctors &rarr; Enrolled Patients & E-CRF</p>' +
           '</div>' +
-          '<div>' +
-            '<button type="button" class="adm-btn-outline" onclick="openCreateZoneModal(null);" style="font-size:12px;padding:6px 14px;border-radius:999px;"><i class="ms" style="font-size:15px;">add</i> + Add Zone</button>' +
+          '<div style="display:flex;align-items:center;gap:8px;">' +
+            '<button type="button" class="adm-btn-outline" onclick="openAssignCourseModal(null, null);" style="font-size:12px;padding:6px 14px;border-radius:999px;"><i class="ms" style="font-size:14px;">school</i> Assign Course</button>' +
+            '<button type="button" class="adm-btn-primary" onclick="openCreateZoneModal(null);" style="font-size:12px;padding:6px 14px;border-radius:999px;background:#0284c7;border-color:#0284c7;"><i class="ms" style="font-size:14px;">add_location_alt</i> + Create New Zone</button>' +
           '</div>' +
         '</div>' +
 
@@ -5146,9 +5143,6 @@
           '<h1 class="adm-hero-title"><i class="ms" style="color:var(--adm-primary);font-size:30px;">medical_services</i> Doctors Directory & Clinical Performance</h1>' +
           '<p class="adm-hero-subtitle">Enlisted doctors, PMDC accreditation status, CME course progress, and assigned clinical trial cohorts.</p>' +
         '</div>' +
-        '<div class="adm-hero-actions">' +
-          '<button type="button" class="adm-btn-primary" id="btnEnlistDoc"><i class="ms">person_add</i> + Enlist New Doctor</button>' +
-        '</div>' +
       '</div>' +
 
       '<!-- Strategic Doctor Telemetry KPI Shelf -->' +
@@ -5212,6 +5206,7 @@
             '<button type="button" class="adm-btn-outline" id="btnToggleDocFilter">' +
               '<i class="ms">tune</i> Filters <i class="ms" style="font-size:16px;">expand_more</i>' +
             '</button>' +
+            '<button type="button" class="adm-btn-primary" id="btnEnlistDoc"><i class="ms">person_add</i> + Enlist New Doctor</button>' +
           '</div>' +
         '</div>' +
 
@@ -5638,9 +5633,6 @@
           '<h1 class="adm-hero-title"><i class="ms" style="color:var(--adm-primary);font-size:30px;">people_alt</i> System User Management & Access Controls</h1>' +
           '<p class="adm-hero-subtitle">Governance of platform administrator accounts, doctor login credentials, role assignments, security policies, and authentication audit logs.</p>' +
         '</div>' +
-        '<div class="adm-hero-actions">' +
-          '<button type="button" class="adm-btn-primary" id="btnCreateUserAccount"><i class="ms">person_add</i> + Create User Account</button>' +
-        '</div>' +
       '</div>' +
 
       '<div class="adm-kpi-grid" style="margin-bottom:24px;">' +
@@ -5685,9 +5677,12 @@
         '</div>' +
       '</div>' +
 
-      '<div class="adm-detail-tabs-bar" style="margin-bottom:20px;">' +
-        '<button type="button" class="adm-detail-tab-btn ' + (activeUserMgmtTab === 'accounts' ? 'active' : '') + '" id="tabBtnAccounts"><i class="ms">manage_accounts</i> Platform Accounts & Credentials</button>' +
-        '<button type="button" class="adm-detail-tab-btn ' + (activeUserMgmtTab === 'audit' ? 'active' : '') + '" id="tabBtnAudit"><i class="ms">security_update_good</i> User Login Audit Logs & Sessions</button>' +
+      '<div class="adm-detail-tabs-bar" style="margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">' +
+        '<div style="display:flex;gap:6px;align-items:center;">' +
+          '<button type="button" class="adm-detail-tab-btn ' + (activeUserMgmtTab === 'accounts' ? 'active' : '') + '" id="tabBtnAccounts"><i class="ms">manage_accounts</i> Platform Accounts & Credentials</button>' +
+          '<button type="button" class="adm-detail-tab-btn ' + (activeUserMgmtTab === 'audit' ? 'active' : '') + '" id="tabBtnAudit"><i class="ms">security_update_good</i> User Login Audit Logs & Sessions</button>' +
+        '</div>' +
+        '<button type="button" class="adm-btn-primary" id="btnCreateUserAccount"><i class="ms">person_add</i> + Create User Account</button>' +
       '</div>' +
 
       '<div id="panelAccounts" style="display:' + (activeUserMgmtTab === 'accounts' ? 'block' : 'none') + ';">' +
@@ -5921,36 +5916,10 @@
 
     var html =
       renderPatientPillarTabs('directory') +
-      (activeFilterDoc ?
-        ('<div class="adm-card" style="padding:14px 20px;background:#f0f9ff;border:1.5px solid #0284c7;border-radius:16px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;box-shadow:0 8px 24px -2px rgba(2,132,199,0.12);">' +
-          '<div style="display:flex;align-items:center;gap:12px;">' +
-            '<div style="width:40px;height:40px;border-radius:50%;background:#0284c7;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;box-shadow:0 2px 8px rgba(2,132,199,0.3);">' +
-              esc(initials(activeFilterDoc.name)) +
-            '</div>' +
-            '<div>' +
-              '<div style="font-size:14px;font-weight:800;color:#0f172a;display:flex;align-items:center;gap:8px;">' +
-                '<span>Filtered Cohort: ' + esc(activeFilterDoc.name) + '</span>' +
-                '<span class="adm-chip adm-chip-cyan" style="font-size:10.5px;">' + esc(activeFilterDoc.zone || 'Central Zone') + '</span>' +
-                '<span class="adm-chip adm-chip-violet" style="font-size:10px;font-family:monospace;">' + esc(activeFilterDoc.pmdcId) + '</span>' +
-              '</div>' +
-              '<div style="font-size:12px;color:#0284c7;margin-top:2px;">' +
-                esc(activeFilterDoc.hospital) + ' &middot; ' + esc(activeFilterDoc.city) + ' &middot; <strong>' + filteredPatients.length + ' Enrolled Clinical Patients</strong>' +
-              '</div>' +
-            '</div>' +
-          '</div>' +
-          '<div style="display:flex;align-items:center;gap:8px;">' +
-            '<button type="button" class="adm-btn-primary" onclick="openRegisterPatientDialog();" style="font-size:11.5px;padding:5px 14px;border-radius:999px;background:#0284c7;border-color:#0284c7;font-weight:700;"><i class="ms" style="font-size:14px;">person_add</i> + Enroll Patient for Dr. ' + esc(activeFilterDoc.name.split(' ')[1] || 'Doctor') + '</button>' +
-            '<a href="#patients" class="adm-btn-outline" style="background:#ffffff;font-size:11.5px;padding:5px 14px;border-radius:999px;font-weight:700;"><i class="ms" style="font-size:13px;">clear</i> Clear Doctor Filter</a>' +
-          '</div>' +
-        '</div>') : '') +
       '<div class="adm-hero">' +
         '<div>' +
           '<h1 class="adm-hero-title"><i class="ms" style="color:var(--adm-primary);font-size:30px;">clinical_notes</i> Patients Registry & Clinical Records</h1>' +
           '<p class="adm-hero-subtitle">Comprehensive longitudinal registry for 48 trial patients enrolled across 12 hospital clusters in Pakistan. Monitors baseline GERD scores, Day-3 follow-up checkups, Day-7 endpoints, and PWA digital app engagement.</p>' +
-        '</div>' +
-        '<div class="adm-hero-actions">' +
-          '<button type="button" class="adm-btn-outline" id="btnPrintUniversalClinicQr2"><i class="ms">qr_code</i> Clinic Leaflet</button>' +
-          '<button type="button" class="adm-btn-primary" id="btnRegisterPatient2"><i class="ms">person_add</i> + Enroll Patient</button>' +
         '</div>' +
       '</div>' +
 
@@ -6013,8 +5982,10 @@
               '<input type="text" id="inpPatientSearchQueryHeader" placeholder="Search patients, doctors, hospitals..." value="' + esc(patientFilters.q) + '">' +
             '</div>' +
             '<button type="button" class="adm-btn-outline" id="btnTogglePatientSearch">' +
-              '<i class="ms">tune</i> Filter Cohort <i class="ms" style="font-size:16px;">expand_more</i>' +
+              '<i class="ms">tune</i> Filter <i class="ms" style="font-size:16px;">expand_more</i>' +
             '</button>' +
+            '<button type="button" class="adm-btn-outline" id="btnPrintUniversalClinicQr2"><i class="ms">qr_code</i> Leaflet</button>' +
+            '<button type="button" class="adm-btn-primary" id="btnRegisterPatient2"><i class="ms">person_add</i> + Enroll Patient</button>' +
           '</div>' +
         '</div>' +
 
@@ -6042,6 +6013,30 @@
             '</div>' +
           '</div>' +
         '</div>' +
+
+        '<!-- Filter Indicator Placed Directly Above The Patient Listing -->' +
+        (activeFilterDoc ?
+          ('<div class="adm-card" style="padding:12px 18px;background:#f0f9ff;border:1.5px solid #0284c7;border-radius:14px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;box-shadow:0 4px 16px -2px rgba(2,132,199,0.12);">' +
+            '<div style="display:flex;align-items:center;gap:12px;">' +
+              '<div style="width:36px;height:36px;border-radius:50%;background:#0284c7;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12.5px;box-shadow:0 2px 8px rgba(2,132,199,0.3);">' +
+                esc(initials(activeFilterDoc.name)) +
+              '</div>' +
+              '<div>' +
+                '<div style="font-size:13.5px;font-weight:800;color:#0f172a;display:flex;align-items:center;gap:8px;">' +
+                  '<span>Filtered Cohort: ' + esc(activeFilterDoc.name) + '</span>' +
+                  '<span class="adm-chip adm-chip-cyan" style="font-size:10px;">' + esc(activeFilterDoc.zone || 'Central Zone') + '</span>' +
+                  '<span class="adm-chip adm-chip-violet" style="font-size:10px;font-family:monospace;">' + esc(activeFilterDoc.pmdcId) + '</span>' +
+                '</div>' +
+                '<div style="font-size:11.5px;color:#0284c7;margin-top:2px;">' +
+                  esc(activeFilterDoc.hospital) + ' &middot; ' + esc(activeFilterDoc.city) + ' &middot; <strong>' + filteredPatients.length + ' Enrolled Clinical Patients</strong>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div style="display:flex;align-items:center;gap:8px;">' +
+              '<button type="button" class="adm-btn-primary" onclick="openRegisterPatientDialog();" style="font-size:11px;padding:4px 12px;border-radius:999px;background:#0284c7;border-color:#0284c7;font-weight:700;"><i class="ms" style="font-size:13px;">person_add</i> + Enroll for Dr. ' + esc(activeFilterDoc.name.split(' ')[1] || 'Doctor') + '</button>' +
+              '<a href="#patients" class="adm-btn-outline" style="background:#ffffff;font-size:11px;padding:4px 12px;border-radius:999px;font-weight:700;"><i class="ms" style="font-size:12px;">clear</i> Clear Doctor Filter</a>' +
+            '</div>' +
+          '</div>') : '') +
 
         '<div id="patientCohortTableContainer">' +
           renderPatientCohortContent(filteredPatients, patientViewMode) +
@@ -6332,13 +6327,6 @@
           '<h1 class="adm-hero-title"><i class="ms" style="color:var(--adm-primary);font-size:30px;">auto_stories</i> Curriculum & Course Management</h1>' +
           '<p class="adm-hero-subtitle">Design course curriculums, manage rich vector thumbnails, watch threshold gates, and quiz question pools.</p>' +
         '</div>' +
-        '<div class="adm-hero-actions">' +
-          '<div class="adm-view-toggle">' +
-            '<button type="button" class="adm-view-toggle-btn ' + (courseViewMode === 'grid' ? 'active' : '') + '" id="btnViewGrid"><i class="ms">grid_view</i> Grid</button>' +
-            '<button type="button" class="adm-view-toggle-btn ' + (courseViewMode === 'table' ? 'active' : '') + '" id="btnViewTable"><i class="ms">table_rows</i> Table</button>' +
-          '</div>' +
-          '<button type="button" class="adm-btn-primary" id="btnCreateCourse"><i class="ms">add</i> + Create New Course</button>' +
-        '</div>' +
       '</div>' +
 
       '<!-- Strategic Curriculum Telemetry KPI Shelf -->' +
@@ -6391,6 +6379,10 @@
             '<p class="adm-section-desc">Showing <strong id="lblCourseCohortCount">' + clist.length + '</strong> courses across gastroenterology, acid peptic diseases, and endoscopic pharmacotherapy.</p>' +
           '</div>' +
           '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">' +
+            '<div class="adm-view-toggle">' +
+              '<button type="button" class="adm-view-toggle-btn ' + (courseViewMode === 'grid' ? 'active' : '') + '" id="btnViewGrid"><i class="ms">grid_view</i> Grid</button>' +
+              '<button type="button" class="adm-view-toggle-btn ' + (courseViewMode === 'table' ? 'active' : '') + '" id="btnViewTable"><i class="ms">table_rows</i> Table</button>' +
+            '</div>' +
             '<div class="adm-list-header-search">' +
               '<i class="ms">search</i>' +
               '<input type="text" id="inpCourseSearchQueryHeader" placeholder="Search masterclasses by title, topic..." value="' + esc(courseFilterState.q) + '">' +
@@ -6398,6 +6390,7 @@
             '<button type="button" class="adm-btn-outline" id="btnToggleCourseFilter">' +
               '<i class="ms">tune</i> Filters <i class="ms" style="font-size:16px;">expand_more</i>' +
             '</button>' +
+            '<button type="button" class="adm-btn-primary" id="btnCreateCourse"><i class="ms">add</i> + Create New Course</button>' +
           '</div>' +
         '</div>' +
 
