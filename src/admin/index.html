@@ -1256,6 +1256,30 @@
      -------------------------------------------------------------------------- */
   var activeOverviewTab = 'all'; // 'all' | 'lms' | 'patients' | 'alerts' | 'regions'
 
+  function switchOverviewTab(t) {
+    activeOverviewTab = t;
+    try { sessionStorage.setItem('adm_overview_tab', t); } catch (e) { }
+    try { history.replaceState(null, '', '#overview?tab=' + t); } catch (e) { }
+    $$('[data-ov-tab]').forEach(function (b) {
+      var isCur = (b.dataset.ovTab === t);
+      b.classList.toggle('active', isCur);
+      b.setAttribute('aria-selected', isCur);
+    });
+    var cs = $('#ovCombinedSummary');
+    var m1 = $('#ovMod1');
+    var m2 = $('#ovMod2');
+    var m3 = $('#ovMod3');
+    var m4 = $('#ovMod4');
+    var m5 = $('#ovMod5');
+    if (cs) cs.style.display = (t === 'all') ? 'block' : 'none';
+    if (m1) m1.style.display = (t === 'lms') ? 'block' : 'none';
+    if (m2) m2.style.display = (t === 'patients') ? 'block' : 'none';
+    if (m3) m3.style.display = (t === 'alerts') ? 'block' : 'none';
+    if (m4) m4.style.display = (t === 'regions') ? 'block' : 'none';
+    if (m5) m5.style.display = (t === 'audit') ? 'block' : 'none';
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+
   function renderRegionalMatrixContent() {
     var actDocs = (doctors() || []).filter(function (d) { return d.active; });
     var pubCourses = (courses() || []).filter(function (c) { return c.published; });
@@ -2628,30 +2652,6 @@
 
     $('#view').innerHTML = html;
 
-    function switchOverviewTab(t) {
-      activeOverviewTab = t;
-      try { sessionStorage.setItem('adm_overview_tab', t); } catch (e) { }
-      try { history.replaceState(null, '', '#overview?tab=' + t); } catch (e) { }
-      $$('[data-ov-tab]').forEach(function (b) {
-        var isCur = (b.dataset.ovTab === t);
-        b.classList.toggle('active', isCur);
-        b.setAttribute('aria-selected', isCur);
-      });
-      var cs = $('#ovCombinedSummary');
-      var m1 = $('#ovMod1');
-      var m2 = $('#ovMod2');
-      var m3 = $('#ovMod3');
-      var m4 = $('#ovMod4');
-      var m5 = $('#ovMod5');
-      if (cs) cs.style.display = (t === 'all') ? 'block' : 'none';
-      if (m1) m1.style.display = (t === 'lms') ? 'block' : 'none';
-      if (m2) m2.style.display = (t === 'patients') ? 'block' : 'none';
-      if (m3) m3.style.display = (t === 'alerts') ? 'block' : 'none';
-      if (m4) m4.style.display = (t === 'regions') ? 'block' : 'none';
-      if (m5) m5.style.display = (t === 'audit') ? 'block' : 'none';
-      window.scrollTo({ top: 0, behavior: 'instant' });
-    }
-
     $$('[data-ov-tab]').forEach(function (tabBtn) {
       tabBtn.onclick = function () {
         switchOverviewTab(tabBtn.dataset.ovTab);
@@ -3791,13 +3791,58 @@
           cancelText: 'Cancel',
           danger: false,
           onConfirm: function () {
+            var audEl = $('#inpBroadcastAudience');
+            var audVal = audEl ? audEl.value : 'all';
+            var selVid = $('#inpBroadcastVideo');
+            var vidUrl = selVid ? selVid.value : 'none';
+            if (vidUrl === 'custom') {
+              var customEl = $('#inpCustomVideoUrl');
+              if (customEl && customEl.value.trim()) vidUrl = customEl.value.trim();
+            }
+            var hasVideo = (vidUrl && vidUrl !== 'none');
+            var nTitle = titleEl.value.trim();
+            var nMsg = msgEl.value.trim();
+
             var pts = patients() || [];
-            pts.forEach(function (p) {
+            var targetPts = pts.filter(function (p) {
+              if (audVal === 'all') return true;
+              if (audVal === 'day3_pending') return p.followupStatus === 'due_today' || p.day3Score === null;
+              if (audVal === 'day7_pending') return p.gerdqScore === undefined || p.day7Score === null;
+              if (audVal.indexOf('region_') === 0) {
+                var reg = audVal.replace('region_', '').toLowerCase();
+                return (p.city && p.city.toLowerCase().indexOf(reg) > -1);
+              }
+              if (audVal.indexOf('doc_') === 0) {
+                var did = audVal.replace('doc_', '');
+                return p.doctorId === did;
+              }
+              return true;
+            });
+
+            var newNotif = {
+              id: 'notif_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+              title: nTitle,
+              message: nMsg,
+              videoUrl: hasVideo ? vidUrl : null,
+              reel: hasVideo,
+              timestamp: new Date().toISOString(),
+              read: false,
+              hasSurvey: tmpl ? (tmpl.id === 'tmpl-1' || tmpl.id === 'tmpl-2') : false,
+              surveyType: tmpl ? (tmpl.id === 'tmpl-2' ? 'gerdq' : (tmpl.id === 'tmpl-1' ? 'discomfort' : null)) : null,
+              sender: 'Attending Doctor'
+            };
+
+            targetPts.forEach(function (p) {
+              p.notifications = p.notifications || [];
+              var item = Object.assign({}, newNotif, {
+                sender: p.doctorName || 'Attending Doctor'
+              });
+              p.notifications.unshift(item);
               p.notificationStatus = 'delivered';
-              p.lastNotification = titleEl.value.trim() + ' · Just now';
+              p.lastNotification = nTitle + ' · Just now';
             });
             saveState();
-            snack('✓ Real-time broadcast successfully dispatched to ' + audLabel + '.');
+            snack('✓ Real-time broadcast successfully dispatched to ' + targetPts.length + ' registered patient devices.');
             if (typeof viewNotificationsDashboard === 'function') {
               viewNotificationsDashboard();
             }
@@ -10412,6 +10457,29 @@
       };
     }
   }
+
+  /* --------------------------------------------------------------------------
+     Global Window Bridge for Inline HTML Action Handlers
+     Exposes dialog, modal & simulation workflows to window for infallible inline onclick execution
+     -------------------------------------------------------------------------- */
+  window.openCreateCourseDialog = openCreateCourseDialog;
+  window.openCreateCourseModal = (typeof openCreateCourseModal === 'function') ? openCreateCourseModal : openCreateCourseDialog;
+  window.launchLiveDoctorView = launchLiveDoctorView;
+  window.openCourseDoctorPreviewModal = openCourseDoctorPreviewModal;
+  window.openAssignCourseModal = openAssignCourseModal;
+  window.openCertificateDetailModal = openCertificateDetailModal;
+  window.openCreateZoneModal = openCreateZoneModal;
+  window.openEditZoneModal = openEditZoneModal;
+  window.openEnlistDoctorDialog = openEnlistDoctorDialog;
+  window.openEditDoctorDialog = openEditDoctorDialog;
+  window.openNotificationComposerModal = openNotificationComposerModal;
+  window.openRegisterPatientDialog = openRegisterPatientDialog;
+  window.openPatientQrLeafletDialog = openPatientQrLeafletDialog;
+  window.openEditCourseDialog = openEditCourseDialog;
+  window.copyDoctorCredentials = copyDoctorCredentials;
+  window.printCertificateDocument = printCertificateDocument;
+  window.inspectDoctor = inspectDoctor;
+  window.switchOverviewTab = switchOverviewTab;
 
   /* --------------------------------------------------------------------------
      Initialization

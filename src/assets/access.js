@@ -212,7 +212,43 @@ function seedInitialPatients() {
       enrolledOn: isoDaysAgo(14 - (i % 12)),
       pwaInstalled: pwaInstalled,
       pushEnabled: pushEnabled,
-      notificationStatus: notifStatus
+      notificationStatus: notifStatus,
+      notifications: [
+        {
+          id: 'notif_p' + i + '_1',
+          title: 'Day-3 Symptom Checkup Due Today',
+          message: 'Assalam-o-Alaikum. Please record your Day-3 symptom discomfort score in your recovery diary and watch your attending doctor\'s 30s guidance reel.',
+          videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+          reel: true,
+          timestamp: isoDaysAgo(1),
+          read: !isPending,
+          hasSurvey: true,
+          surveyType: 'discomfort',
+          sender: doc.name
+        },
+        {
+          id: 'notif_p' + i + '_2',
+          title: 'Clinical Video Guidance: ' + indications[i % indications.length] + ' Recovery',
+          message: 'Personal treatment instructions from ' + doc.name + ' regarding morning fasting dosing and avoiding food triggers.',
+          videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+          reel: true,
+          timestamp: isoDaysAgo(3),
+          read: true,
+          hasSurvey: false,
+          sender: doc.name
+        },
+        {
+          id: 'notif_p' + i + '_3',
+          title: 'Mobile Device Paired with ' + doc.hospital,
+          message: 'Your personal phone is securely paired with GILEAP Observational Study registry. You will receive instant push notifications and doctor guidance reels here.',
+          videoUrl: null,
+          reel: false,
+          timestamp: isoDaysAgo(6),
+          read: true,
+          hasSurvey: false,
+          sender: doc.name + ' · Study Hub'
+        }
+      ]
     });
   }
   return pts;
@@ -269,6 +305,47 @@ function loadState() {
   if (!ST.patients || !ST.patients.length || !ST.patients[0].hasOwnProperty('pwaInstalled')) {
     ST.patients = seedInitialPatients();
   }
+  // Ensure patients have notifications array initialized
+  (ST.patients || []).forEach(function (p) {
+    if (!p.notifications || !p.notifications.length) {
+      p.notifications = [
+        {
+          id: 'notif_' + p.id + '_1',
+          title: 'Day-3 Symptom Checkup Due Today',
+          message: 'Assalam-o-Alaikum. Please record your Day-3 symptom discomfort score in your recovery diary and watch your attending doctor\'s 30s guidance reel.',
+          videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+          reel: true,
+          timestamp: isoDaysAgo(1),
+          read: (p.followupStatus !== 'due_today'),
+          hasSurvey: true,
+          surveyType: 'discomfort',
+          sender: p.doctorName || 'Attending Doctor'
+        },
+        {
+          id: 'notif_' + p.id + '_2',
+          title: 'Clinical Video Guidance: ' + (p.indication || 'Acid Peptic') + ' Recovery',
+          message: 'Personal treatment instructions from ' + (p.doctorName || 'Attending Doctor') + ' regarding morning fasting dosing and avoiding food triggers.',
+          videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+          reel: true,
+          timestamp: isoDaysAgo(3),
+          read: true,
+          hasSurvey: false,
+          sender: p.doctorName || 'Attending Doctor'
+        },
+        {
+          id: 'notif_' + p.id + '_3',
+          title: 'Mobile Device Paired with ' + (p.hospital || 'Study Center'),
+          message: 'Your personal phone is securely paired with GILEAP Observational Study registry. You will receive instant push notifications and doctor guidance reels here.',
+          videoUrl: null,
+          reel: false,
+          timestamp: isoDaysAgo(6),
+          read: true,
+          hasSurvey: false,
+          sender: (p.doctorName || 'Attending Doctor') + ' · Study Hub'
+        }
+      ];
+    }
+  });
   if (!ST.zones || !ST.zones.length) {
     ST.zones = seedInitialZones();
   }

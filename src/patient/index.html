@@ -848,26 +848,22 @@
          ========================================================================= -->
     <div class="pwa-card" id="connectView" style="display:none;">
       <div style="text-align:center;">
-        <span class="pwa-step-chip">Universal Clinic Intake · Step 2 of 3</span>
+        <span class="pwa-step-chip">Device Notification Setup</span>
         <h2 style="font-size:22px;font-weight:900;margin:10px 0 6px;letter-spacing:-0.5px;">Connect with Your Doctor</h2>
         <p style="font-size:13px;color:var(--pwa-slate);line-height:1.5;margin:0;">
-          Scanned the clinic QR leaflet? Enter your prescribed Patient ID to activate your personal notification stream and recovery diary.
+          Set up this personal device to receive clinical notifications, doctor video reels, and follow-up checkup questionnaires directly from your attending physician.
         </p>
       </div>
 
-      <!-- 3-Step Visual Progress Bar -->
+      <!-- 2-Step Visual Progress Bar -->
       <div class="pwa-steps-row">
-        <div class="pwa-step-box is-done">
-          <div class="pwa-step-num"><i class="ms" style="font-size:14px;">check</i></div>
-          <div class="pwa-step-title">1. Scan Universal QR</div>
-        </div>
         <div class="pwa-step-box is-active">
-          <div class="pwa-step-num">2</div>
-          <div class="pwa-step-title">2. Enter Patient ID</div>
+          <div class="pwa-step-num">1</div>
+          <div class="pwa-step-title">Enter Patient ID</div>
         </div>
         <div class="pwa-step-box">
-          <div class="pwa-step-num">3</div>
-          <div class="pwa-step-title">3. Allow Alerts</div>
+          <div class="pwa-step-num">2</div>
+          <div class="pwa-step-title">Allow Device Alerts</div>
         </div>
       </div>
 
@@ -896,14 +892,14 @@
           <i class="ms" style="font-size:20px;">notifications_active</i>
         </div>
         <div style="font-size:12px;color:var(--pwa-slate);line-height:1.45;">
-          <strong style="color:var(--pwa-ink);display:block;margin-bottom:2px;">Personal Notification Stream:</strong>
-          Enables instant Day-3 checkup alerts, Day-7 GERD-Q survey reminders, and doctor video messages directly on your device with zero SMS fees.
+          <strong style="color:var(--pwa-ink);display:block;margin-bottom:2px;">Device Notification Stream:</strong>
+          Enables instant Day-3 checkup alerts, Day-7 GERD-Q survey reminders, and doctor video reels directly on your mobile device.
         </div>
       </div>
 
       <!-- Main Connect Action -->
       <button type="button" class="pwa-btn-primary" id="btnConnectAndNotify">
-        <i class="ms" style="font-size:18px;">notifications_active</i> Allow Notifications & Connect
+        <i class="ms" style="font-size:18px;">notifications_active</i> Allow Notifications &amp; Pair Device
       </button>
 
       <div style="text-align:center;font-size:11.5px;color:var(--pwa-slate);display:flex;align-items:center;justify-content:center;gap:6px;">
@@ -925,11 +921,11 @@
           </a>
           <div class="pwa-live-badge">
             <span class="pwa-pulse-dot"></span>
-            <span>Live Diary Stream</span>
+            <span>Device Paired · Notifications Active</span>
           </div>
         </div>
         <div>
-          <h2 style="font-size:22px;font-weight:900;margin:0 0 4px;color:var(--pwa-ink);letter-spacing:-0.5px;">Notification & Video Center</h2>
+          <h2 style="font-size:22px;font-weight:900;margin:0 0 4px;color:var(--pwa-ink);letter-spacing:-0.5px;">Doctor Notifications &amp; Video Channel</h2>
           <div style="font-size:12.5px;color:var(--pwa-slate);line-height:1.45;" id="notifCenterPatientMeta">
             <!-- Populated dynamically with patient and attending doctor info -->
           </div>
@@ -937,62 +933,37 @@
 
         <!-- Filter Segmented Tabs -->
         <div class="pwa-tabs" id="notifFilterTabs">
-          <button type="button" class="pwa-tab is-active" data-filter="all">All Alerts (5)</button>
-          <button type="button" class="pwa-tab" data-filter="videos">Doctor Videos (3)</button>
-          <button type="button" class="pwa-tab" data-filter="surveys">Clinical Surveys (2)</button>
+          <button type="button" class="pwa-tab is-active" data-filter="all">All Alerts</button>
+          <button type="button" class="pwa-tab" data-filter="videos">Doctor Reels</button>
+          <button type="button" class="pwa-tab" data-filter="surveys">Checkups &amp; Surveys</button>
         </div>
       </div>
 
-      <!-- Educational Guidance Video Carousel / Cards -->
+      <!-- Section 1: Doctor Guidance Reels (if available/pushed) -->
       <div class="pwa-card" id="cardVideoLibrary" style="padding:20px;">
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-          <span class="pwa-step-chip">Interactive Video Library</span>
+          <span class="pwa-step-chip">Doctor Guidance Reels</span>
           <span style="font-size:11px;font-weight:700;color:var(--pwa-primary);" id="lblVideoWatchedCounter">3 Guidance Videos Available</span>
         </div>
-        <h3 style="font-size:15px;font-weight:800;margin:8px 0 2px;">Doctor & Clinical Care Guidance Videos</h3>
+        <h3 style="font-size:15px;font-weight:800;margin:8px 0 2px;">Prescribed Video Guidance</h3>
         <p style="font-size:12px;color:var(--pwa-slate);margin:0 0 12px;line-height:1.45;">
           Short 30-second interactive clinical instructions tailored to your prescribed therapy and recovery milestones.
         </p>
 
-        <div class="pwa-reels-grid">
-          <!-- Video Card 1: Attending Doctor -->
-          <div class="pwa-reel-card" id="btnPlayVideoDoc">
-            <div class="pwa-reel-thumb">
-              <div class="pwa-reel-play-btn"><i class="ms" style="font-size:22px;">play_arrow</i></div>
-              <span class="pwa-reel-duration">0:30</span>
-            </div>
-            <div style="font-size:12.5px;font-weight:800;color:var(--pwa-ink);line-height:1.3;" id="cardVideoDocTitle">Doctor's Treatment Plan & Dosing</div>
-            <div style="font-size:11px;color:var(--pwa-slate);" id="cardVideoDocSub">Attending Doctor · P-CAB Adherence</div>
-            <div style="margin-top:auto;"><span class="pwa-reel-badge" id="badgeVideoDoc">Tap to Watch</span></div>
-          </div>
-
-          <!-- Video Card 2: Clinical Nutritionist -->
-          <div class="pwa-reel-card" id="btnPlayVideoDiet">
-            <div class="pwa-reel-thumb" style="background:linear-gradient(135deg, #064e3b 0%, #047857 100%);">
-              <div class="pwa-reel-play-btn" style="color:#047857;"><i class="ms" style="font-size:22px;">restaurant_menu</i></div>
-              <span class="pwa-reel-duration">0:30</span>
-            </div>
-            <div style="font-size:12.5px;font-weight:800;color:var(--pwa-ink);line-height:1.3;">Nutritionist Reflux Diet Rules</div>
-            <div style="font-size:11px;color:var(--pwa-slate);">Clinical Dietician · Trigger Foods to Avoid</div>
-            <div style="margin-top:auto;"><span class="pwa-reel-badge" id="badgeVideoDiet">Tap to Watch</span></div>
-          </div>
-
-          <!-- Video Card 3: Research Coordinator -->
-          <div class="pwa-reel-card" id="btnPlayVideoNurse">
-            <div class="pwa-reel-thumb" style="background:linear-gradient(135deg, #4c1d95 0%, #6d28d9 100%);">
-              <div class="pwa-reel-play-btn" style="color:#6d28d9;"><i class="ms" style="font-size:22px;">medical_services</i></div>
-              <span class="pwa-reel-duration">0:30</span>
-            </div>
-            <div style="font-size:12.5px;font-weight:800;color:var(--pwa-ink);line-height:1.3;">Day-3 & Day-7 Checkup Guide</div>
-            <div style="font-size:11px;color:var(--pwa-slate);">Study Coordinator · E-CRF Daily Diary</div>
-            <div style="margin-top:auto;"><span class="pwa-reel-badge" id="badgeVideoNurse">Tap to Watch</span></div>
-          </div>
+        <div class="pwa-reels-grid" id="pwaReelsGrid">
+          <!-- Populated dynamically via renderNotificationsView() -->
         </div>
       </div>
 
-      <!-- Chronological Notification Stream with Interactive Survey Links -->
-      <div class="pwa-notif-feed" id="pwaNotifFeed">
-        <!-- Rendered dynamically -->
+      <!-- Section 2: Recent Notifications History -->
+      <div style="width:100%;">
+        <div style="font-size:13px;font-weight:800;color:var(--pwa-ink);margin:4px 0 10px;text-transform:uppercase;letter-spacing:0.5px;display:flex;align-items:center;justify-content:space-between;">
+          <span>Recent Notifications &amp; Messages</span>
+          <span style="font-size:11px;color:var(--pwa-slate);font-weight:600;" id="lblNotifHistoryCount">Channel History</span>
+        </div>
+        <div class="pwa-notif-feed" id="pwaNotifFeed">
+          <!-- Rendered dynamically -->
+        </div>
       </div>
     </div>
 
@@ -1311,6 +1282,177 @@
     /* -------------------------------------------------------------------------
        VIEW 2 RENDER: NOTIFICATION & VIDEO CENTER (#notifications)
        ------------------------------------------------------------------------- */
+    function formatNotifTime(ts) {
+      if (!ts) return 'Recent';
+      try {
+        var d = new Date(ts);
+        var now = new Date();
+        var diffMs = now - d;
+        var diffMin = Math.floor(diffMs / (1000 * 60));
+        if (diffMin < 1) return 'Just now';
+        if (diffMin < 60) return diffMin + 'm ago';
+        var diffHr = Math.floor(diffMin / 60);
+        if (diffHr < 24) return diffHr + 'h ago';
+        var diffDay = Math.floor(diffHr / 24);
+        if (diffDay === 1) return 'Yesterday';
+        if (diffDay < 7) return diffDay + 'd ago';
+        return d.toLocaleDateString();
+      } catch (e) {
+        return 'Recent';
+      }
+    }
+
+    function openNotificationDetailModal(notif, p) {
+      if (!notif) return;
+      var docName = cleanDocName(p.doctorName);
+      notif.read = true;
+      saveState();
+
+      var host = $('#pwaVideoTheaterHost');
+      if (!host) return;
+
+      var hasDiscomfortSurvey = notif.hasSurvey && notif.surveyType === 'discomfort';
+      var hasGerdqSurvey = notif.hasSurvey && notif.surveyType === 'gerdq';
+      var curScore = (p.day3Score !== null && p.day3Score !== undefined) ? p.day3Score : 5;
+
+      host.innerHTML =
+        '<div class="pwa-player-theater" id="pwaDetailModalOverlay">' +
+          '<div class="pwa-player-card" style="max-width:500px;background:#ffffff;border-radius:20px;overflow:hidden;box-shadow:0 25px 60px rgba(0,0,0,0.45);">' +
+            '<div style="background:linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;">' +
+              '<div>' +
+                '<span style="font-size:10px;font-weight:800;letter-spacing:0.8px;text-transform:uppercase;color:#a5b4fc;"><i class="ms" style="font-size:12px;vertical-align:-2px;">notifications_active</i> Clinical Notification</span>' +
+                '<h4 style="font-size:15px;font-weight:800;color:#ffffff;margin:2px 0 0;">' + esc(notif.title) + '</h4>' +
+              '</div>' +
+              '<button type="button" id="btnDetailModalClose" style="background:transparent;border:none;color:#94a3b8;font-size:26px;cursor:pointer;line-height:1;">&times;</button>' +
+            '</div>' +
+            '<div style="padding:18px 20px;overflow-y:auto;max-height:75vh;">' +
+              '<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--pwa-line);">' +
+                '<div style="width:36px;height:36px;border-radius:50%;background:#eff6ff;color:#2563eb;display:flex;align-items:center;justify-content:center;font-weight:900;">' +
+                  '<i class="ms" style="font-size:20px;">stethoscope</i>' +
+                '</div>' +
+                '<div>' +
+                  '<div style="font-size:13px;font-weight:800;color:var(--pwa-ink);">' + esc(notif.sender || ('Dr. ' + docName)) + '</div>' +
+                  '<div style="font-size:11px;color:var(--pwa-slate);">' + esc(p.hospital + ', ' + p.city) + ' · ' + formatNotifTime(notif.timestamp) + '</div>' +
+                '</div>' +
+              '</div>' +
+
+              '<div style="font-size:13.5px;color:var(--pwa-ink);line-height:1.6;background:#f8fafc;padding:14px 16px;border-radius:12px;border:1px solid var(--pwa-line);margin-bottom:16px;">' +
+                esc(notif.message || notif.desc) +
+              '</div>' +
+
+              (notif.videoUrl ?
+                ('<div style="background:#090e17;border-radius:14px;overflow:hidden;padding:12px;text-align:center;margin-bottom:16px;">' +
+                  '<div style="font-size:11px;font-weight:800;color:#38bdf8;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:6px;">' +
+                    '<i class="ms" style="font-size:15px;">smart_display</i> 30-Second Clinical Video Guidance Reel' +
+                  '</div>' +
+                  '<video src="' + esc(notif.videoUrl) + '" controls playsinline autoplay style="width:100%;max-height:220px;border-radius:8px;background:#000;outline:none;"></video>' +
+                '</div>') : '') +
+
+              (hasDiscomfortSurvey ?
+                ('<div style="background:#fff1f2;border:1.5px solid #fecdd3;border-radius:14px;padding:14px;margin-bottom:16px;" id="boxNotifDiscomfortSurvey">' +
+                  '<div style="font-size:12.5px;font-weight:800;color:#9f1239;margin-bottom:4px;display:flex;align-items:center;gap:6px;">' +
+                    '<i class="ms" style="font-size:17px;">rate_review</i> Day-3 Discomfort Checkup Question' +
+                  '</div>' +
+                  '<div style="font-size:12px;color:#881337;line-height:1.45;margin-bottom:10px;">' +
+                    'On a scale of 1 to 10, rate your current gastrointestinal discomfort (1 = minimal, 10 = severe):' +
+                  '</div>' +
+                  '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;" id="notifScorePicker">' +
+                    [1,2,3,4,5,6,7,8,9,10].map(function (n) {
+                      var isSel = (curScore === n);
+                      return '<button type="button" class="notif-score-btn ' + (isSel ? 'active' : '') + '" data-score="' + n + '" style="flex:1;min-width:28px;height:34px;border-radius:8px;border:1.5px solid ' + (isSel ? '#e11d48' : '#fda4af') + ';background:' + (isSel ? '#e11d48' : '#ffffff') + ';color:' + (isSel ? '#ffffff' : '#9f1239') + ';font-weight:800;font-size:13px;cursor:pointer;">' + n + '</button>';
+                    }).join('') +
+                  '</div>' +
+                  '<button type="button" class="pwa-btn-primary" id="btnSubmitNotifDiscomfort" style="background:#e11d48;border-color:#e11d48;width:100%;font-size:12px;padding:8px 14px;">' +
+                    'Submit Discomfort Score to ' + esc(docName) +
+                  '</button>' +
+                '</div>') : '') +
+
+              (hasGerdqSurvey ?
+                ('<div style="background:#f5f3ff;border:1.5px solid #ddd6fe;border-radius:14px;padding:14px;margin-bottom:16px;">' +
+                  '<div style="font-size:12.5px;font-weight:800;color:#5b21b6;margin-bottom:4px;display:flex;align-items:center;gap:6px;">' +
+                    '<i class="ms" style="font-size:17px;">fact_check</i> Day-7 GERD-Q Survey Milestone' +
+                  '</div>' +
+                  '<div style="font-size:12px;color:#6d28d9;line-height:1.45;margin-bottom:10px;">' +
+                    'Validated 6-question clinical assessment required for post-treatment protocol analysis.' +
+                  '</div>' +
+                  '<button type="button" class="pwa-btn-primary" id="btnLaunchNotifGerdq" style="background:#7c3aed;border-color:#7c3aed;width:100%;font-size:12px;padding:8px 14px;">' +
+                    'Complete Day-7 GERD-Q Survey &rarr;' +
+                  '</button>' +
+                '</div>') : '') +
+
+              '<div style="display:flex;gap:10px;justify-content:flex-end;margin-top:10px;">' +
+                '<button type="button" class="pwa-btn-primary" id="btnDetailModalDone" style="padding:8px 18px;font-size:12.5px;">' +
+                  '<i class="ms" style="font-size:16px;">check</i> Mark as Read &amp; Close' +
+                '</button>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+
+      function closeDetailModal() {
+        host.innerHTML = '';
+        renderNotificationsView(p);
+      }
+
+      var btnClose = $('#btnDetailModalClose');
+      if (btnClose) btnClose.onclick = closeDetailModal;
+      var btnDone = $('#btnDetailModalDone');
+      if (btnDone) btnDone.onclick = closeDetailModal;
+
+      // Bind discomfort score picker
+      var scorePicker = $('#notifScorePicker');
+      if (scorePicker) {
+        scorePicker.querySelectorAll('.notif-score-btn').forEach(function (b) {
+          b.onclick = function () {
+            curScore = parseInt(b.dataset.score, 10);
+            scorePicker.querySelectorAll('.notif-score-btn').forEach(function (btn) {
+              var s = parseInt(btn.dataset.score, 10);
+              var isS = (s === curScore);
+              btn.style.background = isS ? '#e11d48' : '#ffffff';
+              btn.style.color = isS ? '#ffffff' : '#9f1239';
+              btn.style.borderColor = isS ? '#e11d48' : '#fda4af';
+            });
+          };
+        });
+      }
+
+      var btnSubmitScore = $('#btnSubmitNotifDiscomfort');
+      if (btnSubmitScore) {
+        btnSubmitScore.onclick = function () {
+          p.day3Score = curScore;
+          p.followupStatus = (p.day7Score !== null && p.day7Score !== undefined) ? 'completed' : 'day3_done';
+          notif.answered = true;
+          notif.read = true;
+          saveState();
+          showToast('✓ Day-3 Discomfort score (' + curScore + '/10) submitted to ' + esc(docName) + '!');
+          var box = $('#boxNotifDiscomfortSurvey');
+          if (box) {
+            box.innerHTML =
+              '<div style="background:#ecfdf5;border:1.5px solid #a7f3d0;color:#065f46;padding:12px 14px;border-radius:10px;font-size:12.5px;font-weight:700;display:flex;align-items:center;gap:8px;">' +
+                '<i class="ms" style="font-size:20px;color:#059669;">check_circle</i>' +
+                '<span>Discomfort score (' + curScore + '/10) successfully recorded and transmitted to ' + esc(docName) + '.</span>' +
+              '</div>';
+          }
+        };
+      }
+
+      var btnGerdq = $('#btnLaunchNotifGerdq');
+      if (btnGerdq) {
+        btnGerdq.onclick = function () {
+          closeDetailModal();
+          location.hash = '#diary';
+          setTimeout(function () {
+            var el = $('#cardGerdqSurvey');
+            if (el) {
+              el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              el.classList.add('highlight-pulse');
+              setTimeout(function () { el.classList.remove('highlight-pulse'); }, 2800);
+            }
+          }, 150);
+        };
+      }
+    }
+
     function renderNotificationsView(p) {
       var docName = cleanDocName(p.doctorName);
       var meta = $('#notifCenterPatientMeta');
@@ -1320,195 +1462,192 @@
           'Attending: <strong>' + esc(docName) + '</strong> (' + esc(p.hospital + ', ' + p.city) + ')';
       }
 
-      var cardDocTitle = $('#cardVideoDocTitle');
-      if (cardDocTitle) cardDocTitle.textContent = docName + ': Treatment Plan & Dosing';
-      var cardDocSub = $('#cardVideoDocSub');
-      if (cardDocSub) cardDocSub.textContent = esc(p.indication) + ' · Morning Dosing';
+      // 1. Populate Doctor Guidance Reels
+      var reelsGrid = $('#pwaReelsGrid');
+      var cardVideoLib = $('#cardVideoLibrary');
+      var reels = [
+        {
+          key: 'doc',
+          title: docName + ': Treatment Plan & Dosing',
+          sub: 'Attending Doctor · P-CAB Adherence',
+          duration: '0:30',
+          watched: p.videoDocWatched,
+          icon: 'play_arrow',
+          gradient: 'linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%)'
+        },
+        {
+          key: 'diet',
+          title: 'Nutritionist Reflux Diet Rules',
+          sub: 'Clinical Dietician · Trigger Foods to Avoid',
+          duration: '0:30',
+          watched: p.videoDietWatched,
+          icon: 'restaurant_menu',
+          gradient: 'linear-gradient(135deg, #064e3b 0%, #047857 100%)'
+        },
+        {
+          key: 'nurse',
+          title: 'Day-3 & Day-7 Checkup Guide',
+          sub: 'Study Coordinator · E-CRF Daily Diary',
+          duration: '0:30',
+          watched: p.videoNurseWatched,
+          icon: 'medical_services',
+          gradient: 'linear-gradient(135deg, #4c1d95 0%, #6d28d9 100%)'
+        }
+      ];
 
-      var docBadge = $('#badgeVideoDoc');
-      if (docBadge) {
-        docBadge.className = 'pwa-reel-badge' + (p.videoDocWatched ? ' watched' : '');
-        docBadge.textContent = p.videoDocWatched ? 'Watched ✓' : 'Tap to Watch';
-      }
-      var dietBadge = $('#badgeVideoDiet');
-      if (dietBadge) {
-        dietBadge.className = 'pwa-reel-badge' + (p.videoDietWatched ? ' watched' : '');
-        dietBadge.textContent = p.videoDietWatched ? 'Watched ✓' : 'Tap to Watch';
-      }
-      var nurseBadge = $('#badgeVideoNurse');
-      if (nurseBadge) {
-        nurseBadge.className = 'pwa-reel-badge' + (p.videoNurseWatched ? ' watched' : '');
-        nurseBadge.textContent = p.videoNurseWatched ? 'Watched ✓' : 'Tap to Watch';
-      }
+      // Add any custom reels pushed by doctor
+      (p.notifications || []).forEach(function (n) {
+        if (n.videoUrl && n.reel) {
+          reels.unshift({
+            key: n.id,
+            title: n.title,
+            sub: n.sender || docName,
+            duration: '0:30',
+            watched: n.read,
+            icon: 'videocam',
+            gradient: 'linear-gradient(135deg, #0f172a 0%, #334155 100%)',
+            customUrl: n.videoUrl
+          });
+        }
+      });
 
       var watchedCount = (p.videoDocWatched ? 1 : 0) + (p.videoDietWatched ? 1 : 0) + (p.videoNurseWatched ? 1 : 0);
       var lblCounter = $('#lblVideoWatchedCounter');
       if (lblCounter) {
-        lblCounter.textContent = watchedCount > 0 ? (watchedCount + ' of 3 Videos Watched ✓') : '3 Guidance Videos Available';
+        lblCounter.textContent = watchedCount > 0 ? (watchedCount + ' of ' + reels.length + ' Videos Watched ✓') : (reels.length + ' Guidance Videos Available');
       }
 
-      var cardVideoLib = $('#cardVideoLibrary');
       if (cardVideoLib) {
         cardVideoLib.style.display = (currentNotifFilter === 'surveys') ? 'none' : 'block';
       }
 
+      if (reelsGrid) {
+        reelsGrid.innerHTML = reels.map(function (r) {
+          return (
+            '<div class="pwa-reel-card" data-reel-key="' + r.key + '" style="cursor:pointer;">' +
+              '<div class="pwa-reel-thumb" style="background:' + r.gradient + ';">' +
+                '<div class="pwa-reel-play-btn"><i class="ms" style="font-size:22px;">' + r.icon + '</i></div>' +
+                '<span class="pwa-reel-duration">' + r.duration + '</span>' +
+              '</div>' +
+              '<div style="font-size:12.5px;font-weight:800;color:var(--pwa-ink);line-height:1.3;">' + esc(r.title) + '</div>' +
+              '<div style="font-size:11px;color:var(--pwa-slate);">' + esc(r.sub) + '</div>' +
+              '<div style="margin-top:auto;"><span class="pwa-reel-badge' + (r.watched ? ' watched' : '') + '">' + (r.watched ? 'Watched ✓' : 'Tap to Watch') + '</span></div>' +
+            '</div>'
+          );
+        }).join('');
+
+        reelsGrid.querySelectorAll('[data-reel-key]').forEach(function (btn) {
+          btn.onclick = function () {
+            var rKey = btn.dataset.reelKey;
+            var matchedCustom = reels.filter(function (x) { return x.key === rKey; })[0];
+            if (matchedCustom && matchedCustom.customUrl) {
+              openVideoPlayer({
+                title: matchedCustom.title,
+                speaker: matchedCustom.sub,
+                role: 'Attending Doctor Video Reel',
+                accent: '#2563eb',
+                duration: 30,
+                transcript: '30-second clinical guidance reel pushed directly by your attending physician.',
+                watchedKey: 'videoDocWatched'
+              }, p);
+            } else {
+              openVideoPlayer(rKey, p);
+            }
+          };
+        });
+      }
+
+      // 2. Populate Chronological Notifications Feed
       var feed = $('#pwaNotifFeed');
       if (!feed) return;
 
-      var items = [
-        {
-          type: 'survey',
-          icon: 'rate_review',
-          iconBg: '#fff1f2',
-          iconColor: '#e11d48',
-          title: 'Day-3 Symptom Checkup Due Today',
-          desc: 'Please report your current gastrointestinal discomfort score (1 to 10) so ' + esc(docName) + ' can review your clinical progress.',
-          time: 'Day-3 Follow-Up Checkup',
-          badgeText: (p.day3Score !== null && p.day3Score !== undefined) ? ('Completed: ' + p.day3Score + '/10 ✓') : 'Pending Doctor Review ⚠️',
-          badgeBg: (p.day3Score !== null && p.day3Score !== undefined) ? '#ecfdf5' : '#fff1f2',
-          badgeColor: (p.day3Score !== null && p.day3Score !== undefined) ? '#065f46' : '#9f1239',
-          actionText: 'Complete Day-3 Discomfort Score &rarr;',
-          actionTarget: 'discomfort'
-        },
-        {
-          type: 'survey',
-          icon: 'fact_check',
-          iconBg: '#f5f3ff',
-          iconColor: '#7c3aed',
-          title: 'Day-7 GERD-Q Clinical Survey Available',
-          desc: '6-question validated clinical assessment to quantify symptom frequency over the past week (Heartburn, regurgitation & sleep quality).',
-          time: 'Protocol Milestone · Day 7 Endpoint',
-          badgeText: (p.gerdqScore !== undefined) ? ('Completed: ' + p.gerdqScore + '/18 (' + (p.gerdqCategory || 'Controlled') + ') ✓') : 'Survey Open Now',
-          badgeBg: (p.gerdqScore !== undefined) ? '#ecfdf5' : '#eff6ff',
-          badgeColor: (p.gerdqScore !== undefined) ? '#065f46' : '#1e40af',
-          actionText: 'Launch Day-7 GERD-Q Survey &rarr;',
-          actionTarget: 'gerdq'
-        },
-        {
-          type: 'video',
-          icon: 'videocam',
-          iconBg: '#eff6ff',
-          iconColor: '#2563eb',
-          title: docName + '\'s Video Message: Treatment Plan & P-CAB Adherence',
-          desc: 'Personal clinical instructions from ' + esc(docName) + ' regarding morning fasting dosing and avoiding treatment interruption.',
-          time: 'Broadcast by Attending Doctor · 0:30',
-          badgeText: p.videoDocWatched ? 'Watched ✓' : 'New Video Message',
-          badgeBg: p.videoDocWatched ? '#ecfdf5' : '#eff6ff',
-          badgeColor: p.videoDocWatched ? '#065f46' : '#2563eb',
-          actionText: 'Watch Doctor Video (0:30) &rarr;',
-          actionVideo: 'doc'
-        },
-        {
-          type: 'video',
-          icon: 'restaurant_menu',
-          iconBg: '#ecfdf5',
-          iconColor: '#059669',
-          title: 'Dietary Video Guide: What to Eat & What to Avoid',
-          desc: 'Crucial food rules from clinical nutritionists: avoiding deep-fried gravies, spices, tea/coffee, and elevating the bed head.',
-          time: 'Clinical Nutrition Dept · 0:30',
-          badgeText: p.videoDietWatched ? 'Watched ✓' : 'Guidance Video',
-          badgeBg: p.videoDietWatched ? '#ecfdf5' : '#f1f5f9',
-          badgeColor: p.videoDietWatched ? '#065f46' : '#475569',
-          actionText: 'Watch Nutrition Guide (0:30) &rarr;',
-          actionVideo: 'diet'
-        },
-        {
-          type: 'sync',
-          icon: 'verified_user',
-          iconBg: '#f8fafc',
-          iconColor: '#582be8',
-          title: 'Personal Notification Stream Activated',
-          desc: 'Your mobile device is securely paired with GILEAP Study Center hospital ' + esc(p.hospital) + '. All reports are encrypted.',
-          time: 'Pairing Verified · Delivers Free Push Alerts',
-          badgeText: 'Delivered ✓✓',
-          badgeBg: '#f0fdf4',
-          badgeColor: '#166534',
-          actionText: null
-        }
-      ];
+      var notifList = (p.notifications && p.notifications.length) ? p.notifications : [];
 
       // Update tab counts
-      var allCount = items.length;
-      var videoCount = items.filter(function (x) { return x.type === 'video'; }).length + 1;
-      var surveyCount = items.filter(function (x) { return x.type === 'survey'; }).length;
+      var allCount = notifList.length;
+      var videoNotifCount = notifList.filter(function (x) { return x.videoUrl || x.reel; }).length;
+      var surveyNotifCount = notifList.filter(function (x) { return x.hasSurvey; }).length;
+
       var tabAll = $('#notifFilterTabs [data-filter="all"]');
       if (tabAll) tabAll.textContent = 'All Alerts (' + allCount + ')';
       var tabVideos = $('#notifFilterTabs [data-filter="videos"]');
-      if (tabVideos) tabVideos.textContent = 'Doctor Videos (' + videoCount + ')';
+      if (tabVideos) tabVideos.textContent = 'Doctor Reels (' + reels.length + ')';
       var tabSurveys = $('#notifFilterTabs [data-filter="surveys"]');
-      if (tabSurveys) tabSurveys.textContent = 'Clinical Surveys (' + surveyCount + ')';
+      if (tabSurveys) tabSurveys.textContent = 'Checkups & Surveys (' + surveyNotifCount + ')';
 
-      // Filter items based on active tab
-      var filtered = items.filter(function (item) {
-        if (currentNotifFilter === 'videos') return item.type === 'video';
-        if (currentNotifFilter === 'surveys') return item.type === 'survey';
+      var filtered = notifList.filter(function (n) {
+        if (currentNotifFilter === 'videos') return (n.videoUrl || n.reel);
+        if (currentNotifFilter === 'surveys') return n.hasSurvey;
         return true;
       });
 
-      feed.innerHTML = filtered.map(function (item) {
-        var actionHtml = '';
-        if (item.actionTarget) {
-          actionHtml = '<button type="button" class="pwa-notif-action-btn" data-survey-jump="' + item.actionTarget + '">' +
-                         item.actionText +
-                       '</button>';
-        } else if (item.actionVideo) {
-          var btnCls = item.actionVideo === 'diet' ? 'pwa-notif-action-btn btn-diet' : 'pwa-notif-action-btn btn-video';
-          actionHtml = '<button type="button" class="' + btnCls + '" data-video-trigger="' + item.actionVideo + '">' +
-                         item.actionText +
-                       '</button>';
+      var countLbl = $('#lblNotifHistoryCount');
+      if (countLbl) countLbl.textContent = filtered.length + ' Recent Alerts';
+
+      if (filtered.length === 0) {
+        feed.innerHTML =
+          '<div class="pwa-card" style="text-align:center;padding:32px 20px;">' +
+            '<div style="width:52px;height:52px;border-radius:50%;background:#ecfdf5;color:#059669;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">' +
+              '<i class="ms" style="font-size:30px;">check_circle</i>' +
+            '</div>' +
+            '<h3 style="font-size:17px;font-weight:800;color:var(--pwa-ink);margin:0 0 6px;">Notifications Active &amp; Up to Date</h3>' +
+            '<p style="font-size:12.5px;color:var(--pwa-slate);line-height:1.5;max-width:340px;margin:0 auto 16px;">' +
+              'Your device is connected to ' + esc(docName) + '. When your doctor sends clinical alerts, follow-up checkups, or video reels, you will receive them here.' +
+            '</p>' +
+            '<a href="#diary" class="pwa-btn-primary" style="display:inline-flex;align-items:center;gap:6px;padding:8px 18px;font-size:12.5px;text-decoration:none;">' +
+              '<i class="ms" style="font-size:16px;">close</i> Close &amp; Return to Diary' +
+            '</a>' +
+          '</div>';
+        return;
+      }
+
+      feed.innerHTML = filtered.map(function (n) {
+        var isUnread = !n.read;
+        var iconName = n.videoUrl ? 'videocam' : (n.hasSurvey ? 'rate_review' : 'notifications');
+        var iconBg = n.videoUrl ? '#eff6ff' : (n.hasSurvey ? '#fff1f2' : '#f5f3ff');
+        var iconColor = n.videoUrl ? '#2563eb' : (n.hasSurvey ? '#e11d48' : '#7c3aed');
+
+        var badgeText = isUnread ? 'New ⚠️' : 'Delivered ✓✓';
+        var badgeBg = isUnread ? '#fff1f2' : '#f0fdf4';
+        var badgeColor = isUnread ? '#9f1239' : '#166534';
+        if (n.hasSurvey && n.answered) {
+          badgeText = 'Answered ✓';
+          badgeBg = '#ecfdf5';
+          badgeColor = '#065f46';
         }
 
         return (
-          '<div class="pwa-notif-card">' +
-            '<div class="pwa-notif-icon-wrap" style="background:' + item.iconBg + ';color:' + item.iconColor + ';">' +
-              '<i class="ms" style="font-size:22px;">' + item.icon + '</i>' +
+          '<div class="pwa-notif-card" data-notif-id="' + n.id + '" style="cursor:pointer;position:relative;' + (isUnread ? 'border-color:rgba(88,43,232,0.4);background:#fcfaff;' : '') + '">' +
+            (isUnread ? '<span style="position:absolute;top:12px;right:12px;width:8px;height:8px;border-radius:50%;background:#2563eb;" title="Unread alert"></span>' : '') +
+            '<div class="pwa-notif-icon-wrap" style="background:' + iconBg + ';color:' + iconColor + ';">' +
+              '<i class="ms" style="font-size:22px;">' + iconName + '</i>' +
             '</div>' +
             '<div class="pwa-notif-body">' +
               '<div class="pwa-notif-title-row">' +
-                '<span class="pwa-notif-title">' + item.title + '</span>' +
-                '<span style="font-size:11px;font-weight:800;background:' + item.badgeBg + ';color:' + item.badgeColor + ';padding:3px 10px;border-radius:9999px;white-space:nowrap;">' +
-                  item.badgeText +
+                '<span class="pwa-notif-title" style="display:flex;align-items:center;gap:6px;">' +
+                  esc(n.title) +
+                '</span>' +
+                '<span style="font-size:10.5px;font-weight:800;background:' + badgeBg + ';color:' + badgeColor + ';padding:2px 8px;border-radius:9999px;white-space:nowrap;">' +
+                  badgeText +
                 '</span>' +
               '</div>' +
-              '<div class="pwa-notif-desc">' + item.desc + '</div>' +
+              '<div class="pwa-notif-desc">' + esc(n.message || n.desc) + '</div>' +
               '<div class="pwa-notif-meta-row">' +
-                '<span class="pwa-notif-time">' + item.time + '</span>' +
-                actionHtml +
+                '<span class="pwa-notif-time">' + esc(n.sender || ('Dr. ' + docName)) + ' · ' + formatNotifTime(n.timestamp) + '</span>' +
+                '<button type="button" class="pwa-notif-action-btn" data-notif-open="' + n.id + '" style="padding:5px 12px;font-size:11.5px;">' +
+                  (n.videoUrl ? '<i class="ms" style="font-size:14px;">play_circle</i> Watch Reel' : (n.hasSurvey ? '<i class="ms" style="font-size:14px;">assignment</i> Answer Question' : '<i class="ms" style="font-size:14px;">visibility</i> View Details')) +
+                '</button>' +
               '</div>' +
             '</div>' +
           '</div>'
         );
       }).join('');
 
-      // Bind survey jump buttons
-      feed.querySelectorAll('[data-survey-jump]').forEach(function (btn) {
-        btn.onclick = function () {
-          var target = btn.dataset.surveyJump;
-          location.hash = '#diary';
-          setTimeout(function () {
-            if (target === 'discomfort') {
-              var el = $('#cardDiscomfortScore');
-              if (el) {
-                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                el.classList.add('highlight-pulse');
-                setTimeout(function () { el.classList.remove('highlight-pulse'); }, 2800);
-              }
-            } else if (target === 'gerdq') {
-              var elGerd = $('#cardGerdqSurvey');
-              if (elGerd) {
-                elGerd.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                elGerd.classList.add('highlight-pulse');
-                setTimeout(function () { elGerd.classList.remove('highlight-pulse'); }, 2800);
-              }
-            }
-          }, 150);
-        };
-      });
-
-      // Bind video trigger buttons
-      feed.querySelectorAll('[data-video-trigger]').forEach(function (btn) {
-        btn.onclick = function () {
-          openVideoPlayer(btn.dataset.videoTrigger, p);
+      feed.querySelectorAll('[data-notif-id]').forEach(function (card) {
+        card.onclick = function () {
+          var nid = card.dataset.notifId;
+          var nObj = notifList.filter(function (x) { return x.id === nid; })[0];
+          if (nObj) openNotificationDetailModal(nObj, p);
         };
       });
     }
