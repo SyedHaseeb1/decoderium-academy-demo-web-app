@@ -4888,6 +4888,7 @@ body:has(.adm-drawer.open) {
   transition: all 0.2s ease !important;
   white-space: nowrap !important;
   box-sizing: border-box !important;
+  flex-shrink: 0 !important;
 }
 
 .adm-uni-tab-btn:hover,
@@ -4939,9 +4940,30 @@ body:has(.adm-drawer.open) {
 }
 
 /* ==========================================================================
-   RESPONSIVE UNI TABS (TABLET & MOBILE)
-   Ensure tabs scale down gracefully, fit screens without clipping, and scroll cleanly
+   RESPONSIVE UNI TABS (DESKTOP LAPTOP, TABLET & MOBILE)
+   Ensure tabs scale down gracefully, fit screens without clipping, and wrap cleanly
    ========================================================================== */
+@media (max-width: 1440px) {
+  .adm-tabs-container,
+  .adm-uni-tabs,
+  .adm-sliding-tabs-track,
+  .adm-detail-tabs-bar,
+  .adm-pillar-tabs {
+    gap: 6px !important;
+    padding: 6px 10px !important;
+  }
+  .adm-uni-tab-btn,
+  .adm-sliding-tab-item,
+  .adm-detail-tab-btn,
+  .adm-pillar-tab,
+  .adm-view-toggle-btn {
+    padding: 6px 13px !important;
+    font-size: 12.5px !important;
+    gap: 5px !important;
+    flex-shrink: 0 !important;
+  }
+}
+
 @media (max-width: 1280px) {
   .adm-tabs-container,
   .adm-uni-tabs,

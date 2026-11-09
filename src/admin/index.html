@@ -1436,19 +1436,19 @@
           '<i class="ms">dashboard</i> Master Overview' +
         '</button>' +
         '<button type="button" class="adm-uni-tab-btn ' + (activeOverviewTab === 'lms' ? 'active' : '') + '" data-ov-tab="lms" role="tab" aria-selected="' + (activeOverviewTab === 'lms') + '">' +
-          '<i class="ms">school</i> 1. LMS Academy & CME' +
+          '<i class="ms">school</i> 1. LMS & CME' +
         '</button>' +
         '<button type="button" class="adm-uni-tab-btn ' + (activeOverviewTab === 'patients' ? 'active' : '') + '" data-ov-tab="patients" role="tab" aria-selected="' + (activeOverviewTab === 'patients') + '">' +
-          '<i class="ms">clinical_notes</i> 2. Patients Clinical Registry' +
+          '<i class="ms">clinical_notes</i> 2. Patients' +
         '</button>' +
         '<button type="button" class="adm-uni-tab-btn ' + (activeOverviewTab === 'alerts' ? 'active' : '') + '" data-ov-tab="alerts" role="tab" aria-selected="' + (activeOverviewTab === 'alerts') + '">' +
-          '<i class="ms">notifications_active</i> 3. Patient Alerts & Broadcasts' +
+          '<i class="ms">notifications_active</i> 3. Alerts & Broadcasts' +
         '</button>' +
         '<button type="button" class="adm-uni-tab-btn ' + (activeOverviewTab === 'regions' ? 'active' : '') + '" data-ov-tab="regions" role="tab" aria-selected="' + (activeOverviewTab === 'regions') + '">' +
-          '<i class="ms">public</i> 4. Participating Centers' +
+          '<i class="ms">public</i> 4. Hospital Centers' +
         '</button>' +
         '<button type="button" class="adm-uni-tab-btn ' + (activeOverviewTab === 'audit' ? 'active' : '') + '" data-ov-tab="audit" role="tab" aria-selected="' + (activeOverviewTab === 'audit') + '">' +
-          '<i class="ms">gavel</i> 5. PMDC Governance Audit' +
+          '<i class="ms">gavel</i> 5. PMDC Audit' +
         '</button>' +
       '</div>' +
 
@@ -3097,7 +3097,9 @@
     });
   }
 
-    var patientViewMode = 'split'; // 'split' | 'grid' | 'table'
+  var patientViewMode = (function () {
+    try { return localStorage.getItem('adm_patient_view_mode') || 'split'; } catch (e) { return 'split'; }
+  })();
   var selectedPatientId = null;
   var activePatientDetailTab = 'followup1'; // 'followup1' | 'followup2' | 'followup3' | 'profile'
 
@@ -3327,7 +3329,14 @@
     if (filteredPatients.length === 0) {
       return renderEmptyState('No Patient Records Found', 'No patients matched your active search query or indication filters.', 'Reset Filters');
     }
-    return '<div class="adm-patient-grid">' +
+    return '<div style="background:#ffffff;border-radius:12px;padding:12px 16px;margin-bottom:14px;box-shadow:0 4px 16px -2px rgba(15,23,42,0.06);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;border:1px solid #e2e8f0;">' +
+      '<div style="display:flex;align-items:center;gap:10px;flex:1;max-width:400px;background:#f8fafc;border:1.5px solid #cbd5e1;padding:6px 12px;border-radius:8px;">' +
+        '<i class="ms" style="color:#64748b;font-size:16px;">search</i>' +
+        '<input type="text" id="inpPatientGridSearch" placeholder="Search cohort by patient code, doctor, hospital..." value="' + esc(patientFilters.q) + '" style="border:none;background:transparent;outline:none;font-size:12.5px;width:100%;color:#0f172a;font-weight:600;">' +
+      '</div>' +
+      '<div style="font-size:12px;color:#64748b;font-weight:700;">Showing <strong>' + filteredPatients.length + '</strong> Clinical Records</div>' +
+    '</div>' +
+    '<div class="adm-patient-grid">' +
       filteredPatients.map(function (p) {
         var isDue = p.followupStatus === 'due_today';
         var statusBadge = isDue ?
@@ -3464,7 +3473,14 @@
     if (filteredPatients.length === 0) {
       return renderEmptyState('No Patient Records Found', 'No patients matched your active search query or indication filters.', 'Reset Filters');
     }
-    return '<div class="adm-table-wrap">' +
+    return '<div style="background:#ffffff;border-radius:12px;padding:12px 16px;margin-bottom:14px;box-shadow:0 4px 16px -2px rgba(15,23,42,0.06);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;border:1px solid #e2e8f0;">' +
+      '<div style="display:flex;align-items:center;gap:10px;flex:1;max-width:400px;background:#f8fafc;border:1.5px solid #cbd5e1;padding:6px 12px;border-radius:8px;">' +
+        '<i class="ms" style="color:#64748b;font-size:16px;">search</i>' +
+        '<input type="text" id="inpPatientTableSearch" placeholder="Search cohort by patient code, doctor, hospital..." value="' + esc(patientFilters.q) + '" style="border:none;background:transparent;outline:none;font-size:12.5px;width:100%;color:#0f172a;font-weight:600;">' +
+      '</div>' +
+      '<div style="font-size:12px;color:#64748b;font-weight:700;">Showing <strong>' + filteredPatients.length + '</strong> Clinical Records</div>' +
+    '</div>' +
+    '<div class="adm-table-wrap">' +
       '<table class="adm-table">' +
         '<thead>' +
           '<tr>' +
@@ -3600,13 +3616,29 @@
       };
     });
 
-    // Master Search Input
+    // Master, Table & Grid Search Inputs (Single dedicated search per view)
     var inpMasterSearch = container.querySelector('#inpPatientMasterSearch');
     if (inpMasterSearch) {
       inpMasterSearch.oninput = function () {
         patientFilters.q = inpMasterSearch.value.trim();
-        var inpHeader = $('#inpPatientSearchQueryHeader');
-        if (inpHeader) inpHeader.value = patientFilters.q;
+        if (typeof refreshPatientCohortTable === 'function') {
+          refreshPatientCohortTable();
+        }
+      };
+    }
+    var inpTableSearch = container.querySelector('#inpPatientTableSearch');
+    if (inpTableSearch) {
+      inpTableSearch.oninput = function () {
+        patientFilters.q = inpTableSearch.value.trim();
+        if (typeof refreshPatientCohortTable === 'function') {
+          refreshPatientCohortTable();
+        }
+      };
+    }
+    var inpGridSearch = container.querySelector('#inpPatientGridSearch');
+    if (inpGridSearch) {
+      inpGridSearch.oninput = function () {
+        patientFilters.q = inpGridSearch.value.trim();
         if (typeof refreshPatientCohortTable === 'function') {
           refreshPatientCohortTable();
         }
@@ -4790,7 +4822,14 @@
     var allCoursesList = courses() || [];
     var c1 = allCoursesList[0];
 
-    return '<div class="adm-table-wrap">' +
+    return '<div style="background:#ffffff;border-radius:12px;padding:12px 16px;margin-bottom:14px;box-shadow:0 4px 16px -2px rgba(15,23,42,0.06);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;border:1px solid #e2e8f0;">' +
+      '<div style="display:flex;align-items:center;gap:10px;flex:1;max-width:400px;background:#f8fafc;border:1.5px solid #cbd5e1;padding:6px 12px;border-radius:8px;">' +
+        '<i class="ms" style="color:#64748b;font-size:16px;">search</i>' +
+        '<input type="text" id="inpDocTableSearch" placeholder="Search doctor by name, PMDC, city, hospital..." value="' + esc(docFilterState.q) + '" style="border:none;background:transparent;outline:none;font-size:12.5px;width:100%;color:#0f172a;font-weight:600;">' +
+      '</div>' +
+      '<div style="font-size:12px;color:#64748b;font-weight:700;">Showing <strong>' + filtered.length + '</strong> Doctors</div>' +
+    '</div>' +
+    '<div class="adm-table-wrap">' +
       '<table class="adm-table">' +
         '<thead>' +
           '<tr>' +
@@ -4996,13 +5035,20 @@
       };
     });
 
-    // Master Search Input
+    // Master & Table Search Inputs (Dedicated single search per view)
     var inpMasterSearch = container.querySelector('#inpDocMasterSearch');
     if (inpMasterSearch) {
       inpMasterSearch.oninput = function () {
         docFilterState.q = inpMasterSearch.value.trim();
-        var inpHeader = $('#inpDocSearchQueryHeader');
-        if (inpHeader) inpHeader.value = docFilterState.q;
+        if (typeof updateDoctorTableLive === 'function') {
+          updateDoctorTableLive();
+        }
+      };
+    }
+    var inpTableSearch = container.querySelector('#inpDocTableSearch');
+    if (inpTableSearch) {
+      inpTableSearch.oninput = function () {
+        docFilterState.q = inpTableSearch.value.trim();
         if (typeof updateDoctorTableLive === 'function') {
           updateDoctorTableLive();
         }
@@ -5010,7 +5056,9 @@
     }
   }
 
-    var docViewMode = 'table'; // 'split' | 'table'
+  var docViewMode = (function () {
+    try { return localStorage.getItem('adm_doc_view_mode') || 'table'; } catch (e) { return 'table'; }
+  })(); // 'split' | 'table'
   var selectedDoctorId = null;
   var activeDoctorDetailTab = 'profile'; // 'profile' | 'lms' | 'patients'
 
@@ -5411,16 +5459,8 @@
             '<p class="adm-section-desc">Showing <strong id="lblDocCohortCount">' + filtered.length + '</strong> of ' + docs.length + ' registered healthcare providers across Pakistan hubs.</p>' +
           '</div>' +
           '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">' +
-            '<div class="adm-view-toggle">' +
-              '<button type="button" class="adm-view-toggle-btn ' + (docViewMode === 'split' ? 'active' : '') + '" id="btnDocSplit"><i class="ms">view_sidebar</i> Split</button>' +
-              '<button type="button" class="adm-view-toggle-btn ' + (docViewMode === 'table' ? 'active' : '') + '" id="btnDocTable"><i class="ms">table_rows</i> Table</button>' +
-            '</div>' +
-            '<div class="adm-list-header-search">' +
-              '<i class="ms">search</i>' +
-              '<input type="text" id="inpDocSearchQueryHeader" placeholder="Search doctors by name, PMDC, city..." value="' + esc(docFilterState.q) + '">' +
-            '</div>' +
             '<button type="button" class="adm-btn-outline" id="btnToggleDocFilter">' +
-              '<i class="ms">tune</i> Filters <i class="ms" style="font-size:16px;">expand_more</i>' +
+              '<i class="ms">tune</i> Filter &amp; Display Settings <i class="ms" style="font-size:16px;">expand_more</i>' +
             '</button>' +
             '<button type="button" class="adm-btn-primary" id="btnEnlistDoc"><i class="ms">person_add</i> + Enlist New Doctor</button>' +
           '</div>' +
@@ -5446,7 +5486,16 @@
               }) +
             '</div>' +
             '<div>' +
-              '<button type="button" class="adm-btn-outline" id="btnResetDocFilters" style="white-space:nowrap;">Reset</button>' +
+              '<button type="button" class="adm-btn-outline" id="btnResetDocFilters" style="white-space:nowrap;">Reset Filters</button>' +
+            '</div>' +
+          '</div>' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:12px;border-top:1px solid #e2e8f0;flex-wrap:wrap;gap:10px;">' +
+            '<div style="font-size:12.5px;font-weight:700;color:var(--adm-ink);display:flex;align-items:center;gap:6px;">' +
+              '<i class="ms" style="font-size:17px;color:var(--adm-primary);">view_quilt</i> Directory Display Mode:' +
+            '</div>' +
+            '<div class="adm-view-toggle">' +
+              '<button type="button" class="adm-view-toggle-btn ' + (docViewMode === 'split' ? 'active' : '') + '" id="btnDocSplit" title="Master-Detail Split View"><i class="ms" style="font-size:14px;">view_sidebar</i> Split View</button>' +
+              '<button type="button" class="adm-view-toggle-btn ' + (docViewMode === 'table' ? 'active' : '') + '" id="btnDocTable" title="Tabular View"><i class="ms" style="font-size:14px;">table_rows</i> List / Table</button>' +
             '</div>' +
           '</div>' +
         '</div>' +
@@ -5473,6 +5522,7 @@
     var btnDocTable = $('#btnDocTable');
     function setDocView(m) {
       docViewMode = m;
+      try { localStorage.setItem('adm_doc_view_mode', m); } catch (e) {}
       if (btnDocSplit) btnDocSplit.classList.toggle('active', m === 'split');
       if (btnDocTable) btnDocTable.classList.toggle('active', m === 'table');
       updateDoctorTableLive();
@@ -5486,14 +5536,6 @@
         docFilterState.isOpen = !docFilterState.isOpen;
         var p = $('#docFilterPanel');
         if (p) p.classList.toggle('is-open', docFilterState.isOpen);
-      };
-    }
-
-    var inpDocHeader = $('#inpDocSearchQueryHeader');
-    if (inpDocHeader) {
-      inpDocHeader.oninput = function () {
-        docFilterState.q = inpDocHeader.value.trim();
-        updateDoctorTableLive();
       };
     }
 
@@ -6181,31 +6223,22 @@
         '</div>' +
       '</div>' +
 
-      '<div class="adm-section">' +
-        '<div class="adm-section-head">' +
+      '<div class="adm-section adm-section-plain">' +
+        '<div class="adm-section-head" style="margin-bottom:18px;">' +
           '<div>' +
             '<h3 class="adm-section-title" style="display:inline;">Patient Registry & Electronic Records</h3>' +
             '<p class="adm-section-desc" id="lblPatientCohortCount">Showing ' + filteredPatients.length + ' of ' + pts.length + ' patients enrolled across Pakistan study centers.</p>' +
           '</div>' +
           '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">' +
-            '<div class="adm-view-toggle">' +
-              '<button type="button" class="adm-view-toggle-btn ' + (patientViewMode === 'split' ? 'active' : '') + '" id="btnPatientSplit2"><i class="ms">view_sidebar</i> Split</button>' +
-              '<button type="button" class="adm-view-toggle-btn ' + (patientViewMode === 'grid' ? 'active' : '') + '" id="btnPatientGrid2"><i class="ms">grid_view</i> Grid</button>' +
-              '<button type="button" class="adm-view-toggle-btn ' + (patientViewMode === 'table' ? 'active' : '') + '" id="btnPatientTable2"><i class="ms">table_rows</i> Table</button>' +
-            '</div>' +
-            '<div class="adm-list-header-search">' +
-              '<i class="ms">search</i>' +
-              '<input type="text" id="inpPatientSearchQueryHeader" placeholder="Search patients, doctors, hospitals..." value="' + esc(patientFilters.q) + '">' +
-            '</div>' +
             '<button type="button" class="adm-btn-outline" id="btnTogglePatientSearch">' +
-              '<i class="ms">tune</i> Filter <i class="ms" style="font-size:16px;">expand_more</i>' +
+              '<i class="ms">tune</i> Filter &amp; Display Settings <i class="ms" style="font-size:16px;">expand_more</i>' +
             '</button>' +
             '<button type="button" class="adm-btn-outline" id="btnPrintUniversalClinicQr2"><i class="ms">qr_code</i> Leaflet</button>' +
-            '<button type="button" class="adm-btn-primary" id="btnRegisterPatient2"><i class="ms">person_add</i> + Enroll Patient</button>' +
+            '<button type="button" class="adm-btn-primary" id="btnRegisterPatient2" style="background:#582be8;border-color:#582be8;"><i class="ms">person_add</i> + Enroll Patient</button>' +
           '</div>' +
         '</div>' +
 
-        '<!-- Collapsible Search Header -->' +
+        '<!-- Collapsible Search & Display Settings Header -->' +
         '<div class="adm-collapsible-search-wrap' + (patientFilters.isOpen ? ' is-open' : '') + '" id="patientSearchPanel">' +
           '<div class="adm-collapsible-search-grid">' +
             '<div>' +
@@ -6225,7 +6258,17 @@
               }) +
             '</div>' +
             '<div>' +
-              '<button type="button" class="adm-btn-outline" id="btnResetPatientFilters" style="white-space:nowrap;">Reset</button>' +
+              '<button type="button" class="adm-btn-outline" id="btnResetPatientFilters" style="white-space:nowrap;">Reset Filters</button>' +
+            '</div>' +
+          '</div>' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:12px;border-top:1px solid #e2e8f0;flex-wrap:wrap;gap:10px;">' +
+            '<div style="font-size:12.5px;font-weight:700;color:var(--adm-ink);display:flex;align-items:center;gap:6px;">' +
+              '<i class="ms" style="font-size:17px;color:var(--adm-primary);">view_quilt</i> Registry Display Mode:' +
+            '</div>' +
+            '<div class="adm-view-toggle">' +
+              '<button type="button" class="adm-view-toggle-btn ' + (patientViewMode === 'split' ? 'active' : '') + '" id="btnPatientSplit2" title="Master-Detail Split View"><i class="ms" style="font-size:14px;">view_sidebar</i> Split View</button>' +
+              '<button type="button" class="adm-view-toggle-btn ' + (patientViewMode === 'table' ? 'active' : '') + '" id="btnPatientTable2" title="Tabular View"><i class="ms" style="font-size:14px;">table_rows</i> List / Table</button>' +
+              '<button type="button" class="adm-view-toggle-btn ' + (patientViewMode === 'grid' ? 'active' : '') + '" id="btnPatientGrid2" title="Cards Grid View"><i class="ms" style="font-size:14px;">grid_view</i> Grid Cards</button>' +
             '</div>' +
           '</div>' +
         '</div>' +
@@ -6328,6 +6371,7 @@
     var btnTable2 = $('#btnPatientTable2');
     function setPtView(m) {
       patientViewMode = m;
+      try { localStorage.setItem('adm_patient_view_mode', m); } catch (e) {}
       if (btnSplit2) btnSplit2.classList.toggle('active', m === 'split');
       if (btnGrid2) btnGrid2.classList.toggle('active', m === 'grid');
       if (btnTable2) btnTable2.classList.toggle('active', m === 'table');
@@ -10306,6 +10350,32 @@
             '<div style="display:flex;justify-content:space-between;">' +
               '<span>Digital E-CRF Standard:</span>' +
               '<strong style="color:var(--adm-emerald);">Electronic Patient Intake</strong>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="adm-card" style="margin-top:20px;">' +
+        '<div class="adm-card-head">' +
+          '<div>' +
+            '<h3 class="adm-card-title"><i class="ms" style="color:var(--adm-primary);">view_quilt</i> Registry &amp; Directory Display Preferences</h3>' +
+            '<p class="adm-card-subtitle">Configure preferred default layout modes for patient electronic records and doctor directories across sessions.</p>' +
+          '</div>' +
+        '</div>' +
+        '<div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:16px;margin-top:16px;">' +
+          '<div style="background:#f8fafc;padding:14px;border-radius:12px;border:1px solid #e2e8f0;">' +
+            '<div style="font-size:12.5px;font-weight:800;color:var(--adm-ink);margin-bottom:8px;">Default Patient Registry Layout</div>' +
+            '<div class="adm-view-toggle">' +
+              '<button type="button" class="adm-view-toggle-btn ' + (patientViewMode === 'split' ? 'active' : '') + '" onclick="patientViewMode=\'split\';try{localStorage.setItem(\'adm_patient_view_mode\',\'split\');}catch(e){}viewSettings();snack(\'Default Patient View set to Split View\');"><i class="ms" style="font-size:14px;">view_sidebar</i> Split View</button>' +
+              '<button type="button" class="adm-view-toggle-btn ' + (patientViewMode === 'table' ? 'active' : '') + '" onclick="patientViewMode=\'table\';try{localStorage.setItem(\'adm_patient_view_mode\',\'table\');}catch(e){}viewSettings();snack(\'Default Patient View set to List / Table\');"><i class="ms" style="font-size:14px;">table_rows</i> List / Table</button>' +
+              '<button type="button" class="adm-view-toggle-btn ' + (patientViewMode === 'grid' ? 'active' : '') + '" onclick="patientViewMode=\'grid\';try{localStorage.setItem(\'adm_patient_view_mode\',\'grid\');}catch(e){}viewSettings();snack(\'Default Patient View set to Grid Cards\');"><i class="ms" style="font-size:14px;">grid_view</i> Grid Cards</button>' +
+            '</div>' +
+          '</div>' +
+          '<div style="background:#f8fafc;padding:14px;border-radius:12px;border:1px solid #e2e8f0;">' +
+            '<div style="font-size:12.5px;font-weight:800;color:var(--adm-ink);margin-bottom:8px;">Default Doctors Directory Layout</div>' +
+            '<div class="adm-view-toggle">' +
+              '<button type="button" class="adm-view-toggle-btn ' + (docViewMode === 'split' ? 'active' : '') + '" onclick="docViewMode=\'split\';try{localStorage.setItem(\'adm_doc_view_mode\',\'split\');}catch(e){}viewSettings();snack(\'Default Doctor View set to Split View\');"><i class="ms" style="font-size:14px;">view_sidebar</i> Split View</button>' +
+              '<button type="button" class="adm-view-toggle-btn ' + (docViewMode === 'table' ? 'active' : '') + '" onclick="docViewMode=\'table\';try{localStorage.setItem(\'adm_doc_view_mode\',\'table\');}catch(e){}viewSettings();snack(\'Default Doctor View set to List / Table\');"><i class="ms" style="font-size:14px;">table_rows</i> List / Table</button>' +
             '</div>' +
           '</div>' +
         '</div>' +
