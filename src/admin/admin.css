@@ -2375,10 +2375,13 @@ body:has(.adm-drawer.open) {
   box-shadow: 0 -20px 48px -4px rgba(11, 23, 39, 0.24), 0 -8px 20px rgba(11, 23, 39, 0.12);
 }
 
-/* Ensure modal dialog cards and bodies allow dropdown menus to overlay without clipping */
+/* Ensure modal dialog cards stay pinned on screen without scrolling the background page */
 .lms-dialog-overlay {
-  overflow-y: auto !important;
-  padding: 30px 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+  padding: 20px !important;
   box-sizing: border-box !important;
 }
 
@@ -2386,10 +2389,13 @@ body:has(.adm-drawer.open) {
   border-radius: var(--adm-radius-lg) !important;
   max-width: 660px !important;
   width: min(660px, 94vw) !important;
-  overflow: visible !important;
+  max-height: calc(100vh - 40px) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
   background: #ffffff !important;
   box-shadow: 0 25px 65px -10px rgba(15, 23, 42, 0.28), 0 10px 24px -4px rgba(15, 23, 42, 0.1) !important;
-  margin: auto !important;
+  margin: 0 !important;
   position: relative !important;
 }
 
@@ -2399,24 +2405,29 @@ body:has(.adm-drawer.open) {
 }
 
 .lms-dialog-header {
+  flex-shrink: 0 !important;
   border-top-left-radius: calc(var(--adm-radius-lg) - 1.5px) !important;
   border-top-right-radius: calc(var(--adm-radius-lg) - 1.5px) !important;
-  padding: 22px 30px 18px !important;
+  padding: 20px 28px 16px !important;
   position: relative !important;
   z-index: 5 !important;
 }
 
 .lms-dialog-body {
-  overflow: visible !important;
-  padding: 24px 30px !important;
+  flex: 1 1 auto !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+  padding: 20px 28px !important;
   position: relative !important;
-  z-index: 20 !important;
+  z-index: 2 !important;
 }
 
 .lms-dialog-footer {
+  flex-shrink: 0 !important;
   border-bottom-left-radius: calc(var(--adm-radius-lg) - 1.5px) !important;
   border-bottom-right-radius: calc(var(--adm-radius-lg) - 1.5px) !important;
-  padding: 18px 30px 24px !important;
+  padding: 16px 28px 20px !important;
   position: relative !important;
   z-index: 5 !important;
 }
