@@ -1299,33 +1299,87 @@
         '</div>' +
       '</div>' +
 
-      '<h3 style="font-size:17px;font-weight:800;color:var(--adm-ink);margin:0 0 14px;"><i class="ms" style="color:var(--adm-emerald);vertical-align:middle;font-size:19px;margin-right:6px;">local_hospital</i> Participating Hospital Study Centers</h3>' +
-      '<div class="adm-region-grid">' +
-        (doctors() || []).map(function (d, i) {
-          var prog = progressOf(d.id);
-          var c1 = pubCourses[0];
-          var pc = c1 ? RULES.percent(c1, prog) : 0;
-          var pCount = 3 + (i % 4);
-          return '<div class="adm-city-card">' +
-            '<div class="adm-city-head">' +
-              '<span class="adm-city-name"><i class="ms" style="font-size:16px;color:var(--adm-primary);vertical-align:middle;margin-right:4px;">place</i>' + esc(d.city) + '</span>' +
-              '<span class="adm-province-tag">' + (d.active ? 'Active Node' : 'Suspended') + '</span>' +
-            '</div>' +
-            '<div style="font-size:13px;font-weight:700;color:var(--adm-ink);margin-bottom:2px;">' + esc(d.name) + '</div>' +
-            '<div style="font-size:11.5px;color:var(--adm-slate);margin-bottom:12px;">' + esc(d.hospital) + '</div>' +
-            '<div style="background:var(--adm-canvas);padding:8px 10px;border-radius:8px;border:1px solid var(--adm-line);">' +
-              '<div style="display:flex;justify-content:space-between;font-size:11.5px;font-weight:600;color:var(--adm-slate);margin-bottom:4px;">' +
-                '<span>CME Progress</span>' +
-                '<span style="color:var(--adm-primary);font-weight:700;">' + pc + '%</span>' +
-              '</div>' +
-              '<div class="adm-progress-bar-bg" style="height:6px;"><div class="adm-progress-bar-fill" style="width:' + pc + '%;"></div></div>' +
-              '<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--adm-slate);margin-top:6px;">' +
-                '<span>PMDC: <strong>' + esc(d.pmdcId) + '</strong></span>' +
-                '<span>Trial Cohort: <strong>' + pCount + ' Pts</strong></span>' +
-              '</div>' +
-            '</div>' +
-          '</div>';
-        }).join('') +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin:24px 0 14px;flex-wrap:wrap;gap:10px;">' +
+        '<div>' +
+          '<h3 style="font-size:17px;font-weight:800;color:var(--adm-ink);margin:0;"><i class="ms" style="color:var(--adm-emerald);vertical-align:middle;font-size:20px;margin-right:6px;">local_hospital</i> Participating Hospital Study Centers</h3>' +
+          '<div style="font-size:12px;color:var(--adm-slate);margin-top:2px;">Operational trial centers, principal investigator doctors, and CME accreditation progress across Pakistan.</div>' +
+        '</div>' +
+        '<span class="adm-chip adm-chip-emerald" style="font-weight:700;">' + (doctors() || []).length + ' Study Centers Active</span>' +
+      '</div>' +
+      '<div class="adm-card" style="padding:0;overflow:hidden;border:1px solid #e2e8f0;box-shadow:0 4px 16px -2px rgba(15,23,42,0.06);">' +
+        '<div class="adm-table-wrap">' +
+          '<table class="adm-table">' +
+            '<thead>' +
+              '<tr>' +
+                '<th>Study Center / Hospital</th>' +
+                '<th>City &amp; Zone Hub</th>' +
+                '<th>Principal Investigator Doctor</th>' +
+                '<th>PMDC Licensure</th>' +
+                '<th>CME Accreditation</th>' +
+                '<th>Trial Cohort</th>' +
+                '<th style="text-align:right;">Quick Actions</th>' +
+              '</tr>' +
+            '</thead>' +
+            '<tbody>' +
+              (doctors() || []).map(function (d, i) {
+                var prog = progressOf(d.id);
+                var c1 = pubCourses[0];
+                var pc = c1 ? RULES.percent(c1, prog) : 0;
+                var ptsList = (typeof patients === 'function' ? patients() : []).filter(function (p) { return p.doctorId === d.id; });
+                var pCount = ptsList.length || (3 + (i % 4));
+                var zName = d.zone || (d.city === 'Karachi' ? 'Southern Zone' : (d.city === 'Lahore' ? 'Central Zone' : 'Northern Zone'));
+
+                return '<tr style="cursor:pointer;" onclick="if(!event.target.closest(\'button, a\')){ location.hash=\'#patients?doc=' + d.id + '\'; }" title="Click to view trial cohort for ' + esc(d.name) + '">' +
+                  '<td>' +
+                    '<div style="font-weight:800;color:#0f172a;display:flex;align-items:center;gap:8px;">' +
+                      '<i class="ms" style="color:#059669;font-size:18px;">local_hospital</i>' +
+                      '<span>' + esc(d.hospital) + '</span>' +
+                    '</div>' +
+                    '<div style="font-size:11px;color:#64748b;margin-top:2px;">Study Site #' + (i + 1) + ' · Verified Clinical Protocol Node</div>' +
+                  '</td>' +
+                  '<td>' +
+                    '<span class="adm-chip adm-chip-cyan" style="font-size:10.5px;font-weight:700;"><i class="ms" style="font-size:11px;">place</i> ' + esc(d.city) + '</span>' +
+                    '<div style="font-size:11px;color:#64748b;margin-top:2px;">' + esc(zName) + '</div>' +
+                  '</td>' +
+                  '<td>' +
+                    '<div style="font-weight:700;color:#0f172a;">' + esc(d.name) + '</div>' +
+                    '<div style="font-size:11px;color:#64748b;">' + esc(d.speciality || 'Consultant Physician') + '</div>' +
+                  '</td>' +
+                  '<td>' +
+                    '<span class="adm-chip adm-chip-violet" style="font-size:10.5px;font-family:monospace;font-weight:700;">' + esc(d.pmdcId) + '</span>' +
+                  '</td>' +
+                  '<td>' +
+                    '<div style="min-width:120px;">' +
+                      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;font-size:11px;">' +
+                        '<span style="font-weight:700;color:var(--adm-primary);">' + pc + '% Complete</span>' +
+                        '<span style="font-size:10px;color:#64748b;">Gate: 90%</span>' +
+                      '</div>' +
+                      '<div class="adm-progress-bar-bg" style="height:6px;"><div class="adm-progress-bar-fill" style="width:' + pc + '%;"></div></div>' +
+                    '</div>' +
+                  '</td>' +
+                  '<td>' +
+                    '<button type="button" class="adm-chip adm-chip-emerald" onclick="event.stopPropagation();location.hash=\'#patients?doc=' + d.id + '\';" title="View Patients for Dr. ' + esc(d.name) + '" style="cursor:pointer;border:none;font-weight:800;padding:4px 8px;">' +
+                      '<i class="ms" style="font-size:12px;">people</i> ' + pCount + ' Pts' +
+                    '</button>' +
+                  '</td>' +
+                  '<td style="text-align:right;white-space:nowrap;">' +
+                    '<div style="display:inline-flex;gap:6px;align-items:center;" onclick="event.stopPropagation();">' +
+                      '<button type="button" class="adm-btn-primary" onclick="location.hash=\'#patients?doc=' + d.id + '\';" title="Open Patient Cohort" style="padding:4px 10px;font-size:11px;border-radius:6px;background:#0284c7;border-color:#0284c7;font-weight:700;">' +
+                        '<i class="ms" style="font-size:12px;">people</i> Patients' +
+                      '</button>' +
+                      '<button type="button" class="adm-btn-outline" onclick="openAssignCourseModal(null, \'' + d.id + '\');" title="Assign Course to Doctor" style="padding:4px 10px;font-size:11px;border-radius:6px;color:#7c3aed;border-color:#ddd6fe;font-weight:700;">' +
+                        '<i class="ms" style="font-size:12px;">school</i> Assign' +
+                      '</button>' +
+                      '<button type="button" class="adm-btn-outline" onclick="location.hash=\'#doctors\';" title="View in Doctors Directory" style="padding:4px 8px;font-size:11px;border-radius:6px;">' +
+                        '<i class="ms" style="font-size:13px;">medical_services</i>' +
+                      '</button>' +
+                    '</div>' +
+                  '</td>' +
+                '</tr>';
+              }).join('') +
+            '</tbody>' +
+          '</table>' +
+        '</div>' +
       '</div>';
   }
 
