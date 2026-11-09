@@ -4487,6 +4487,45 @@ body:has(.adm-drawer.open) {
   height: 100%;
 }
 
+/* 4-Column Horizontal Executive KPI Cards */
+.neo-kpi-4col {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+  margin-bottom: 22px;
+  box-sizing: border-box;
+}
+@media (max-width: 1100px) {
+  .neo-kpi-4col {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 640px) {
+  .neo-kpi-4col {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.neo-kpi-card-rich {
+  background: #ffffff !important;
+  border-radius: 18px !important;
+  padding: 20px 22px !important;
+  box-shadow: 0 10px 30px -4px rgba(15, 23, 42, 0.10), 0 4px 12px -2px rgba(15, 23, 42, 0.06) !important;
+  border: none !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 110px;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+.neo-kpi-card-rich:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 36px -4px rgba(15, 23, 42, 0.14), 0 6px 16px -2px rgba(15, 23, 42, 0.08) !important;
+}
+
 .neo-metric-tile {
   border-radius: 20px;
   padding: 20px;

@@ -46,9 +46,9 @@
         <div class="adm-nav-sliding-pill" id="admNavPill"></div>
 
         <div class="adm-nav-header">Executive Dashboard</div>
-        <a class="adm-nav-item" href="#overview" data-route="overview" title="Primary Combined Dashboard">
+        <a class="adm-nav-item" href="#overview" data-route="overview" title="Executive Master Dashboard">
           <i class="ms">dashboard</i>
-          <span class="adm-nav-text">Combined Overview</span>
+          <span class="adm-nav-text">Executive Overview</span>
         </a>
 
         <div class="adm-nav-header">Clinical & Academic Pillars</div>
@@ -1406,220 +1406,188 @@
           '</div>' +
         '</div>' +
 
-        '<div class="neo-grid-row" style="margin-bottom:20px;">' +
-          '<!-- Left: 2x2 Soft Pastel Metric Cards -->' +
-          '<div class="neo-metric-2x2">' +
-            '<div class="neo-metric-tile neo-tile-periwinkle" onclick="location.hash=\'#doctors\';" style="cursor:pointer;" title="Open Doctors Directory">' +
-              '<div style="display:flex;justify-content:space-between;align-items:center;">' +
-                '<div class="neo-tile-icon-box" style="color:#582be8;"><i class="ms" style="font-size:22px;">event_available</i></div>' +
-                '<span class="adm-chip adm-chip-violet" style="font-size:10.5px;padding:2px 8px;">Active Hubs</span>' +
-              '</div>' +
+        '<!-- 1. Top Row: 4 Rich Executive KPI Cards -->' +
+        '<div class="neo-kpi-4col">' +
+          '<div class="neo-kpi-card-rich" onclick="location.hash=\'#doctors\';" title="Open Doctors Directory">' +
+            '<div style="display:flex;justify-content:space-between;align-items:flex-start;">' +
               '<div>' +
-                '<div class="neo-tile-label">Enrolled Physicians</div>' +
-                '<div class="neo-tile-val">' + actDocs.length + '</div>' +
+                '<div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;">Enrolled Clinicians</div>' +
+                '<div style="font-size:26px;font-weight:900;color:#0f172a;margin:4px 0 2px;">' + actDocs.length + ' <span style="font-size:13px;font-weight:600;color:#64748b;">Doctors</span></div>' +
+                '<div style="font-size:11.5px;color:#059669;font-weight:700;"><i class="ms" style="font-size:13px;vertical-align:-2px;">verified</i> 100% PMDC Licensed</div>' +
               '</div>' +
-            '</div>' +
-
-            '<div class="neo-metric-tile neo-tile-cyan" onclick="location.hash=\'#courses\';" style="cursor:pointer;" title="Inspect CME Accreditation">' +
-              '<div style="display:flex;justify-content:space-between;align-items:center;">' +
-                '<div class="neo-tile-icon-box" style="color:#0284c7;"><i class="ms" style="font-size:22px;">military_tech</i></div>' +
-                '<span class="adm-chip adm-chip-cyan" style="font-size:10.5px;padding:2px 8px;">Accredited</span>' +
-              '</div>' +
-              '<div>' +
-                '<div class="neo-tile-label">Accredited CME Hours</div>' +
-                '<div class="neo-tile-val">' + totalCmeHours + ' hrs</div>' +
-              '</div>' +
-            '</div>' +
-
-            '<div class="neo-metric-tile neo-tile-lilac" onclick="location.hash=\'#patients\';" style="cursor:pointer;" title="Open Patients Registry">' +
-              '<div style="display:flex;justify-content:space-between;align-items:center;">' +
-                '<div class="neo-tile-icon-box" style="color:#db2777;"><i class="ms" style="font-size:22px;">personal_injury</i></div>' +
-                '<span class="adm-chip adm-chip-danger" style="font-size:10.5px;padding:2px 8px;">Arm 2 E-CRF</span>' +
-              '</div>' +
-              '<div>' +
-                '<div class="neo-tile-label">Total Trial Patients</div>' +
-                '<div class="neo-tile-val">' + pts.length + ' Pts</div>' +
-              '</div>' +
-            '</div>' +
-
-            '<div class="neo-metric-tile neo-tile-mint" onclick="location.hash=\'#certificates\';" style="cursor:pointer;" title="View Issued Certifications">' +
-              '<div style="display:flex;justify-content:space-between;align-items:center;">' +
-                '<div class="neo-tile-icon-box" style="color:#059669;"><i class="ms" style="font-size:22px;">verified</i></div>' +
-                '<span class="adm-chip adm-chip-active" style="font-size:10.5px;padding:2px 8px;">FNV-1a Hash</span>' +
-              '</div>' +
-              '<div>' +
-                '<div class="neo-tile-label">PMDC Certifications</div>' +
-                '<div class="neo-tile-val">' + certCount + '</div>' +
+              '<div style="width:42px;height:42px;border-radius:12px;background:#f3e8ff;color:#7c3aed;display:flex;align-items:center;justify-content:center;">' +
+                '<i class="ms" style="font-size:22px;">medical_services</i>' +
               '</div>' +
             '</div>' +
           '</div>' +
 
-          '<!-- Right: CME Learning Velocity Area Spline Card -->' +
-          '<div class="neo-card" style="box-shadow:0 8px 24px -2px rgba(15,23,42,0.08), 0 2px 6px -1px rgba(15,23,42,0.04);border:none;margin-bottom:18px;">' +
+          '<div class="neo-kpi-card-rich" onclick="location.hash=\'#courses\';" title="Inspect CME Accreditation">' +
+            '<div style="display:flex;justify-content:space-between;align-items:flex-start;">' +
+              '<div>' +
+                '<div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;">Accredited CME Hours</div>' +
+                '<div style="font-size:26px;font-weight:900;color:#0f172a;margin:4px 0 2px;">' + totalCmeHours + ' <span style="font-size:13px;font-weight:600;color:#64748b;">hrs</span></div>' +
+                '<div style="font-size:11.5px;color:#0284c7;font-weight:700;"><i class="ms" style="font-size:13px;vertical-align:-2px;">school</i> 12 Curriculum Modules</div>' +
+              '</div>' +
+              '<div style="width:42px;height:42px;border-radius:12px;background:#e0f2fe;color:#0284c7;display:flex;align-items:center;justify-content:center;">' +
+                '<i class="ms" style="font-size:22px;">workspace_premium</i>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="neo-kpi-card-rich" onclick="location.hash=\'#patients\';" title="Open Patients Registry">' +
+            '<div style="display:flex;justify-content:space-between;align-items:flex-start;">' +
+              '<div>' +
+                '<div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;">Trial Patient Cohort</div>' +
+                '<div style="font-size:26px;font-weight:900;color:#0f172a;margin:4px 0 2px;">' + pts.length + ' <span style="font-size:13px;font-weight:600;color:#64748b;">Patients</span></div>' +
+                '<div style="font-size:11.5px;color:#db2777;font-weight:700;"><i class="ms" style="font-size:13px;vertical-align:-2px;">personal_injury</i> Arm 1 & Arm 2 Enrolled</div>' +
+              '</div>' +
+              '<div style="width:42px;height:42px;border-radius:12px;background:#fce7f3;color:#db2777;display:flex;align-items:center;justify-content:center;">' +
+                '<i class="ms" style="font-size:22px;">groups</i>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="neo-kpi-card-rich" onclick="location.hash=\'#certificates\';" title="View Issued Certifications">' +
+            '<div style="display:flex;justify-content:space-between;align-items:flex-start;">' +
+              '<div>' +
+                '<div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;">PMDC Certifications</div>' +
+                '<div style="font-size:26px;font-weight:900;color:#0f172a;margin:4px 0 2px;">' + certCount + ' <span style="font-size:13px;font-weight:600;color:#64748b;">Issued</span></div>' +
+                '<div style="font-size:11.5px;color:#059669;font-weight:700;"><i class="ms" style="font-size:13px;vertical-align:-2px;">verified</i> FNV-1a Cryptographic Hash</div>' +
+              '</div>' +
+              '<div style="width:42px;height:42px;border-radius:12px;background:#d1fae5;color:#059669;display:flex;align-items:center;justify-content:center;">' +
+                '<i class="ms" style="font-size:22px;">verified_user</i>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+
+        '<!-- 2. Main Analytics Row: Watch Velocity Vertical Pillars (Left) + CME Learning Rhythm (Right) -->' +
+        '<div class="neo-grid-row" style="margin-bottom:20px;">' +
+          '<!-- Left: Single, Perfectly-Spaced Video Watch Velocity Card -->' +
+          '<div class="neo-card" style="box-shadow:0 8px 24px -2px rgba(15,23,42,0.08), 0 2px 6px -1px rgba(15,23,42,0.04);border:none;">' +
             '<div class="neo-card-head">' +
-              '<h3 class="neo-card-title">CME Learning Velocity & Lecture Streams</h3>' +
+              '<div>' +
+                '<h3 class="neo-card-title"><i class="ms" style="color:var(--adm-primary);font-size:18px;">video_library</i> Video Watch Velocity & 90% Gate</h3>' +
+                '<div style="font-size:12px;color:var(--adm-slate);margin-top:3px;">Accredited clinical curriculum with enforced 90% watch velocity threshold</div>' +
+              '</div>' +
+              '<span class="neo-pill-filter" style="cursor:pointer;" onclick="location.hash=\'#courses\';" title="Open Curriculum Catalog">Curriculum 2026 <i class="ms" style="font-size:14px;">arrow_forward</i></span>' +
+            '</div>' +
+            '<div class="neo-vbar-container">' +
+              '<div class="neo-vbar-stage">' +
+                '<div class="neo-vbar-gate-line">' +
+                  '<span class="neo-vbar-gate-label"><i class="ms" style="font-size:12px;">verified</i> 90% Accreditation Gate</span>' +
+                '</div>' +
+                '<div class="neo-vbar-scroll-track" style="padding:48px 12px 8px;">' +
+                  '<div class="neo-vbar-col" onclick="location.hash=\'#courses\';" style="cursor:pointer;">' +
+                    '<div class="neo-vbar-tooltip"><strong>M1: GERD & Reflux Pathophysiology</strong><span>95% Avg Watch · 48 Clinicians</span></div>' +
+                    '<div class="neo-vbar-badge" style="color:#059669;">95%</div>' +
+                    '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-emerald" style="height:95%;"></div></div>' +
+                    '<div class="neo-vbar-label"><strong>M1</strong><span>Reflux</span></div>' +
+                  '</div>' +
+                  '<div class="neo-vbar-col" onclick="location.hash=\'#courses\';" style="cursor:pointer;">' +
+                    '<div class="neo-vbar-tooltip"><strong>M2: P-CAB vs PPI Pharmacotherapy</strong><span>89% Avg Watch · 44 Clinicians</span></div>' +
+                    '<div class="neo-vbar-badge" style="color:#2563eb;">89%</div>' +
+                    '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-blue" style="height:89%;"></div></div>' +
+                    '<div class="neo-vbar-label"><strong>M2</strong><span>P-CAB</span></div>' +
+                  '</div>' +
+                  '<div class="neo-vbar-col" onclick="location.hash=\'#courses\';" style="cursor:pointer;">' +
+                    '<div class="neo-vbar-tooltip"><strong>M3: Endoscopic Healing Evaluation</strong><span>82% Avg Watch · 39 Clinicians</span></div>' +
+                    '<div class="neo-vbar-badge" style="color:#0284c7;">82%</div>' +
+                    '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-cyan" style="height:82%;"></div></div>' +
+                    '<div class="neo-vbar-label"><strong>M3</strong><span>Endoscopic</span></div>' +
+                  '</div>' +
+                  '<div class="neo-vbar-col" onclick="location.hash=\'#courses\';" style="cursor:pointer;">' +
+                    '<div class="neo-vbar-tooltip"><strong>M4: E-CRF Protocol & Data Integrity</strong><span>76% Avg Watch · 36 Clinicians</span></div>' +
+                    '<div class="neo-vbar-badge" style="color:#582be8;">76%</div>' +
+                    '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-violet" style="height:76%;"></div></div>' +
+                    '<div class="neo-vbar-label"><strong>M4</strong><span>E-CRF</span></div>' +
+                  '</div>' +
+                  '<div class="neo-vbar-col" onclick="location.hash=\'#courses\';" style="cursor:pointer;">' +
+                    '<div class="neo-vbar-tooltip"><strong>M5: Adverse Event Reporting</strong><span>71% Avg Watch · 32 Clinicians</span></div>' +
+                    '<div class="neo-vbar-badge" style="color:#582be8;">71%</div>' +
+                    '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-violet" style="height:71%;"></div></div>' +
+                    '<div class="neo-vbar-label"><strong>M5</strong><span>Safety</span></div>' +
+                  '</div>' +
+                  '<div class="neo-vbar-col" onclick="location.hash=\'#courses\';" style="cursor:pointer;">' +
+                    '<div class="neo-vbar-tooltip"><strong>M6: Pediatric & Geriatric Nuances</strong><span>68% Avg Watch · 29 Clinicians</span></div>' +
+                    '<div class="neo-vbar-badge" style="color:#e11d48;">68%</div>' +
+                    '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-rose" style="height:68%;"></div></div>' +
+                    '<div class="neo-vbar-label"><strong>M6</strong><span>Dosing</span></div>' +
+                  '</div>' +
+                  '<div class="neo-vbar-col" onclick="location.hash=\'#courses\';" style="cursor:pointer;">' +
+                    '<div class="neo-vbar-tooltip"><strong>M7: Motility & Refractory GERD</strong><span>64% Avg Watch · 27 Clinicians</span></div>' +
+                    '<div class="neo-vbar-badge" style="color:#e11d48;">64%</div>' +
+                    '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-rose" style="height:64%;"></div></div>' +
+                    '<div class="neo-vbar-label"><strong>M7</strong><span>Refractory</span></div>' +
+                  '</div>' +
+                  '<div class="neo-vbar-col" onclick="location.hash=\'#courses\';" style="cursor:pointer;">' +
+                    '<div class="neo-vbar-tooltip"><strong>M8: Final PMDC Accreditation Exam</strong><span>59% Avg Watch · 24 Clinicians</span></div>' +
+                    '<div class="neo-vbar-badge" style="color:#e11d48;">59%</div>' +
+                    '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-rose" style="height:59%;"></div></div>' +
+                    '<div class="neo-vbar-label"><strong>M8</strong><span>Exam</span></div>' +
+                  '</div>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+            '<!-- Clinical Milestone Summary Strip -->' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:#f8fafc;border-radius:12px;margin-top:14px;flex-wrap:wrap;gap:8px;font-size:11.5px;">' +
+              '<span style="color:#059669;font-weight:700;"><i class="ms" style="font-size:13px;vertical-align:-2px;">check_circle</i> 2 Gated (&ge;90%)</span>' +
+              '<span style="color:#0284c7;font-weight:700;"><i class="ms" style="font-size:13px;vertical-align:-2px;">schedule</i> 3 In Progress (&ge;70%)</span>' +
+              '<span style="color:#e11d48;font-weight:700;"><i class="ms" style="font-size:13px;vertical-align:-2px;">warning</i> 3 Attention (&lt;70%)</span>' +
+            '</div>' +
+          '</div>' +
+
+          '<!-- Right: CME Learning Rhythm & Streaming Telemetry -->' +
+          '<div class="neo-card" style="box-shadow:0 8px 24px -2px rgba(15,23,42,0.08), 0 2px 6px -1px rgba(15,23,42,0.04);border:none;">' +
+            '<div class="neo-card-head">' +
+              '<div>' +
+                '<h3 class="neo-card-title"><i class="ms" style="color:#2563eb;font-size:18px;">timeline</i> CME Learning Velocity</h3>' +
+                '<div style="font-size:12px;color:var(--adm-slate);margin-top:3px;">Monthly physician study rhythm & streaming telemetry</div>' +
+              '</div>' +
               '<span class="neo-pill-filter">Monthly <i class="ms" style="font-size:14px;">expand_more</i></span>' +
             '</div>' +
-            '<div style="width:100%;height:180px;position:relative;">' +
-              '<svg viewBox="0 0 600 180" style="width:100%;height:100%;overflow:visible;">' +
+            '<div style="width:100%;height:140px;position:relative;margin-bottom:12px;">' +
+              '<svg viewBox="0 0 600 140" style="width:100%;height:100%;overflow:visible;">' +
                 '<defs>' +
                   '<linearGradient id="cmeAreaGrad" x1="0" y1="0" x2="0" y2="1">' +
                     '<stop offset="0%" stop-color="#3b82f6" stop-opacity="0.25"/>' +
                     '<stop offset="100%" stop-color="#3b82f6" stop-opacity="0.0"/>' +
                   '</linearGradient>' +
                 '</defs>' +
-                '<line x1="20" y1="35" x2="580" y2="35" stroke="#f1f5f9" stroke-width="1"/>' +
-                '<line x1="20" y1="85" x2="580" y2="85" stroke="#f1f5f9" stroke-width="1"/>' +
-                '<line x1="20" y1="135" x2="580" y2="135" stroke="#f1f5f9" stroke-width="1"/>' +
-                '<line x1="380" y1="45" x2="380" y2="155" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="3,3"/>' +
-                '<path d="M 20,140 C 90,130 150,150 210,110 C 270,70 320,120 380,45 C 440,95 500,120 580,110 L 580,155 L 20,155 Z" fill="url(#cmeAreaGrad)"/>' +
-                '<path d="M 20,140 C 90,130 150,150 210,110 C 270,70 320,120 380,45 C 440,95 500,120 580,110" fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round"/>' +
-                '<circle cx="380" cy="45" r="5" fill="#2563eb" stroke="#ffffff" stroke-width="2.5"/>' +
-                '<rect x="325" y="16" width="110" height="22" rx="11" fill="#ffffff" stroke="#e2e8f0" filter="drop-shadow(0 2px 5px rgba(0,0,0,0.06))"/>' +
-                '<text x="380" y="31" font-size="10.5" font-weight="800" fill="#2563eb" text-anchor="middle">Week 4: 92% ↗ 1</text>' +
-                '<text x="25" y="172" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="middle">Jan</text>' +
-                '<text x="115" y="172" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="middle">Feb</text>' +
-                '<text x="205" y="172" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="middle">Mar</text>' +
-                '<text x="295" y="172" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="middle">Apr</text>' +
-                '<text x="385" y="172" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="middle">May</text>' +
-                '<text x="475" y="172" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="middle">Jun</text>' +
-                '<text x="565" y="172" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="middle">Jul</text>' +
+                '<line x1="20" y1="20" x2="580" y2="20" stroke="#f1f5f9" stroke-width="1"/>' +
+                '<line x1="20" y1="60" x2="580" y2="60" stroke="#f1f5f9" stroke-width="1"/>' +
+                '<line x1="20" y1="100" x2="580" y2="100" stroke="#f1f5f9" stroke-width="1"/>' +
+                '<line x1="380" y1="30" x2="380" y2="120" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="3,3"/>' +
+                '<path d="M 20,105 C 90,95 150,115 210,75 C 270,35 320,85 380,30 C 440,70 500,90 580,80 L 580,120 L 20,120 Z" fill="url(#cmeAreaGrad)"/>' +
+                '<path d="M 20,105 C 90,95 150,115 210,75 C 270,35 320,85 380,30 C 440,70 500,90 580,80" fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round"/>' +
+                '<circle cx="380" cy="30" r="5" fill="#2563eb" stroke="#ffffff" stroke-width="2.5"/>' +
+                '<rect x="325" y="8" width="110" height="20" rx="10" fill="#ffffff" stroke="#e2e8f0" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.06))"/>' +
+                '<text x="380" y="22" font-size="10" font-weight="800" fill="#2563eb" text-anchor="middle">Week 4: 92% ↗</text>' +
+                '<text x="25" y="135" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="middle">Jan</text>' +
+                '<text x="115" y="135" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="middle">Feb</text>' +
+                '<text x="205" y="135" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="middle">Mar</text>' +
+                '<text x="295" y="135" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="middle">Apr</text>' +
+                '<text x="385" y="135" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="middle">May</text>' +
+                '<text x="475" y="135" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="middle">Jun</text>' +
+                '<text x="565" y="135" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="middle">Jul</text>' +
               '</svg>' +
             '</div>' +
-          '</div>' +
-        '</div>' +
-
-        '<!-- Video Watch Velocity & Module Mastery: 8-Pillar Vertical Chart -->' +
-        '<div class="neo-card" style="box-shadow:0 8px 24px -2px rgba(15,23,42,0.08), 0 2px 6px -1px rgba(15,23,42,0.04);border:none;margin-bottom:18px;">' +
-          '<div class="neo-card-head">' +
-            '<div>' +
-              '<h3 class="neo-card-title">Video Watch Velocity & Module Mastery</h3>' +
-              '<div style="font-size:12px;color:var(--adm-slate);margin-top:3px;">Accredited video curriculum with mandatory 90% watch threshold</div>' +
-            '</div>' +
-            '<span class="neo-pill-filter" style="cursor:pointer;" onclick="location.hash=\'#courses\';" title="Open Curriculum Catalog">Curriculum 2026 <i class="ms" style="font-size:14px;">arrow_forward</i></span>' +
-          '</div>' +
-          '<div class="neo-vbar-container" style="gap:10px;">' +
-            '<div class="neo-vbar-stage" style="height:190px;">' +
-              '<div class="neo-vbar-gate-line">' +
-                '<span class="neo-vbar-gate-label"><i class="ms" style="font-size:12px;">verified</i> 90% Accreditation Gate</span>' +
+            '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding-top:10px;border-top:1px solid #f1f5f9;font-size:11.5px;">' +
+              '<div style="background:#f8fafc;padding:8px 10px;border-radius:10px;">' +
+                '<div style="color:#64748b;font-size:10.5px;font-weight:600;">Streaming Logged</div>' +
+                '<strong style="color:#0f172a;font-size:13.5px;">184.6 hrs</strong>' +
               '</div>' +
-              '<div class="neo-vbar-scroll-track" style="justify-content:space-around;padding:48px 8px 6px;margin-top:-38px;">' +
-                '<div class="neo-vbar-col" onclick="location.hash=\'#courses\';" title="Module 1: Pathophysiology">' +
-                  '<div class="neo-vbar-tooltip"><strong>M1 &middot; Pathophysiology</strong><span>95% Watched &middot; Mastery Gated</span></div>' +
-                  '<div class="neo-vbar-badge" style="color:#059669;">95%</div>' +
-                  '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-emerald" style="height:95%;"></div></div>' +
-                  '<div class="neo-vbar-label"><strong>M1</strong><span>95%</span></div>' +
-                '</div>' +
-                '<div class="neo-vbar-col" onclick="location.hash=\'#courses\';" title="Module 2: P-CAB Therapy">' +
-                  '<div class="neo-vbar-tooltip"><strong>M2 &middot; P-CAB Therapy</strong><span>89% Watched &middot; Mastery Gated</span></div>' +
-                  '<div class="neo-vbar-badge" style="color:#2563eb;">89%</div>' +
-                  '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-blue" style="height:89%;"></div></div>' +
-                  '<div class="neo-vbar-label"><strong>M2</strong><span>89%</span></div>' +
-                '</div>' +
-                '<div class="neo-vbar-col" onclick="location.hash=\'#courses\';" title="Module 3: Endoscopic Findings">' +
-                  '<div class="neo-vbar-tooltip"><strong>M3 &middot; Endoscopic Findings</strong><span>82% Watched &middot; Below Gate</span></div>' +
-                  '<div class="neo-vbar-badge" style="color:var(--adm-cyan);">82%</div>' +
-                  '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-cyan" style="height:82%;"></div></div>' +
-                  '<div class="neo-vbar-label"><strong>M3</strong><span>82%</span></div>' +
-                '</div>' +
-                '<div class="neo-vbar-col" onclick="location.hash=\'#courses\';" title="Module 4: E-CRF Documentation">' +
-                  '<div class="neo-vbar-tooltip"><strong>M4 &middot; E-CRF Documentation</strong><span>76% Watched &middot; Below Gate</span></div>' +
-                  '<div class="neo-vbar-badge" style="color:var(--adm-primary);">76%</div>' +
-                  '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-violet" style="height:76%;"></div></div>' +
-                  '<div class="neo-vbar-label"><strong>M4</strong><span>76%</span></div>' +
-                '</div>' +
-                '<div class="neo-vbar-col" onclick="location.hash=\'#courses\';" title="Module 5: Pharmacologic Management">' +
-                  '<div class="neo-vbar-tooltip"><strong>M5 &middot; Pharmacologic Management</strong><span>71% Watched &middot; Below Gate</span></div>' +
-                  '<div class="neo-vbar-badge" style="color:#e11d48;">71%</div>' +
-                  '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-rose" style="height:71%;"></div></div>' +
-                  '<div class="neo-vbar-label"><strong>M5</strong><span>71%</span></div>' +
-                '</div>' +
-                '<div class="neo-vbar-col" onclick="location.hash=\'#courses\';" title="Module 6: Surgical Intervention">' +
-                  '<div class="neo-vbar-tooltip"><strong>M6 &middot; Surgical Intervention</strong><span>68% Watched &middot; Below Gate</span></div>' +
-                  '<div class="neo-vbar-badge" style="color:#059669;">68%</div>' +
-                  '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-emerald" style="height:68%;"></div></div>' +
-                  '<div class="neo-vbar-label"><strong>M6</strong><span>68%</span></div>' +
-                '</div>' +
-                '<div class="neo-vbar-col" onclick="location.hash=\'#courses\';" title="Module 7: Post-Op Care Pathways">' +
-                  '<div class="neo-vbar-tooltip"><strong>M7 &middot; Post-Op Care Pathways</strong><span>64% Watched &middot; Below Gate</span></div>' +
-                  '<div class="neo-vbar-badge" style="color:#2563eb;">64%</div>' +
-                  '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-blue" style="height:64%;"></div></div>' +
-                  '<div class="neo-vbar-label"><strong>M7</strong><span>64%</span></div>' +
-                '</div>' +
-                '<div class="neo-vbar-col" onclick="location.hash=\'#courses\';" title="Module 8: Long-Term Follow-up">' +
-                  '<div class="neo-vbar-tooltip"><strong>M8 &middot; Long-Term Follow-up</strong><span>59% Watched &middot; Below Gate</span></div>' +
-                  '<div class="neo-vbar-badge" style="color:var(--adm-cyan);">59%</div>' +
-                  '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-cyan" style="height:59%;"></div></div>' +
-                  '<div class="neo-vbar-label"><strong>M8</strong><span>59%</span></div>' +
-                '</div>' +
+              '<div style="background:#f8fafc;padding:8px 10px;border-radius:10px;">' +
+                '<div style="color:#64748b;font-size:10.5px;font-weight:600;">Mean Completion</div>' +
+                '<strong style="color:#2563eb;font-size:13.5px;">84.6%</strong>' +
               '</div>' +
-            '</div>' +
-          '</div>' +
-        '</div>' +
-
-        '<!-- Scrollable Vertical Pillar Chart: Video Watch Velocity & Module Mastery -->' +
-        '<div class="neo-card" style="box-shadow:0 8px 24px -2px rgba(15,23,42,0.08), 0 2px 6px -1px rgba(15,23,42,0.04);border:none;margin-bottom:20px;">' +
-          '<div class="neo-card-head">' +
-            '<div>' +
-              '<h3 class="neo-card-title"><i class="ms" style="color:var(--adm-primary);font-size:18px;">video_library</i> Video Watch Velocity & Module Mastery</h3>' +
-              '<div style="font-size:12px;color:var(--adm-slate);margin-top:3px;">Accredited clinical video curriculum with enforced 90% watch velocity threshold (Scroll horizontally for all modules)</div>' +
-            '</div>' +
-            '<span class="neo-pill-filter" style="cursor:pointer;" onclick="location.hash=\'#courses\';" title="Open Curriculum Catalog">Curriculum 2026 <i class="ms" style="font-size:14px;">arrow_forward</i></span>' +
-          '</div>' +
-          '<div class="neo-vbar-container">' +
-            '<div class="neo-vbar-stage">' +
-              '<div class="neo-vbar-gate-line">' +
-                '<span class="neo-vbar-gate-label"><i class="ms" style="font-size:12px;">verified</i> 90% Accreditation Gate</span>' +
+              '<div style="background:#f8fafc;padding:8px 10px;border-radius:10px;">' +
+                '<div style="color:#64748b;font-size:10.5px;font-weight:600;">MCQ Pass Rate</div>' +
+                '<strong style="color:#059669;font-size:13.5px;">87.5%</strong>' +
               '</div>' +
-              '<div class="neo-vbar-scroll-track">' +
-                '<div class="neo-vbar-col" onclick="location.hash=\'#courses\';" style="cursor:pointer;">' +
-                  '<div class="neo-vbar-tooltip"><strong>M1: GERD & Reflux Pathophysiology</strong><span>95% Avg Watch · 48 Clinicians</span></div>' +
-                  '<div class="neo-vbar-badge" style="color:#059669;">95%</div>' +
-                  '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-emerald" style="height:95%;"></div></div>' +
-                  '<div class="neo-vbar-label"><strong>M1</strong><span>Reflux</span></div>' +
-                '</div>' +
-                '<div class="neo-vbar-col" onclick="location.hash=\'#courses\';" style="cursor:pointer;">' +
-                  '<div class="neo-vbar-tooltip"><strong>M2: P-CAB vs PPI Pharmacotherapy</strong><span>89% Avg Watch · 44 Clinicians</span></div>' +
-                  '<div class="neo-vbar-badge" style="color:#2563eb;">89%</div>' +
-                  '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-blue" style="height:89%;"></div></div>' +
-                  '<div class="neo-vbar-label"><strong>M2</strong><span>P-CAB</span></div>' +
-                '</div>' +
-                '<div class="neo-vbar-col" onclick="location.hash=\'#courses\';" style="cursor:pointer;">' +
-                  '<div class="neo-vbar-tooltip"><strong>M3: Endoscopic Healing Evaluation</strong><span>82% Avg Watch · 39 Clinicians</span></div>' +
-                  '<div class="neo-vbar-badge" style="color:#0284c7;">82%</div>' +
-                  '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-cyan" style="height:82%;"></div></div>' +
-                  '<div class="neo-vbar-label"><strong>M3</strong><span>Endoscopic</span></div>' +
-                '</div>' +
-                '<div class="neo-vbar-col" onclick="location.hash=\'#courses\';" style="cursor:pointer;">' +
-                  '<div class="neo-vbar-tooltip"><strong>M4: E-CRF Protocol & Data Integrity</strong><span>76% Avg Watch · 36 Clinicians</span></div>' +
-                  '<div class="neo-vbar-badge" style="color:#582be8;">76%</div>' +
-                  '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-violet" style="height:76%;"></div></div>' +
-                  '<div class="neo-vbar-label"><strong>M4</strong><span>E-CRF</span></div>' +
-                '</div>' +
-                '<div class="neo-vbar-col" onclick="location.hash=\'#courses\';" style="cursor:pointer;">' +
-                  '<div class="neo-vbar-tooltip"><strong>M5: Clinical Trial Adverse Event Reporting</strong><span>71% Avg Watch · 32 Clinicians</span></div>' +
-                  '<div class="neo-vbar-badge" style="color:#582be8;">71%</div>' +
-                  '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-violet" style="height:71%;"></div></div>' +
-                  '<div class="neo-vbar-label"><strong>M5</strong><span>Safety</span></div>' +
-                '</div>' +
-                '<div class="neo-vbar-col" onclick="location.hash=\'#courses\';" style="cursor:pointer;">' +
-                  '<div class="neo-vbar-tooltip"><strong>M6: Pediatric & Geriatric Nuances</strong><span>68% Avg Watch · 29 Clinicians</span></div>' +
-                  '<div class="neo-vbar-badge" style="color:#e11d48;">68%</div>' +
-                  '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-rose" style="height:68%;"></div></div>' +
-                  '<div class="neo-vbar-label"><strong>M6</strong><span>Dosing</span></div>' +
-                '</div>' +
-                '<div class="neo-vbar-col" onclick="location.hash=\'#courses\';" style="cursor:pointer;">' +
-                  '<div class="neo-vbar-tooltip"><strong>M7: Motility & Refractory GERD</strong><span>64% Avg Watch · 27 Clinicians</span></div>' +
-                  '<div class="neo-vbar-badge" style="color:#e11d48;">64%</div>' +
-                  '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-rose" style="height:64%;"></div></div>' +
-                  '<div class="neo-vbar-label"><strong>M7</strong><span>Refractory</span></div>' +
-                '</div>' +
-                '<div class="neo-vbar-col" onclick="location.hash=\'#courses\';" style="cursor:pointer;">' +
-                  '<div class="neo-vbar-tooltip"><strong>M8: Final PMDC Accreditation Assessment</strong><span>59% Avg Watch · 24 Clinicians</span></div>' +
-                  '<div class="neo-vbar-badge" style="color:#e11d48;">59%</div>' +
-                  '<div class="neo-vbar-track"><div class="neo-vbar-fill fill-rose" style="height:59%;"></div></div>' +
-                  '<div class="neo-vbar-label"><strong>M8</strong><span>Exam</span></div>' +
-                '</div>' +
+              '<div style="background:#f8fafc;padding:8px 10px;border-radius:10px;">' +
+                '<div style="color:#64748b;font-size:10.5px;font-weight:600;">Anti-Skipping Gate</div>' +
+                '<strong style="color:#7c3aed;font-size:13.5px;">100% Active</strong>' +
               '</div>' +
             '</div>' +
           '</div>' +
