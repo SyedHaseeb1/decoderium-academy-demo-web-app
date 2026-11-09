@@ -1171,9 +1171,7 @@
 
     var routeMap = {
       overview: function () {
-        if (parts[1] === 'neo' || hashQuery.indexOf('tab=neo') !== -1 || hashQuery.indexOf('neo=1') !== -1) {
-          activeOverviewTab = 'neo';
-        } else if (parts[1] === 'lms' || hashQuery.indexOf('tab=lms') !== -1) {
+        if (parts[1] === 'lms' || hashQuery.indexOf('tab=lms') !== -1) {
           activeOverviewTab = 'lms';
         } else if (parts[1] === 'patients' || hashQuery.indexOf('tab=patients') !== -1) {
           activeOverviewTab = 'patients';
@@ -1183,6 +1181,8 @@
           activeOverviewTab = 'regions';
         } else if (parts[1] === 'audit' || hashQuery.indexOf('tab=audit') !== -1) {
           activeOverviewTab = 'audit';
+        } else {
+          activeOverviewTab = 'all';
         }
         viewOverviewDashboard();
       },
@@ -1220,6 +1220,10 @@
         }
       },
       regions: viewRegionalMatrix,
+      audit: function () {
+        activeOverviewTab = 'audit';
+        viewOverviewDashboard();
+      },
       users: function () {
         if (parts[1] === 'doctors') {
           location.hash = '#doctors';
@@ -1353,16 +1357,16 @@
 
     // Infallible Tab State Persistence
     var savedTab = 'all';
-    try {
-      var stTab = sessionStorage.getItem('adm_overview_tab');
-      if (stTab) savedTab = stTab;
-    } catch (e) { }
-
     var hq = location.hash.slice(1);
     var qm = hq.indexOf('?');
     if (qm !== -1) {
       var m = hq.slice(qm + 1).match(/tab=([a-z]+)/);
       if (m && m[1]) savedTab = m[1];
+    } else {
+      try {
+        var stTab = sessionStorage.getItem('adm_overview_tab');
+        if (stTab) savedTab = stTab;
+      } catch (e) { }
     }
     activeOverviewTab = savedTab;
 
@@ -1371,34 +1375,429 @@
       '<div class="adm-detail-tabs-bar" style="margin-bottom:24px;">' +
         '<div class="adm-uni-tabs" role="tablist" aria-label="Executive Overview Navigation">' +
           '<button type="button" class="adm-uni-tab-btn ' + (activeOverviewTab === 'all' ? 'active' : '') + '" data-ov-tab="all" role="tab" aria-selected="' + (activeOverviewTab === 'all') + '">' +
-            '<i class="ms">dashboard</i> Overview' +
+            '<i class="ms">dashboard</i> Master Overview' +
           '</button>' +
           '<button type="button" class="adm-uni-tab-btn ' + (activeOverviewTab === 'lms' ? 'active' : '') + '" data-ov-tab="lms" role="tab" aria-selected="' + (activeOverviewTab === 'lms') + '">' +
-            '<i class="ms">school</i> 1. LMS & CME' +
+            '<i class="ms">school</i> 1. LMS Academy & CME' +
           '</button>' +
           '<button type="button" class="adm-uni-tab-btn ' + (activeOverviewTab === 'patients' ? 'active' : '') + '" data-ov-tab="patients" role="tab" aria-selected="' + (activeOverviewTab === 'patients') + '">' +
-            '<i class="ms">clinical_notes</i> 2. Patients' +
+            '<i class="ms">clinical_notes</i> 2. Patients Clinical Registry' +
           '</button>' +
           '<button type="button" class="adm-uni-tab-btn ' + (activeOverviewTab === 'alerts' ? 'active' : '') + '" data-ov-tab="alerts" role="tab" aria-selected="' + (activeOverviewTab === 'alerts') + '">' +
-            '<i class="ms">notifications_active</i> 3. Alerts & Broadcasts' +
+            '<i class="ms">notifications_active</i> 3. Patient Alerts & Broadcasts' +
           '</button>' +
           '<button type="button" class="adm-uni-tab-btn ' + (activeOverviewTab === 'regions' ? 'active' : '') + '" data-ov-tab="regions" role="tab" aria-selected="' + (activeOverviewTab === 'regions') + '">' +
-            '<i class="ms">public</i> 4. Hospital Centers' +
+            '<i class="ms">public</i> 4. Participating Centers' +
           '</button>' +
           '<button type="button" class="adm-uni-tab-btn ' + (activeOverviewTab === 'audit' ? 'active' : '') + '" data-ov-tab="audit" role="tab" aria-selected="' + (activeOverviewTab === 'audit') + '">' +
-            '<i class="ms">gavel</i> 5. PMDC Audit' +
+            '<i class="ms">gavel</i> 5. PMDC Governance Audit' +
           '</button>' +
         '</div>' +
       '</div>' +
 
       '<!-- ===========================================================================' +
+      '     COMBINED MASTER OVERVIEW (tab=all)' +
+      '     Executive multi-pillar synthesis with key statistics and deep-dive routes' +
+      '     =========================================================================== -->' +
+      '<div id="ovCombinedSummary" style="display:' + (activeOverviewTab === 'all' ? 'block' : 'none') + ';">' +
+
+        '<!-- 1. Master KPI Deck: 4 High-Impact Stat Cards -->' +
+        '<div class="neo-kpi-4col" style="margin-bottom:24px;">' +
+          '<div class="neo-kpi-card-rich" onclick="location.hash=\'#doctors\';" title="Open Doctors Directory">' +
+            '<div style="display:flex;justify-content:space-between;align-items:flex-start;">' +
+              '<div>' +
+                '<div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;">Enrolled Clinicians</div>' +
+                '<div style="font-size:26px;font-weight:900;color:#0f172a;margin:4px 0 2px;">' + actDocs.length + ' <span style="font-size:13px;font-weight:600;color:#64748b;">Doctors</span></div>' +
+                '<div style="font-size:11.5px;color:#059669;font-weight:700;"><i class="ms" style="font-size:13px;vertical-align:-2px;">verified</i> 100% PMDC Licensed</div>' +
+              '</div>' +
+              '<div style="width:42px;height:42px;border-radius:12px;background:#f3e8ff;color:#7c3aed;display:flex;align-items:center;justify-content:center;">' +
+                '<i class="ms" style="font-size:22px;">medical_services</i>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="neo-kpi-card-rich" onclick="location.hash=\'#courses\';" title="Inspect CME Accreditation">' +
+            '<div style="display:flex;justify-content:space-between;align-items:flex-start;">' +
+              '<div>' +
+                '<div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;">Accredited CME Hours</div>' +
+                '<div style="font-size:26px;font-weight:900;color:#0f172a;margin:4px 0 2px;">' + totalCmeHours + ' <span style="font-size:13px;font-weight:600;color:#64748b;">hrs</span></div>' +
+                '<div style="font-size:11.5px;color:#0284c7;font-weight:700;"><i class="ms" style="font-size:13px;vertical-align:-2px;">school</i> 12 Curriculum Modules</div>' +
+              '</div>' +
+              '<div style="width:42px;height:42px;border-radius:12px;background:#e0f2fe;color:#0284c7;display:flex;align-items:center;justify-content:center;">' +
+                '<i class="ms" style="font-size:22px;">workspace_premium</i>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="neo-kpi-card-rich" onclick="location.hash=\'#patients\';" title="Open Patients Registry">' +
+            '<div style="display:flex;justify-content:space-between;align-items:flex-start;">' +
+              '<div>' +
+                '<div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;">Trial Patient Cohort</div>' +
+                '<div style="font-size:26px;font-weight:900;color:#0f172a;margin:4px 0 2px;">' + pts.length + ' <span style="font-size:13px;font-weight:600;color:#64748b;">Patients</span></div>' +
+                '<div style="font-size:11.5px;color:#db2777;font-weight:700;"><i class="ms" style="font-size:13px;vertical-align:-2px;">personal_injury</i> Arm 1 &amp; Arm 2 Enrolled</div>' +
+              '</div>' +
+              '<div style="width:42px;height:42px;border-radius:12px;background:#fce7f3;color:#db2777;display:flex;align-items:center;justify-content:center;">' +
+                '<i class="ms" style="font-size:22px;">groups</i>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="neo-kpi-card-rich" onclick="location.hash=\'#certificates\';" title="View Issued Certifications">' +
+            '<div style="display:flex;justify-content:space-between;align-items:flex-start;">' +
+              '<div>' +
+                '<div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;">PMDC Certifications</div>' +
+                '<div style="font-size:26px;font-weight:900;color:#0f172a;margin:4px 0 2px;">' + certCount + ' <span style="font-size:13px;font-weight:600;color:#64748b;">Issued</span></div>' +
+                '<div style="font-size:11.5px;color:#059669;font-weight:700;"><i class="ms" style="font-size:13px;vertical-align:-2px;">verified</i> FNV-1a Cryptographic Hash</div>' +
+              '</div>' +
+              '<div style="width:42px;height:42px;border-radius:12px;background:#d1fae5;color:#059669;display:flex;align-items:center;justify-content:center;">' +
+                '<i class="ms" style="font-size:22px;">verified_user</i>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+
+        '<!-- 2. Four-Pillar Domain Executive Synthesis Cards (2x2 Grid) -->' +
+        '<div class="adm-pillars-2x2" style="margin-bottom:24px;">' +
+
+          '<!-- Pillar 1 Card -->' +
+          '<div class="neo-card" style="box-shadow:0 8px 24px -2px rgba(15,23,42,0.08), 0 2px 6px -1px rgba(15,23,42,0.04);border:none;">' +
+            '<div class="neo-card-head" style="margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #f1f5f9;">' +
+              '<div style="display:flex;align-items:center;gap:8px;">' +
+                '<span class="adm-chip adm-chip-violet" style="font-weight:800;font-size:10.5px;">PILLAR 1</span>' +
+                '<h4 style="font-size:16px;font-weight:800;color:#0f172a;margin:0;">LMS Academy &amp; Clinician Accreditation</h4>' +
+              '</div>' +
+              '<button type="button" class="adm-btn-outline" data-switch-tab="lms" style="font-size:11.5px;padding:4px 12px;border-radius:999px;font-weight:700;color:#7c3aed;border-color:#ddd6fe;">' +
+                '<i class="ms" style="font-size:13px;">school</i> LMS Detail →' +
+              '</button>' +
+            '</div>' +
+            '<p style="font-size:12px;color:var(--adm-slate);margin:0 0 14px;">Physician training curriculum across 12 modules with enforced 90% watch velocity gate</p>' +
+            '<div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:10px;text-align:center;margin-bottom:14px;">' +
+              '<div style="background:#f8fafc;padding:10px 8px;border-radius:10px;">' +
+                '<div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;">Mean Watch</div>' +
+                '<div style="font-size:18px;font-weight:900;color:#7c3aed;margin-top:2px;">84.6%</div>' +
+                '<div style="font-size:9.5px;color:#059669;font-weight:700;">2 Gated &ge;90%</div>' +
+              '</div>' +
+              '<div style="background:#f8fafc;padding:10px 8px;border-radius:10px;">' +
+                '<div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;">MCQ Pass</div>' +
+                '<div style="font-size:18px;font-weight:900;color:#059669;margin-top:2px;">87.5%</div>' +
+                '<div style="font-size:9.5px;color:#64748b;">First Attempt</div>' +
+              '</div>' +
+              '<div style="background:#f8fafc;padding:10px 8px;border-radius:10px;">' +
+                '<div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;">Streaming</div>' +
+                '<div style="font-size:18px;font-weight:900;color:#0f172a;margin-top:2px;">184.6h</div>' +
+                '<div style="font-size:9.5px;color:#64748b;">Total Watched</div>' +
+              '</div>' +
+              '<div style="background:#f8fafc;padding:10px 8px;border-radius:10px;">' +
+                '<div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;">Anti-Skip</div>' +
+                '<div style="font-size:18px;font-weight:900;color:#2563eb;margin-top:2px;">100%</div>' +
+                '<div style="font-size:9.5px;color:#2563eb;font-weight:700;">Enforced</div>' +
+              '</div>' +
+            '</div>' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#faf5ff;border-radius:10px;font-size:11.5px;color:#6b21a8;">' +
+              '<span><i class="ms" style="font-size:13px;vertical-align:-2px;color:#7c3aed;">star</i> <strong>Top Clinician:</strong> Dr. Ayesha Khan (SIMS Lahore · 481 CME score)</span>' +
+              '<span class="adm-chip adm-chip-violet" style="font-size:10px;">5 Modules Certified</span>' +
+            '</div>' +
+          '</div>' +
+
+          '<!-- Pillar 2 Card -->' +
+          '<div class="neo-card" style="box-shadow:0 8px 24px -2px rgba(15,23,42,0.08), 0 2px 6px -1px rgba(15,23,42,0.04);border:none;">' +
+            '<div class="neo-card-head" style="margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #f1f5f9;">' +
+              '<div style="display:flex;align-items:center;gap:8px;">' +
+                '<span class="adm-chip adm-chip-cyan" style="font-weight:800;font-size:10.5px;">PILLAR 2</span>' +
+                '<h4 style="font-size:16px;font-weight:800;color:#0f172a;margin:0;">Patients Clinical Registry &amp; Outcomes</h4>' +
+              '</div>' +
+              '<button type="button" class="adm-btn-outline" data-switch-tab="patients" style="font-size:11.5px;padding:4px 12px;border-radius:999px;font-weight:700;color:#0284c7;border-color:#bae6fd;">' +
+                '<i class="ms" style="font-size:13px;">clinical_notes</i> Registry Detail →' +
+              '</button>' +
+            '</div>' +
+            '<p style="font-size:12px;color:var(--adm-slate);margin:0 0 14px;">Multi-center clinical trial cohort evaluating Arm 1 (PPI) vs Arm 2 (P-CAB Tegoprazan)</p>' +
+            '<div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:10px;text-align:center;margin-bottom:14px;">' +
+              '<div style="background:#f8fafc;padding:10px 8px;border-radius:10px;">' +
+                '<div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;">Trial Cohort</div>' +
+                '<div style="font-size:18px;font-weight:900;color:#0284c7;margin-top:2px;">48 Pts</div>' +
+                '<div style="font-size:9.5px;color:#64748b;">24 Arm 1 / 24 Arm 2</div>' +
+              '</div>' +
+              '<div style="background:#f8fafc;padding:10px 8px;border-radius:10px;">' +
+                '<div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;">Healing Rate</div>' +
+                '<div style="font-size:18px;font-weight:900;color:#059669;margin-top:2px;">87.5%</div>' +
+                '<div style="font-size:9.5px;color:#059669;font-weight:700;">+25% Superiority</div>' +
+              '</div>' +
+              '<div style="background:#f8fafc;padding:10px 8px;border-radius:10px;">' +
+                '<div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;">Median Relief</div>' +
+                '<div style="font-size:18px;font-weight:900;color:#0f172a;margin-top:2px;">2.4 d</div>' +
+                '<div style="font-size:9.5px;color:#059669;font-weight:700;">-3.4d vs PPI</div>' +
+              '</div>' +
+              '<div style="background:#f8fafc;padding:10px 8px;border-radius:10px;">' +
+                '<div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;">Acid Break</div>' +
+                '<div style="font-size:18px;font-weight:900;color:#059669;margin-top:2px;">0.0%</div>' +
+                '<div style="font-size:9.5px;color:#059669;font-weight:700;">Arm 2 Zero Break</div>' +
+              '</div>' +
+            '</div>' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#f0f9ff;border-radius:10px;font-size:11.5px;color:#0369a1;">' +
+              '<span><i class="ms" style="font-size:13px;vertical-align:-2px;color:#0284c7;">schedule</i> <strong>Follow-up Status:</strong> 12 Day-3 Pending · 28 Day-7 Resolved</span>' +
+              '<span class="adm-chip adm-chip-danger" style="font-size:10px;">3 High-Risk Triage</span>' +
+            '</div>' +
+          '</div>' +
+
+          '<!-- Pillar 3 Card -->' +
+          '<div class="neo-card" style="box-shadow:0 8px 24px -2px rgba(15,23,42,0.08), 0 2px 6px -1px rgba(15,23,42,0.04);border:none;">' +
+            '<div class="neo-card-head" style="margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #f1f5f9;">' +
+              '<div style="display:flex;align-items:center;gap:8px;">' +
+                '<span class="adm-chip adm-chip-danger" style="font-weight:800;font-size:10.5px;">PILLAR 3</span>' +
+                '<h4 style="font-size:16px;font-weight:800;color:#0f172a;margin:0;">Patient Alerts &amp; Broadcast Telemetry</h4>' +
+              '</div>' +
+              '<button type="button" class="adm-btn-outline" data-switch-tab="alerts" style="font-size:11.5px;padding:4px 12px;border-radius:999px;font-weight:700;color:#e11d48;border-color:#fecdd3;">' +
+                '<i class="ms" style="font-size:13px;">notifications_active</i> Alerts Detail →' +
+              '</button>' +
+            '</div>' +
+            '<p style="font-size:12px;color:var(--adm-slate);margin:0 0 14px;">Automated PWA pushes &amp; SMS checkups driving patient engagement and adherence</p>' +
+            '<div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:10px;text-align:center;margin-bottom:14px;">' +
+              '<div style="background:#f8fafc;padding:10px 8px;border-radius:10px;">' +
+                '<div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;">Delivery Rate</div>' +
+                '<div style="font-size:18px;font-weight:900;color:#e11d48;margin-top:2px;">96.8%</div>' +
+                '<div style="font-size:9.5px;color:#64748b;">213 Dispatched</div>' +
+              '</div>' +
+              '<div style="background:#f8fafc;padding:10px 8px;border-radius:10px;">' +
+                '<div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;">Video Reel</div>' +
+                '<div style="font-size:18px;font-weight:900;color:#0f172a;margin-top:2px;">89%</div>' +
+                '<div style="font-size:9.5px;color:#059669;font-weight:700;">Day-3 Completion</div>' +
+              '</div>' +
+              '<div style="background:#f8fafc;padding:10px 8px;border-radius:10px;">' +
+                '<div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;">GERD-Q Survey</div>' +
+                '<div style="font-size:18px;font-weight:900;color:#0284c7;margin-top:2px;">85%</div>' +
+                '<div style="font-size:9.5px;color:#64748b;">Day-7 Responses</div>' +
+              '</div>' +
+              '<div style="background:#f8fafc;padding:10px 8px;border-radius:10px;">' +
+                '<div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;">Templates</div>' +
+                '<div style="font-size:18px;font-weight:900;color:#7c3aed;margin-top:2px;">8 Live</div>' +
+                '<div style="font-size:9.5px;color:#7c3aed;font-weight:700;">Benchmark &ge;85%</div>' +
+              '</div>' +
+            '</div>' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#fff1f2;border-radius:10px;font-size:11.5px;color:#9f1239;">' +
+              '<span><i class="ms" style="font-size:13px;vertical-align:-2px;color:#e11d48;">sensors</i> <strong>Telemetry:</strong> PT-41822-01 completed APD reel (Just now)</span>' +
+              '<span class="adm-chip adm-chip-active" style="font-size:10px;">Sync OK</span>' +
+            '</div>' +
+          '</div>' +
+
+          '<!-- Pillar 4 Card -->' +
+          '<div class="neo-card" style="box-shadow:0 8px 24px -2px rgba(15,23,42,0.08), 0 2px 6px -1px rgba(15,23,42,0.04);border:none;">' +
+            '<div class="neo-card-head" style="margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #f1f5f9;">' +
+              '<div style="display:flex;align-items:center;gap:8px;">' +
+                '<span class="adm-chip adm-chip-emerald" style="font-weight:800;font-size:10.5px;">PILLAR 4</span>' +
+                '<h4 style="font-size:16px;font-weight:800;color:#0f172a;margin:0;">Participating Centers &amp; PMDC Governance</h4>' +
+              '</div>' +
+              '<button type="button" class="adm-btn-outline" data-switch-tab="regions" style="font-size:11.5px;padding:4px 12px;border-radius:999px;font-weight:700;color:#059669;border-color:#a7f3d0;">' +
+                '<i class="ms" style="font-size:13px;">public</i> Centers &amp; Audit →' +
+              '</button>' +
+            '</div>' +
+            '<p style="font-size:12px;color:var(--adm-slate);margin:0 0 14px;">Provincial hospital network and tamper-evident cryptographic compliance</p>' +
+            '<div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:10px;text-align:center;margin-bottom:14px;">' +
+              '<div style="background:#f8fafc;padding:10px 8px;border-radius:10px;">' +
+                '<div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;">Study Hubs</div>' +
+                '<div style="font-size:18px;font-weight:900;color:#059669;margin-top:2px;">12</div>' +
+                '<div style="font-size:9.5px;color:#64748b;">5 Provinces</div>' +
+              '</div>' +
+              '<div style="background:#f8fafc;padding:10px 8px;border-radius:10px;">' +
+                '<div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;">Clinicians</div>' +
+                '<div style="font-size:18px;font-weight:900;color:#0f172a;margin-top:2px;">11 Docs</div>' +
+                '<div style="font-size:9.5px;color:#059669;font-weight:700;">100% Synced</div>' +
+              '</div>' +
+              '<div style="background:#f8fafc;padding:10px 8px;border-radius:10px;">' +
+                '<div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;">PMDC License</div>' +
+                '<div style="font-size:18px;font-weight:900;color:#0284c7;margin-top:2px;">100%</div>' +
+                '<div style="font-size:9.5px;color:#0284c7;font-weight:700;">12 / 12 Verified</div>' +
+              '</div>' +
+              '<div style="background:#f8fafc;padding:10px 8px;border-radius:10px;">' +
+                '<div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;">Hash Audit</div>' +
+                '<div style="font-size:18px;font-weight:900;color:#059669;margin-top:2px;">0 Anom</div>' +
+                '<div style="font-size:9.5px;color:#059669;font-weight:700;">Zero Collisions</div>' +
+              '</div>' +
+            '</div>' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#ecfdf5;border-radius:10px;font-size:11.5px;color:#065f46;">' +
+              '<span><i class="ms" style="font-size:13px;vertical-align:-2px;color:#059669;">verified_user</i> <strong>Compliance Standard:</strong> ISO/IEC 27001 &amp; PMDC GCP Ready</span>' +
+              '<span class="adm-chip adm-chip-active" style="font-size:10px;">PASS · 100%</span>' +
+            '</div>' +
+          '</div>' +
+
+        '</div>' +
+
+        '<!-- 3. Cross-Pillar Executive Analytics Row -->' +
+        '<div class="neo-grid-row" style="margin-bottom:24px;">' +
+
+          '<!-- Left: CME Learning Velocity & Lecture Streams (Spline) -->' +
+          '<div class="neo-card" style="box-shadow:0 8px 24px -2px rgba(15,23,42,0.08), 0 2px 6px -1px rgba(15,23,42,0.04);border:none;">' +
+            '<div class="neo-card-head">' +
+              '<div>' +
+                '<h3 class="neo-card-title"><i class="ms" style="color:#2563eb;font-size:18px;">timeline</i> Macro CME Learning Velocity &amp; Physician Engagement</h3>' +
+                '<div style="font-size:12px;color:var(--adm-slate);margin-top:3px;">Monthly physician study rhythm and continuous streaming telemetry</div>' +
+              '</div>' +
+              '<button type="button" class="adm-btn-outline" data-switch-tab="lms" style="font-size:11px;padding:3px 10px;border-radius:999px;">View LMS Pillar →</button>' +
+            '</div>' +
+            '<div style="width:100%;height:140px;position:relative;margin-bottom:12px;">' +
+              '<svg viewBox="0 0 600 140" style="width:100%;height:100%;overflow:visible;">' +
+                '<defs>' +
+                  '<linearGradient id="cmeAreaGradOv" x1="0" y1="0" x2="0" y2="1">' +
+                    '<stop offset="0%" stop-color="#3b82f6" stop-opacity="0.25"/>' +
+                    '<stop offset="100%" stop-color="#3b82f6" stop-opacity="0.0"/>' +
+                  '</linearGradient>' +
+                '</defs>' +
+                '<line x1="20" y1="20" x2="580" y2="20" stroke="#f1f5f9" stroke-width="1"/>' +
+                '<line x1="20" y1="60" x2="580" y2="60" stroke="#f1f5f9" stroke-width="1"/>' +
+                '<line x1="20" y1="100" x2="580" y2="100" stroke="#f1f5f9" stroke-width="1"/>' +
+                '<line x1="380" y1="30" x2="380" y2="120" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="3,3"/>' +
+                '<path d="M 20,105 C 90,95 150,115 210,75 C 270,35 320,85 380,30 C 440,70 500,90 580,80 L 580,120 L 20,120 Z" fill="url(#cmeAreaGradOv)"/>' +
+                '<path d="M 20,105 C 90,95 150,115 210,75 C 270,35 320,85 380,30 C 440,70 500,90 580,80" fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round"/>' +
+                '<circle cx="380" cy="30" r="5" fill="#2563eb" stroke="#ffffff" stroke-width="2.5"/>' +
+                '<rect x="325" y="8" width="110" height="20" rx="10" fill="#ffffff" stroke="#e2e8f0" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.06))"/>' +
+                '<text x="380" y="22" font-size="10" font-weight="800" fill="#2563eb" text-anchor="middle">Week 4: 92% ↗</text>' +
+                '<text x="25" y="135" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="middle">Jan</text>' +
+                '<text x="115" y="135" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="middle">Feb</text>' +
+                '<text x="205" y="135" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="middle">Mar</text>' +
+                '<text x="295" y="135" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="middle">Apr</text>' +
+                '<text x="385" y="135" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="middle">May</text>' +
+                '<text x="475" y="135" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="middle">Jun</text>' +
+                '<text x="565" y="135" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="middle">Jul</text>' +
+              '</svg>' +
+            '</div>' +
+            '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding-top:10px;border-top:1px solid #f1f5f9;font-size:11.5px;">' +
+              '<div style="background:#f8fafc;padding:8px 10px;border-radius:10px;">' +
+                '<div style="color:#64748b;font-size:10.5px;font-weight:600;">Streaming Logged</div>' +
+                '<strong style="color:#0f172a;font-size:13.5px;">184.6 hrs</strong>' +
+              '</div>' +
+              '<div style="background:#f8fafc;padding:8px 10px;border-radius:10px;">' +
+                '<div style="color:#64748b;font-size:10.5px;font-weight:600;">Mean Completion</div>' +
+                '<strong style="color:#2563eb;font-size:13.5px;">84.6%</strong>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<!-- Right: Comparative Clinical Protocol Arms (Arm 1 PPI vs Arm 2 P-CAB) -->' +
+          '<div class="neo-card" style="box-shadow:0 8px 24px -2px rgba(15,23,42,0.08), 0 2px 6px -1px rgba(15,23,42,0.04);border:none;">' +
+            '<div class="neo-card-head">' +
+              '<div>' +
+                '<h3 class="neo-card-title"><i class="ms" style="color:#059669;font-size:18px;">compare_arrows</i> Clinical Protocol Superiority Comparison</h3>' +
+                '<div style="font-size:12px;color:var(--adm-slate);margin-top:3px;">Standard PPI (Esomeprazole 40mg) vs P-CAB (Tegoprazan 50mg)</div>' +
+              '</div>' +
+              '<button type="button" class="adm-btn-outline" data-switch-tab="patients" style="font-size:11px;padding:3px 10px;border-radius:999px;">View Registry Pillar →</button>' +
+            '</div>' +
+            '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:12px;">' +
+              '<div style="background:#f8fafc;padding:12px 14px;border-radius:12px;border:1px solid #e2e8f0;">' +
+                '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">' +
+                  '<span class="adm-chip" style="font-size:10px;font-weight:800;background:#e2e8f0;color:#334155;">ARM 1: PPI</span>' +
+                  '<span style="font-size:11px;color:#64748b;font-weight:600;">n = 24</span>' +
+                '</div>' +
+                '<div style="font-size:11px;color:#64748b;">Healing Rate: <strong style="color:#0f172a;font-size:14px;">66.7%</strong></div>' +
+                '<div style="font-size:11px;color:#64748b;margin-top:4px;">Median Relief: <strong style="color:#0f172a;font-size:14px;">5.8 days</strong></div>' +
+                '<div style="font-size:11px;color:#e11d48;margin-top:4px;">Nocturnal Break: <strong>12.5%</strong></div>' +
+              '</div>' +
+              '<div style="background:linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);padding:12px 14px;border-radius:12px;border:1px solid #a7f3d0;">' +
+                '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">' +
+                  '<span class="adm-chip adm-chip-emerald" style="font-size:10px;font-weight:800;">ARM 2: P-CAB</span>' +
+                  '<span style="font-size:11px;color:#059669;font-weight:700;">+25.0% Superior</span>' +
+                '</div>' +
+                '<div style="font-size:11px;color:#065f46;">Healing Rate: <strong style="color:#047857;font-size:14px;">91.7%</strong></div>' +
+                '<div style="font-size:11px;color:#065f46;margin-top:4px;">Median Relief: <strong style="color:#047857;font-size:14px;">2.4 days</strong></div>' +
+                '<div style="font-size:11px;color:#059669;margin-top:4px;font-weight:700;">Zero Acid Breakthrough</div>' +
+              '</div>' +
+            '</div>' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#f8fafc;border-radius:8px;font-size:11px;color:#64748b;">' +
+              '<span><i class="ms" style="font-size:13px;vertical-align:-2px;color:#059669;">check_circle</i> P-CAB demonstrates statistically significant faster onset of symptom relief</span>' +
+              '<strong style="color:#059669;">p &lt; 0.001</strong>' +
+            '</div>' +
+          '</div>' +
+
+        '</div>' +
+
+        '<!-- 4. Operational Activity & High-Risk Triage Row -->' +
+        '<div class="neo-grid-row" style="margin-bottom:12px;">' +
+
+          '<!-- Left: Live Telemetry Stream -->' +
+          '<div class="neo-card" style="box-shadow:0 8px 24px -2px rgba(15,23,42,0.08), 0 2px 6px -1px rgba(15,23,42,0.04);border:none;">' +
+            '<div class="neo-card-head">' +
+              '<h3 class="neo-card-title"><i class="ms" style="color:var(--adm-cyan);font-size:18px;">sensors</i> Real-Time Multi-Center Telemetry</h3>' +
+              '<span class="adm-chip adm-chip-active" style="font-size:10px;">Live Stream</span>' +
+            '</div>' +
+            '<div style="display:flex;flex-direction:column;gap:10px;font-size:12px;">' +
+              '<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0;">' +
+                '<div style="display:flex;align-items:center;gap:8px;">' +
+                  '<span class="adm-chip adm-chip-violet" style="font-size:10px;padding:2px 6px;">LMS</span>' +
+                  '<span>Dr. Ayesha Khan completed Module 1 (95% Watch Velocity)</span>' +
+                '</div>' +
+                '<span style="font-size:10px;color:#64748b;">2m ago</span>' +
+              '</div>' +
+              '<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0;">' +
+                '<div style="display:flex;align-items:center;gap:8px;">' +
+                  '<span class="adm-patient-code-badge" style="font-size:11px;padding:2px 6px;">PT-41822-01</span>' +
+                  '<span>30s APD Video Reel Completed (100% Watched)</span>' +
+                '</div>' +
+                '<span class="adm-chip adm-chip-active" style="font-size:10px;">Just now</span>' +
+              '</div>' +
+              '<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0;">' +
+                '<div style="display:flex;align-items:center;gap:8px;">' +
+                  '<span class="adm-chip adm-chip-cyan" style="font-size:10px;padding:2px 6px;">E-CRF</span>' +
+                  '<span>Patient P-205 (Zainab B.) enrolled in Arm 2 (Civil Hospital Karachi)</span>' +
+                '</div>' +
+                '<span style="font-size:10px;color:#64748b;">18m ago</span>' +
+              '</div>' +
+              '<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0;">' +
+                '<div style="display:flex;align-items:center;gap:8px;">' +
+                  '<span class="adm-chip adm-chip-emerald" style="font-size:10px;padding:2px 6px;">PMDC</span>' +
+                  '<span>Certificate GILEAP-2026-c1-d1-a47f2b issued &amp; verified</span>' +
+                '</div>' +
+                '<span style="font-size:10px;color:#64748b;">1h ago</span>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<!-- Right: High-Risk Day-3 Triage Snapshot -->' +
+          '<div class="neo-card" style="box-shadow:0 8px 24px -2px rgba(15,23,42,0.08), 0 2px 6px -1px rgba(15,23,42,0.04);border:none;">' +
+            '<div class="neo-card-head">' +
+              '<div style="display:flex;align-items:center;gap:8px;">' +
+                '<i class="ms" style="color:#e11d48;font-size:18px;">warning</i>' +
+                '<h3 class="neo-card-title">High-Risk Day-3 Triage Action Queue</h3>' +
+              '</div>' +
+              '<span class="adm-chip adm-chip-danger" style="font-size:10px;">3 Pending Immediate Contact</span>' +
+            '</div>' +
+            '<div style="display:flex;flex-direction:column;gap:10px;font-size:12px;">' +
+              '<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:#fff1f2;border-radius:10px;border:1px solid #fecdd3;">' +
+                '<div>' +
+                  '<div style="font-weight:800;color:#0f172a;">P-102 (Farooq A.) &middot; Services Hospital Lahore</div>' +
+                  '<div style="font-size:11px;color:#e11d48;font-weight:700;">GERD-Q: 14/18 (Arm 1 PPI) &middot; Persistent Severe Symptoms</div>' +
+                '</div>' +
+                '<button type="button" class="adm-btn-primary" onclick="location.hash=\'#patients\';" style="font-size:11px;padding:4px 10px;border-radius:999px;background:#0284c7;border-color:#0284c7;">Review</button>' +
+              '</div>' +
+              '<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:#fff1f2;border-radius:10px;border:1px solid #fecdd3;">' +
+                '<div>' +
+                  '<div style="font-weight:800;color:#0f172a;">P-205 (Zainab B.) &middot; Civil Hospital Karachi</div>' +
+                  '<div style="font-size:11px;color:#d97706;font-weight:700;">GERD-Q: 12/18 (Arm 2 P-CAB) &middot; Pending SMS Confirmation</div>' +
+                '</div>' +
+                '<button type="button" class="adm-btn-outline" onclick="openNotificationComposerModal(\'P-205\');" style="font-size:11px;padding:4px 10px;border-radius:999px;">SMS Alert</button>' +
+              '</div>' +
+              '<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:#fff1f2;border-radius:10px;border:1px solid #fecdd3;">' +
+                '<div>' +
+                  '<div style="font-weight:800;color:#0f172a;">P-304 (Tariq M.) &middot; PIMS Hospital Islamabad</div>' +
+                  '<div style="font-size:11px;color:#e11d48;font-weight:700;">GERD-Q: 15/18 (Arm 1 PPI) &middot; Recurrent Night Heartburn</div>' +
+                '</div>' +
+                '<button type="button" class="adm-btn-primary" onclick="location.hash=\'#patients\';" style="font-size:11px;padding:4px 10px;border-radius:999px;background:#0284c7;border-color:#0284c7;">Review</button>' +
+              '</div>' +
+            '</div>' +
+            '<div style="margin-top:12px;text-align:right;">' +
+              '<button type="button" class="adm-btn-outline" data-switch-tab="patients" style="font-size:11.5px;padding:4px 12px;border-radius:999px;">View Full Patient Roster &rarr;</button>' +
+            '</div>' +
+          '</div>' +
+
+        '</div>' +
+
+      '</div><!-- /#ovCombinedSummary -->' +
+
+      '<!-- ===========================================================================' +
       '     MODULE 1: LMS ACADEMY & CLINICIAN ACCREDITATION' +
       '     =========================================================================== -->' +
-      '<div class="neo-card" id="ovMod1" style="margin-bottom:24px;display:' + (activeOverviewTab === 'all' || activeOverviewTab === 'lms' ? 'block' : 'none') + ';">' +
+      '<div class="neo-card" id="ovMod1" style="margin-bottom:24px;display:' + (activeOverviewTab === 'lms' ? 'block' : 'none') + ';">' +
         '<div class="neo-card-head" style="margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid #f1f5f9;">' +
           '<div style="display:flex;align-items:center;gap:10px;">' +
             '<span class="adm-chip adm-chip-violet" style="font-weight:800;font-size:11px;">MODULE 1</span>' +
-            '<h3 style="font-size:20px;font-weight:800;color:#0f172a;margin:0;">LMS Academy & Clinician Accreditation</h3>' +
+            '<h3 style="font-size:20px;font-weight:800;color:#0f172a;margin:0;">LMS Academy &amp; Clinician Accreditation</h3>' +
           '</div>' +
           '<div style="display:flex;align-items:center;gap:8px;">' +
             '<button type="button" class="adm-btn-primary" onclick="location.hash=\'#courses/new\';" style="font-size:12px;padding:6px 14px;border-radius:999px;font-weight:700;"><i class="ms" style="font-size:15px;">add</i> + New Course</button>' +
@@ -1666,7 +2065,7 @@
       '<!-- ===========================================================================' +
       '     MODULE 2: PATIENTS CLINICAL REGISTRY & E-CRF' +
       '     =========================================================================== -->' +
-      '<div class="neo-card" id="ovMod2" style="margin-bottom:24px;display:' + (activeOverviewTab === 'all' || activeOverviewTab === 'patients' ? 'block' : 'none') + ';">' +
+      '<div class="neo-card" id="ovMod2" style="margin-bottom:24px;display:' + (activeOverviewTab === 'patients' ? 'block' : 'none') + ';">' +
         '<div class="neo-card-head" style="margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid #f1f5f9;">' +
           '<div style="display:flex;align-items:center;gap:10px;">' +
             '<span class="adm-chip adm-chip-cyan" style="font-weight:800;font-size:11px;">MODULE 2</span>' +
@@ -1876,7 +2275,7 @@
       '<!-- ===========================================================================' +
       '     MODULE 3: PATIENT BROADCAST ALERTS & FOLLOW-UP COMPLIANCE' +
       '     =========================================================================== -->' +
-      '<div class="neo-card" id="ovMod3" style="margin-bottom:24px;display:' + (activeOverviewTab === 'all' || activeOverviewTab === 'alerts' ? 'block' : 'none') + ';">' +
+      '<div class="neo-card" id="ovMod3" style="margin-bottom:24px;display:' + (activeOverviewTab === 'alerts' ? 'block' : 'none') + ';">' +
         '<div class="neo-card-head" style="margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid #f1f5f9;">' +
           '<div style="display:flex;align-items:center;gap:10px;">' +
             '<span class="adm-chip adm-chip-danger" style="font-weight:800;font-size:11px;">MODULE 3</span>' +
@@ -1991,7 +2390,7 @@
       '<!-- ===========================================================================' +
       '     MODULE 4: PARTICIPATING HOSPITAL CENTERS' +
       '     =========================================================================== -->' +
-      '<div class="neo-card" id="ovMod4" style="margin-bottom:24px;display:' + (activeOverviewTab === 'all' || activeOverviewTab === 'regions' ? 'block' : 'none') + ';">' +
+      '<div class="neo-card" id="ovMod4" style="margin-bottom:24px;display:' + (activeOverviewTab === 'regions' ? 'block' : 'none') + ';">' +
         '<div class="neo-card-head" style="margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid #f1f5f9;">' +
           '<div style="display:flex;align-items:center;gap:10px;">' +
             '<span class="adm-chip adm-chip-emerald" style="font-weight:800;font-size:11px;">MODULE 4</span>' +
@@ -2005,7 +2404,7 @@
       '<!-- ===========================================================================' +
       '     MODULE 5: GOVERNANCE & PMDC ACCREDITATION AUDIT LEDGER' +
       '     =========================================================================== -->' +
-      '<div class="neo-card" id="ovMod5" style="margin-bottom:24px;display:' + (activeOverviewTab === 'all' || activeOverviewTab === 'audit' ? 'block' : 'none') + ';">' +
+      '<div class="neo-card" id="ovMod5" style="margin-bottom:24px;display:' + (activeOverviewTab === 'audit' ? 'block' : 'none') + ';">' +
         '<div class="neo-card-head" style="margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid #f1f5f9;">' +
           '<div style="display:flex;align-items:center;gap:10px;">' +
             '<span class="adm-chip adm-chip-violet" style="font-weight:800;font-size:11px;">MODULE 5</span>' +
@@ -2084,27 +2483,41 @@
 
     $('#view').innerHTML = html;
 
+    function switchOverviewTab(t) {
+      activeOverviewTab = t;
+      try { sessionStorage.setItem('adm_overview_tab', t); } catch (e) { }
+      try { history.replaceState(null, '', '#overview?tab=' + t); } catch (e) { }
+      $$('[data-ov-tab]').forEach(function (b) {
+        var isCur = (b.dataset.ovTab === t);
+        b.classList.toggle('active', isCur);
+        b.setAttribute('aria-selected', isCur);
+      });
+      var cs = $('#ovCombinedSummary');
+      var m1 = $('#ovMod1');
+      var m2 = $('#ovMod2');
+      var m3 = $('#ovMod3');
+      var m4 = $('#ovMod4');
+      var m5 = $('#ovMod5');
+      if (cs) cs.style.display = (t === 'all') ? 'block' : 'none';
+      if (m1) m1.style.display = (t === 'lms') ? 'block' : 'none';
+      if (m2) m2.style.display = (t === 'patients') ? 'block' : 'none';
+      if (m3) m3.style.display = (t === 'alerts') ? 'block' : 'none';
+      if (m4) m4.style.display = (t === 'regions') ? 'block' : 'none';
+      if (m5) m5.style.display = (t === 'audit') ? 'block' : 'none';
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
     $$('[data-ov-tab]').forEach(function (tabBtn) {
       tabBtn.onclick = function () {
-        var t = tabBtn.dataset.ovTab;
-        activeOverviewTab = t;
-        try { sessionStorage.setItem('adm_overview_tab', t); } catch (e) { }
-        try { history.replaceState(null, '', '#overview?tab=' + t); } catch (e) { }
-        $$('[data-ov-tab]').forEach(function (b) {
-          var isCur = (b.dataset.ovTab === t);
-          b.classList.toggle('active', isCur);
-          b.setAttribute('aria-selected', isCur);
-        });
-        var m1 = $('#ovMod1');
-        var m2 = $('#ovMod2');
-        var m3 = $('#ovMod3');
-        var m4 = $('#ovMod4');
-        var m5 = $('#ovMod5');
-        if (m1) m1.style.display = (t === 'all' || t === 'lms') ? 'block' : 'none';
-        if (m2) m2.style.display = (t === 'all' || t === 'patients') ? 'block' : 'none';
-        if (m3) m3.style.display = (t === 'all' || t === 'alerts') ? 'block' : 'none';
-        if (m4) m4.style.display = (t === 'all' || t === 'regions') ? 'block' : 'none';
-        if (m5) m5.style.display = (t === 'all' || t === 'audit') ? 'block' : 'none';
+        switchOverviewTab(tabBtn.dataset.ovTab);
+      };
+    });
+
+    $$('[data-switch-tab]').forEach(function (btn) {
+      btn.onclick = function (e) {
+        e.preventDefault();
+        var target = btn.getAttribute('data-switch-tab');
+        switchOverviewTab(target);
       };
     });
   }
