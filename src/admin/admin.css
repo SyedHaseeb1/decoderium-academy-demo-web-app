@@ -4817,10 +4817,30 @@ body:has(.adm-drawer.open) {
    Single CSS standard across all views (#overview, #courses, #users, #doctors)
    Zero white-on-white text, vibrant gradient active pill, borderless elevated dock
    ========================================================================== */
+/* ==========================================================================
+   CANONICAL UNIVERSAL FULL-WIDTH TABS CONTAINER (REUSABLE EVERYWHERE)
+   ========================================================================== */
+.adm-tabs-container,
 .adm-uni-tabs,
 .adm-sliding-tabs-track,
 .adm-detail-tabs-bar,
-.adm-pillar-tabs,
+.adm-pillar-tabs {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  background: #ffffff !important;
+  border-radius: var(--adm-radius-lg, 16px) !important;
+  padding: 8px 12px !important;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  border: 1px solid rgba(226, 232, 240, 0.9) !important;
+  margin-bottom: 22px !important;
+  user-select: none !important;
+}
+
 .adm-view-toggle {
   display: inline-flex !important;
   align-items: center !important;
@@ -4829,12 +4849,12 @@ body:has(.adm-drawer.open) {
   background: #ffffff !important;
   border-radius: 999px !important;
   padding: 4px !important;
-  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.06) !important;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05) !important;
   width: fit-content !important;
   max-width: 100% !important;
   box-sizing: border-box !important;
   overflow: visible !important;
-  border: none !important;
+  border: 1px solid var(--adm-line, #e2e8f0) !important;
   user-select: none !important;
 }
 
@@ -4923,14 +4943,14 @@ body:has(.adm-drawer.open) {
    Ensure tabs scale down gracefully, fit screens without clipping, and scroll cleanly
    ========================================================================== */
 @media (max-width: 1280px) {
+  .adm-tabs-container,
   .adm-uni-tabs,
   .adm-sliding-tabs-track,
   .adm-detail-tabs-bar,
-  .adm-pillar-tabs,
-  .adm-view-toggle {
+  .adm-pillar-tabs {
     display: flex !important;
     flex-wrap: wrap !important;
-    gap: 4px !important;
+    gap: 6px !important;
     width: 100% !important;
     max-width: 100% !important;
     border-radius: 16px !important;

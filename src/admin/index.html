@@ -543,7 +543,7 @@
       return n + ((ST.progress[k] && ST.progress[k].certs) ? ST.progress[k].certs.length : 0);
     }, 0);
     return '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:22px;">' +
-      '<div class="adm-uni-tabs" role="tablist" aria-label="LMS Academy Tabs">' +
+      '<div class="adm-tabs-container adm-uni-tabs" style="flex:1;min-width:280px;margin-bottom:0 !important;" role="tablist" aria-label="LMS Academy Tabs">' +
         '<a href="#lms" class="adm-uni-tab-btn ' + (activeTab === 'overview' ? 'active' : '') + '">' +
           '<i class="ms">space_dashboard</i> Overview' +
         '</a>' +
@@ -565,8 +565,7 @@
   function renderPatientPillarTabs(activeTab) {
     var pCount = (patients() || []).length;
     var dueTodayCount = (patients() || []).filter(function (p) { return p.followupStatus === 'due_today'; }).length;
-    return '<div style="margin-bottom:22px;">' +
-      '<div class="adm-uni-tabs" role="tablist" aria-label="Patients Registry Navigation">' +
+    return '<div class="adm-tabs-container adm-uni-tabs" role="tablist" aria-label="Patients Registry Navigation">' +
         '<a href="#patients" class="adm-uni-tab-btn ' + (activeTab === 'directory' ? 'active' : '') + '">' +
           '<i class="ms">clinical_notes</i> Patients Registry & E-CRF ' +
           '<span class="adm-chip ' + (activeTab === 'directory' ? 'adm-chip-active' : '') + '">' + pCount + ' Patients</span>' +
@@ -575,8 +574,7 @@
           '<i class="ms">notifications_active</i> Patient Follow-up & Notifications ' +
           '<span class="adm-chip ' + (activeTab === 'notifications' ? 'adm-chip-danger' : '') + '">' + dueTodayCount + ' Actions Due</span>' +
         '</a>' +
-      '</div>' +
-    '</div>';
+      '</div>';
   }
 
   /* --------------------------------------------------------------------------
@@ -1432,28 +1430,26 @@
     activeOverviewTab = savedTab;
 
     var html =
-      '<!-- 1. Unified Elevated Tab Dock (Compact, Center/Left Fit) -->' +
-      '<div class="adm-detail-tabs-bar" style="margin-bottom:24px;">' +
-        '<div class="adm-uni-tabs" role="tablist" aria-label="Executive Overview Navigation">' +
-          '<button type="button" class="adm-uni-tab-btn ' + (activeOverviewTab === 'all' ? 'active' : '') + '" data-ov-tab="all" role="tab" aria-selected="' + (activeOverviewTab === 'all') + '">' +
-            '<i class="ms">dashboard</i> Master Overview' +
-          '</button>' +
-          '<button type="button" class="adm-uni-tab-btn ' + (activeOverviewTab === 'lms' ? 'active' : '') + '" data-ov-tab="lms" role="tab" aria-selected="' + (activeOverviewTab === 'lms') + '">' +
-            '<i class="ms">school</i> 1. LMS Academy & CME' +
-          '</button>' +
-          '<button type="button" class="adm-uni-tab-btn ' + (activeOverviewTab === 'patients' ? 'active' : '') + '" data-ov-tab="patients" role="tab" aria-selected="' + (activeOverviewTab === 'patients') + '">' +
-            '<i class="ms">clinical_notes</i> 2. Patients Clinical Registry' +
-          '</button>' +
-          '<button type="button" class="adm-uni-tab-btn ' + (activeOverviewTab === 'alerts' ? 'active' : '') + '" data-ov-tab="alerts" role="tab" aria-selected="' + (activeOverviewTab === 'alerts') + '">' +
-            '<i class="ms">notifications_active</i> 3. Patient Alerts & Broadcasts' +
-          '</button>' +
-          '<button type="button" class="adm-uni-tab-btn ' + (activeOverviewTab === 'regions' ? 'active' : '') + '" data-ov-tab="regions" role="tab" aria-selected="' + (activeOverviewTab === 'regions') + '">' +
-            '<i class="ms">public</i> 4. Participating Centers' +
-          '</button>' +
-          '<button type="button" class="adm-uni-tab-btn ' + (activeOverviewTab === 'audit' ? 'active' : '') + '" data-ov-tab="audit" role="tab" aria-selected="' + (activeOverviewTab === 'audit') + '">' +
-            '<i class="ms">gavel</i> 5. PMDC Governance Audit' +
-          '</button>' +
-        '</div>' +
+      '<!-- 1. Universal Full-Width Elevated Tab Dock -->' +
+      '<div class="adm-tabs-container adm-uni-tabs" role="tablist" aria-label="Executive Overview Navigation">' +
+        '<button type="button" class="adm-uni-tab-btn ' + (activeOverviewTab === 'all' ? 'active' : '') + '" data-ov-tab="all" role="tab" aria-selected="' + (activeOverviewTab === 'all') + '">' +
+          '<i class="ms">dashboard</i> Master Overview' +
+        '</button>' +
+        '<button type="button" class="adm-uni-tab-btn ' + (activeOverviewTab === 'lms' ? 'active' : '') + '" data-ov-tab="lms" role="tab" aria-selected="' + (activeOverviewTab === 'lms') + '">' +
+          '<i class="ms">school</i> 1. LMS Academy & CME' +
+        '</button>' +
+        '<button type="button" class="adm-uni-tab-btn ' + (activeOverviewTab === 'patients' ? 'active' : '') + '" data-ov-tab="patients" role="tab" aria-selected="' + (activeOverviewTab === 'patients') + '">' +
+          '<i class="ms">clinical_notes</i> 2. Patients Clinical Registry' +
+        '</button>' +
+        '<button type="button" class="adm-uni-tab-btn ' + (activeOverviewTab === 'alerts' ? 'active' : '') + '" data-ov-tab="alerts" role="tab" aria-selected="' + (activeOverviewTab === 'alerts') + '">' +
+          '<i class="ms">notifications_active</i> 3. Patient Alerts & Broadcasts' +
+        '</button>' +
+        '<button type="button" class="adm-uni-tab-btn ' + (activeOverviewTab === 'regions' ? 'active' : '') + '" data-ov-tab="regions" role="tab" aria-selected="' + (activeOverviewTab === 'regions') + '">' +
+          '<i class="ms">public</i> 4. Participating Centers' +
+        '</button>' +
+        '<button type="button" class="adm-uni-tab-btn ' + (activeOverviewTab === 'audit' ? 'active' : '') + '" data-ov-tab="audit" role="tab" aria-selected="' + (activeOverviewTab === 'audit') + '">' +
+          '<i class="ms">gavel</i> 5. PMDC Governance Audit' +
+        '</button>' +
       '</div>' +
 
       '<!-- ===========================================================================' +
@@ -7738,7 +7734,7 @@
           '<i class="ms" style="font-size:15px;">view_module</i> Module ' + (idx + 1) + titleSnippet +
         '</button>';
       }).join('');
-      return '<div class="adm-uni-tabs" style="display:inline-flex;gap:4px;background:#ffffff;padding:4px;border-radius:999px;box-shadow:0 2px 10px rgba(15,23,42,0.06);">' +
+      return '<div class="adm-tabs-container adm-uni-tabs">' +
         btnList +
         '<button type="button" class="adm-uni-tab-btn" id="btnStAddModule" style="color:var(--adm-primary);font-weight:700;"><i class="ms" style="font-size:15px;">add</i> Add Module</button>' +
       '</div>';
@@ -7752,7 +7748,7 @@
           '<i class="ms" style="font-size:15px;">play_circle</i> Lecture ' + (idx + 1) + (l.title ? ': ' + esc(l.title.slice(0, 16)) + (l.title.length > 16 ? '…' : '') : '') +
         '</button>';
       }).join('');
-      return '<div class="adm-uni-tabs" style="display:inline-flex;gap:4px;background:#ffffff;padding:4px;border-radius:999px;box-shadow:0 2px 10px rgba(15,23,42,0.06);">' +
+      return '<div class="adm-tabs-container adm-uni-tabs">' +
         btnList +
       '</div>';
     }
