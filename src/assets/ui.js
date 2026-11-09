@@ -82,8 +82,8 @@ function openDialog(opts) {
   closeDialog();
   var title = opts.title || 'Notice';
   var body = opts.body || '';
-  var confirmText = opts.confirmText || 'Confirm';
-  var cancelText = opts.cancelText || 'Cancel';
+  var confirmText = (opts.confirmText === false || opts.confirmText === null || opts.confirmText === '') ? '' : (opts.confirmText || 'Confirm');
+  var cancelText = (opts.cancelText === false || opts.cancelText === null || opts.cancelText === '') ? '' : (opts.cancelText || 'Cancel');
   var onConfirm = opts.onConfirm;
 
   var overlay = document.createElement('div');

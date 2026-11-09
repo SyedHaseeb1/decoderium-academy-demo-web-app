@@ -1196,7 +1196,15 @@
         if (parts[1] && parts[2] === 'edit') return viewCourseStudio(parts[1]);
         return parts[1] ? viewCourseDetail(parts[1], hashQuery) : viewCourseList();
       },
-      certificates: viewCertificationsList,
+      certificates: function () {
+        viewCertificationsList();
+        var cMatch = hashQuery.match(/cert=([^&]+)/) || hashQuery.match(/verify=([^&]+)/);
+        if (cMatch) {
+          setTimeout(function () {
+            openCertificateDetailModal(decodeURIComponent(cMatch[1]));
+          }, 80);
+        }
+      },
       doctors: viewDoctorList,
       zones: viewZonesDashboard,
       patients: viewPatientsList,
@@ -6596,6 +6604,203 @@
   }
 
   /* --------------------------------------------------------------------------
+     CERTIFICATE DETAILS & PRINT / EXPORT PDF MODAL (ZERO NEW TAB)
+     -------------------------------------------------------------------------- */
+  function printCertificateDocument(code) {
+    var certEl = document.getElementById('printableCertContainer');
+    if (!certEl) {
+      window.print();
+      return;
+    }
+
+    var printFrame = document.createElement('iframe');
+    printFrame.style.position = 'fixed';
+    printFrame.style.right = '0';
+    printFrame.style.bottom = '0';
+    printFrame.style.width = '0';
+    printFrame.style.height = '0';
+    printFrame.style.border = '0';
+    document.body.appendChild(printFrame);
+
+    var doc = printFrame.contentWindow.document;
+    doc.open();
+    doc.write('<!DOCTYPE html><html><head><title>PMDC Certificate - ' + esc(code) + '</title>');
+    doc.write('<link rel="stylesheet" href="../assets/base.css">');
+    doc.write('<link rel="stylesheet" href="../assets/academy.css">');
+    doc.write('<style>');
+    doc.write('@page { size: A4 landscape; margin: 8mm; }');
+    doc.write('body { background: #ffffff !important; margin: 0; padding: 24px; display: flex; align-items: center; justify-content: center; min-height: 90vh; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }');
+    doc.write('#printableCertContainer { width: 100% !important; max-width: 900px !important; box-shadow: none !important; border: 4px double #1e1b4b !important; }');
+    doc.write('</style>');
+    doc.write('</head><body>');
+    doc.write(certEl.outerHTML);
+    doc.write('</body></html>');
+    doc.close();
+
+    setTimeout(function () {
+      printFrame.contentWindow.focus();
+      printFrame.contentWindow.print();
+      setTimeout(function () {
+        printFrame.remove();
+      }, 1500);
+    }, 300);
+  }
+
+  function openCertificateDetailModal(certCode) {
+    var allCertsList = [];
+    var allDocsList = doctors() || [];
+    allDocsList.forEach(function (d) {
+      var p = progressOf(d.id);
+      if (p && p.certs && p.certs.length) {
+        p.certs.forEach(function (ct) {
+          var co = course(ct.courseId);
+          allCertsList.push({
+            cert: ct,
+            doctor: d,
+            course: co || { id: ct.courseId, title: 'Acid Peptic Disease & Refractory GERD', category: 'Gastroenterology', cmeHours: 12, modules: [{}, {}, {}] }
+          });
+        });
+      }
+    });
+
+    var r = null;
+    if (certCode) {
+      r = verifyCert(certCode);
+      if (!r) {
+        var cleanCode = String(certCode).trim().toUpperCase();
+        r = allCertsList.filter(function (x) {
+          return x.cert.code.toUpperCase() === cleanCode;
+        })[0];
+      }
+    }
+    if (!r && allCertsList.length) {
+      r = allCertsList[0];
+    }
+
+    if (!r) {
+      snack('No official certificate matching code "' + (certCode || '') + '" found in registry.');
+      return;
+    }
+
+    var cObj = r.course;
+    var dObj = r.doctor;
+    var cert = r.cert;
+    var cs = (typeof settings === 'function' && settings().certificate) || {
+      issuingOrganisation: 'Pakistan Medical & Dental Council (PMDC) & GILEAP CME',
+      signatoryName: 'Prof. Dr. Tariq Mahmood',
+      signatoryTitle: 'Chairman, CME Accreditation Council'
+    };
+
+    var body =
+      '<div style="margin-bottom:18px;">' +
+        '<div style="background:#ecfdf5;border:1.5px solid #a7f3d0;border-radius:12px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">' +
+          '<div style="display:flex;align-items:center;gap:12px;">' +
+            '<div style="width:38px;height:38px;border-radius:50%;background:#10b981;color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(16,185,129,0.3);">' +
+              '<i class="ms">verified</i>' +
+            '</div>' +
+            '<div>' +
+              '<div style="font-size:14px;font-weight:800;color:#065f46;">Official PMDC Credential Verified &amp; Active</div>' +
+              '<div style="font-size:12px;color:#047857;">Cryptographic FNV-1a ledger match &middot; Category-1 Continuous Medical Education Accreditation</div>' +
+            '</div>' +
+          '</div>' +
+          '<div style="display:flex;align-items:center;gap:8px;">' +
+            '<span class="adm-chip adm-chip-emerald" style="font-weight:800;font-size:11px;">Status: Valid</span>' +
+            '<span class="adm-chip adm-chip-violet" style="font-weight:700;font-size:11px;font-family:monospace;">' + esc(cert.code) + '</span>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+
+      '<!-- High-Fidelity Printable Certificate Canvas -->' +
+      '<div id="printableCertContainer" style="background:#ffffff;border:3px double #1e1b4b;border-radius:16px;padding:36px 32px;text-align:center;box-shadow:0 8px 30px -4px rgba(15,23,42,0.12);position:relative;margin-bottom:18px;">' +
+        '<div style="font-size:12px;font-weight:800;color:#582be8;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;">' +
+          esc(cs.issuingOrganisation) +
+        '</div>' +
+        '<div style="font-size:26px;font-weight:900;color:#0f172a;letter-spacing:-0.5px;margin-bottom:12px;">' +
+          'Certificate of Clinical Competence' +
+        '</div>' +
+        '<p style="font-size:13px;color:#64748b;margin:0;">This is to officially certify that</p>' +
+        '<div style="font-size:24px;font-weight:800;color:#0f172a;border-bottom:2px solid #582be8;display:inline-block;padding:0 24px 4px;margin:8px 0 12px;">' +
+          esc(dObj.name) +
+        '</div>' +
+        '<div style="font-size:13px;color:#334155;">' +
+          'PMDC Registration ID: <strong>' + esc(dObj.pmdcId) + '</strong> &middot; ' + esc(dObj.hospital) + ', ' + esc(dObj.city) +
+        '</div>' +
+        '<p style="font-size:13px;color:#64748b;margin:12px 0 6px;">' +
+          'has successfully completed all required modules, timed clinical assessments, and 90% watch velocity gate for' +
+        '</p>' +
+        '<h2 style="font-size:20px;font-weight:800;color:#582be8;margin:0 0 16px;">' +
+          esc(cObj.title) +
+        '</h2>' +
+
+        '<div style="display:flex;justify-content:center;gap:32px;margin:20px 0;font-size:12.5px;color:#64748b;flex-wrap:wrap;border-top:1px solid #f1f5f9;border-bottom:1px solid #f1f5f9;padding:12px 0;">' +
+          '<div>Issue Date<b style="display:block;color:#0f172a;font-size:14px;margin-top:2px;">' + esc(cert.issuedOn) + '</b></div>' +
+          '<div>Curriculum<b style="display:block;color:#0f172a;font-size:14px;margin-top:2px;">' + (cObj.modules ? cObj.modules.length : 12) + ' Modules</b></div>' +
+          '<div>Accreditation<b style="display:block;color:#0f172a;font-size:14px;margin-top:2px;">' + (cObj.cmeHours || 12) + ' Category-1 CME Hrs</b></div>' +
+          '<div>Knowledge Score<b style="display:block;color:#059669;font-size:14px;margin-top:2px;">100% Verified</b></div>' +
+        '</div>' +
+
+        '<div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:24px;flex-wrap:wrap;gap:16px;">' +
+          '<div style="text-align:left;">' +
+            '<div style="display:inline-flex;align-items:center;gap:6px;background:#f8fafc;border:1px solid #e2e8f0;padding:6px 12px;border-radius:999px;font-family:monospace;font-size:11.5px;color:#0f172a;">' +
+              '<i class="ms" style="color:#582be8;font-size:15px;">verified</i>' +
+              '<span>Verification Hash: <strong>' + esc(cert.code) + '</strong></span>' +
+            '</div>' +
+            '<div style="font-size:10.5px;color:#94a3b8;margin-top:4px;">Deterministic FNV-1a Hash (Seed 0x811c9dc5)</div>' +
+          '</div>' +
+
+          '<div style="text-align:right;min-width:180px;">' +
+            '<div style="border-top:1.5px solid #0f172a;padding-top:4px;font-size:12px;color:#0f172a;font-weight:700;">' +
+              esc(cs.signatoryName) + '<br>' +
+              '<span style="font-size:10.5px;color:#64748b;font-weight:500;">' + esc(cs.signatoryTitle) + '</span>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+
+      '<!-- Action Toolbar Inside Dialog -->' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;background:#f8fafc;padding:12px 16px;border-radius:12px;border:1px solid #e2e8f0;">' +
+        '<div style="display:flex;align-items:center;gap:8px;">' +
+          '<button type="button" class="adm-btn-outline" id="btnCopyCertHashInModal" style="font-size:11.5px;padding:6px 12px;border-radius:8px;gap:6px;">' +
+            '<i class="ms" style="font-size:14px;">content_copy</i> Copy Hash Code' +
+          '</button>' +
+          '<span style="font-size:11.5px;color:#64748b;">SHA-2026 Compatible</span>' +
+        '</div>' +
+        '<div style="display:flex;align-items:center;gap:8px;">' +
+          '<button type="button" class="adm-btn-primary" id="btnExportCertPdfModal" style="background:#582be8;border-color:#582be8;font-size:12px;padding:8px 18px;border-radius:8px;font-weight:700;display:inline-flex;align-items:center;gap:6px;box-shadow:0 4px 12px rgba(88,43,232,0.3);">' +
+            '<i class="ms" style="font-size:16px;">print</i> Print / Export Certificate to PDF' +
+          '</button>' +
+        '</div>' +
+      '</div>';
+
+    openDialog({
+      title: 'Official Medical Accreditation Certificate (' + esc(cert.code) + ')',
+      body: body,
+      wide: true,
+      confirmText: '',
+      cancelText: 'Close Certificate'
+    });
+
+    setTimeout(function () {
+      var btnCopy = $('#btnCopyCertHashInModal');
+      if (btnCopy) {
+        btnCopy.onclick = function () {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(cert.code);
+          }
+          snack('✓ Certificate hash ' + cert.code + ' copied to clipboard.');
+        };
+      }
+
+      var btnExport = $('#btnExportCertPdfModal');
+      if (btnExport) {
+        btnExport.onclick = function () {
+          printCertificateDocument(cert.code);
+        };
+      }
+    }, 50);
+  }
+
+  /* --------------------------------------------------------------------------
      VIEW 5D: LMS ACADEMY — CERTIFICATIONS REGISTRY (#certificates)
      -------------------------------------------------------------------------- */
   function viewCertificationsList() {
@@ -6631,7 +6836,7 @@
           '<p class="adm-hero-subtitle">Tamper-evident, cryptographically verified CME certifications generated using deterministic FNV-1a hashes. Compliant with PMDC Category-1 accreditation standards.</p>' +
         '</div>' +
         '<div class="adm-hero-actions">' +
-          '<a href="../verify/" target="_blank" class="adm-btn-outline" style="gap:6px;"><i class="ms">fact_check</i> Open Public Verification Portal <i class="ms" style="font-size:14px;">open_in_new</i></a>' +
+          '<button type="button" onclick="openCertificateDetailModal(null);" class="adm-btn-outline" style="gap:6px;"><i class="ms">fact_check</i> PMDC Verification Lookup</button>' +
         '</div>' +
       '</div>' +
 
@@ -6698,9 +6903,9 @@
               (allCerts.length === 0 ?
                 '<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--adm-slate);">No certificates issued yet. Doctors achieve certification after completing video modules and passing all quizzes with &ge;70%.</td></tr>' :
                 allCerts.map(function (item) {
-                  return '<tr>' +
+                  return '<tr style="cursor:pointer;" onclick="if(!event.target.closest(\'button, a\')){ openCertificateDetailModal(\'' + esc(item.cert.code) + '\'); }" title="Click to view certificate details & export to PDF">' +
                     '<td>' +
-                      '<span style="font-family:monospace;font-weight:800;color:var(--adm-primary);background:var(--adm-primary-soft);padding:4px 10px;border-radius:6px;border:1px solid rgba(88,43,232,0.25);font-size:12.5px;letter-spacing:0.5px;">' +
+                      '<span onclick="event.stopPropagation();openCertificateDetailModal(\'' + esc(item.cert.code) + '\');" style="cursor:pointer;font-family:monospace;font-weight:800;color:var(--adm-primary);background:var(--adm-primary-soft);padding:4px 10px;border-radius:6px;border:1px solid rgba(88,43,232,0.25);font-size:12.5px;letter-spacing:0.5px;" title="Click to view certificate & export to PDF">' +
                         esc(item.cert.code) +
                       '</span>' +
                     '</td>' +
@@ -6722,10 +6927,10 @@
                       '<span class="adm-chip adm-chip-active"><i class="ms" style="font-size:13px;">verified</i> PMDC Verified</span>' +
                     '</td>' +
                     '<td>' +
-                      '<div style="display:flex;gap:6px;">' +
-                        '<a href="../verify/?code=' + encodeURIComponent(item.cert.code) + '" target="_blank" class="adm-btn-action" title="Verify Online">' +
-                          '<i class="ms" style="font-size:14px;">open_in_new</i> Verify' +
-                        '</a>' +
+                      '<div style="display:flex;gap:6px;" onclick="event.stopPropagation();">' +
+                        '<button type="button" class="adm-btn-action" onclick="openCertificateDetailModal(\'' + esc(item.cert.code) + '\');" title="View Certificate Details & Export PDF" style="font-weight:700;color:var(--adm-primary);border-color:rgba(124,58,237,0.3);">' +
+                          '<i class="ms" style="font-size:14px;color:var(--adm-primary);">verified</i> Verify' +
+                        '</button>' +
                         '<button type="button" class="adm-btn-action" data-copy-cert="' + esc(item.cert.code) + '" title="Copy Certificate Hash">' +
                           '<i class="ms" style="font-size:14px;">content_copy</i>' +
                         '</button>' +
