@@ -50,37 +50,33 @@
           <i class="ms">dashboard</i>
           <span class="adm-nav-text">Executive Overview</span>
         </a>
+        <a class="adm-nav-item" href="#lms" data-route="lms" title="LMS Academy & Curriculum">
+          <i class="ms">school</i>
+          <span class="adm-nav-text">LMS</span>
+        </a>
+        <a class="adm-nav-item" href="#patients" data-route="patients" title="Patients Clinical Cohort & E-CRF Registry">
+          <i class="ms">clinical_notes</i>
+          <span class="adm-nav-text">Patients</span>
+        </a>
+        <a class="adm-nav-item" href="#notifications" data-route="notifications" title="Patient Alerts & Notification Center">
+          <i class="ms">notifications_active</i>
+          <span class="adm-nav-text">Notifications</span>
+        </a>
 
         <div class="adm-nav-header">Clinical & Academic Pillars</div>
-        <a class="adm-nav-item" href="#lms" data-route="lms" title="LMS Academy Pillar">
-          <i class="ms">school</i>
-          <span class="adm-nav-text">LMS Academy</span>
-        </a>
-        <a class="adm-nav-item" href="#doctors" data-route="doctors" title="Doctor Directory & Clinical Performance">
+        <a class="adm-nav-item" href="#doctors" data-route="doctors" title="Doctors Directory & User Management">
           <i class="ms">medical_services</i>
-          <span class="adm-nav-text">Doctors Directory</span>
+          <span class="adm-nav-text">Doctors &amp; Users</span>
         </a>
         <a class="adm-nav-item" href="#zones" data-route="zones" title="Regional Clinical Trial Zones & Study Hubs">
           <i class="ms">map</i>
-          <span class="adm-nav-text">Zones & Hubs</span>
-        </a>
-        <a class="adm-nav-item" href="#patients" data-route="patients" title="Patients Registry (Clinical Cohort & E-CRF)">
-          <i class="ms">clinical_notes</i>
-          <span class="adm-nav-text">Patients Registry</span>
-        </a>
-        <a class="adm-nav-item" href="#notifications" data-route="notifications" title="Patient Broadcasts & Notification Center">
-          <i class="ms">notifications_active</i>
-          <span class="adm-nav-text">Patient Notifications</span>
+          <span class="adm-nav-text">Zone Hubs</span>
         </a>
 
         <div class="adm-nav-header">Platform & Settings</div>
-        <a class="adm-nav-item" href="#users" data-route="users" title="System User Management & Access Controls">
-          <i class="ms">people_alt</i>
-          <span class="adm-nav-text">User Management</span>
-        </a>
-        <a class="adm-nav-item" href="#settings" data-route="settings" title="Accreditation & System Rules">
+        <a class="adm-nav-item" href="#settings" data-route="settings" title="Accreditation & System Permissions Rules">
           <i class="ms">tune</i>
-          <span class="adm-nav-text">System Rules</span>
+          <span class="adm-nav-text">Permissions Rules</span>
         </a>
       </nav>
     </div>
@@ -1115,11 +1111,10 @@
       var match = (r === sec) ||
         (r === 'overview' && sec === 'overview') ||
         (r === 'lms' && (sec === 'lms' || sec === 'courses' || sec === 'certificates')) ||
-        (r === 'doctors' && (sec === 'doctors' || (sec === 'users' && parts[1] === 'doctors'))) ||
+        (r === 'doctors' && (sec === 'doctors' || sec === 'users')) ||
+        (r === 'zones' && (sec === 'zones' || sec === 'regions')) ||
         (r === 'patients' && sec === 'patients') ||
-        (r === 'notifications' && (sec === 'notifications' || sec === 'clinical')) ||
-        (r === 'regions' && sec === 'regions') ||
-        (r === 'users' && sec === 'users' && parts[1] !== 'doctors') ||
+        (r === 'notifications' && (sec === 'notifications' || sec === 'alerts' || sec === 'clinical')) ||
         (r === 'settings' && sec === 'settings');
       el.classList.toggle('active', match);
     });
@@ -1129,10 +1124,11 @@
       var match = (mr === sec) ||
         (mr === 'overview' && sec === 'overview') ||
         (mr === 'lms' && (sec === 'lms' || sec === 'courses' || sec === 'certificates')) ||
-        (mr === 'doctors' && (sec === 'doctors' || (sec === 'users' && parts[1] === 'doctors'))) ||
+        (mr === 'doctors' && (sec === 'doctors' || sec === 'users')) ||
+        (mr === 'zones' && (sec === 'zones' || sec === 'regions')) ||
         (mr === 'patients' && sec === 'patients') ||
-        (mr === 'notifications' && (sec === 'notifications' || sec === 'clinical')) ||
-        (mr === 'users' && sec === 'users' && parts[1] !== 'doctors');
+        (mr === 'notifications' && (sec === 'notifications' || sec === 'alerts' || sec === 'clinical')) ||
+        (mr === 'settings' && sec === 'settings');
       el.classList.toggle('active', match);
     });
     updateNavIndicator(isInitialRender);
