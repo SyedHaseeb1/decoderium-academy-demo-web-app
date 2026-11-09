@@ -3761,10 +3761,10 @@
       '<div class="adm-hero">' +
         '<div>' +
           '<h1 class="adm-hero-title"><i class="ms" style="color:#0284c7;font-size:32px;">map</i> Clinical Trial Study Zones & Regional Hubs</h1>' +
-          '<p class="adm-hero-subtitle">Hierarchical operational governance: define geographical trial zones, assign lead hospitals, link investigators, and deploy accredited masterclasses by zone or clinical specialty.</p>' +
+          '<p class="adm-hero-subtitle">Hierarchical operational governance: define geographical trial zones, assign lead hospitals, link investigators, and assign accredited masterclasses by zone or clinical specialty.</p>' +
         '</div>' +
         '<div class="adm-hero-actions">' +
-          '<button type="button" class="adm-btn-outline" onclick="openAssignCourseModal(null, null);" style="gap:6px;"><i class="ms">school</i> Deploy Course to Zone</button>' +
+          '<button type="button" class="adm-btn-outline" onclick="openAssignCourseModal(null, null);" style="gap:6px;"><i class="ms">school</i> Assign Course to Zone</button>' +
           '<button type="button" class="adm-btn-primary" onclick="openCreateZoneModal(null);" style="gap:6px;background:#0284c7;border-color:#0284c7;box-shadow:0 4px 14px rgba(2,132,199,0.3);"><i class="ms">add_location_alt</i> + Create New Zone</button>' +
         '</div>' +
       '</div>' +
@@ -3897,7 +3897,7 @@
                   '</td>' +
                   '<td style="text-align:right;">' +
                     '<div style="display:inline-flex;align-items:center;gap:6px;">' +
-                      '<button type="button" class="adm-btn-primary" onclick="openAssignCourseModal(null, \'' + z.id + '\');" style="font-size:11px;padding:4px 10px;border-radius:999px;background:#0284c7;border-color:#0284c7;font-weight:700;" title="Assign Masterclass to all doctors in ' + esc(z.name) + '"><i class="ms" style="font-size:13px;">school</i> Deploy Course</button>' +
+                      '<button type="button" class="adm-btn-primary" onclick="openAssignCourseModal(null, \'' + z.id + '\');" style="font-size:11px;padding:4px 10px;border-radius:999px;background:#0284c7;border-color:#0284c7;font-weight:700;" title="Assign Masterclass to all doctors in ' + esc(z.name) + '"><i class="ms" style="font-size:13px;">school</i> Assign Course</button>' +
                       '<button type="button" class="adm-btn-outline" onclick="openEnlistDoctorDialog();" style="font-size:11px;padding:4px 8px;border-radius:999px;" title="Enlist Doctor to Zone"><i class="ms" style="font-size:13px;">person_add</i></button>' +
                       '<button type="button" class="adm-btn-action" onclick="openEditZoneModal(\'' + z.id + '\');" title="Edit Zone"><i class="ms" style="font-size:13px;">edit</i></button>' +
                     '</div>' +
@@ -4018,7 +4018,7 @@
         '</div>' +
 
         '<div class="adm-form-group">' +
-          '<label class="adm-label">Deployment Scope / Assignment Target</label>' +
+          '<label class="adm-label">Assignment Target Scope</label>' +
           '<div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:10px;margin-top:6px;">' +
             '<label style="display:flex;align-items:center;gap:8px;background:#f8fafc;padding:10px;border-radius:10px;cursor:pointer;border:1.5px solid #cbd5e1;font-weight:700;font-size:12.5px;">' +
               '<input type="radio" name="rdAssignTarget" value="doctor" checked style="accent-color:#0284c7;"> Single Doctor' +
@@ -4043,7 +4043,7 @@
         '</div>' +
 
         '<div id="paneTargetZone" class="adm-form-group" style="display:none;">' +
-          '<label class="adm-label">Select Study Zone (Deploys to all doctors in zone)</label>' +
+          '<label class="adm-label">Select Study Zone (Assigns to all doctors in zone)</label>' +
           '<select class="adm-select" id="selTargetZone">' +
             zList.map(function (z) {
               return '<option value="' + z.id + '"' + (z.id === preTargetId ? ' selected' : '') + '>' + esc(z.name) + ' (' + esc(z.leadHospital) + ')</option>';
@@ -4069,7 +4069,7 @@
       '</div>';
 
     openDialog({
-      title: 'Deploy Masterclass / Assign Course',
+      title: 'Assign Course to Clinicians',
       body: body,
       confirmText: 'Assign Course Now',
       cancelText: 'Cancel',
