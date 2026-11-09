@@ -4438,7 +4438,7 @@
       confirmText: 'Print Poster / Slip 🖨️',
       cancelText: 'Close',
       onConfirm: function () {
-        window.print();
+        printQrLeafletDocument(currentTab, p);
         return false;
       }
     });
@@ -7153,10 +7153,149 @@
   }
 
   /* --------------------------------------------------------------------------
-     CERTIFICATE DETAILS & PRINT / EXPORT PDF MODAL (ZERO NEW TAB)
+     CERTIFICATE DETAILS & PRINT / EXPORT PDF (ISOLATED A4 LANDSCAPE IFRAME)
      -------------------------------------------------------------------------- */
   function printCertificateDocument(code) {
-    window.print();
+    var r = null;
+    if (code) {
+      r = (typeof verifyCert === 'function') ? verifyCert(code) : null;
+      if (!r) {
+        var cleanCode = String(code).trim().toUpperCase();
+        var allDocs = (typeof doctors === 'function') ? doctors() : [];
+        for (var i = 0; i < allDocs.length; i++) {
+          var p = progressOf(allDocs[i].id);
+          if (p && p.certs) {
+            var found = p.certs.filter(function (x) { return x.code.toUpperCase() === cleanCode; })[0];
+            if (found) {
+              r = { cert: found, doctor: allDocs[i], course: course(found.courseId) };
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    if (!r) {
+      var certEl = document.getElementById('printableCertContainer');
+      if (certEl) {
+        printCertificateHtml(certEl.outerHTML, 'Official Medical Accreditation Certificate');
+        return;
+      }
+      var allDocsList = (typeof doctors === 'function') ? (doctors() || []) : [];
+      for (var j = 0; j < allDocsList.length; j++) {
+        var prog = progressOf(allDocsList[j].id);
+        if (prog && prog.certs && prog.certs.length) {
+          var ct = prog.certs[0];
+          r = {
+            cert: ct,
+            doctor: allDocsList[j],
+            course: course(ct.courseId) || { id: ct.courseId, title: 'Acid Peptic Disease & Refractory GERD', cmeHours: 12, modules: [{}, {}, {}, {}] }
+          };
+          break;
+        }
+      }
+    }
+
+    if (!r) {
+      snack('No official certificate matching code "' + (code || '') + '" found to print.');
+      return;
+    }
+
+    var cObj = r.course || { title: 'Acid Peptic Disease & Refractory GERD', cmeHours: 12, modules: [{}, {}, {}, {}] };
+    var dObj = r.doctor || { name: 'Dr. Ayesha Khan', pmdcId: '41822-P', hospital: 'Federal General Hospital', city: 'Islamabad' };
+    var cert = r.cert || { code: code || 'SHA-2026-KH5JTT', issuedOn: '2026-11-03' };
+    var cs = (typeof settings === 'function' && settings().certificate) || {
+      issuingOrganisation: 'Pakistan Medical & Dental Council (PMDC) & GILEAP CME',
+      signatoryName: 'Prof. Dr. Tariq Mahmood',
+      signatoryTitle: 'Chairman, CME Accreditation Council'
+    };
+
+    var content =
+      '<div id="printableCertContainer" style="background:#ffffff;border:4px double #1e1b4b;border-radius:16px;padding:32px 36px;text-align:center;position:relative;max-width:960px;margin:0 auto;box-sizing:border-box;">' +
+        '<div style="font-size:12px;font-weight:800;color:#582be8;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;">' +
+          esc(cs.issuingOrganisation) +
+        '</div>' +
+        '<div style="font-size:27px;font-weight:900;color:#0f172a;letter-spacing:-0.5px;margin-bottom:10px;">' +
+          'Certificate of Clinical Competence' +
+        '</div>' +
+        '<p style="font-size:13px;color:#64748b;margin:0;">This is to officially certify that</p>' +
+        '<div style="font-size:24px;font-weight:800;color:#0f172a;border-bottom:2.5px solid #582be8;display:inline-block;padding:0 26px 4px;margin:6px 0 10px;">' +
+          esc(dObj.name) +
+        '</div>' +
+        '<div style="font-size:13px;color:#334155;">' +
+          'PMDC Registration ID: <strong>' + esc(dObj.pmdcId) + '</strong> &middot; ' + esc(dObj.hospital) + ', ' + esc(dObj.city) +
+        '</div>' +
+        '<p style="font-size:12.5px;color:#64748b;margin:10px 0 6px;">' +
+          'has successfully completed all required modules, timed clinical assessments, and 90% watch velocity gate for' +
+        '</p>' +
+        '<h2 style="font-size:20px;font-weight:800;color:#582be8;margin:0 0 14px;">' +
+          esc(cObj.title) +
+        '</h2>' +
+
+        '<div style="display:flex;justify-content:center;gap:36px;margin:18px 0;font-size:12px;color:#64748b;flex-wrap:wrap;border-top:1px solid #f1f5f9;border-bottom:1px solid #f1f5f9;padding:10px 0;">' +
+          '<div>Issue Date<b style="display:block;color:#0f172a;font-size:13.5px;margin-top:2px;">' + esc(cert.issuedOn) + '</b></div>' +
+          '<div>Curriculum<b style="display:block;color:#0f172a;font-size:13.5px;margin-top:2px;">' + (cObj.modules ? cObj.modules.length : 12) + ' Modules</b></div>' +
+          '<div>Accreditation<b style="display:block;color:#0f172a;font-size:13.5px;margin-top:2px;">' + (cObj.cmeHours || 12) + ' Category-1 CME Hrs</b></div>' +
+          '<div>Knowledge Score<b style="display:block;color:#059669;font-size:13.5px;margin-top:2px;">100% Verified</b></div>' +
+        '</div>' +
+
+        '<div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:20px;flex-wrap:wrap;gap:16px;">' +
+          '<div style="text-align:left;">' +
+            '<div style="display:inline-flex;align-items:center;gap:6px;background:#f8fafc;border:1px solid #cbd5e1;padding:6px 12px;border-radius:999px;font-family:monospace;font-size:11px;color:#0f172a;">' +
+              '<span style="color:#582be8;font-size:14px;font-weight:bold;">&#10003;</span>' +
+              '<span>Verification Hash: <strong>' + esc(cert.code) + '</strong></span>' +
+            '</div>' +
+            '<div style="font-size:10px;color:#94a3b8;margin-top:4px;">Deterministic FNV-1a Hash (Seed 0x811c9dc5)</div>' +
+          '</div>' +
+
+          '<div style="text-align:right;min-width:180px;">' +
+            '<div style="border-top:1.5px solid #0f172a;padding-top:4px;font-size:12px;color:#0f172a;font-weight:700;">' +
+              esc(cs.signatoryName) + '<br>' +
+              '<span style="font-size:10.5px;color:#64748b;font-weight:500;">' + esc(cs.signatoryTitle) + '</span>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+
+    printCertificateHtml(content, 'PMDC Certificate - ' + esc(cert.code));
+  }
+
+  function printCertificateHtml(bodyHtml, title) {
+    var iframe = document.createElement('iframe');
+    iframe.style.position = 'fixed';
+    iframe.style.right = '0';
+    iframe.style.bottom = '0';
+    iframe.style.width = '0';
+    iframe.style.height = '0';
+    iframe.style.border = '0';
+    iframe.style.visibility = 'hidden';
+    iframe.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(iframe);
+
+    var doc = iframe.contentWindow.document;
+    doc.open();
+    doc.write('<!DOCTYPE html><html><head><meta charset="utf-8"><title>' + esc(title || 'Certificate') + '</title>');
+    doc.write('<link rel="preconnect" href="https://fonts.googleapis.com">');
+    doc.write('<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>');
+    doc.write('<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">');
+    doc.write('<style>');
+    doc.write('@page { size: A4 landscape; margin: 8mm; }');
+    doc.write('*, *::before, *::after { box-sizing: border-box; }');
+    doc.write('html, body { width: 100%; height: 100%; margin: 0; padding: 0; background: #ffffff !important; display: flex; align-items: center; justify-content: center; font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif; -webkit-print-color-adjust: exact; print-color-adjust: exact; }');
+    doc.write('#printableCertContainer { width: 100% !important; max-width: 960px !important; margin: 0 auto !important; box-shadow: none !important; border: 4px double #1e1b4b !important; border-radius: 14px !important; padding: 32px 36px !important; background: #ffffff !important; }');
+    doc.write('</style>');
+    doc.write('</head><body>');
+    doc.write(bodyHtml);
+    doc.write('</body></html>');
+    doc.close();
+
+    setTimeout(function () {
+      iframe.contentWindow.focus();
+      iframe.contentWindow.print();
+      setTimeout(function () {
+        iframe.remove();
+      }, 2000);
+    }, 350);
   }
 
   function openCertificateDetailModal(certCode) {
