@@ -7903,7 +7903,7 @@
                 '<span class="adm-thumb-chip"><i class="ms" style="font-size:12px;">school</i> ' + esc(initialCat + ' · ' + initialLevel) + '</span>' +
               '</div>' +
               '<div style="position:absolute;bottom:12px;left:12px;">' +
-                '<span class="adm-thumb-chip" id="stPrevDurChip"><i class="ms" style="font-size:12px;">schedule</i> ' + Math.round((curLec.seconds || 600) / 60) + 'm · 1 Lecture</span>' +
+                '<span class="adm-thumb-chip" id="stPrevDurChip"><i class="ms" style="font-size:12px;">schedule</i> ' + fmtDur(RULES.totalSeconds(studioCourse)) + ' · ' + RULES.lectureCount(studioCourse) + ' Lectures</span>' +
               '</div>' +
             '</div>' +
 
@@ -8086,7 +8086,7 @@
             '<span class="adm-thumb-chip"><i class="ms" style="font-size:12px;">school</i> ' + esc(cat + ' · ' + level) + '</span>' +
           '</div>' +
           '<div style="position:absolute;bottom:12px;left:12px;">' +
-            '<span class="adm-thumb-chip" id="stPrevDurChip"><i class="ms" style="font-size:12px;">schedule</i> ' + lMin + 'm · ' + curM.lectures.length + ' Lectures</span>' +
+            '<span class="adm-thumb-chip" id="stPrevDurChip"><i class="ms" style="font-size:12px;">schedule</i> ' + fmtDur(RULES.totalSeconds(studioCourse)) + ' · ' + RULES.lectureCount(studioCourse) + ' Lectures</span>' +
           '</div>';
       }
 
@@ -8988,20 +8988,20 @@
           '<!-- 4-Tab Segmented Navigation Rail (Theme Blue & Zero White-on-White) -->' +
           '<div style="margin-bottom:20px;">' +
             '<div class="adm-uni-tabs" id="courseDetailNavRail" role="tablist">' +
-              '<button type="button" class="adm-uni-tab-btn ' + (activeDetailTab === 'lectures' ? 'active' : '') + '" data-cd-tab="lectures">' +
-                '<i class="ms">video_library</i> 01 · Lectures &amp; Modules ' +
-                '<span class="adm-chip">' + c.modules.length + ' Modules · ' + RULES.lectureCount(c) + ' Lectures</span>' +
+              '<button type="button" class="adm-uni-tab-btn ' + (activeDetailTab === 'lectures' ? 'active' : '') + '" data-cd-tab="lectures" title="Lectures &amp; Modules">' +
+                '<i class="ms" style="font-size:14px;">video_library</i> 01 · Lectures ' +
+                '<span class="adm-chip">' + RULES.lectureCount(c) + ' Lectures</span>' +
               '</button>' +
-              '<button type="button" class="adm-uni-tab-btn ' + (activeDetailTab === 'materials' ? 'active' : '') + '" data-cd-tab="materials">' +
-                '<i class="ms">description</i> 02 · Clinical Materials &amp; Guidelines ' +
-                '<span class="adm-chip">' + c.materials.length + ' Documents</span>' +
+              '<button type="button" class="adm-uni-tab-btn ' + (activeDetailTab === 'materials' ? 'active' : '') + '" data-cd-tab="materials" title="Clinical Materials &amp; Guidelines">' +
+                '<i class="ms" style="font-size:14px;">description</i> 02 · Materials ' +
+                '<span class="adm-chip">' + c.materials.length + ' Docs</span>' +
               '</button>' +
-              '<button type="button" class="adm-uni-tab-btn ' + (activeDetailTab === 'exam' ? 'active' : '') + '" data-cd-tab="exam">' +
-                '<i class="ms">quiz</i> 03 · Assessment Exam &amp; Question Bank ' +
+              '<button type="button" class="adm-uni-tab-btn ' + (activeDetailTab === 'exam' ? 'active' : '') + '" data-cd-tab="exam" title="Assessment Exam &amp; Question Bank">' +
+                '<i class="ms" style="font-size:14px;">quiz</i> 03 · Assessment ' +
                 '<span class="adm-chip">' + totalQuestions + ' MCQs</span>' +
               '</button>' +
-              '<button type="button" class="adm-uni-tab-btn ' + (activeDetailTab === 'assigned' ? 'active' : '') + '" data-cd-tab="assigned">' +
-                '<i class="ms">groups</i> 04 · Assigned Doctors &amp; Compliance ' +
+              '<button type="button" class="adm-uni-tab-btn ' + (activeDetailTab === 'assigned' ? 'active' : '') + '" data-cd-tab="assigned" title="Assigned Doctors &amp; Compliance">' +
+                '<i class="ms" style="font-size:14px;">groups</i> 04 · Doctors ' +
                 '<span class="adm-chip">' + assignedDocs.length + ' Doctors</span>' +
               '</button>' +
             '</div>' +
