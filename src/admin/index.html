@@ -50,33 +50,33 @@
           <i class="ms">dashboard</i>
           <span class="adm-nav-text">Executive Overview</span>
         </a>
-        <a class="adm-nav-item" href="#lms" data-route="lms" title="LMS Academy & Curriculum">
+        <a class="adm-nav-item" href="#lms" data-route="lms" title="LMS Academy & Doctor Accreditation">
           <i class="ms">school</i>
-          <span class="adm-nav-text">LMS</span>
+          <span class="adm-nav-text">LMS Academy</span>
         </a>
         <a class="adm-nav-item" href="#patients" data-route="patients" title="Patients Clinical Cohort & E-CRF Registry">
           <i class="ms">clinical_notes</i>
-          <span class="adm-nav-text">Patients</span>
+          <span class="adm-nav-text">Patients Registry</span>
         </a>
-        <a class="adm-nav-item" href="#notifications" data-route="notifications" title="Patient Alerts & Notification Center">
+        <a class="adm-nav-item" href="#notifications" data-route="notifications" title="Patient Alerts & Broadcast Telemetry">
           <i class="ms">notifications_active</i>
-          <span class="adm-nav-text">Notifications</span>
+          <span class="adm-nav-text">Alerts &amp; Broadcasts</span>
         </a>
 
         <div class="adm-nav-header">Clinical & Academic Pillars</div>
-        <a class="adm-nav-item" href="#doctors" data-route="doctors" title="Doctors Directory & User Management">
+        <a class="adm-nav-item" href="#doctors" data-route="doctors" title="Doctor Directory & User Management">
           <i class="ms">medical_services</i>
-          <span class="adm-nav-text">Doctors &amp; Users</span>
+          <span class="adm-nav-text">Doctor &amp; User Management</span>
         </a>
-        <a class="adm-nav-item" href="#zones" data-route="zones" title="Regional Clinical Trial Zones & Study Hubs">
+        <a class="adm-nav-item" href="#zones" data-route="zones" title="Regional Clinical Study Centers & Hubs">
           <i class="ms">map</i>
-          <span class="adm-nav-text">Zone Hubs</span>
+          <span class="adm-nav-text">Regional Study Hubs</span>
         </a>
 
         <div class="adm-nav-header">Platform & Settings</div>
         <a class="adm-nav-item" href="#settings" data-route="settings" title="Accreditation, Security & Access Governance Rules">
           <i class="ms">tune</i>
-          <span class="adm-nav-text">Access &amp; Governance Rules</span>
+          <span class="adm-nav-text">Governance &amp; Security Rules</span>
         </a>
       </nav>
     </div>
@@ -1149,14 +1149,14 @@
       lms: 'LMS Academy · Intelligence Overview',
       courses: parts[1] === 'new' ? 'Course Creator Studio' : (parts[2] === 'edit' ? 'Course Editor Studio' : (parts[1] ? 'Course Curriculum Studio' : 'LMS Academy · Curriculum & Courses')),
       certificates: 'LMS Academy · PMDC Certifications Registry',
-      doctors: 'Doctor Directory & Clinical Performance',
-      zones: 'Regional Clinical Trial Zones & Study Hubs',
+      doctors: 'Doctor & User Management · Directory & Access',
+      zones: 'Regional Study Hubs · Participating Hospital Centers',
       patients: 'Patients Registry · Clinical Cohort & E-CRF Records',
-      clinical: 'Patient Broadcasts & Notification Center',
-      notifications: 'Patient Broadcasts & Notification Center',
+      clinical: 'Alerts & Broadcasts · Telemetry & Communication Center',
+      notifications: 'Alerts & Broadcasts · Telemetry & Communication Center',
       regions: 'Regional Performance Matrix',
-      users: 'System User Management & Access Controls',
-      settings: 'Access & Governance Rules · Accreditation & Security Policies'
+      users: 'Doctor & User Management · Access & Accounts',
+      settings: 'Governance & Security Rules · Accreditation & Access Policies'
     };
     var tElem = $('#admCurrentTitle');
     if (tElem) {
