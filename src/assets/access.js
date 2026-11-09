@@ -377,29 +377,28 @@ function signOut(loginUrl) {
 }
 
 function startDoctorPreview(doctorId, redirectUrl) {
-  // If in admin console with in-app simulation modal available, open simulation stage without opening a new tab
-  if (typeof openCourseDoctorPreviewModal === 'function') {
-    var cMatch = (redirectUrl || '').match(/[#?]c=([a-zA-Z0-9_-]+)/) || (redirectUrl || '').match(/#([a-zA-Z0-9_-]+)/);
-    var cid = cMatch ? cMatch[1] : null;
-    openCourseDoctorPreviewModal(cid, doctorId);
-    return;
-  }
+  var targetDocId = doctorId || 'd01';
+  var doc = (ST.doctors || []).filter(function (d) { return d.id === targetDocId; })[0] || (ST.doctors && ST.doctors[0]) || { id: 'd01', name: 'Dr. Ayesha Khan' };
 
-  // Retain Super Admin session in sandboxed read-only preview without touching doctor accounts
+  // Set doctor session state with admin preview flags
   ssSet('academy_auth', '1');
-  ssSet('academy_role', 'admin');
-  ssSet('academy_name', 'Executive Admin');
-  ssSet('academy_doctor', '');
+  ssSet('academy_role', 'doctor');
+  ssSet('academy_name', doc.name);
+  ssSet('academy_doctor', doc.id);
   ssSet('academy_admin_preview', '1');
   ssSet('academy_eval_mode', 'sandbox_preview');
+  try {
+    localStorage.setItem('academy_doctor', doc.id);
+    localStorage.setItem('academy_admin_preview', '1');
+  } catch (e) { }
 
-  var target = redirectUrl || '../lecture/?mode=sandbox_preview';
+  var target = redirectUrl || ('../lecture/?doc=' + encodeURIComponent(doc.id) + '&preview=1');
   var sep = target.indexOf('?') > -1 ? '&' : '?';
   var hashIdx = target.indexOf('#');
   if (hashIdx > -1) {
-    target = target.slice(0, hashIdx) + sep + 'mode=sandbox_preview' + target.slice(hashIdx);
-  } else {
-    target = target + sep + 'mode=sandbox_preview';
+    target = target.slice(0, hashIdx) + sep + 'preview=1&doc=' + encodeURIComponent(doc.id) + target.slice(hashIdx);
+  } else if (target.indexOf('preview=1') === -1) {
+    target = target + sep + 'preview=1';
   }
   window.open(target, '_blank');
 }
@@ -459,13 +458,16 @@ function doctors() { return ST.doctors; }
 function me() {
   var s = session();
   if (s.role === 'admin' && (ss('academy_admin_preview') === '1' || s.isPreview)) {
-    return {
-      id: 'admin_eval',
-      name: s.name || 'Executive Admin',
-      speciality: 'Super Administrator · Clinician Evaluator',
-      hospital: 'GILEAP Clinical Academy',
-      city: 'Islamabad',
-      pmdcId: 'SYS-ADMIN-EVAL',
+    var targetDocId = ss('academy_doctor') || 'd01';
+    var foundDoc = (ST.doctors || []).filter(function (d) { return d.id === targetDocId; })[0];
+    if (foundDoc) return foundDoc;
+    return (ST.doctors && ST.doctors[0]) || {
+      id: 'd01',
+      name: 'Dr. Ayesha Khan',
+      speciality: 'Gastroenterology & Hepatology',
+      hospital: 'Services Hospital (SIMS)',
+      city: 'Lahore',
+      pmdcId: '41822-P',
       active: true
     };
   }
