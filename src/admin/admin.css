@@ -1177,19 +1177,17 @@ body.admin-body {
   box-sizing: border-box;
 }
 
-/* Smooth Entrance Transition for Center Container */
+/* Smooth Instant Fade for Center Viewport */
 .adm-view-enter {
-  animation: admFadeSlideUp 0.28s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+  animation: admFadeIn 0.15s ease-out forwards;
 }
 
-@keyframes admFadeSlideUp {
+@keyframes admFadeIn {
   0% {
-    opacity: 0;
-    transform: translateY(12px);
+    opacity: 0.8;
   }
   100% {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
@@ -2041,12 +2039,36 @@ body.admin-body {
 }
 
 .adm-course-card-actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  margin-top: auto;
-  flex-wrap: wrap;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 6px !important;
+  margin-top: auto !important;
+  width: 100% !important;
+}
+
+.adm-course-card-actions .adm-btn-action {
+  white-space: nowrap !important;
+  font-weight: 700 !important;
+  border-radius: 8px !important;
+  color: #0f172a !important;
+  border: 1.5px solid #64748b !important;
+  background: #ffffff !important;
+}
+
+.adm-course-card-actions .adm-btn-action:hover {
+  background: #f1f5f9 !important;
+  border-color: #334155 !important;
+  color: #020617 !important;
+}
+
+.adm-course-card-actions .adm-btn-action[style*="background:#2563eb"],
+.adm-course-card-actions .adm-btn-action[style*="background: #2563eb"],
+.adm-course-card-actions .adm-btn-action.adm-btn-course-assign {
+  background: #2563eb !important;
+  color: #ffffff !important;
+  border: 1.5px solid #1d4ed8 !important;
 }
 
 /* View Switcher Toggle (Uni Tabs System) */
@@ -2218,15 +2240,62 @@ body.admin-body {
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08) !important;
 }
 
+/* Global Clean Input Focus Styling (Matching Login Style, Neutral Ring, Zero Pink) */
+input,
+select,
+textarea,
+.adm-input,
+.adm-select,
+.adm-textarea,
+.adm-search-input,
+.adm-master-search-input,
+.admin-search-box input,
+.adm-dropdown-search-input,
+.adm-search-wrap input,
+.adm-list-header-search input,
+#admOmniSearch {
+  outline: none !important;
+  outline-color: transparent !important;
+}
+
+input:focus,
+input:focus-visible,
+select:focus,
+select:focus-visible,
+textarea:focus,
+textarea:focus-visible,
 .adm-input:focus,
+.adm-input:focus-visible,
 .adm-select:focus,
+.adm-select:focus-visible,
 .adm-textarea:focus,
+.adm-textarea:focus-visible,
 .adm-search-input:focus,
+.adm-search-input:focus-visible,
+.adm-master-search-input:focus,
+.adm-master-search-input:focus-visible,
+.admin-search-box input:focus,
+.admin-search-box input:focus-visible,
 .adm-search-dropdown-btn.is-open {
   border-color: #2563eb !important;
-  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.18), 0 2px 8px rgba(37, 99, 235, 0.08) !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
   background: #ffffff !important;
   outline: none !important;
+  outline-color: transparent !important;
+}
+
+/* Eliminate pink / magenta outline overrides from base.css */
+.search input:focus,
+label.search input:focus,
+.search-expandable input:focus,
+.search:focus-within,
+label.search:focus-within,
+.search-expandable:focus-within,
+.cb:focus-within [data-cb-input] {
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+  outline: none !important;
+  outline-color: transparent !important;
 }
 
 .adm-input::placeholder,
@@ -2347,14 +2416,24 @@ body.admin-body {
 }
 
 /* Prevent dropdown clipping in dialogs and ensure dropdown overlays modal footer */
+.lms-dialog-card,
+.lms-dialog-body,
+.lms-dialog-card:has(.adm-search-dropdown),
+.lms-dialog-body:has(.adm-search-dropdown),
 .lms-dialog-card:has(.adm-search-dropdown.is-open),
 .lms-dialog-body:has(.adm-search-dropdown.is-open),
 .lms-dialog-card.dropdown-active,
 .lms-dialog-body.dropdown-active {
   overflow: visible !important;
-  z-index: 50 !important;
 }
 
+.lms-dialog-body {
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+.lms-dialog-footer,
+.lms-dialog-card .lms-dialog-footer,
 .lms-dialog-card:has(.adm-search-dropdown.is-open) .lms-dialog-footer,
 .lms-dialog-card.dropdown-active .lms-dialog-footer,
 .lms-dialog-card:has(.adm-search-dropdown.is-open) .lms-dialog-footer *,
@@ -2363,8 +2442,13 @@ body.admin-body {
   position: relative !important;
 }
 
+.adm-search-dropdown {
+  position: relative !important;
+  z-index: 20;
+}
+
 .adm-search-dropdown.is-open {
-  z-index: 100000 !important;
+  z-index: 10000 !important;
   position: relative !important;
 }
 
@@ -2377,9 +2461,14 @@ body.admin-body {
   border: 1.5px solid #cbd5e1 !important;
   border-radius: var(--adm-radius-md) !important;
   box-shadow: 0 20px 48px -4px rgba(11, 23, 39, 0.24), 0 8px 20px rgba(11, 23, 39, 0.12) !important;
-  z-index: 1000000 !important;
+  z-index: 100000 !important;
   display: none;
   max-height: 260px !important;
+}
+
+.adm-search-dropdown-menu.open {
+  display: block !important;
+  z-index: 100000 !important;
 }
 
 /* Toast Notifications: Always float above dialog backdrops & modals */
@@ -2522,7 +2611,7 @@ body:has(.adm-drawer.open) {
   max-height: calc(100vh - 40px) !important;
   display: flex !important;
   flex-direction: column !important;
-  overflow: hidden !important;
+  overflow: visible !important;
   background: #ffffff !important;
   box-shadow: 0 25px 65px -10px rgba(15, 23, 42, 0.28), 0 10px 24px -4px rgba(15, 23, 42, 0.1) !important;
   margin: 0 !important;
@@ -2545,12 +2634,13 @@ body:has(.adm-drawer.open) {
 
 .lms-dialog-body {
   flex: 1 1 auto !important;
-  overflow-y: auto !important;
+  overflow-y: visible !important;
+  overflow: visible !important;
   overscroll-behavior: contain !important;
   -webkit-overflow-scrolling: touch !important;
   padding: 20px 28px !important;
   position: relative !important;
-  z-index: 2 !important;
+  z-index: 10 !important;
 }
 
 .lms-dialog-footer {
@@ -2559,7 +2649,7 @@ body:has(.adm-drawer.open) {
   border-bottom-right-radius: calc(var(--adm-radius-lg) - 1.5px) !important;
   padding: 16px 28px 20px !important;
   position: relative !important;
-  z-index: 5 !important;
+  z-index: 1 !important;
 }
 
 .lms-dialog-body:last-child {
@@ -3174,8 +3264,13 @@ body:has(.adm-drawer.open) {
 }
 
 .adm-collapsible-search-wrap:has(.adm-search-dropdown.is-open),
-.adm-collapsible-search-wrap:has(.adm-search-dropdown-btn.is-open) {
-  z-index: 100 !important;
+.adm-collapsible-search-wrap:has(.adm-search-dropdown-btn.is-open),
+.adm-collapsible-search-wrap:has(.open) {
+  z-index: 10000 !important;
+}
+
+.adm-master-pane {
+  z-index: 2 !important;
 }
 
 .adm-collapsible-search-grid {
@@ -4559,17 +4654,36 @@ body:has(.adm-drawer.open) {
 /* --------------------------------------------------------------------------
    Universal Clinic QR Standee & Print Layout
    -------------------------------------------------------------------------- */
+#admPrintSurface {
+  display: none;
+}
+
 @media print {
   @page {
     size: A4 portrait;
-    margin: 8mm;
+    margin: 10mm;
   }
   html, body {
     background: #ffffff !important;
     color: #0b1727 !important;
     margin: 0 !important;
     padding: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
   }
+  body.is-printing-clean > * {
+    display: none !important;
+  }
+  body.is-printing-clean #admPrintSurface {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    max-width: 860px !important;
+    margin: 0 auto !important;
+    padding: 10px !important;
+    background: #ffffff !important;
+  }
+  /* Hide application shell, sidebars, headers, dialog chrome, buttons */
   .adm-side,
   .adm-topbar,
   .adm-mobile-bottom-nav,
@@ -4580,24 +4694,93 @@ body:has(.adm-drawer.open) {
   .adm-master-pane,
   .adm-drawer,
   .adm-drawer-scrim,
-  .adm-dialog-header,
-  .adm-dialog-footer,
+  .adm-toast,
+  .adm-section-head,
+  .adm-collapsible-search-wrap,
+  .adm-view-toggle,
+  .lms-dialog-header,
+  .lms-dialog-footer,
+  .lms-dialog-close,
   .adm-qr-tab-switcher,
+  .adm-btn-action,
+  .adm-btn-outline,
+  .adm-btn-primary,
+  button,
   .no-print {
     display: none !important;
   }
-  #clinicStandeePrintContainer {
-    display: block !important;
+
+  /* Reset modal overlay and card so only document canvas renders cleanly on A4 without dialog chrome or gray backdrop */
+  .lms-dialog-overlay,
+  #activeDialogOverlay {
     position: static !important;
+    display: block !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
     width: 100% !important;
     max-width: 100% !important;
-    margin: 0 auto !important;
-    padding: 24px 20px !important;
-    border: 3px double #0b1727 !important;
-    border-radius: 16px !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+  }
+
+  .lms-dialog-card {
+    position: static !important;
+    display: block !important;
     background: #ffffff !important;
     box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: visible !important;
+  }
+
+  .lms-dialog-body {
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    border: none !important;
+  }
+
+  .adm-qr-leaflet-box {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .adm-qr-panel {
+    display: none !important;
+  }
+
+  .adm-qr-panel.active {
+    display: block !important;
+    border: 2.5px solid #2563eb !important;
+    border-radius: 16px !important;
+    padding: 28px !important;
+    background: #ffffff !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  #printableCertContainer {
+    display: block !important;
+    border: 4px double #1e1b4b !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+    padding: 32px !important;
+    margin: 0 auto !important;
+    width: 100% !important;
     box-sizing: border-box !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    background: #ffffff !important;
   }
 }
 
@@ -5027,8 +5210,10 @@ body:has(.adm-drawer.open) {
 .adm-sliding-tabs-track,
 .adm-detail-tabs-bar,
 .adm-pillar-tabs {
+  position: relative !important;
   display: flex !important;
   align-items: center !important;
+  justify-content: flex-start !important;
   flex-wrap: nowrap !important;
   overflow-x: auto !important;
   overflow-y: hidden !important;
@@ -5080,11 +5265,17 @@ body:has(.adm-drawer.open) {
   min-width: 150px;
 }
 
-.adm-sliding-pill-bg {
-  display: none !important; /* Eradicate detached gliders causing white-out text */
+/* Animated Sliding Selector Glider for Universal Tabs - Disabled to ensure bulletproof solid pill and zero invisible text */
+.adm-uni-sliding-glider {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 .adm-uni-tab-btn,
+.adm-mod-tab-btn,
 .adm-sliding-tab-item,
 .adm-detail-tab-btn,
 .adm-pillar-tab,
@@ -5094,7 +5285,7 @@ body:has(.adm-drawer.open) {
   align-items: center !important;
   justify-content: center !important;
   gap: 6px !important;
-  padding: 7px 16px !important;
+  padding: 8px 18px !important;
   border-radius: 999px !important;
   border: none !important;
   background: transparent !important;
@@ -5103,10 +5294,53 @@ body:has(.adm-drawer.open) {
   font-weight: 600 !important;
   cursor: pointer !important;
   text-decoration: none !important;
-  transition: all 0.28s cubic-bezier(0.25, 1, 0.5, 1) !important;
+  transition: color 0.2s ease, background-color 0.2s ease !important;
   white-space: nowrap !important;
   box-sizing: border-box !important;
-  flex-shrink: 0 !important;
+  flex: 0 0 auto !important;
+  width: auto !important;
+  min-width: max-content !important;
+  max-width: max-content !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+.adm-uni-tab-btn:focus,
+.adm-uni-tab-btn:focus-visible,
+.adm-mod-tab-btn:focus,
+.adm-mod-tab-btn:focus-visible,
+.adm-detail-tab-btn:focus,
+.adm-detail-tab-btn:focus-visible,
+.adm-pillar-tab:focus,
+.adm-pillar-tab:focus-visible {
+  outline: none !important;
+  outline-color: transparent !important;
+}
+
+.adm-mod-tab-btn,
+.adm-uni-tabs .adm-mod-tab-btn,
+.adm-tabs-container .adm-mod-tab-btn {
+  flex: 0 0 auto !important;
+  width: auto !important;
+  min-width: max-content !important;
+  white-space: nowrap !important;
+  padding: 8px 16px !important;
+  font-size: 13px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+.adm-mod-tabs-track {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  width: 100% !important;
+  padding: 6px 8px !important;
+  gap: 8px !important;
+  scrollbar-width: thin !important;
 }
 
 .adm-uni-tab-btn:hover,
@@ -5129,14 +5363,25 @@ body:has(.adm-drawer.open) {
   box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35) !important;
   font-weight: 700 !important;
   border-radius: 9999px !important;
-  transition: all 0.28s cubic-bezier(0.25, 1, 0.5, 1) !important;
 }
 
-/* Ensure tabs fill unified container symmetrically with no awkward empty voids */
+.adm-uni-tab-btn.active *,
+.adm-sliding-tab-item.active *,
+.adm-detail-tab-btn.active *,
+.adm-pillar-tab.active *,
+.adm-view-toggle-btn.active *,
+.adm-wizard-step.active * {
+  color: #ffffff !important;
+}
+
+/* Tabs wrap to their content size while the background bar spans the full width */
 .adm-uni-tabs .adm-uni-tab-btn,
-.adm-detail-tabs-bar .adm-detail-tab-btn {
-  flex: 1 1 0px !important;
-  min-width: 0 !important;
+.adm-detail-tabs-bar .adm-detail-tab-btn,
+.adm-pillar-tabs .adm-uni-tab-btn {
+  flex: 0 0 auto !important;
+  width: auto !important;
+  min-width: max-content !important;
+  max-width: max-content !important;
 }
 
 .adm-tab-text-short {
