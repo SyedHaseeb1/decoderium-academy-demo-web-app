@@ -377,6 +377,14 @@ function signOut(loginUrl) {
 }
 
 function startDoctorPreview(doctorId, redirectUrl) {
+  // If in admin console with in-app simulation modal available, open simulation stage without opening a new tab
+  if (typeof openCourseDoctorPreviewModal === 'function') {
+    var cMatch = (redirectUrl || '').match(/[#?]c=([a-zA-Z0-9_-]+)/) || (redirectUrl || '').match(/#([a-zA-Z0-9_-]+)/);
+    var cid = cMatch ? cMatch[1] : null;
+    openCourseDoctorPreviewModal(cid, doctorId);
+    return;
+  }
+
   // Retain Super Admin session in sandboxed read-only preview without touching doctor accounts
   ssSet('academy_auth', '1');
   ssSet('academy_role', 'admin');

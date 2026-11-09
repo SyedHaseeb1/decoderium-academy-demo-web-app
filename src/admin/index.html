@@ -4399,6 +4399,162 @@
   }
 
   /* --------------------------------------------------------------------------
+     IN-ADMIN DOCTOR PERSPECTIVE SIMULATION MODAL (ZERO EXTERNAL PORTAL BOUNCE)
+     -------------------------------------------------------------------------- */
+  function openCourseDoctorPreviewModal(preCourseId, preDoctorId) {
+    var cList = courses();
+    var dList = doctors() || [];
+    var course = cList.filter(function (c) { return c.id === preCourseId; })[0] || cList[0];
+    var doc = dList.filter(function (d) { return d.id === preDoctorId; })[0] || dList[0] || { name: 'Dr. Ayesha Khan', pmdcId: 'PMDC-49120-P', hospital: 'Services Hospital (SIMS)', city: 'Lahore' };
+    if (!course) {
+      snack('No course selected for simulation.');
+      return;
+    }
+
+    var mod1 = (course.modules && course.modules[0]) ? course.modules[0] : { title: 'Module 1: Clinical Fundamentals', lectures: [] };
+    var lec1 = (mod1.lectures && mod1.lectures[0]) ? mod1.lectures[0] : { title: 'Lecture 1.1: Clinical Protocol & Diagnostic Algorithms', duration: '14:20' };
+    var totalLecs = RULES.lectureCount(course);
+
+    var body =
+      '<div style="margin-bottom:16px;">' +
+        '<div style="background:linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);color:#fff;padding:16px 20px;border-radius:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;box-shadow:0 8px 24px -4px rgba(49,46,129,0.3);">' +
+          '<div style="display:flex;align-items:center;gap:12px;">' +
+            '<div style="width:42px;height:42px;border-radius:50%;background:#4338ca;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;border:2px solid #818cf8;">' +
+              esc(initials(doc.name)) +
+            '</div>' +
+            '<div>' +
+              '<div style="font-size:11px;font-weight:800;color:#a5b4fc;text-transform:uppercase;letter-spacing:0.5px;"><i class="ms" style="font-size:12px;vertical-align:-2px;">visibility</i> In-Admin Doctor Simulation Stage</div>' +
+              '<div style="font-size:15px;font-weight:800;color:#ffffff;">Simulated Doctor: ' + esc(doc.name) + '</div>' +
+              '<div style="font-size:12px;color:#c7d2fe;">' + esc(doc.hospital) + ' · ' + esc(doc.city) + ' · PMDC: <strong>' + esc(doc.pmdcId) + '</strong></div>' +
+            '</div>' +
+          '</div>' +
+          '<div style="display:flex;align-items:center;gap:8px;">' +
+            '<span class="adm-chip" style="background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.2);font-weight:700;"><i class="ms" style="font-size:12px;">speed</i> 90% Watch Gate Active</span>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+
+      '<div style="display:grid;grid-template-columns:1.6fr 1fr;gap:20px;align-items:start;" class="adm-sim-grid">' +
+        '<!-- Left Column: Video Stage Simulation -->' +
+        '<div>' +
+          '<div style="background:#0f172a;border-radius:14px;overflow:hidden;position:relative;box-shadow:0 12px 30px -4px rgba(15,23,42,0.35);">' +
+            '<div style="aspect-ratio:16/9;position:relative;background:#020617;display:flex;align-items:center;justify-content:center;">' +
+              '<div style="width:100%;height:100%;position:absolute;top:0;left:0;opacity:0.4;">' +
+                courseThumbSvg(course, false) +
+              '</div>' +
+              '<div style="position:relative;z-index:2;text-align:center;padding:20px;">' +
+                '<button type="button" id="btnSimPlayStage" style="width:64px;height:64px;border-radius:50%;background:#7c3aed;border:none;color:#fff;font-size:32px;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(124,58,237,0.5);cursor:pointer;transition:transform 0.15s ease;">' +
+                  '<i class="ms">play_arrow</i>' +
+                '</button>' +
+                '<div style="margin-top:12px;font-size:13px;font-weight:700;color:#fff;" id="lblSimLecTitle">' + esc(lec1.title) + '</div>' +
+                '<div style="font-size:11px;color:#94a3b8;margin-top:3px;">Clinical Video Lecture · Full HD 1080p · Anti-Skipping Telemetry Active</div>' +
+              '</div>' +
+            '</div>' +
+            '<!-- Player Telemetry Bar -->' +
+            '<div style="background:#1e293b;padding:12px 16px;border-top:1px solid #334155;">' +
+              '<div style="display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:#cbd5e1;margin-bottom:6px;">' +
+                '<span><i class="ms" style="font-size:13px;color:#38bdf8;vertical-align:-2px;">timer</i> Current Position: <strong id="lblSimTime">04:12</strong> / ' + esc(lec1.duration || '14:20') + '</span>' +
+                '<span id="lblSimPct" style="font-weight:800;color:#38bdf8;">Watch Velocity: 32%</span>' +
+              '</div>' +
+              '<div style="height:6px;background:#334155;border-radius:999px;overflow:hidden;position:relative;">' +
+                '<div id="barSimProgress" style="height:100%;width:32%;background:linear-gradient(90deg, #38bdf8, #818cf8);border-radius:999px;transition:width 0.3s ease;"></div>' +
+              '</div>' +
+              '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:11px;color:#94a3b8;">' +
+                '<span><i class="ms" style="font-size:13px;color:#10b981;vertical-align:-2px;">lock</i> Seeking locked past watched threshold</span>' +
+                '<button type="button" id="btnSimFastUnlock" style="background:rgba(124,58,237,0.2);color:#c4b5fd;border:1px solid rgba(124,58,237,0.4);border-radius:6px;padding:3px 8px;font-size:10.5px;cursor:pointer;font-weight:700;">' +
+                  '⚡ Simulate 90% Watch Gate' +
+                '</button>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+
+        '<!-- Right Column: Interactive Course Modules & Quiz Gate Accordion -->' +
+        '<div>' +
+          '<div style="font-size:13px;font-weight:800;color:#0f172a;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">' +
+            '<span>Curriculum Modules (' + (course.modules ? course.modules.length : 0) + ')</span>' +
+            '<span class="adm-chip adm-chip-violet" style="font-size:10.5px;">' + totalLecs + ' Lectures Total</span>' +
+          '</div>' +
+          '<div style="max-height:340px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding-right:4px;">' +
+            (course.modules || []).map(function (m, mi) {
+              return '<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px 12px;">' +
+                '<div style="font-size:12px;font-weight:800;color:#0f172a;display:flex;justify-content:space-between;align-items:center;">' +
+                  '<span>Module ' + (mi + 1) + ': ' + esc(m.title) + '</span>' +
+                  '<span class="adm-chip adm-chip-cyan" style="font-size:9.5px;">' + (m.lectures ? m.lectures.length : 0) + ' lecs</span>' +
+                '</div>' +
+                '<div style="margin-top:8px;display:flex;flex-direction:column;gap:4px;">' +
+                  (m.lectures || []).map(function (l, li) {
+                    var isSelected = (mi === 0 && li === 0);
+                    return '<div style="padding:6px 8px;border-radius:6px;background:' + (isSelected ? '#e0e7ff' : '#ffffff') + ';border:1px solid ' + (isSelected ? '#a5b4fc' : '#f1f5f9') + ';font-size:11.5px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;" class="sim-lec-item" data-lec-title="' + esc(l.title) + '" data-lec-dur="' + esc(l.duration || '12:00') + '">' +
+                      '<div style="display:flex;align-items:center;gap:6px;min-width:0;flex:1;">' +
+                        '<i class="ms" style="font-size:14px;color:' + (isSelected ? '#4f46e5' : '#64748b') + ';">' + (isSelected ? 'play_circle' : 'videocam') + '</i>' +
+                        '<span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:' + (isSelected ? '700' : '500') + ';color:' + (isSelected ? '#1e1b4b' : '#334155') + ';">' + esc(l.title) + '</span>' +
+                      '</div>' +
+                      '<span style="font-size:10px;color:#94a3b8;margin-left:6px;">' + esc(l.duration || '12:00') + '</span>' +
+                    '</div>';
+                  }).join('') +
+                '</div>' +
+                '<!-- Module Quiz Assessment Gate -->' +
+                '<div style="margin-top:8px;padding-top:6px;border-top:1px dashed #cbd5e1;display:flex;justify-content:space-between;align-items:center;">' +
+                  '<span style="font-size:10.5px;color:#64748b;"><i class="ms" style="font-size:12px;vertical-align:-2px;color:#7c3aed;">quiz</i> 10 MCQs Exam</span>' +
+                  '<button type="button" class="adm-btn-outline" onclick="snack(\'MCQ pool active: 10 randomised questions from Category-1 bank.\');" style="font-size:10px;padding:2px 8px;border-radius:999px;">Inspect Pool</button>' +
+                '</div>' +
+              '</div>';
+            }).join('') +
+          '</div>' +
+        '</div>' +
+      '</div>';
+
+    openDialog({
+      title: 'Doctor Learning Perspective Simulation',
+      body: body,
+      wide: true,
+      confirmText: '',
+      cancelText: 'Close Simulation Stage'
+    });
+
+    // Wire fast unlock simulation button
+    setTimeout(function () {
+      var btnFast = $('#btnSimFastUnlock');
+      var bar = $('#barSimProgress');
+      var lblPct = $('#lblSimPct');
+      var lblTime = $('#lblSimTime');
+      if (btnFast && bar && lblPct) {
+        btnFast.onclick = function () {
+          bar.style.width = '94%';
+          lblPct.innerHTML = 'Watch Velocity: <strong style="color:#10b981;">94% (Gate Passed ✓)</strong>';
+          if (lblTime) lblTime.textContent = '13:28';
+          snack('✓ Simulated 90% watch velocity gate satisfied! Post-module quiz unlocked.');
+        };
+      }
+
+      var playBtn = $('#btnSimPlayStage');
+      if (playBtn) {
+        var isPlaying = false;
+        playBtn.onclick = function () {
+          isPlaying = !isPlaying;
+          playBtn.innerHTML = isPlaying ? '<i class="ms">pause</i>' : '<i class="ms">play_arrow</i>';
+          snack(isPlaying ? '▶ Video simulation playback started.' : '⏸ Video simulation paused.');
+        };
+      }
+
+      document.querySelectorAll('.sim-lec-item').forEach(function (el) {
+        el.onclick = function () {
+          document.querySelectorAll('.sim-lec-item').forEach(function (x) {
+            x.style.background = '#ffffff';
+            x.style.borderColor = '#f1f5f9';
+          });
+          el.style.background = '#e0e7ff';
+          el.style.borderColor = '#a5b4fc';
+          var titleEl = $('#lblSimLecTitle');
+          if (titleEl) titleEl.textContent = el.dataset.lecTitle;
+          snack('Switched lecture to: ' + el.dataset.lecTitle);
+        };
+      });
+    }, 50);
+  }
+
+  /* --------------------------------------------------------------------------
      SUPER ADMIN MULTI-TARGET COURSE ASSIGNMENT MODAL (BY DOCTOR, ZONE, OR SPECIALTY)
      -------------------------------------------------------------------------- */
   function openAssignCourseModal(preCourseId, preTargetId) {
@@ -4939,7 +5095,7 @@
                         '<span style="font-size:11px;color:var(--adm-slate);">In Progress</span>') +
                     '</td>' +
                     '<td>' +
-                      '<button type="button" class="adm-btn-outline" style="font-size:11px;padding:3px 8px;gap:4px;" onclick="startDoctorPreview(\'' + doc.id + '\', \'../lecture/?c=' + c.id + '\')"><i class="ms" style="font-size:13px;">visibility</i> Preview Course</button>' +
+                      '<button type="button" class="adm-btn-outline" style="font-size:11px;padding:3px 8px;gap:4px;" onclick="openCourseDoctorPreviewModal(\'' + c.id + '\', \'' + doc.id + '\')"><i class="ms" style="font-size:13px;">visibility</i> Preview Course</button>' +
                     '</td>' +
                   '</tr>';
                 }).join('') +
@@ -8263,7 +8419,7 @@
             '<span><i class="ms" style="font-size:16px;vertical-align:middle;color:var(--adm-rose);">workspace_premium</i> <strong>' + (c.cmeHours || 12) + '</strong> CME Hours</span>' +
           '</div>' +
           '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
-            '<button type="button" class="adm-btn-primary" style="background:#582be8;border-color:#582be8;gap:6px;cursor:pointer;" onclick="startDoctorPreview(\'admin_eval\', \'../courses/#' + c.id + '\')"><i class="ms">visibility</i> View as Doctor</button>' +
+            '<button type="button" class="adm-btn-primary" style="background:#582be8;border-color:#582be8;gap:6px;cursor:pointer;" onclick="openCourseDoctorPreviewModal(\'' + c.id + '\', \'d01\')"><i class="ms">visibility</i> View as Doctor</button>' +
             '<button type="button" class="adm-btn-primary" id="btnAssignCourseInDetail" style="background:#059669;border-color:#059669;gap:6px;" onclick="openAssignCourseModal(\'' + c.id + '\')"><i class="ms">person_add</i> Assign Course</button>' +
             '<a href="#courses/' + c.id + '/edit" class="adm-btn-outline"><i class="ms">tune</i> Open Course Studio</a>' +
             '<button type="button" class="adm-btn-outline" id="btnEditCurCourse"><i class="ms">edit</i> Quick Edit Details</button>' +
@@ -8538,7 +8694,7 @@
                         '<span style="font-size:11px;color:var(--adm-slate);">In Progress</span>') +
                     '</td>' +
                     '<td>' +
-                      '<button type="button" class="adm-btn-outline" style="font-size:11px;padding:3px 8px;gap:4px;" onclick="startDoctorPreview(\'' + doc.id + '\', \'../lecture/?c=' + c.id + '\')"><i class="ms" style="font-size:12px;">visibility</i> View</button>' +
+                      '<button type="button" class="adm-btn-outline" style="font-size:11px;padding:3px 8px;gap:4px;" onclick="openCourseDoctorPreviewModal(\'' + c.id + '\', \'' + doc.id + '\')"><i class="ms" style="font-size:12px;">visibility</i> View</button>' +
                     '</td>' +
                   '</tr>';
                 }).join('') +
